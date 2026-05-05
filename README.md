@@ -1,24 +1,18 @@
 # README
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/luciotbc/sro-build-planer)
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+### Dependency
 
-* System dependencies
+- Ruby: 4.0.2
 
-* Configuration
+### Getting Started
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+1. Clone the repository
+2. Install dependencies using `bundle install`
+3. Run the application using `bin/dev`
