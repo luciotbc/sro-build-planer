@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_05_153717) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_05_172203) do
+  create_table "masteries", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "external_id", null: false
+    t.string "mastery_type", null: false
+    t.string "name", null: false
+    t.integer "race_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_id"], name: "index_masteries_on_external_id", unique: true
+    t.index ["race_id"], name: "index_masteries_on_race_id"
+  end
+
   create_table "races", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "external_id", null: false
@@ -18,4 +29,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_05_153717) do
     t.datetime "updated_at", null: false
     t.index ["external_id"], name: "index_races_on_external_id", unique: true
   end
+
+  add_foreign_key "masteries", "races"
 end
