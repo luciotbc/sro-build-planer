@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_05_180000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_05_183000) do
   create_table "masteries", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "external_id", null: false
@@ -41,6 +41,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_05_180000) do
     t.datetime "updated_at", null: false
     t.index ["external_group_code"], name: "index_skill_groups_on_external_group_code", unique: true
     t.index ["mastery_id"], name: "index_skill_groups_on_mastery_id"
+  end
+
+  create_table "skills", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "external_id", null: false
+    t.string "external_skill_code", null: false
+    t.integer "mastery_level_req"
+    t.integer "skill_group_id", null: false
+    t.integer "skill_level", null: false
+    t.integer "sp_cost"
+    t.datetime "updated_at", null: false
+    t.index ["external_id"], name: "index_skills_on_external_id", unique: true
+    t.index ["external_skill_code"], name: "index_skills_on_external_skill_code", unique: true
+    t.index ["skill_group_id"], name: "index_skills_on_skill_group_id"
   end
 
   add_foreign_key "masteries", "races"
