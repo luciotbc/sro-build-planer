@@ -36,3 +36,13 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### TODO ###
+*.todo
