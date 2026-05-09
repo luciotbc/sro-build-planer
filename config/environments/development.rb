@@ -20,7 +20,9 @@ Rails.application.configure do
   if Rails.root.join("tmp/caching-dev.txt").exist?
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
-    config.public_file_server.headers = { "cache-control" => "public, max-age=#{2.days.to_i}" }
+    config.public_file_server.headers = {
+      "cache-control" => "public, max-age=#{2.days.to_i}"
+    }
   else
     config.action_controller.perform_caching = false
   end
@@ -79,11 +81,12 @@ Rails.application.configure do
   # Allow connections to local server from Codespaces.
   if ENV["CODESPACES"]
     warn "⚠️⚠️⚠️ Running in GitHub Codespaces ⚠️⚠️⚠️"
-    codespaces_port_forwarding_domain = ENV["GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN"]
+    codespaces_port_forwarding_domain =
+      ENV["GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN"]
     codespace_name = ENV["CODESPACE_NAME"]
     host = "#{codespace_name}-3000.#{codespaces_port_forwarding_domain}"
 
-     config.hosts << host
+    config.hosts << host
 
     warn "Disabling the CSRF protection Origin header check in GitHub Codespaces"
     config.action_controller.forgery_protection_origin_check = false

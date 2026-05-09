@@ -18,7 +18,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_05_183000) do
     t.string "name", null: false
     t.integer "race_id", null: false
     t.datetime "updated_at", null: false
-    t.index ["external_id"], name: "index_masteries_on_external_id", unique: true
+    t.index ["external_id"],
+            name: "index_masteries_on_external_id",
+            unique: true
     t.index ["race_id"], name: "index_masteries_on_race_id"
   end
 
@@ -39,7 +41,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_05_183000) do
     t.string "name"
     t.string "tooltip"
     t.datetime "updated_at", null: false
-    t.index ["external_group_code"], name: "index_skill_groups_on_external_group_code", unique: true
+    t.index ["external_group_code"],
+            name: "index_skill_groups_on_external_group_code",
+            unique: true
     t.index ["mastery_id"], name: "index_skill_groups_on_mastery_id"
   end
 
@@ -53,7 +57,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_05_183000) do
     t.integer "sp_cost"
     t.datetime "updated_at", null: false
     t.index ["external_id"], name: "index_skills_on_external_id", unique: true
-    t.index ["external_skill_code"], name: "index_skills_on_external_skill_code", unique: true
+    t.index ["external_skill_code"],
+            name: "index_skills_on_external_skill_code",
+            unique: true
     t.index ["skill_group_id"], name: "index_skills_on_skill_group_id"
   end
 

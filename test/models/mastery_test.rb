@@ -3,14 +3,21 @@ require "test_helper"
 class MasteryTest < ActiveSupport::TestCase
   test "valid with external_id, name, mastery_type, and race" do
     race = races(:chinese)
-    mastery = Mastery.new(external_id: 999, name: "Test Mastery", mastery_type: "Weapon", race: race)
+    mastery =
+      Mastery.new(
+        external_id: 999,
+        name: "Test Mastery",
+        mastery_type: "Weapon",
+        race: race
+      )
 
     assert mastery.valid?
   end
 
   test "invalid without external_id" do
     race = races(:chinese)
-    mastery = Mastery.new(name: "Test Mastery", mastery_type: "Weapon", race: race)
+    mastery =
+      Mastery.new(name: "Test Mastery", mastery_type: "Weapon", race: race)
 
     assert_not mastery.valid?
     assert_includes mastery.errors[:external_id], "can't be blank"
@@ -19,7 +26,13 @@ class MasteryTest < ActiveSupport::TestCase
   test "invalid with duplicate external_id" do
     existing_mastery = masteries(:blade_sword)
     race = races(:chinese)
-    mastery = Mastery.new(external_id: existing_mastery.external_id, name: "New Mastery", mastery_type: "Weapon", race: race)
+    mastery =
+      Mastery.new(
+        external_id: existing_mastery.external_id,
+        name: "New Mastery",
+        mastery_type: "Weapon",
+        race: race
+      )
 
     assert_not mastery.valid?
     assert_includes mastery.errors[:external_id], "has already been taken"
@@ -43,14 +56,25 @@ class MasteryTest < ActiveSupport::TestCase
 
   test "invalid with invalid mastery_type" do
     race = races(:chinese)
-    mastery = Mastery.new(external_id: 1002, name: "Test Mastery", mastery_type: "Invalid", race: race)
+    mastery =
+      Mastery.new(
+        external_id: 1002,
+        name: "Test Mastery",
+        mastery_type: "Invalid",
+        race: race
+      )
 
     assert_not mastery.valid?
     assert_includes mastery.errors[:mastery_type], "is not included in the list"
   end
 
   test "invalid without race" do
-    mastery = Mastery.new(external_id: 1003, name: "Test Mastery", mastery_type: "Weapon")
+    mastery =
+      Mastery.new(
+        external_id: 1003,
+        name: "Test Mastery",
+        mastery_type: "Weapon"
+      )
 
     assert_not mastery.valid?
     assert_includes mastery.errors[:race], "must exist"
@@ -64,7 +88,13 @@ class MasteryTest < ActiveSupport::TestCase
 
   test "database rejects null name" do
     race = races(:chinese)
-    mastery = Mastery.new(external_id: 1004, name: nil, mastery_type: "Weapon", race: race)
+    mastery =
+      Mastery.new(
+        external_id: 1004,
+        name: nil,
+        mastery_type: "Weapon",
+        race: race
+      )
 
     assert_raises(ActiveRecord::NotNullViolation) do
       mastery.save!(validate: false)
@@ -73,7 +103,13 @@ class MasteryTest < ActiveSupport::TestCase
 
   test "database rejects null mastery_type" do
     race = races(:chinese)
-    mastery = Mastery.new(external_id: 1005, name: "Test Mastery", mastery_type: nil, race: race)
+    mastery =
+      Mastery.new(
+        external_id: 1005,
+        name: "Test Mastery",
+        mastery_type: nil,
+        race: race
+      )
 
     assert_raises(ActiveRecord::NotNullViolation) do
       mastery.save!(validate: false)
@@ -81,7 +117,13 @@ class MasteryTest < ActiveSupport::TestCase
   end
 
   test "database rejects null race_id" do
-    mastery = Mastery.new(external_id: 1006, name: "Test Mastery", mastery_type: "Weapon", race_id: nil)
+    mastery =
+      Mastery.new(
+        external_id: 1006,
+        name: "Test Mastery",
+        mastery_type: "Weapon",
+        race_id: nil
+      )
 
     assert_raises(ActiveRecord::NotNullViolation) do
       mastery.save!(validate: false)

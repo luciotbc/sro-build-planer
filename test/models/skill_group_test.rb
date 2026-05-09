@@ -19,10 +19,15 @@ class SkillGroupTest < ActiveSupport::TestCase
   test "invalid with duplicate external_group_code" do
     existing_skill_group = skill_groups(:sword_mastery_skills)
     mastery = masteries(:blade_sword)
-    skill_group = SkillGroup.new(external_group_code: existing_skill_group.external_group_code, mastery: mastery)
+    skill_group =
+      SkillGroup.new(
+        external_group_code: existing_skill_group.external_group_code,
+        mastery: mastery
+      )
 
     assert_not skill_group.valid?
-    assert_includes skill_group.errors[:external_group_code], "has already been taken"
+    assert_includes skill_group.errors[:external_group_code],
+                    "has already been taken"
   end
 
   test "invalid without mastery" do

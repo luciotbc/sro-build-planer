@@ -4,10 +4,16 @@ module SRO
   class SkillsImporter
     # Configuration for field comparison per model
     COMPARISON_FIELDS = {
-      Race: [ :name ],
-      Mastery: [ :name, :mastery_type, :race_id ],
-      SkillGroup: [ :mastery_id ],
-      Skill: [ :external_id, :external_skill_code, :mastery_level_req, :skill_level, :sp_cost ]
+      Race: [:name],
+      Mastery: %i[name mastery_type race_id],
+      SkillGroup: [:mastery_id],
+      Skill: %i[
+        external_id
+        external_skill_code
+        mastery_level_req
+        skill_level
+        sp_cost
+      ]
     }.freeze
 
     attr_reader :csv_path, :stats, :conflicts
@@ -16,8 +22,8 @@ module SRO
       @csv_path = csv_path || default_csv_path
       @stats = initialize_stats
       @conflicts = []
-      @race_map = {}  # Map race names to IDs
-      @skill_group_cache = {}  # Cache for skill group lookups
+      @race_map = {} # Map race names to IDs
+      @skill_group_cache = {} # Cache for skill group lookups
     end
 
     def import!
@@ -61,9 +67,7 @@ module SRO
     def load_csv
       log_section "Loading CSV"
 
-      unless File.exist?(@csv_path)
-        raise "CSV file not found: #{@csv_path}"
-      end
+      raise "CSV file not found: #{@csv_path}" unless File.exist?(@csv_path)
 
       @csv_data = CSV.read(@csv_path, headers: true, encoding: "utf-8")
       log_info "✓ Loaded #{@csv_data.count} rows"
@@ -72,12 +76,28 @@ module SRO
     end
 
     def validate_csv_headers
-      required_headers = [
-        "Race", "Mastery_ID", "Mastery_Name", "Mastery_Type",
-        "Skill_ID", "Skill_Code", "Group_Code", "Skill_Level",
-        "Weapon_Req1_Code", "Weapon_Req2_Code",
-        "Name_KOR", "Name_EN", "Tooltip_KOR", "Tooltip_EN", "Study_KOR", "Study_EN",
-        "Eff1_Type_Raw", "Eff1_Value", "Eff1_Element", "Eff1_Param_Min", "Eff1_Param_Max"
+      required_headers = %w[
+        Race
+        Mastery_ID
+        Mastery_Name
+        Mastery_Type
+        Skill_ID
+        Skill_Code
+        Group_Code
+        Skill_Level
+        Weapon_Req1_Code
+        Weapon_Req2_Code
+        Name_KOR
+        Name_EN
+        Tooltip_KOR
+        Tooltip_EN
+        Study_KOR
+        Study_EN
+        Eff1_Type_Raw
+        Eff1_Value
+        Eff1_Element
+        Eff1_Param_Min
+        Eff1_Param_Max
       ]
 
       missing = required_headers - @csv_data.headers
@@ -99,10 +119,7 @@ module SRO
     def import_races
       log_section "Importing Races"
 
-      races = {
-        "Chinese" => 1,
-        "European" => 2
-      }
+      races = { "Chinese" => 1, "European" => 2 }
 
       races.each do |race_name, external_id|
         record = Race.find_by(external_id: external_id)
@@ -152,7 +169,7 @@ module SRO
             external_id: mastery_id,
             name: mastery_info[:name],
             mastery_type: mastery_info[:type],
-            race_id: mastery_info[:race_id],
+            race_id: mastery_info[:race_id]
           )
           @stats[:masteries][:created] += 1
           log_debug "  ✓ Created Mastery: #{mastery_info[:name]} (external_id=#{mastery_id})"
@@ -176,20 +193,24 @@ module SRO
 
         if record
           if record.mastery_id != group_info[:mastery_id]
-            log_conflict "SkillGroup", group_code, record, { mastery_id: group_info[:mastery_id] }
+            log_conflict "SkillGroup",
+                         group_code,
+                         record,
+                         { mastery_id: group_info[:mastery_id] }
             @stats[:skill_groups][:conflicts] += 1
             next
           end
           @skill_group_cache[group_code] = record
         else
-          record = SkillGroup.create!(
-            description: group_info[:description],
-            external_group_code: group_code,
-            icon_path: group_info[:icon_path],
-            mastery_id: group_info[:mastery_id],
-            name: group_info[:name],
-            tooltip: group_info[:tooltip],
-          )
+          record =
+            SkillGroup.create!(
+              description: group_info[:description],
+              external_group_code: group_code,
+              icon_path: group_info[:icon_path],
+              mastery_id: group_info[:mastery_id],
+              name: group_info[:name],
+              tooltip: group_info[:tooltip]
+            )
           @stats[:skill_groups][:created] += 1
           @skill_group_cache[group_code] = record
           log_debug "  ✓ Created SkillGroup: #{group_code} (mastery_id=#{group_info[:mastery_id]})"
@@ -207,7 +228,8 @@ module SRO
         skill_code = safe_string(row["Skill_Code"])
         group_code = safe_string(row["Group_Code"])
 
-        record = Skill.find_by(external_id: skill_id, external_skill_code: skill_code)
+        record =
+          Skill.find_by(external_id: skill_id, external_skill_code: skill_code)
 
         # Build comparison data from row
         comparison_data = build_skill_comparison_data(row)
@@ -215,9 +237,15 @@ module SRO
         if record
           if compare_record(record, comparison_data, Skill)
             @stats[:skills][:skipped] += 1
-            log_debug "  ⊘ Skill external_id=#{skill_id} already exists (matches)" if idx < 3
+            if idx < 3
+              log_debug "  ⊘ Skill external_id=#{skill_id} already exists (matches)"
+            end
           else
-            log_conflict "Skill", skill_id, record, comparison_data, detail: true
+            log_conflict "Skill",
+                         skill_id,
+                         record,
+                         comparison_data,
+                         detail: true
             @stats[:skills][:conflicts] += 1
           end
         else
@@ -233,7 +261,9 @@ module SRO
           Skill.create!(skill_attrs)
 
           @stats[:skills][:created] += 1
-          log_debug "  ✓ Created Skill: #{skill_code} (external_id=#{skill_id})" if idx < 3
+          if idx < 3
+            log_debug "  ✓ Created Skill: #{skill_code} (external_id=#{skill_id})"
+          end
         end
 
         log_progress(idx, @csv_data.count, interval: 1000) if idx > 0
@@ -258,10 +288,13 @@ module SRO
 
       # Spot-check 5 random skills
       log_info "\nSpot-checking 5 random skills:"
-      Skill.order("RANDOM()").limit(5).each do |skill|
-        group = skill.skill_group&.external_group_code || "?"
-        log_info "  #{skill.external_skill_code}: group=#{group}"
-      end
+      Skill
+        .order("RANDOM()")
+        .limit(5)
+        .each do |skill|
+          group = skill.skill_group&.external_group_code || "?"
+          log_info "  #{skill.external_skill_code}: group=#{group}"
+        end
 
       # Check FK referential integrity
       skills_without_group = Skill.where(skill_group_id: nil).count
@@ -275,11 +308,16 @@ module SRO
     def report(elapsed_time = nil)
       log_section "Import Summary"
 
-      total_created = @stats.values.sum { |table_stats| table_stats[:created] || 0 }
-      total_updated = @stats.values.sum { |table_stats| table_stats[:updated] || 0 }
-      total_skipped = @stats.values.sum { |table_stats| table_stats[:skipped] || 0 }
-      total_conflicts = @stats.values.sum { |table_stats| table_stats[:conflicts] || 0 }
-      total_errors = @stats.values.sum { |table_stats| table_stats[:errors] || 0 }
+      total_created =
+        @stats.values.sum { |table_stats| table_stats[:created] || 0 }
+      total_updated =
+        @stats.values.sum { |table_stats| table_stats[:updated] || 0 }
+      total_skipped =
+        @stats.values.sum { |table_stats| table_stats[:skipped] || 0 }
+      total_conflicts =
+        @stats.values.sum { |table_stats| table_stats[:conflicts] || 0 }
+      total_errors =
+        @stats.values.sum { |table_stats| table_stats[:errors] || 0 }
 
       log_info "┌────────────────────────────────────────┐"
       log_info "│ Per-Table Statistics                   │"
@@ -307,9 +345,7 @@ module SRO
       log_info "│  Errors:   #{total_errors.to_s.rjust(31)} │"
       log_info "└────────────────────────────────────────┘"
 
-      if elapsed_time
-        log_info "\n⏱️  Elapsed time: #{elapsed_time}s"
-      end
+      log_info "\n⏱️  Elapsed time: #{elapsed_time}s" if elapsed_time
 
       if @conflicts.any?
         log_section "Conflicts Summary"
@@ -325,10 +361,34 @@ module SRO
 
     def initialize_stats
       {
-        races: { created: 0, updated: 0, skipped: 0, conflicts: 0, errors: 0 },
-        masteries: { created: 0, updated: 0, skipped: 0, conflicts: 0, errors: 0 },
-        skill_groups: { created: 0, updated: 0, skipped: 0, conflicts: 0, errors: 0 },
-        skills: { created: 0, updated: 0, skipped: 0, conflicts: 0, errors: 0 }
+        races: {
+          created: 0,
+          updated: 0,
+          skipped: 0,
+          conflicts: 0,
+          errors: 0
+        },
+        masteries: {
+          created: 0,
+          updated: 0,
+          skipped: 0,
+          conflicts: 0,
+          errors: 0
+        },
+        skill_groups: {
+          created: 0,
+          updated: 0,
+          skipped: 0,
+          conflicts: 0,
+          errors: 0
+        },
+        skills: {
+          created: 0,
+          updated: 0,
+          skipped: 0,
+          conflicts: 0,
+          errors: 0
+        }
       }
     end
 
@@ -360,13 +420,15 @@ module SRO
           tooltip = safe_string(row["Tooltip_EN"])
 
           # Fix icon extension if needed
-          icon_path = icon_path.sub(/\.ddj\z/, ".png") if icon_path.end_with?(".ddj")
+          icon_path = icon_path.sub(/\.ddj\z/, ".png") if icon_path.end_with?(
+            ".ddj"
+          )
 
           # Fix mastery_id is the external_id, we need to find the actual mastery record
           mastery = Mastery.find_by(external_id: mastery_id)
 
           groups[group_code] = {
-          description: description,
+            description: description,
             icon_path: icon_path,
             mastery_id: mastery&.id,
             name: name,
@@ -413,8 +475,7 @@ module SRO
         csv_value = csv_data[field]
 
         # Handle type conversions
-        record_value == csv_value ||
-          record_value.to_s == csv_value.to_s ||
+        record_value == csv_value || record_value.to_s == csv_value.to_s ||
           (record_value.nil? && csv_value.blank?)
       end
     end
@@ -422,7 +483,9 @@ module SRO
     def resolve_skill_group_id(group_code)
       return nil if group_code.blank?
 
-      skill_group = @skill_group_cache[group_code] || SkillGroup.find_by(group_code: group_code)
+      skill_group =
+        @skill_group_cache[group_code] ||
+          SkillGroup.find_by(group_code: group_code)
       skill_group&.id
     end
 
@@ -432,19 +495,19 @@ module SRO
 
     def safe_string(value)
       value.to_s.strip
-    rescue
+    rescue StandardError
       ""
     end
 
     def safe_int(value)
       Integer(value)
-    rescue
+    rescue StandardError
       0
     end
 
     def safe_float(value)
       Float(value)
-    rescue
+    rescue StandardError
       0.0
     end
 
@@ -492,7 +555,8 @@ module SRO
     end
 
     def log_conflict(model_name, id, db_record, csv_data, detail: false)
-      conflict_msg = "⚠️  SKIP #{model_name}: external_id=#{id} (BD/CSV inconsistent)"
+      conflict_msg =
+        "⚠️  SKIP #{model_name}: external_id=#{id} (BD/CSV inconsistent)"
       conflict_msg += "\n   BD:  " + format_record_data(db_record)
       conflict_msg += "\n   CSV: " + format_csv_data(csv_data)
       log_warn conflict_msg
@@ -501,7 +565,8 @@ module SRO
 
     def format_record_data(record)
       # Format DB record for display
-      key_fields = record.attributes.slice(*%w[id external_id name mastery_type]).compact
+      key_fields =
+        record.attributes.slice(*%w[id external_id name mastery_type]).compact
       key_fields.map { |k, v| "#{k}=#{v.inspect}" }.join(", ")
     end
 
