@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_11_015818) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_11_020407) do
   create_table "character_masteries", force: :cascade do |t|
     t.integer "character_id", null: false
     t.datetime "created_at", null: false
@@ -118,9 +118,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_11_015818) do
     t.integer "external_id", null: false
     t.string "external_skill_code", null: false
     t.integer "mastery_level_req"
+    t.integer "mp_cost"
     t.integer "skill_group_id", null: false
     t.integer "skill_level", null: false
     t.integer "sp_cost"
+    t.integer "stack"
     t.datetime "updated_at", null: false
     t.index ["external_id"], name: "index_skills_on_external_id", unique: true
     t.index ["external_skill_code"],
