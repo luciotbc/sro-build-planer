@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_11_004645) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_11_004822) do
+  create_table "characters", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "current_level"
+    t.string "name"
+    t.integer "race_id", null: false
+    t.integer "target_level"
+    t.datetime "updated_at", null: false
+    t.index ["race_id"], name: "index_characters_on_race_id"
+  end
+
   create_table "level_data", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "level"
@@ -94,6 +104,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_11_004645) do
     t.index ["skill_group_id"], name: "index_skills_on_skill_group_id"
   end
 
+  add_foreign_key "characters", "races"
   add_foreign_key "masteries", "races"
   add_foreign_key "skill_group_requirements", "required_groups"
   add_foreign_key "skill_group_requirements", "skill_groups"
