@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_11_012319) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_11_015818) do
   create_table "character_masteries", force: :cascade do |t|
     t.integer "character_id", null: false
     t.datetime "created_at", null: false
@@ -84,18 +84,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_11_012319) do
   end
 
   create_table "skill_groups", force: :cascade do |t|
+    t.integer "col_position"
     t.datetime "created_at", null: false
     t.string "description"
     t.string "external_group_code", null: false
+    t.integer "external_id"
     t.string "icon_path"
     t.integer "mastery_id", null: false
+    t.integer "max_level"
     t.string "name"
+    t.integer "skill_series_id"
     t.string "tooltip"
     t.datetime "updated_at", null: false
     t.index ["external_group_code"],
             name: "index_skill_groups_on_external_group_code",
             unique: true
     t.index ["mastery_id"], name: "index_skill_groups_on_mastery_id"
+    t.index ["skill_series_id"], name: "index_skill_groups_on_skill_series_id"
   end
 
   create_table "skill_series", force: :cascade do |t|
@@ -133,5 +138,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_11_012319) do
   add_foreign_key "skill_group_requirements", "required_groups"
   add_foreign_key "skill_group_requirements", "skill_groups"
   add_foreign_key "skill_groups", "masteries"
+  add_foreign_key "skill_groups", "skill_series"
   add_foreign_key "skill_series", "masteries"
 end
