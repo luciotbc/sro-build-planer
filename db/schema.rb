@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_11_005106) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_11_012319) do
   create_table "character_masteries", force: :cascade do |t|
     t.integer "character_id", null: false
     t.datetime "created_at", null: false
@@ -18,6 +18,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_11_005106) do
     t.datetime "updated_at", null: false
     t.index ["character_id"], name: "index_character_masteries_on_character_id"
     t.index ["mastery_id"], name: "index_character_masteries_on_mastery_id"
+  end
+
+  create_table "character_skills", force: :cascade do |t|
+    t.integer "character_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "current_level"
+    t.integer "skill_group_id", null: false
+    t.integer "target_level"
+    t.datetime "updated_at", null: false
+    t.index ["character_id"], name: "index_character_skills_on_character_id"
+    t.index ["skill_group_id"], name: "index_character_skills_on_skill_group_id"
   end
 
   create_table "characters", force: :cascade do |t|
@@ -115,6 +126,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_11_005106) do
 
   add_foreign_key "character_masteries", "characters"
   add_foreign_key "character_masteries", "masteries"
+  add_foreign_key "character_skills", "characters"
+  add_foreign_key "character_skills", "skill_groups"
   add_foreign_key "characters", "races"
   add_foreign_key "masteries", "races"
   add_foreign_key "skill_group_requirements", "required_groups"
