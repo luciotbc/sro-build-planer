@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_05_183000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_10_222608) do
   create_table "masteries", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "external_id", null: false
@@ -47,6 +47,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_05_183000) do
     t.index ["mastery_id"], name: "index_skill_groups_on_mastery_id"
   end
 
+  create_table "skill_series", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "icon_path"
+    t.integer "mastery_id", null: false
+    t.integer "row_position"
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.index ["mastery_id"], name: "index_skill_series_on_mastery_id"
+  end
+
   create_table "skills", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "external_id", null: false
@@ -65,4 +75,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_05_183000) do
 
   add_foreign_key "masteries", "races"
   add_foreign_key "skill_groups", "masteries"
+  add_foreign_key "skill_series", "masteries"
 end
