@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_11_004015) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_11_004645) do
+  create_table "level_data", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "level"
+    t.integer "sp_cumulative"
+    t.integer "sp_gained"
+    t.datetime "updated_at", null: false
+    t.integer "xp_required"
+  end
+
   create_table "masteries", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "external_id", null: false
