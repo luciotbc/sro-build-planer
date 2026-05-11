@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  skill_group: one
+  required_group: one
+  required_level: 1
+
+two:
+  skill_group: two
+  required_group: two
+  required_level: 1
