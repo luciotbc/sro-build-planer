@@ -1,7 +1,21 @@
 require "test_helper"
 
 class LevelDatumTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "valid with level" do
+    assert LevelDatum.new(level: 200).valid?
+  end
+
+  test "invalid without level" do
+    ld = LevelDatum.new
+
+    assert_not ld.valid?
+    assert_includes ld.errors[:level], "can't be blank"
+  end
+
+  test "invalid with duplicate level" do
+    ld = LevelDatum.new(level: level_data(:one).level)
+
+    assert_not ld.valid?
+    assert_includes ld.errors[:level], "has already been taken"
+  end
 end

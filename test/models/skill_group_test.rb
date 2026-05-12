@@ -38,7 +38,32 @@ class SkillGroupTest < ActiveSupport::TestCase
   end
 
   test "belongs_to mastery association" do
-    skill_group = skill_groups(:sword_mastery_skills)
-    assert_equal masteries(:blade_sword), skill_group.mastery
+    assert_equal masteries(:blade_sword),
+                 skill_groups(:sword_mastery_skills).mastery
+  end
+
+  test "valid without skill_series (optional)" do
+    sg =
+      SkillGroup.new(
+        external_group_code: "SG_OPT_001",
+        mastery: masteries(:blade_sword)
+      )
+
+    assert sg.valid?
+  end
+
+  test "belongs_to skill_series when present" do
+    sg = skill_groups(:sword_mastery_skills)
+
+    assert_respond_to sg, :skill_series
+  end
+
+  test "has_many skill_group_requirements" do
+    assert_respond_to skill_groups(:sword_mastery_skills),
+                      :skill_group_requirements
+  end
+
+  test "has_many character_skills" do
+    assert_respond_to skill_groups(:sword_mastery_skills), :character_skills
   end
 end

@@ -140,7 +140,9 @@ module SRO
         end
       end
 
-      log_info "Races: created=#{@stats[:races][:created]}, skipped=#{@stats[:races][:skipped]}, conflicts=#{@stats[:races][:conflicts]}"
+      log_info "Races: created=#{@stats[:races][:created]}, skipped=#{@stats[:races][:skipped]}, conflicts=#{
+                 @stats[:races][:conflicts]
+               }"
     end
 
     def import_masteries
@@ -176,7 +178,9 @@ module SRO
         end
       end
 
-      log_info "Masteries: created=#{@stats[:masteries][:created]}, skipped=#{@stats[:masteries][:skipped]}, conflicts=#{@stats[:masteries][:conflicts]}"
+      log_info "Masteries: created=#{@stats[:masteries][:created]}, skipped=#{
+                 @stats[:masteries][:skipped]
+               }, conflicts=#{@stats[:masteries][:conflicts]}"
     end
 
     # ───────────────────────────────────────────────────────────────────────────────
@@ -217,7 +221,9 @@ module SRO
         end
       end
 
-      log_info "SkillGroups: created=#{@stats[:skill_groups][:created]}, updated=#{@stats[:skill_groups][:updated]}, skipped=#{@stats[:skill_groups][:skipped]}, conflicts=#{@stats[:skill_groups][:conflicts]}"
+      log_info "SkillGroups: created=#{@stats[:skill_groups][:created]}, updated=#{
+                 @stats[:skill_groups][:updated]
+               }, skipped=#{@stats[:skill_groups][:skipped]}, conflicts=#{@stats[:skill_groups][:conflicts]}"
     end
 
     def import_skills
@@ -269,7 +275,11 @@ module SRO
         log_progress(idx, @csv_data.count, interval: 1000) if idx > 0
       end
 
-      log_info "Skills: created=#{@stats[:skills][:created]}, skipped=#{@stats[:skills][:skipped]}, conflicts=#{@stats[:skills][:conflicts]}, errors=#{@stats[:skills][:errors]}"
+      log_info "Skills: created=#{@stats[:skills][:created]}, skipped=#{
+                 @stats[:skills][:skipped]
+               }, conflicts=#{@stats[:skills][:conflicts]}, errors=#{
+                 @stats[:skills][:errors]
+               }"
     end
 
     # ───────────────────────────────────────────────────────────────────────────────
@@ -333,17 +343,19 @@ module SRO
         status = "✓" if conflicts.zero? && errors.zero?
         status ||= "⚠️" if conflicts > 0 || errors > 0
 
-        log_info "│ #{status} #{table.to_s.ljust(20)} C:#{created.to_s.rjust(5)} U:#{updated.to_s.rjust(5)} S:#{skipped.to_s.rjust(5)} │"
+        log_info "│ #{status} #{table.to_s.ljust(20)} C:#{created.to_s.rjust(5)} U:#{updated.to_s.rjust(5)} S:#{
+                   skipped.to_s.rjust(5)
+                 } │"
       end
 
-      log_info "├────────────────────────────────────────┤"
-      log_info "│ TOTALS                                 │"
+      log_info "├────────────────────────────────----────────┤"
+      log_info "│ TOTALS                                     │"
       log_info "│  Created:  #{total_created.to_s.rjust(31)} │"
       log_info "│  Updated:  #{total_updated.to_s.rjust(31)} │"
       log_info "│  Skipped:  #{total_skipped.to_s.rjust(31)} │"
       log_info "│  Conflicts:#{total_conflicts.to_s.rjust(30)} │"
-      log_info "│  Errors:   #{total_errors.to_s.rjust(31)} │"
-      log_info "└────────────────────────────────────────┘"
+      log_info "│  Errors:    #{total_errors.to_s.rjust(31)} │"
+      log_info "└─────────────----───────────────────────────┘"
 
       log_info "\n⏱️  Elapsed time: #{elapsed_time}s" if elapsed_time
 

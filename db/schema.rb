@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_11_020407) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_12_000001) do
   create_table "character_masteries", force: :cascade do |t|
     t.integer "character_id", null: false
     t.datetime "created_at", null: false
@@ -137,8 +137,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_11_020407) do
   add_foreign_key "character_skills", "skill_groups"
   add_foreign_key "characters", "races"
   add_foreign_key "masteries", "races"
-  add_foreign_key "skill_group_requirements", "required_groups"
   add_foreign_key "skill_group_requirements", "skill_groups"
+  add_foreign_key "skill_group_requirements",
+                  "skill_groups",
+                  column: "required_group_id"
   add_foreign_key "skill_groups", "masteries"
   add_foreign_key "skill_groups", "skill_series"
   add_foreign_key "skill_series", "masteries"

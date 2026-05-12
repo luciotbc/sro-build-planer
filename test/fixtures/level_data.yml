@@ -2,12 +2,12 @@
 
 one:
   level: 1
-  xp_required: 1
-  sp_gained: 1
-  sp_cumulative: 1
+  xp_required: 800
+  sp_gained: 10
+  sp_cumulative: 10
 
 two:
-  level: 1
-  xp_required: 1
-  sp_gained: 1
-  sp_cumulative: 1
+  level: 2
+  xp_required: 1600
+  sp_gained: 10
+  sp_cumulative: 20

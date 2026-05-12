@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  mastery: one
+  mastery: blade_sword
   row_position: 1
   title: MyString
   icon_path: MyString
 
 two:
-  mastery: two
+  mastery: warrior
   row_position: 1
   title: MyString
   icon_path: MyString

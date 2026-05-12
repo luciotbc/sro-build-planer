@@ -2,12 +2,12 @@
 
 one:
   character: one
-  skill_group: one
+  skill_group: sword_mastery_skills
   current_level: 1
   target_level: 1
 
 two:
   character: two
-  skill_group: two
+  skill_group: warrior_skills
   current_level: 1
   target_level: 1
