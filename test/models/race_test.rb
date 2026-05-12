@@ -22,11 +22,26 @@ class RaceTest < ActiveSupport::TestCase
     assert_includes race.errors[:external_id], "has already been taken"
   end
 
+  test "invalid without name" do
+    race = Race.new(external_id: 4)
+
+    assert_not race.valid?
+    assert_includes race.errors[:name], "can't be blank"
+  end
+
   test "database rejects null name" do
     race = Race.new(external_id: 4, name: nil)
 
     assert_raises(ActiveRecord::NotNullViolation) do
       race.save!(validate: false)
     end
+  end
+
+  test "has_many masteries" do
+    assert_respond_to races(:chinese), :masteries
+  end
+
+  test "has_many characters" do
+    assert_respond_to races(:chinese), :characters
   end
 end
