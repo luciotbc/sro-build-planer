@@ -17,4 +17,5 @@ Things you may want to cover:
 
 1. Clone the repository
 2. Install dependencies using `bundle install`
-3. Run the application using `bin/dev`
+3. Enable git hooks: `git config core.hooksPath .githooks`
+4. Run the application using `bin/dev`
