@@ -2,12 +2,12 @@
 
 one:
   name: MyString
-  race: one
+  race: chinese
   current_level: 1
   target_level: 1
 
 two:
   name: MyString
-  race: two
+  race: european
   current_level: 1
   target_level: 1
