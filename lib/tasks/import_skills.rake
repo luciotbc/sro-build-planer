@@ -7,7 +7,7 @@ namespace :import do
       args.csv_path ||
         Rails.root.join("doc", "import", "SRO_Skills_Complete.csv").to_s
 
-    importer = SRO::SkillsImporter.new(csv_path)
+    importer = Sro::SkillsImporter.new(csv_path)
     success = importer.import!
 
     exit(1) unless success
@@ -19,13 +19,13 @@ namespace :import do
     ch_xml_path =
       args.xml_path || Rails.root.join("doc", "import", "skill_ch.xml").to_s
 
-    importer = SRO::XmlSkillsImporter.new(ch_xml_path, :ch)
+    importer = Sro::XmlSkillsImporter.new(ch_xml_path, :ch)
     ch_success = importer.import!
 
     eu_xml_path =
       args.xml_path || Rails.root.join("doc", "import", "skill_eu.xml").to_s
 
-    importer = SRO::XmlSkillsImporter.new(eu_xml_path, :eu)
+    importer = Sro::XmlSkillsImporter.new(eu_xml_path, :eu)
     eu_success = importer.import!
 
     success = ch_success && eu_success

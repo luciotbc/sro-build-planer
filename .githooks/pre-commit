@@ -4,16 +4,21 @@ set -e
 # Auto-format staged Ruby and Rake files with syntax_tree before committing.
 files=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(rb|rake)$|^Rakefile$' || true)
 
-if [ -z "$files" ]; then
-  exit 0
+if [ -n "$files" ]; then
+  echo "syntax_tree: formatting staged Ruby/Rake files..."
+
+  for file in $files; do
+    stree write "$file"
+    git add "$file"
+  done
+
+  echo "rubocop: checking staged Ruby/Rake files..."
+  bin/rubocop $files
 fi
 
-echo "syntax_tree: formatting staged Ruby/Rake files..."
-
-for file in $files; do
-  stree write "$file"
-  git add "$file"
-done
-
-echo "rubocop: checking staged Ruby/Rake files..."
-bin/rubocop $files
+# Regenerate ERD diagram when db/schema.rb is staged.
+if git diff --cached --name-only | grep -q "^db/schema\.rb$"; then
+  echo "schema.rb changed: regenerating doc/diagrams/db-erd.svg..."
+  bin/rails docs:erd
+  git add doc/diagrams/db-erd.svg
+fi

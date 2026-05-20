@@ -1,6 +1,6 @@
 require "nokogiri"
 
-module SRO
+module Sro
   class XmlSkillsImporter
     RACES = {
       ch: {

@@ -1,6 +1,6 @@
 require "csv"
 
-module SRO
+module Sro
   class SkillsImporter
     # Configuration for field comparison per model
     COMPARISON_FIELDS = {
