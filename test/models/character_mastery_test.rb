@@ -44,4 +44,78 @@ class CharacterMasteryTest < ActiveSupport::TestCase
 
     assert_equal masteries(:spear), cm.mastery
   end
+
+  test "valid with nil mastery levels" do
+    cm =
+      CharacterMastery.new(
+        character: characters(:one),
+        mastery: masteries(:spear)
+      )
+
+    assert cm.valid?
+  end
+
+  test "valid with mastery levels within range" do
+    cm =
+      CharacterMastery.new(
+        character: characters(:one),
+        mastery: masteries(:spear),
+        current_mastery_level: 0,
+        target_mastery_level: Character::MAX_LEVEL
+      )
+
+    assert cm.valid?
+  end
+
+  test "invalid with current_mastery_level below 0" do
+    cm =
+      CharacterMastery.new(
+        character: characters(:one),
+        mastery: masteries(:spear),
+        current_mastery_level: -1
+      )
+
+    assert_not cm.valid?
+    assert_includes cm.errors[:current_mastery_level],
+                    "must be greater than or equal to 0"
+  end
+
+  test "invalid with current_mastery_level above MAX_LEVEL" do
+    cm =
+      CharacterMastery.new(
+        character: characters(:one),
+        mastery: masteries(:spear),
+        current_mastery_level: Character::MAX_LEVEL + 1
+      )
+
+    assert_not cm.valid?
+    assert_includes cm.errors[:current_mastery_level],
+                    "must be less than or equal to #{Character::MAX_LEVEL}"
+  end
+
+  test "invalid with target_mastery_level below 0" do
+    cm =
+      CharacterMastery.new(
+        character: characters(:one),
+        mastery: masteries(:spear),
+        target_mastery_level: -1
+      )
+
+    assert_not cm.valid?
+    assert_includes cm.errors[:target_mastery_level],
+                    "must be greater than or equal to 0"
+  end
+
+  test "invalid with target_mastery_level above MAX_LEVEL" do
+    cm =
+      CharacterMastery.new(
+        character: characters(:one),
+        mastery: masteries(:spear),
+        target_mastery_level: Character::MAX_LEVEL + 1
+      )
+
+    assert_not cm.valid?
+    assert_includes cm.errors[:target_mastery_level],
+                    "must be less than or equal to #{Character::MAX_LEVEL}"
+  end
 end
