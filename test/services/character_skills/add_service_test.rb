@@ -1,0 +1,383 @@
+require "test_helper"
+
+class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
+  # ───────── helpers ────────────────────────────────────────────────────────
+
+  def fresh_char
+    Character.create!(
+      name: "Fresh",
+      race: races(:chinese),
+      current_level: 0,
+      target_level: 0
+    )
+  end
+
+  # ───────── validations ────────────────────────────────────────────────────
+
+  test "fails when skill_group does not exist" do
+    result =
+      CharacterSkills::AddService.call(
+        characters(:one),
+        skill_group_id: 0,
+        current_skill_level: 1
+      )
+
+    assert_not result.success?
+    assert result.errors.any? { |e| e.include?("SkillGroup must exist") }
+  end
+
+  test "fails when skill_group race differs from character race" do
+    result =
+      CharacterSkills::AddService.call(
+        characters(:one),
+        skill_group_id: skill_groups(:warrior_skills).id,
+        current_skill_level: 1
+      )
+
+    assert_not result.success?
+    assert result.errors.any? { |e| e.include?("race") }
+  end
+
+  test "fails when skill already added to this character" do
+    result =
+      CharacterSkills::AddService.call(
+        characters(:one),
+        skill_group_id: skill_groups(:sword_mastery_skills).id,
+        current_skill_level: 1
+      )
+
+    assert_not result.success?
+    assert result.errors.any? { |e| e.include?("already been added") }
+  end
+
+  test "fails when current_skill_level is nil" do
+    result =
+      CharacterSkills::AddService.call(
+        characters(:one),
+        skill_group_id: skill_groups(:cold_force_skills).id
+      )
+
+    assert_not result.success?
+    assert result.errors.any? { |e|
+             e.include?("current_skill_level is required")
+           }
+  end
+
+  test "fails when current_skill_level is negative" do
+    result =
+      CharacterSkills::AddService.call(
+        characters(:one),
+        skill_group_id: skill_groups(:cold_force_skills).id,
+        current_skill_level: -1
+      )
+
+    assert_not result.success?
+    assert result.errors.any? { |e|
+             e.include?("current_skill_level") && e.include?(">= 0")
+           }
+  end
+
+  test "fails when current_skill_level exceeds max_skill_level" do
+    result =
+      CharacterSkills::AddService.call(
+        fresh_char,
+        skill_group_id: skill_groups(:sword_mastery_skills).id,
+        current_skill_level: 3
+      )
+
+    assert_not result.success?
+    assert result.errors.any? { |e|
+             e.include?("current_skill_level") && e.include?("<= 2")
+           }
+  end
+
+  test "fails when target_skill_level is negative" do
+    result =
+      CharacterSkills::AddService.call(
+        fresh_char,
+        skill_group_id: skill_groups(:cold_force_skills).id,
+        current_skill_level: 0,
+        target_skill_level: -1
+      )
+
+    assert_not result.success?
+    assert result.errors.any? { |e|
+             e.include?("target_skill_level") && e.include?(">= 0")
+           }
+  end
+
+  test "fails when target_skill_level exceeds max_skill_level" do
+    result =
+      CharacterSkills::AddService.call(
+        fresh_char,
+        skill_group_id: skill_groups(:sword_mastery_skills).id,
+        current_skill_level: 0,
+        target_skill_level: 3
+      )
+
+    assert_not result.success?
+    assert result.errors.any? { |e|
+             e.include?("target_skill_level") && e.include?("<= 2")
+           }
+  end
+
+  # ───────── happy path ────────────────────────────────────────────────────
+
+  test "creates CharacterSkill with provided levels" do
+    char = fresh_char
+    result =
+      CharacterSkills::AddService.call(
+        char,
+        skill_group_id: skill_groups(:sword_mastery_skills).id,
+        current_skill_level: 1,
+        target_skill_level: 2
+      )
+
+    assert result.success?
+    assert_instance_of CharacterSkill, result.data
+    assert_equal 1, result.data.current_skill_level
+    assert_equal 2, result.data.target_skill_level
+  end
+
+  test "defaults target_skill_level to 0 when not provided" do
+    char = fresh_char
+    result =
+      CharacterSkills::AddService.call(
+        char,
+        skill_group_id: skill_groups(:sword_mastery_skills).id,
+        current_skill_level: 1
+      )
+
+    assert result.success?
+    assert_equal 0, result.data.target_skill_level
+  end
+
+  test "accepts current_skill_level of 0" do
+    char = fresh_char
+    result =
+      CharacterSkills::AddService.call(
+        char,
+        skill_group_id: skill_groups(:sword_mastery_skills).id,
+        current_skill_level: 0
+      )
+
+    assert result.success?
+    assert_equal 0, result.data.current_skill_level
+  end
+
+  test "persists CharacterSkill to the database" do
+    assert_difference "CharacterSkill.count", 1 do
+      CharacterSkills::AddService.call(
+        fresh_char,
+        skill_group_id: skill_groups(:sword_mastery_skills).id,
+        current_skill_level: 1
+      )
+    end
+  end
+
+  # ───────── CharacterMastery auto-create ──────────────────────────────────
+
+  test "auto-creates CharacterMastery when not present" do
+    char = fresh_char
+    assert_difference "CharacterMastery.count", 1 do
+      CharacterSkills::AddService.call(
+        char,
+        skill_group_id: skill_groups(:sword_mastery_skills).id,
+        current_skill_level: 1
+      )
+    end
+  end
+
+  test "sets mastery levels from the skill mastery_level_req" do
+    char = fresh_char
+    CharacterSkills::AddService.call(
+      char,
+      skill_group_id: skill_groups(:sword_mastery_skills).id,
+      current_skill_level: 1,
+      target_skill_level: 2
+    )
+
+    cm =
+      CharacterMastery.find_by(
+        character: char,
+        mastery: masteries(:blade_sword)
+      )
+    # blade_passive_skill (level 1): mastery_level_req = 1
+    # blade_active_skill  (level 2): mastery_level_req = 5
+    assert_equal 1, cm.current_mastery_level
+    assert_equal 5, cm.target_mastery_level
+  end
+
+  test "adds warning when CharacterMastery is auto-created" do
+    result =
+      CharacterSkills::AddService.call(
+        fresh_char,
+        skill_group_id: skill_groups(:sword_mastery_skills).id,
+        current_skill_level: 1
+      )
+
+    assert result.warnings.any? { |w| w.include?("criada automaticamente") }
+  end
+
+  # ───────── CharacterMastery auto-update ──────────────────────────────────
+
+  test "updates CharacterMastery.current_mastery_level when too low" do
+    char = fresh_char
+    mastery = masteries(:blade_sword)
+    cm =
+      CharacterMastery.create!(
+        character: char,
+        mastery:,
+        current_mastery_level: 0
+      )
+
+    CharacterSkills::AddService.call(
+      char,
+      skill_group_id: skill_groups(:sword_mastery_skills).id,
+      current_skill_level: 2
+    )
+
+    # blade_active_skill (level 2): mastery_level_req = 5
+    assert_equal 5, cm.reload.current_mastery_level
+  end
+
+  test "adds warning when CharacterMastery is updated" do
+    char = fresh_char
+    CharacterMastery.create!(
+      character: char,
+      mastery: masteries(:blade_sword),
+      current_mastery_level: 0
+    )
+
+    result =
+      CharacterSkills::AddService.call(
+        char,
+        skill_group_id: skill_groups(:sword_mastery_skills).id,
+        current_skill_level: 2
+      )
+
+    assert result.warnings.any? { |w| w.include?("atualizado para") }
+  end
+
+  test "does not update CharacterMastery when level is already sufficient" do
+    char = fresh_char
+    mastery = masteries(:blade_sword)
+    cm =
+      CharacterMastery.create!(
+        character: char,
+        mastery:,
+        current_mastery_level: 10
+      )
+
+    CharacterSkills::AddService.call(
+      char,
+      skill_group_id: skill_groups(:sword_mastery_skills).id,
+      current_skill_level: 1
+    )
+
+    assert_equal 10, cm.reload.current_mastery_level
+  end
+
+  # ───────── character level auto-update ───────────────────────────────────
+
+  test "auto-updates character current_level when mastery exceeds it" do
+    char = fresh_char # current_level = 0
+    CharacterSkills::AddService.call(
+      char,
+      skill_group_id: skill_groups(:sword_mastery_skills).id,
+      current_skill_level: 1 # mastery_level_req = 1 > 0
+    )
+
+    assert_equal 1, char.reload.current_level
+  end
+
+  test "adds warning when character level is auto-updated" do
+    char = fresh_char
+    result =
+      CharacterSkills::AddService.call(
+        char,
+        skill_group_id: skill_groups(:sword_mastery_skills).id,
+        current_skill_level: 1
+      )
+
+    assert result.warnings.any? { |w| w.include?("character.current_level") }
+  end
+
+  # ───────── prerequisite resolution ───────────────────────────────────────
+
+  test "auto-adds prerequisite skill when not present" do
+    char = fresh_char
+    # spear requires sword at level 1; char has no skills yet
+    assert_difference "CharacterSkill.count", 2 do
+      CharacterSkills::AddService.call(
+        char,
+        skill_group_id: skill_groups(:spear_mastery_skills).id,
+        current_skill_level: 1
+      )
+    end
+
+    prereq_cs =
+      CharacterSkill.find_by(
+        character: char,
+        skill_group: skill_groups(:sword_mastery_skills)
+      )
+    assert_not_nil prereq_cs
+    assert_equal 1, prereq_cs.current_skill_level
+  end
+
+  test "adds warning when prerequisite is auto-added" do
+    result =
+      CharacterSkills::AddService.call(
+        fresh_char,
+        skill_group_id: skill_groups(:spear_mastery_skills).id,
+        current_skill_level: 1
+      )
+
+    assert result.warnings.any? { |w| w.include?("adicionado automaticamente") }
+  end
+
+  test "upgrades existing prerequisite when level is insufficient" do
+    # characters(:one) already has sword at level 1; cold requires sword at 3
+    result =
+      CharacterSkills::AddService.call(
+        characters(:one),
+        skill_group_id: skill_groups(:cold_force_skills).id,
+        current_skill_level: 1
+      )
+
+    assert result.success?
+    assert_equal 3, character_skills(:one).reload.current_skill_level
+    assert result.warnings.any? { |w|
+             w.include?("Blade Skills") && w.include?("atualizado para 3")
+           }
+  end
+
+  test "does not add or modify prerequisite when already at sufficient level" do
+    # characters(:one) has sword at level 1; spear requires sword at 1 — already met
+    CharacterSkills::AddService.call(
+      characters(:one),
+      skill_group_id: skill_groups(:spear_mastery_skills).id,
+      current_skill_level: 1
+    )
+
+    # sword should remain at level 1, not be duplicated
+    assert_equal 1, character_skills(:one).reload.current_skill_level
+    assert_equal 1,
+                 CharacterSkill.where(
+                   character: characters(:one),
+                   skill_group: skill_groups(:sword_mastery_skills)
+                 ).count
+  end
+
+  test "does not resolve prerequisites when current_skill_level is 0" do
+    char = fresh_char
+    # spear requires sword at level 1, but current_skill_level is 0 → no prereq resolution
+    assert_difference "CharacterSkill.count", 1 do
+      CharacterSkills::AddService.call(
+        char,
+        skill_group_id: skill_groups(:spear_mastery_skills).id,
+        current_skill_level: 0
+      )
+    end
+  end
+end
