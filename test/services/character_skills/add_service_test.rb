@@ -216,7 +216,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
         current_skill_level: 1
       )
 
-    assert result.warnings.any? { |w| w.include?("criada automaticamente") }
+    assert result.warnings.any? { |w| w.include?("created automatically") }
   end
 
   # ───────── CharacterMastery auto-update ──────────────────────────────────
@@ -256,7 +256,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
         current_skill_level: 2
       )
 
-    assert result.warnings.any? { |w| w.include?("atualizado para") }
+    assert result.warnings.any? { |w| w.include?("updated to") }
   end
 
   test "does not update CharacterMastery when level is already sufficient" do
@@ -329,11 +329,9 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
       )
 
     assert result.success?
-    assert result.warnings.any? { |w|
-             w.include?("adicionado automaticamente")
-           },
+    assert result.warnings.any? { |w| w.include?("added automatically") },
            "must warn about auto-added prerequisite"
-    assert result.warnings.any? { |w| w.include?("criada automaticamente") },
+    assert result.warnings.any? { |w| w.include?("created automatically") },
            "must warn about auto-created CharacterMastery"
     assert result.warnings.any? { |w| w.include?("character.current_level") },
            "must warn about character level auto-update"
@@ -371,7 +369,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
         current_skill_level: 1
       )
 
-    assert result.warnings.any? { |w| w.include?("adicionado automaticamente") }
+    assert result.warnings.any? { |w| w.include?("added automatically") }
   end
 
   test "upgrades existing prerequisite when level is insufficient" do
@@ -386,7 +384,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert result.success?
     assert_equal 3, character_skills(:one).reload.current_skill_level
     assert result.warnings.any? { |w|
-             w.include?("Blade Skills") && w.include?("atualizado para 3")
+             w.include?("Blade Skills") && w.include?("updated to 3")
            }
   end
 

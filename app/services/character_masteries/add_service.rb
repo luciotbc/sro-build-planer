@@ -55,12 +55,12 @@ module CharacterMasteries
 
       if current_mastery_level > (@character.current_level || 0)
         updates[:current_level] = current_mastery_level
-        @warnings << "character.current_level atualizado para #{current_mastery_level}"
+        @warnings << "character.current_level updated to #{current_mastery_level}"
       end
 
       if target_mastery_level > (@character.target_level || 0)
         updates[:target_level] = target_mastery_level
-        @warnings << "character.target_level atualizado para #{target_mastery_level}"
+        @warnings << "character.target_level updated to #{target_mastery_level}"
       end
 
       @character.update!(updates) if updates.any?

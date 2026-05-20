@@ -97,7 +97,7 @@ module CharacterSkills
             end
           elsif existing.current_skill_level.to_i < required_level
             existing.update!(current_skill_level: required_level)
-            @warnings << "prerequisite '#{required_group.name}' current_skill_level atualizado para #{required_level}"
+            @warnings << "prerequisite '#{required_group.name}' current_skill_level updated to #{required_level}"
             resolve_prerequisites(required_group, visited)
           end
         end
@@ -111,7 +111,7 @@ module CharacterSkills
         current_skill_level: level,
         target_skill_level: level
       )
-      @warnings << "prerequisite '#{skill_group.name}' adicionado automaticamente"
+      @warnings << "prerequisite '#{skill_group.name}' added automatically"
     end
 
     def ensure_mastery(skill_group, current_level, target_level)
@@ -130,12 +130,12 @@ module CharacterSkills
           current_mastery_level: current_req,
           target_mastery_level: target_req
         )
-        @warnings << "CharacterMastery '#{mastery.name}' criada automaticamente"
+        @warnings << "CharacterMastery '#{mastery.name}' created automatically"
         sync_character_level(:current_level, current_req)
         sync_character_level(:target_level, target_req)
       elsif cm.current_mastery_level.to_i < current_req
         cm.update!(current_mastery_level: current_req)
-        @warnings << "CharacterMastery '#{mastery.name}' current_mastery_level atualizado para #{current_req}"
+        @warnings << "CharacterMastery '#{mastery.name}' current_mastery_level updated to #{current_req}"
         sync_character_level(:current_level, current_req)
       end
     end
@@ -145,7 +145,7 @@ module CharacterSkills
       return unless mastery_level > char_level
 
       @character.update!(attr => mastery_level)
-      @warnings << "character.#{attr} atualizado para #{mastery_level}"
+      @warnings << "character.#{attr} updated to #{mastery_level}"
     end
   end
 end

@@ -121,7 +121,7 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
     )
 
     result = add_skill(char, :spear_mastery_skills, 1)
-    assert result.warnings.any? { |w| w.include?("atualizado para 1") }
+    assert result.warnings.any? { |w| w.include?("updated to 1") }
   end
 
   # ───────── DFS: 3-level chain ─────────────────────────────────────────────

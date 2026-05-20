@@ -328,7 +328,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
         current_skill_level: 2
       )
 
-    assert result.warnings.any? { |w| w.include?("atualizado para") }
+    assert result.warnings.any? { |w| w.include?("updated to") }
   end
 
   test "does not update CharacterMastery when level is already sufficient" do
