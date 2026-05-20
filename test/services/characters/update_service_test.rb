@@ -168,6 +168,19 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
     assert result.success?
   end
 
+  test "preserves other character fields when race changes" do
+    char = characters(:one)
+    original_name = char.name
+    original_current_level = char.current_level
+
+    Characters::UpdateService.call(char, race_id: races(:european).id)
+
+    char.reload
+    assert_equal original_name, char.name
+    assert_equal original_current_level, char.current_level
+    assert_equal races(:european).id, char.race_id
+  end
+
   test "skips mastery check when race is also changing" do
     char = characters(:one)
     char.update!(current_level: 80)

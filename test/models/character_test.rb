@@ -118,4 +118,30 @@ class CharacterTest < ActiveSupport::TestCase
     assert_not character.valid?
     assert_includes character.errors[:current_level], "must be an integer"
   end
+
+  test "invalid with blank name" do
+    character = Character.new(name: "", race: races(:chinese))
+
+    assert_not character.valid?
+    assert_includes character.errors[:name], "can't be blank"
+  end
+
+  test "invalid with nonexistent race_id" do
+    character = Character.new(name: "Test", race_id: 0)
+
+    assert_not character.valid?
+    assert_includes character.errors[:race], "must exist"
+  end
+
+  test "target_level can be lower than current_level without error" do
+    character =
+      Character.new(
+        name: "Test",
+        race: races(:chinese),
+        current_level: 80,
+        target_level: 30
+      )
+
+    assert character.valid?
+  end
 end

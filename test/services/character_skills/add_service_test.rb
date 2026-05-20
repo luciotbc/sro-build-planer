@@ -303,6 +303,44 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert result.warnings.any? { |w| w.include?("character.current_level") }
   end
 
+  # ───────── warnings accumulation ────────────────────────────────────────
+
+  test "warnings accumulate across prerequisite and mastery auto-creation" do
+    # Adding spear (requires sword at 1) to a fresh char:
+    #   1. CharacterMastery for blade_sword auto-created (sword prereq)
+    #   2. character.current_level raised (sword mastery req > 0)
+    #   3. character.target_level raised
+    #   4. prerequisite 'Blade Skills' added automatically
+    #   5. CharacterMastery for spear auto-created
+    #   6. character.current_level raised again (spear mastery req > sword's)
+    char =
+      Character.create!(
+        name: "Fresh",
+        race: races(:chinese),
+        current_level: 0,
+        target_level: 0
+      )
+
+    result =
+      CharacterSkills::AddService.call(
+        char,
+        skill_group_id: skill_groups(:spear_mastery_skills).id,
+        current_skill_level: 1
+      )
+
+    assert result.success?
+    assert result.warnings.any? { |w|
+             w.include?("adicionado automaticamente")
+           },
+           "must warn about auto-added prerequisite"
+    assert result.warnings.any? { |w| w.include?("criada automaticamente") },
+           "must warn about auto-created CharacterMastery"
+    assert result.warnings.any? { |w| w.include?("character.current_level") },
+           "must warn about character level auto-update"
+    assert result.warnings.size >= 4,
+           "expected at least 4 accumulated warnings, got #{result.warnings.size}"
+  end
+
   # ───────── prerequisite resolution ───────────────────────────────────────
 
   test "auto-adds prerequisite skill when not present" do

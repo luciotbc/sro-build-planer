@@ -1,5 +1,5 @@
 module CharacterSkills
-  class AddService
+  class UpdateService
     def self.call(character, params) = new(character, params).call
 
     def initialize(character, params)
@@ -9,51 +9,66 @@ module CharacterSkills
     end
 
     def call
-      sg =
-        SkillGroup.includes(mastery: :race).find_by(
-          id: @params[:skill_group_id]
+      cs =
+        CharacterSkill.includes(skill_group: :mastery).find_by(
+          character: @character,
+          skill_group_id: @params[:skill_group_id]
         )
-      return ServiceResult.fail(errors: ["SkillGroup must exist"]) unless sg
+      return ServiceResult.fail(errors: ["CharacterSkill not found"]) unless cs
 
-      unless sg.mastery.race_id == @character.race_id
-        return(
-          ServiceResult.fail(
-            errors: ["SkillGroup race does not match character race"]
-          )
-        )
+      if @params.key?(:character_id)
+        return ServiceResult.fail(errors: ["character_id cannot be changed"])
       end
 
-      if CharacterSkill.exists?(character: @character, skill_group: sg)
-        return(
-          ServiceResult.fail(
-            errors: ["Skill has already been added to this character"]
-          )
-        )
+      if @params.key?(:skill_group_id) &&
+           @params[:skill_group_id] != cs.skill_group_id
+        return(ServiceResult.fail(errors: ["skill_group_id cannot be changed"]))
       end
 
-      current_level = @params[:current_skill_level]
-      if current_level.nil?
-        return ServiceResult.fail(errors: ["current_skill_level is required"])
-      end
-
-      target_level = @params.fetch(:target_skill_level, 0)
+      sg = cs.skill_group
+      new_current = @params[:current_skill_level]
+      new_target = @params[:target_skill_level]
 
       errors =
-        validate_level("current_skill_level", current_level, sg) +
-          validate_level("target_skill_level", target_level, sg)
+        (
+          if new_current
+            validate_level("current_skill_level", new_current, sg)
+          else
+            []
+          end
+        ) +
+          (
+            if new_target
+              validate_level("target_skill_level", new_target, sg)
+            else
+              []
+            end
+          )
       return ServiceResult.fail(errors:) if errors.any?
 
-      cs = nil
-      ActiveRecord::Base.transaction do
-        resolve_prerequisites(sg, Set.new) if current_level > 0
-        ensure_mastery(sg, current_level, target_level)
-        cs =
-          CharacterSkill.create!(
-            character: @character,
-            skill_group: sg,
-            current_skill_level: current_level,
-            target_skill_level: target_level
+      if new_current && new_current < cs.current_skill_level.to_i
+        blocking = find_blocking_dependents(sg, new_current)
+        if blocking.any?
+          return(
+            ServiceResult.fail(
+              errors: [
+                "Cannot decrease current_skill_level: blocked by #{blocking.join(", ")}"
+              ]
+            )
           )
+        end
+      end
+
+      ActiveRecord::Base.transaction do
+        if new_current && new_current > cs.current_skill_level.to_i
+          resolve_prerequisites(sg, Set.new)
+          update_mastery(sg, new_current)
+        end
+
+        updates = {}
+        updates[:current_skill_level] = new_current if new_current
+        updates[:target_skill_level] = new_target if new_target
+        cs.update!(updates) if updates.any?
       end
 
       ServiceResult.ok(data: cs, warnings: @warnings)
@@ -72,6 +87,24 @@ module CharacterSkills
         errors << "#{attr} must be <= #{sg.max_skill_level}"
       end
       errors
+    end
+
+    def find_blocking_dependents(skill_group, new_current_level)
+      SkillGroupRequirement
+        .includes(:skill_group)
+        .where(required_group: skill_group)
+        .where("required_skill_level > ?", new_current_level)
+        .filter_map do |req|
+          dep_cs =
+            @character.character_skills.find_by(skill_group: req.skill_group)
+          next unless dep_cs
+          unless dep_cs.current_skill_level.to_i >=
+                   req.required_skill_level.to_i
+            next
+          end
+
+          req.skill_group.name
+        end
     end
 
     def resolve_prerequisites(skill_group, visited)
@@ -104,7 +137,7 @@ module CharacterSkills
     end
 
     def add_prerequisite(skill_group, level)
-      ensure_mastery(skill_group, level, level)
+      update_mastery(skill_group, level)
       CharacterSkill.create!(
         character: @character,
         skill_group: skill_group,
@@ -114,12 +147,10 @@ module CharacterSkills
       @warnings << "prerequisite '#{skill_group.name}' adicionado automaticamente"
     end
 
-    def ensure_mastery(skill_group, current_level, target_level)
+    def update_mastery(skill_group, current_level)
       mastery = skill_group.mastery
       current_req =
         skill_group.skill_at_level(current_level)&.mastery_level_req.to_i
-      target_req =
-        skill_group.skill_at_level(target_level)&.mastery_level_req.to_i
 
       cm = CharacterMastery.find_by(character: @character, mastery:)
 
@@ -128,11 +159,10 @@ module CharacterSkills
           character: @character,
           mastery:,
           current_mastery_level: current_req,
-          target_mastery_level: target_req
+          target_mastery_level: 0
         )
         @warnings << "CharacterMastery '#{mastery.name}' criada automaticamente"
         sync_character_level(:current_level, current_req)
-        sync_character_level(:target_level, target_req)
       elsif cm.current_mastery_level.to_i < current_req
         cm.update!(current_mastery_level: current_req)
         @warnings << "CharacterMastery '#{mastery.name}' current_mastery_level atualizado para #{current_req}"
