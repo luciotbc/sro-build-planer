@@ -10,11 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_12_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_20_045559) do
   create_table "character_masteries", force: :cascade do |t|
     t.integer "character_id", null: false
     t.datetime "created_at", null: false
+    t.integer "current_level"
     t.integer "mastery_id", null: false
+    t.integer "target_level"
     t.datetime "updated_at", null: false
     t.index ["character_id"], name: "index_character_masteries_on_character_id"
     t.index ["mastery_id"], name: "index_character_masteries_on_mastery_id"
