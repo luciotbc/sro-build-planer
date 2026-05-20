@@ -53,13 +53,20 @@ class CharacterTest < ActiveSupport::TestCase
     assert character.valid?
   end
 
-  test "invalid with current_level below 1" do
+  test "valid with current_level of 0" do
     character =
       Character.new(name: "Test", race: races(:chinese), current_level: 0)
 
+    assert character.valid?
+  end
+
+  test "invalid with current_level below 0" do
+    character =
+      Character.new(name: "Test", race: races(:chinese), current_level: -1)
+
     assert_not character.valid?
     assert_includes character.errors[:current_level],
-                    "must be greater than or equal to 1"
+                    "must be greater than or equal to 0"
   end
 
   test "invalid with current_level above MAX_LEVEL" do
@@ -75,13 +82,20 @@ class CharacterTest < ActiveSupport::TestCase
                     "must be less than or equal to #{Character::MAX_LEVEL}"
   end
 
-  test "invalid with target_level below 1" do
+  test "valid with target_level of 0" do
     character =
       Character.new(name: "Test", race: races(:chinese), target_level: 0)
 
+    assert character.valid?
+  end
+
+  test "invalid with target_level below 0" do
+    character =
+      Character.new(name: "Test", race: races(:chinese), target_level: -1)
+
     assert_not character.valid?
     assert_includes character.errors[:target_level],
-                    "must be greater than or equal to 1"
+                    "must be greater than or equal to 0"
   end
 
   test "invalid with target_level above MAX_LEVEL" do
