@@ -8,6 +8,7 @@ sword_mastery_skills:
   description: "A collection of fundamental blade sword techniques"
   icon_path: "/assets/icons/blade.png"
   mastery: blade_sword
+  max_skill_level: 2
 
 # Spear Mastery Skill Group
 spear_mastery_skills:

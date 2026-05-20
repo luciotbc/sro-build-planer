@@ -66,4 +66,57 @@ class SkillGroupTest < ActiveSupport::TestCase
   test "has_many character_skills" do
     assert_respond_to skill_groups(:sword_mastery_skills), :character_skills
   end
+
+  test "skill_at_level returns the skill matching the given level" do
+    sg = skill_groups(:sword_mastery_skills)
+
+    assert_equal skills(:blade_passive_skill), sg.skill_at_level(1)
+    assert_equal skills(:blade_active_skill), sg.skill_at_level(2)
+  end
+
+  test "skill_at_level returns nil when no skill exists at that level" do
+    sg = skill_groups(:spear_mastery_skills)
+
+    assert_nil sg.skill_at_level(0)
+  end
+
+  test "skill_at_level returns nil for level 0 when no skill at level 0" do
+    sg = skill_groups(:sword_mastery_skills)
+
+    assert_nil sg.skill_at_level(0)
+  end
+
+  test "skill_at_level raises ArgumentError for negative level" do
+    sg = skill_groups(:sword_mastery_skills)
+
+    assert_raises(ArgumentError) { sg.skill_at_level(-1) }
+  end
+
+  test "skill_at_level raises ArgumentError with descriptive message for negative level" do
+    sg = skill_groups(:sword_mastery_skills)
+    error = assert_raises(ArgumentError) { sg.skill_at_level(-1) }
+
+    assert_match "-1", error.message
+  end
+
+  test "skill_at_level raises ArgumentError when level exceeds max_skill_level" do
+    sg = skill_groups(:sword_mastery_skills)
+
+    assert_raises(ArgumentError) { sg.skill_at_level(3) }
+  end
+
+  test "skill_at_level raises ArgumentError with descriptive message for level above max" do
+    sg = skill_groups(:sword_mastery_skills)
+    error = assert_raises(ArgumentError) { sg.skill_at_level(3) }
+
+    assert_match "3", error.message
+    assert_match sg.max_skill_level.to_s, error.message
+  end
+
+  test "skill_at_level allows any non-negative level when max_skill_level is nil" do
+    sg = skill_groups(:spear_mastery_skills)
+
+    assert_nil sg.max_skill_level
+    assert_nil sg.skill_at_level(99)
+  end
 end

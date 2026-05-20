@@ -56,4 +56,58 @@ class CharacterSkillTest < ActiveSupport::TestCase
     assert_equal skill_groups(:sword_mastery_skills),
                  character_skills(:one).skill_group
   end
+
+  test "current_skill returns the skill at current_skill_level" do
+    cs = character_skills(:one)
+
+    assert_equal skills(:blade_passive_skill), cs.current_skill
+  end
+
+  test "current_skill returns nil when current_skill_level is 0" do
+    cs =
+      CharacterSkill.new(
+        character: characters(:one),
+        skill_group: skill_groups(:cold_force_skills),
+        current_skill_level: 0
+      )
+
+    assert_nil cs.current_skill
+  end
+
+  test "current_skill returns nil when current_skill_level is nil" do
+    cs =
+      CharacterSkill.new(
+        character: characters(:one),
+        skill_group: skill_groups(:cold_force_skills)
+      )
+
+    assert_nil cs.current_skill
+  end
+
+  test "target_skill returns the skill at target_skill_level" do
+    cs = character_skills(:one)
+
+    assert_equal skills(:blade_passive_skill), cs.target_skill
+  end
+
+  test "target_skill returns nil when target_skill_level is 0" do
+    cs =
+      CharacterSkill.new(
+        character: characters(:one),
+        skill_group: skill_groups(:cold_force_skills),
+        target_skill_level: 0
+      )
+
+    assert_nil cs.target_skill
+  end
+
+  test "target_skill returns nil when target_skill_level is nil" do
+    cs =
+      CharacterSkill.new(
+        character: characters(:one),
+        skill_group: skill_groups(:cold_force_skills)
+      )
+
+    assert_nil cs.target_skill
+  end
 end
