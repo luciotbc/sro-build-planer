@@ -33,12 +33,12 @@
 <polyline fill="none" stroke="black" points="116,-444 260.08,-444"/>
 <text xml:space="preserve" text-anchor="start" x="123.04" y="-429.9" font-family="ArialMT" font-size="10.00">character_id </text>
 <text xml:space="preserve" text-anchor="start" x="179.29" y="-429.9" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer ∗ FK</text>
-<text xml:space="preserve" text-anchor="start" x="123.04" y="-415.15" font-family="ArialMT" font-size="10.00">current_level </text>
-<text xml:space="preserve" text-anchor="start" x="181.54" y="-415.15" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer</text>
+<text xml:space="preserve" text-anchor="start" x="123.04" y="-415.15" font-family="ArialMT" font-size="10.00">current_mastery_level </text>
+<text xml:space="preserve" text-anchor="start" x="222.04" y="-415.15" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer</text>
 <text xml:space="preserve" text-anchor="start" x="123.04" y="-401.9" font-family="ArialMT" font-size="10.00">mastery_id </text>
 <text xml:space="preserve" text-anchor="start" x="174.04" y="-401.9" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer ∗ FK</text>
-<text xml:space="preserve" text-anchor="start" x="123.04" y="-387.15" font-family="ArialMT" font-size="10.00">target_level </text>
-<text xml:space="preserve" text-anchor="start" x="176.29" y="-387.15" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer</text>
+<text xml:space="preserve" text-anchor="start" x="123.04" y="-387.15" font-family="ArialMT" font-size="10.00">target_mastery_level </text>
+<text xml:space="preserve" text-anchor="start" x="216.79" y="-387.15" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer</text>
 </g>
 <!-- m_Character&#45;&gt;m_CharacterMastery -->
 <g id="edge11" class="edge">
@@ -54,12 +54,12 @@
 <polyline fill="none" stroke="black" points="0,-93.7 144.08,-93.7"/>
 <text xml:space="preserve" text-anchor="start" x="7.04" y="-79.6" font-family="ArialMT" font-size="10.00">character_id </text>
 <text xml:space="preserve" text-anchor="start" x="63.29" y="-79.6" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer ∗ FK</text>
-<text xml:space="preserve" text-anchor="start" x="7.04" y="-64.85" font-family="ArialMT" font-size="10.00">current_level </text>
-<text xml:space="preserve" text-anchor="start" x="65.54" y="-64.85" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer</text>
+<text xml:space="preserve" text-anchor="start" x="7.04" y="-64.85" font-family="ArialMT" font-size="10.00">current_skill_level </text>
+<text xml:space="preserve" text-anchor="start" x="88.04" y="-64.85" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer</text>
 <text xml:space="preserve" text-anchor="start" x="7.04" y="-51.6" font-family="ArialMT" font-size="10.00">skill_group_id </text>
 <text xml:space="preserve" text-anchor="start" x="69.29" y="-51.6" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer ∗ FK</text>
-<text xml:space="preserve" text-anchor="start" x="7.04" y="-36.85" font-family="ArialMT" font-size="10.00">target_level </text>
-<text xml:space="preserve" text-anchor="start" x="60.29" y="-36.85" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer</text>
+<text xml:space="preserve" text-anchor="start" x="7.04" y="-36.85" font-family="ArialMT" font-size="10.00">target_skill_level </text>
+<text xml:space="preserve" text-anchor="start" x="82.79" y="-36.85" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer</text>
 </g>
 <!-- m_Character&#45;&gt;m_CharacterSkill -->
 <g id="edge10" class="edge">
@@ -121,8 +121,8 @@
 <text xml:space="preserve" text-anchor="start" x="281.92" y="-254" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">string</text>
 <text xml:space="preserve" text-anchor="start" x="236.92" y="-240.75" font-family="ArialMT" font-size="10.00">mastery_id </text>
 <text xml:space="preserve" text-anchor="start" x="287.92" y="-240.75" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer ∗ FK</text>
-<text xml:space="preserve" text-anchor="start" x="236.92" y="-226" font-family="ArialMT" font-size="10.00">max_level </text>
-<text xml:space="preserve" text-anchor="start" x="284.17" y="-226" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer</text>
+<text xml:space="preserve" text-anchor="start" x="236.92" y="-226" font-family="ArialMT" font-size="10.00">max_skill_level </text>
+<text xml:space="preserve" text-anchor="start" x="306.67" y="-226" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer</text>
 <text xml:space="preserve" text-anchor="start" x="236.92" y="-212.75" font-family="ArialMT" font-size="10.00">name </text>
 <text xml:space="preserve" text-anchor="start" x="263.92" y="-212.75" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">string</text>
 <text xml:space="preserve" text-anchor="start" x="236.92" y="-199.5" font-family="ArialMT" font-size="10.00">skill_series_id </text>
@@ -223,8 +223,8 @@
 <polyline fill="none" stroke="black" points="346.38,-87.08 491.71,-87.08"/>
 <text xml:space="preserve" text-anchor="start" x="353.42" y="-72.97" font-family="ArialMT" font-size="10.00">required_group_id </text>
 <text xml:space="preserve" text-anchor="start" x="432.92" y="-72.97" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer ∗ FK</text>
-<text xml:space="preserve" text-anchor="start" x="353.42" y="-58.22" font-family="ArialMT" font-size="10.00">required_level </text>
-<text xml:space="preserve" text-anchor="start" x="416.42" y="-58.22" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer</text>
+<text xml:space="preserve" text-anchor="start" x="353.42" y="-58.22" font-family="ArialMT" font-size="10.00">required_skill_level </text>
+<text xml:space="preserve" text-anchor="start" x="438.92" y="-58.22" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer</text>
 <text xml:space="preserve" text-anchor="start" x="353.42" y="-44.98" font-family="ArialMT" font-size="10.00">skill_group_id </text>
 <text xml:space="preserve" text-anchor="start" x="415.67" y="-44.98" font-family="Arial ItalicMT" font-size="10.00" fill="#999999">integer ∗ FK</text>
 </g>

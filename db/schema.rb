@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_20_045559) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_20_100360) do
   create_table "character_masteries", force: :cascade do |t|
     t.integer "character_id", null: false
     t.datetime "created_at", null: false
-    t.integer "current_level"
+    t.integer "current_mastery_level"
     t.integer "mastery_id", null: false
-    t.integer "target_level"
+    t.integer "target_mastery_level"
     t.datetime "updated_at", null: false
     t.index ["character_id"], name: "index_character_masteries_on_character_id"
     t.index ["mastery_id"], name: "index_character_masteries_on_mastery_id"
@@ -25,9 +25,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_20_045559) do
   create_table "character_skills", force: :cascade do |t|
     t.integer "character_id", null: false
     t.datetime "created_at", null: false
-    t.integer "current_level"
+    t.integer "current_skill_level"
     t.integer "skill_group_id", null: false
-    t.integer "target_level"
+    t.integer "target_skill_level"
     t.datetime "updated_at", null: false
     t.index ["character_id"], name: "index_character_skills_on_character_id"
     t.index ["skill_group_id"], name: "index_character_skills_on_skill_group_id"
@@ -76,7 +76,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_20_045559) do
   create_table "skill_group_requirements", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "required_group_id", null: false
-    t.integer "required_level"
+    t.integer "required_skill_level"
     t.integer "skill_group_id", null: false
     t.datetime "updated_at", null: false
     t.index ["required_group_id"],
@@ -93,7 +93,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_20_045559) do
     t.integer "external_id"
     t.string "icon_path"
     t.integer "mastery_id", null: false
-    t.integer "max_level"
+    t.integer "max_skill_level"
     t.string "name"
     t.integer "skill_series_id"
     t.string "tooltip"

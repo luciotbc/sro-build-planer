@@ -192,7 +192,7 @@ module Sro
                         col_position: col_position,
                         mastery_id: mastery.id,
                         skill_series_id: skill_series&.id,
-                        max_level: max_level
+                        max_skill_level: max_level
                       )
                     @skill_group_cache[external_id] = record
                     @stats[:skill_groups][:created] += 1
@@ -288,7 +288,7 @@ module Sro
               SkillGroupRequirement.create!(
                 skill_group_id: skill_group.id,
                 required_group_id: required_group.id,
-                required_level: required_level
+                required_skill_level: required_level
               )
               @stats[:skill_group_requirements][:created] += 1
               log_debug "  ✓ Requirement: #{skill_group.name} requires #{required_group.name} lv#{required_level}"

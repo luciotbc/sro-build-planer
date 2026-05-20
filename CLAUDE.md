@@ -45,7 +45,7 @@ The static game-data hierarchy:
 Race (Chinese / European)
   └── Mastery (e.g. "Sword", "Cold Force") [mastery_type: Weapon/Force/Physical/Magical/Support]
         ├── SkillSeries (a row of related skill groups within the mastery UI grid)
-        │     └── SkillGroup (one skill "slot"; holds all level variants) [col_position, max_level]
+        │     └── SkillGroup (one skill "slot"; holds all level variants) [col_position, max_skill_level]
         │           ├── Skill (one level of the skill: skill_level, sp_cost, mp_cost, mastery_level_req)
         │           └── SkillGroupRequirement → required_group (prerequisite unlock edges)
         └── LevelDatum (XP/SP table per character level, used for SP budget calculations)
@@ -56,10 +56,10 @@ The character build planning layer sits on top:
 ```
 Character [race, current_level, target_level]
   ├── CharacterMastery → Mastery
-  └── CharacterSkill → SkillGroup [current_level, target_level]
+  └── CharacterSkill → SkillGroup [current_skill_level, target_skill_level]
 ```
 
-`CharacterSkill.current_level` / `target_level` record where the player is now and where they want to reach — these are the core "build plan" state. `LevelDatum.sp_cumulative` gives total SP available at any level.
+`CharacterSkill.current_skill_level` / `target_skill_level` record where the player is now and where they want to reach — these are the core "build plan" state. `LevelDatum.sp_cumulative` gives total SP available at any level.
 
 All static records carry an `external_id` (from the game's data) used as the stable upsert key. Skills also carry `external_skill_code` as a secondary unique key.
 
