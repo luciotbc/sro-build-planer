@@ -90,21 +90,29 @@ module CharacterSkills
     end
 
     def find_blocking_dependents(skill_group, new_current_level)
-      SkillGroupRequirement
-        .includes(:skill_group)
-        .where(required_group: skill_group)
-        .where("required_skill_level > ?", new_current_level)
-        .filter_map do |req|
-          dep_cs =
-            @character.character_skills.find_by(skill_group: req.skill_group)
-          next unless dep_cs
-          unless dep_cs.current_skill_level.to_i >=
-                   req.required_skill_level.to_i
-            next
-          end
+      reqs =
+        SkillGroupRequirement
+          .includes(:skill_group)
+          .where(required_group: skill_group)
+          .where("required_skill_level > ?", new_current_level)
 
-          req.skill_group.name
+      return [] if reqs.empty?
+
+      cs_by_sg =
+        @character
+          .character_skills
+          .where(skill_group_id: reqs.map(&:skill_group_id))
+          .index_by(&:skill_group_id)
+
+      reqs.filter_map do |req|
+        dep_cs = cs_by_sg[req.skill_group_id]
+        next unless dep_cs
+        unless dep_cs.current_skill_level.to_i >= req.required_skill_level.to_i
+          next
         end
+
+        req.skill_group.name
+      end
     end
 
     def resolve_prerequisites(skill_group, visited)
