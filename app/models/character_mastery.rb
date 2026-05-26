@@ -1,5 +1,5 @@
 class CharacterMastery < ApplicationRecord
-  belongs_to :character
+  belongs_to :character, inverse_of: :character_masteries
   belongs_to :mastery
 
   validates :mastery_id, uniqueness: { scope: :character_id }

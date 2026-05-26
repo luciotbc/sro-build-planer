@@ -2,9 +2,9 @@ class Character < ApplicationRecord
   MAX_LEVEL = 150
 
   belongs_to :race
-  has_many :character_masteries, dependent: :destroy
+  has_many :character_masteries, dependent: :destroy, inverse_of: :character
   has_many :masteries, through: :character_masteries
-  has_many :character_skills, dependent: :destroy
+  has_many :character_skills, dependent: :destroy, inverse_of: :character
 
   validates :name, presence: true
   validates :current_level,
