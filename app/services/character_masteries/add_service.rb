@@ -44,6 +44,8 @@ module CharacterMasteries
 
         ServiceResult.ok(data: cm, warnings: @warnings)
       end
+    rescue ActiveRecord::RecordInvalid => e
+      ServiceResult.fail(errors: e.record.errors.full_messages)
     rescue => e
       ServiceResult.fail(errors: [e.message])
     end

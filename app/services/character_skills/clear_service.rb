@@ -45,6 +45,8 @@ module CharacterSkills
       cs.update!(updates)
 
       ServiceResult.ok(data: cs)
+    rescue ActiveRecord::RecordInvalid => e
+      ServiceResult.fail(errors: e.record.errors.full_messages)
     rescue => e
       ServiceResult.fail(errors: [e.message])
     end
