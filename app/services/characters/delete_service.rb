@@ -7,12 +7,7 @@ module Characters
     end
 
     def call
-      ActiveRecord::Base.transaction do
-        @character.character_skills.delete_all
-        @character.character_masteries.delete_all
-        @character.destroy!
-      end
-
+      @character.destroy!
       ServiceResult.ok
     rescue => e
       ServiceResult.fail(errors: [e.message])

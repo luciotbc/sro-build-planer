@@ -85,8 +85,8 @@ module Characters
     def persist!(race_changing)
       ActiveRecord::Base.transaction do
         if race_changing
-          @character.character_skills.delete_all
-          @character.character_masteries.delete_all
+          @character.character_skills.destroy_all
+          @character.character_masteries.destroy_all
         end
 
         @character.update!(
