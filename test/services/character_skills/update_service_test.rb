@@ -1,28 +1,48 @@
 require "test_helper"
 
 class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
-  # --------- helpers --------------------------------------------------------
-
-  def setup
-    @char = characters(:one)
-    # characters(:one) already has character_skills(:one) --- sword_mastery_skills at 1/1
-    @cs = character_skills(:one)
-    @sg = skill_groups(:sword_mastery_skills)
+  before do
+    @chinese_race = create(:race)
+    @blade_mastery = create(:mastery, race: @chinese_race)
+    @spear_mastery = create(:mastery, race: @chinese_race)
+    @sword_sg =
+      create(
+        :skill_group,
+        mastery: @blade_mastery,
+        name: "Blade Skills",
+        max_skill_level: 2
+      )
+    @spear_sg =
+      create(:skill_group, mastery: @spear_mastery, name: "Spear Skills")
+    create(:skill, skill_group: @sword_sg, skill_level: 1, mastery_level_req: 1)
+    create(:skill, skill_group: @sword_sg, skill_level: 2, mastery_level_req: 5)
+    create(:skill, skill_group: @spear_sg, skill_level: 1, mastery_level_req: 3)
+    create(
+      :skill_group_requirement,
+      skill_group: @spear_sg,
+      required_group: @sword_sg,
+      required_skill_level: 1
+    )
+    @char =
+      create(:character, race: @chinese_race, current_level: 1, target_level: 1)
+    @cs =
+      create(
+        :character_skill,
+        character: @char,
+        skill_group: @sword_sg,
+        current_skill_level: 1,
+        target_skill_level: 1
+      )
     CharacterMastery.create!(
       character: @char,
-      mastery: masteries(:blade_sword),
+      mastery: @blade_mastery,
       current_mastery_level: 1,
       target_mastery_level: 1
     )
   end
 
   def fresh_char
-    Character.create!(
-      name: "Fresh",
-      race: races(:chinese),
-      current_level: 0,
-      target_level: 0
-    )
+    create(:character, race: @chinese_race, current_level: 0, target_level: 0)
   end
 
   # --------- existence validation -------------------------------------------
@@ -31,7 +51,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: skill_groups(:cold_force_skills).id,
+        skill_group_id: @spear_sg.id,
         current_skill_level: 1
       )
 
@@ -42,11 +62,12 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
   # --------- immutable fields -----------------------------------------------
 
   it "fails when character_id is provided" do
+    other_char = create(:character, race: @chinese_race)
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
-        character_id: characters(:two).id
+        skill_group_id: @sword_sg.id,
+        character_id: other_char.id
       )
 
     assert_not result.success?
@@ -59,7 +80,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         current_skill_level: 1
       )
 
@@ -73,7 +94,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         current_skill_level: -1
       )
 
@@ -87,7 +108,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         current_skill_level: 3
       )
 
@@ -101,7 +122,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         target_skill_level: -1
       )
 
@@ -115,7 +136,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         target_skill_level: 3
       )
 
@@ -130,7 +151,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
   it "updates current_skill_level" do
     CharacterSkills::UpdateService.call(
       @char,
-      skill_group_id: @sg.id,
+      skill_group_id: @sword_sg.id,
       current_skill_level: 2
     )
 
@@ -140,7 +161,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
   it "updates target_skill_level" do
     CharacterSkills::UpdateService.call(
       @char,
-      skill_group_id: @sg.id,
+      skill_group_id: @sword_sg.id,
       target_skill_level: 2
     )
 
@@ -151,7 +172,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         current_skill_level: 2,
         target_skill_level: 2
       )
@@ -165,7 +186,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
   it "does not change fields not provided in params" do
     CharacterSkills::UpdateService.call(
       @char,
-      skill_group_id: @sg.id,
+      skill_group_id: @sword_sg.id,
       current_skill_level: 2
     )
 
@@ -176,7 +197,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         current_skill_level: 2
       )
 
@@ -188,7 +209,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         current_skill_level: 0
       )
 
@@ -200,7 +221,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         target_skill_level: 0
       )
 
@@ -212,7 +233,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: skill_groups(:cold_force_skills).id,
+        skill_group_id: @spear_sg.id,
         current_skill_level: 1
       )
 
@@ -223,20 +244,17 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
   # --------- blocking dependents on decrease --------------------------------
 
   it "fails when decreasing current_skill_level below a dependent's requirement" do
-    # cold_force_skills requires sword at level 3; char has sword at 1
-    # first add spear (requires sword at 1) to make it a dependent
     CharacterSkill.create!(
       character: @char,
-      skill_group: skill_groups(:spear_mastery_skills),
+      skill_group: @spear_sg,
       current_skill_level: 1,
       target_skill_level: 1
     )
 
-    # sword is at level 1, spear requires sword at 1 --- cannot drop sword to 0
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         current_skill_level: 0
       )
 
@@ -248,7 +266,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
   it "does not block when dependent's current_skill_level is 0" do
     CharacterSkill.create!(
       character: @char,
-      skill_group: skill_groups(:spear_mastery_skills),
+      skill_group: @spear_sg,
       current_skill_level: 0,
       target_skill_level: 1
     )
@@ -256,7 +274,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         current_skill_level: 0
       )
 
@@ -264,11 +282,10 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
   end
 
   it "does not block when no dependents exist for the character" do
-    # char has no spear or cold skill --- free to decrease sword
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         current_skill_level: 0
       )
 
@@ -279,11 +296,10 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
   # --------- prerequisite resolution on increase ---------------------------
 
   it "does not resolve prerequisites when current_skill_level is not increasing" do
-    # sword at 1, only update target --- no prereq logic fires
     assert_no_difference "CharacterSkill.count" do
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         target_skill_level: 2
       )
     end
@@ -295,7 +311,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert_no_difference "CharacterSkill.count" do
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         current_skill_level: 1
       )
     end
@@ -304,19 +320,14 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
   # CharacterMastery auto-update on increase
 
   it "updates CharacterMastery when current_skill_level increases" do
-    cm =
-      CharacterMastery.find_by(
-        character: @char,
-        mastery: masteries(:blade_sword)
-      )
+    cm = CharacterMastery.find_by(character: @char, mastery: @blade_mastery)
 
     CharacterSkills::UpdateService.call(
       @char,
-      skill_group_id: @sg.id,
+      skill_group_id: @sword_sg.id,
       current_skill_level: 2
     )
 
-    # blade_active_skill (level 2): mastery_level_req = 5
     assert_equal 5, cm.reload.current_mastery_level
   end
 
@@ -324,7 +335,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         current_skill_level: 2
       )
 
@@ -332,16 +343,12 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
   end
 
   it "does not update CharacterMastery when level is already sufficient" do
-    cm =
-      CharacterMastery.find_by(
-        character: @char,
-        mastery: masteries(:blade_sword)
-      )
+    cm = CharacterMastery.find_by(character: @char, mastery: @blade_mastery)
     cm.update!(current_mastery_level: 10)
 
     CharacterSkills::UpdateService.call(
       @char,
-      skill_group_id: @sg.id,
+      skill_group_id: @sword_sg.id,
       current_skill_level: 2
     )
 
@@ -352,36 +359,27 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
 
   it "auto-updates character current_level when mastery exceeds it" do
     @char.update!(current_level: 0)
-    cm =
-      CharacterMastery.find_by(
-        character: @char,
-        mastery: masteries(:blade_sword)
-      )
+    cm = CharacterMastery.find_by(character: @char, mastery: @blade_mastery)
     cm.update!(current_mastery_level: 0)
 
     CharacterSkills::UpdateService.call(
       @char,
-      skill_group_id: @sg.id,
+      skill_group_id: @sword_sg.id,
       current_skill_level: 2
     )
 
-    # blade_active_skill mastery_level_req = 5 > 0
     assert_equal 5, @char.reload.current_level
   end
 
   it "adds warning when character level is auto-updated" do
     @char.update!(current_level: 0)
-    cm =
-      CharacterMastery.find_by(
-        character: @char,
-        mastery: masteries(:blade_sword)
-      )
+    cm = CharacterMastery.find_by(character: @char, mastery: @blade_mastery)
     cm.update!(current_mastery_level: 0)
 
     result =
       CharacterSkills::UpdateService.call(
         @char,
-        skill_group_id: @sg.id,
+        skill_group_id: @sword_sg.id,
         current_skill_level: 2
       )
 

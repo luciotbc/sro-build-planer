@@ -3,26 +3,54 @@ require "test_helper"
 # Tests the recursive DFS algorithm shared by AddService and UpdateService.
 # Each branch of the spec is exercised in isolation.
 #
-# Fixture graph (relevant edges):
-#   spear_mastery_skills  --- sword_mastery_skills (required_skill_level: 1)
-#   cold_force_skills     --- sword_mastery_skills (required_skill_level: 3)
+# Graph (relevant edges):
+#   spear_sg  --- sword_sg (required_skill_level: 1)
+#   cold_sg   --- sword_sg (required_skill_level: 3)
 #
 # Dynamic requirements created inside individual tests extend this graph
 # for 3-level chain and cycle scenarios.
 class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
-  def fresh_char
-    Character.create!(
-      name: "Fresh",
-      race: races(:chinese),
-      current_level: 0,
-      target_level: 0
+  before do
+    @chinese_race = create(:race)
+    @blade_mastery = create(:mastery, race: @chinese_race)
+    @spear_mastery = create(:mastery, race: @chinese_race)
+    @cold_mastery = create(:mastery, race: @chinese_race)
+    @sword_sg =
+      create(
+        :skill_group,
+        mastery: @blade_mastery,
+        name: "Blade Skills",
+        max_skill_level: 2
+      )
+    @spear_sg =
+      create(:skill_group, mastery: @spear_mastery, name: "Spear Skills")
+    @cold_sg =
+      create(:skill_group, mastery: @cold_mastery, name: "Cold Force Skills")
+    create(:skill, skill_group: @sword_sg, skill_level: 1, mastery_level_req: 1)
+    create(:skill, skill_group: @sword_sg, skill_level: 2, mastery_level_req: 5)
+    create(:skill, skill_group: @spear_sg, skill_level: 1, mastery_level_req: 3)
+    create(
+      :skill_group_requirement,
+      skill_group: @spear_sg,
+      required_group: @sword_sg,
+      required_skill_level: 1
+    )
+    create(
+      :skill_group_requirement,
+      skill_group: @cold_sg,
+      required_group: @sword_sg,
+      required_skill_level: 3
     )
   end
 
-  def add_skill(char, sg_fixture, level)
+  def fresh_char
+    create(:character, race: @chinese_race, current_level: 0, target_level: 0)
+  end
+
+  def add_skill(char, sg, level)
     CharacterSkills::AddService.call(
       char,
-      skill_group_id: skill_groups(sg_fixture).id,
+      skill_group_id: sg.id,
       current_skill_level: level
     )
   end
@@ -31,25 +59,16 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
 
   it "creates missing prerequisite automatically" do
     char = fresh_char
-    add_skill(char, :spear_mastery_skills, 1)
+    add_skill(char, @spear_sg, 1)
 
-    assert(
-      CharacterSkill.exists?(
-        character: char,
-        skill_group: skill_groups(:sword_mastery_skills)
-      )
-    )
+    assert CharacterSkill.exists?(character: char, skill_group: @sword_sg)
   end
 
   it "sets created prerequisite to required_skill_level" do
     char = fresh_char
-    add_skill(char, :spear_mastery_skills, 1)
+    add_skill(char, @spear_sg, 1)
 
-    cs =
-      CharacterSkill.find_by(
-        character: char,
-        skill_group: skill_groups(:sword_mastery_skills)
-      )
+    cs = CharacterSkill.find_by(character: char, skill_group: @sword_sg)
     assert_equal 1, cs.current_skill_level
     assert_equal 1, cs.target_skill_level
   end
@@ -60,18 +79,14 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
     char = fresh_char
     CharacterSkill.create!(
       character: char,
-      skill_group: skill_groups(:sword_mastery_skills),
+      skill_group: @sword_sg,
       current_skill_level: 2,
       target_skill_level: 2
     )
 
-    add_skill(char, :spear_mastery_skills, 1)
+    add_skill(char, @spear_sg, 1)
 
-    cs =
-      CharacterSkill.find_by(
-        character: char,
-        skill_group: skill_groups(:sword_mastery_skills)
-      )
+    cs = CharacterSkill.find_by(character: char, skill_group: @sword_sg)
     assert_equal 2, cs.current_skill_level
   end
 
@@ -79,12 +94,12 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
     char = fresh_char
     CharacterSkill.create!(
       character: char,
-      skill_group: skill_groups(:sword_mastery_skills),
+      skill_group: @sword_sg,
       current_skill_level: 2,
       target_skill_level: 2
     )
 
-    result = add_skill(char, :spear_mastery_skills, 1)
+    result = add_skill(char, @spear_sg, 1)
     assert result.warnings.none? { |w|
              w.include?("sword") || w.include?("Blade")
            }
@@ -96,18 +111,14 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
     char = fresh_char
     CharacterSkill.create!(
       character: char,
-      skill_group: skill_groups(:sword_mastery_skills),
+      skill_group: @sword_sg,
       current_skill_level: 0,
       target_skill_level: 0
     )
 
-    add_skill(char, :spear_mastery_skills, 1)
+    add_skill(char, @spear_sg, 1)
 
-    cs =
-      CharacterSkill.find_by(
-        character: char,
-        skill_group: skill_groups(:sword_mastery_skills)
-      )
+    cs = CharacterSkill.find_by(character: char, skill_group: @sword_sg)
     assert_equal 1, cs.current_skill_level
   end
 
@@ -115,119 +126,91 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
     char = fresh_char
     CharacterSkill.create!(
       character: char,
-      skill_group: skill_groups(:sword_mastery_skills),
+      skill_group: @sword_sg,
       current_skill_level: 0,
       target_skill_level: 0
     )
 
-    result = add_skill(char, :spear_mastery_skills, 1)
+    result = add_skill(char, @spear_sg, 1)
     assert result.warnings.any? { |w| w.include?("updated to 1") }
   end
 
   # --------- DFS: 3-level chain ---------------------------------------------
 
-  # Graph after adding the dynamic edge spear --- cold:
-  #   spear --- sword  (fixture, level 1)
-  #   spear --- cold   (dynamic, level 1)
-  #   cold  --- sword  (fixture, level 3)
-  #
-  # Adding spear creates sword (spear's direct dep, level 1),
-  # then creates cold (dynamic dep), whose own dep on sword at 3 upgrades it.
-
   it "creates entire chain when no prerequisites exist (3 levels)" do
     char = fresh_char
     SkillGroupRequirement.create!(
-      skill_group: skill_groups(:spear_mastery_skills),
-      required_group: skill_groups(:cold_force_skills),
+      skill_group: @spear_sg,
+      required_group: @cold_sg,
       required_skill_level: 1
     )
 
-    result = add_skill(char, :spear_mastery_skills, 1)
+    result = add_skill(char, @spear_sg, 1)
 
     assert result.success?
     assert(
-      CharacterSkill.exists?(
-        character: char,
-        skill_group: skill_groups(:cold_force_skills)
-      ),
+      CharacterSkill.exists?(character: char, skill_group: @cold_sg),
       "cold should have been created as a direct prerequisite of spear"
     )
     assert(
-      CharacterSkill.exists?(
-        character: char,
-        skill_group: skill_groups(:sword_mastery_skills)
-      ),
+      CharacterSkill.exists?(character: char, skill_group: @sword_sg),
       "sword should have been created as a transitive prerequisite via cold"
     )
   end
 
   it "upgrades transitive prerequisite when existing skill is insufficient (3 levels)" do
     char = fresh_char
-    # sword exists at 0 --- below cold's requirement of 3
     sword_cs =
       CharacterSkill.create!(
         character: char,
-        skill_group: skill_groups(:sword_mastery_skills),
+        skill_group: @sword_sg,
         current_skill_level: 0,
         target_skill_level: 0
       )
     SkillGroupRequirement.create!(
-      skill_group: skill_groups(:spear_mastery_skills),
-      required_group: skill_groups(:cold_force_skills),
+      skill_group: @spear_sg,
+      required_group: @cold_sg,
       required_skill_level: 1
     )
 
-    result = add_skill(char, :spear_mastery_skills, 1)
+    result = add_skill(char, @spear_sg, 1)
 
     assert result.success?
     assert(
-      CharacterSkill.exists?(
-        character: char,
-        skill_group: skill_groups(:cold_force_skills)
-      ),
+      CharacterSkill.exists?(character: char, skill_group: @cold_sg),
       "cold should have been created"
     )
-    # cold requires sword at 3; resolve_prerequisites must have upgraded it
     assert sword_cs.reload.current_skill_level >= 1,
            "sword must have been upgraded to satisfy cold's transitive requirement"
   end
 
   # --------- cycle protection -----------------------------------------------
 
-  # Cycle: spear --- sword (fixture) --- spear (dynamic)
-  # The visited set prevents infinite recursion; the already_visited guard prevents
-  # double-creation of the root skill mid-traversal.
-
   it "does not loop infinitely when prerequisites contain a cycle" do
     char = fresh_char
     SkillGroupRequirement.create!(
-      skill_group: skill_groups(:sword_mastery_skills),
-      required_group: skill_groups(:spear_mastery_skills),
+      skill_group: @sword_sg,
+      required_group: @spear_sg,
       required_skill_level: 1
     )
 
-    result = add_skill(char, :spear_mastery_skills, 1)
+    result = add_skill(char, @spear_sg, 1)
     assert result.success?
   end
 
   it "creates prerequisite exactly once despite diamond-shaped dependency graph" do
     char = fresh_char
-    # Diamond: spear --- sword (fixture) and spear --- cold (dynamic) --- sword (fixture)
-    # sword is reachable via two paths but must be created only once.
     SkillGroupRequirement.create!(
-      skill_group: skill_groups(:spear_mastery_skills),
-      required_group: skill_groups(:cold_force_skills),
+      skill_group: @spear_sg,
+      required_group: @cold_sg,
       required_skill_level: 1
     )
 
-    add_skill(char, :spear_mastery_skills, 1)
+    add_skill(char, @spear_sg, 1)
 
     assert_equal(
       1,
-      CharacterSkill.where(
-        character: char,
-        skill_group: skill_groups(:sword_mastery_skills)
-      ).count,
+      CharacterSkill.where(character: char, skill_group: @sword_sg).count,
       "sword must be created exactly once despite being reachable via two paths"
     )
   end

@@ -1,6 +1,8 @@
 require "test_helper"
 
 class LevelDatumTest < ActiveSupport::TestCase
+  let(:existing_datum) { create(:level_datum) }
+
   it "valid with level" do
     assert LevelDatum.new(level: 200).valid?
   end
@@ -13,7 +15,7 @@ class LevelDatumTest < ActiveSupport::TestCase
   end
 
   it "invalid with duplicate level" do
-    ld = LevelDatum.new(level: level_data(:one).level)
+    ld = LevelDatum.new(level: existing_datum.level)
 
     assert_not ld.valid?
     assert_includes ld.errors[:level], "has already been taken"

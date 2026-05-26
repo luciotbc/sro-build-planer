@@ -2,18 +2,28 @@ require "test_helper"
 
 class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
   before do
-    @char = characters(:one)
-    @mastery = masteries(:blade_sword)
+    @chinese_race = create(:race)
+    @blade_mastery = create(:mastery, race: @chinese_race)
+    @spear_mastery = create(:mastery, race: @chinese_race)
+    @sword_sg =
+      create(:skill_group, mastery: @blade_mastery, max_skill_level: 2)
+    @spear_sg = create(:skill_group, mastery: @spear_mastery)
+    @char = create(:character, race: @chinese_race)
     @cm =
       CharacterMastery.create!(
         character: @char,
-        mastery: @mastery,
+        mastery: @blade_mastery,
         current_mastery_level: 60,
         target_mastery_level: 80
       )
-    # character_skills(:one) --- sword_mastery_skills (belongs to blade_sword)
-    @cs = character_skills(:one)
-    @cs.update!(current_skill_level: 2, target_skill_level: 2)
+    @cs =
+      create(
+        :character_skill,
+        character: @char,
+        skill_group: @sword_sg,
+        current_skill_level: 2,
+        target_skill_level: 2
+      )
   end
 
   # --------- validation ----------------------------------------------------
@@ -22,7 +32,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     result =
       CharacterMasteries::ClearService.call(
         @char,
-        mastery_id: masteries(:spear).id,
+        mastery_id: @spear_mastery.id,
         field: :current
       )
 
@@ -34,7 +44,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     result =
       CharacterMasteries::ClearService.call(
         @char,
-        mastery_id: @mastery.id,
+        mastery_id: @blade_mastery.id,
         field: :invalid
       )
 
@@ -47,7 +57,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
   it "zeros current_mastery_level when field is :current" do
     CharacterMasteries::ClearService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       field: :current
     )
 
@@ -57,7 +67,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
   it "zeros current_skill_level for all skills in the mastery when field is :current" do
     CharacterMasteries::ClearService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       field: :current
     )
 
@@ -67,7 +77,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
   it "does not touch target fields when field is :current" do
     CharacterMasteries::ClearService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       field: :current
     )
 
@@ -80,7 +90,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
   it "zeros target_mastery_level when field is :target" do
     CharacterMasteries::ClearService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       field: :target
     )
 
@@ -90,7 +100,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
   it "zeros target_skill_level for all skills in the mastery when field is :target" do
     CharacterMasteries::ClearService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       field: :target
     )
 
@@ -100,7 +110,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
   it "does not touch current fields when field is :target" do
     CharacterMasteries::ClearService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       field: :target
     )
 
@@ -113,7 +123,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
   it "zeros both mastery levels when field is :both" do
     CharacterMasteries::ClearService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       field: :both
     )
 
@@ -125,7 +135,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
   it "zeros both skill levels when field is :both" do
     CharacterMasteries::ClearService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       field: :both
     )
 
@@ -140,19 +150,19 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     spear_cm =
       CharacterMastery.create!(
         character: @char,
-        mastery: masteries(:spear),
+        mastery: @spear_mastery,
         current_mastery_level: 40
       )
     spear_cs =
       CharacterSkill.create!(
         character: @char,
-        skill_group: skill_groups(:spear_mastery_skills),
+        skill_group: @spear_sg,
         current_skill_level: 1
       )
 
     CharacterMasteries::ClearService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       field: :both
     )
 
@@ -166,7 +176,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     result =
       CharacterMasteries::ClearService.call(
         @char,
-        mastery_id: @mastery.id,
+        mastery_id: @blade_mastery.id,
         field: :current
       )
 

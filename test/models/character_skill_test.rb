@@ -1,113 +1,100 @@
 require "test_helper"
 
 class CharacterSkillTest < ActiveSupport::TestCase
-  it "valid with character and skill_group" do
-    cs =
-      CharacterSkill.new(
-        character: characters(:one),
-        skill_group: skill_groups(:cold_force_skills)
-      )
+  let(:race) { create(:race) }
+  let(:mastery) { create(:mastery, race:) }
+  let(:character) { create(:character, race:) }
+  let(:another_character) { create(:character, race:) }
+  let(:skill_group) { create(:skill_group, mastery:) }
+  let(:other_skill_group) { create(:skill_group, mastery:) }
+  let(:skill_1) { create(:skill, skill_group:, skill_level: 1) }
+  let(:cs) do
+    create(
+      :character_skill,
+      character:,
+      skill_group:,
+      current_skill_level: 1,
+      target_skill_level: 1
+    )
+  end
 
-    assert cs.valid?
+  it "valid with character and skill_group" do
+    new_cs = CharacterSkill.new(character:, skill_group: other_skill_group)
+
+    assert new_cs.valid?
   end
 
   it "invalid without character" do
-    cs = CharacterSkill.new(skill_group: skill_groups(:sword_mastery_skills))
+    new_cs = CharacterSkill.new(skill_group:)
 
-    assert_not cs.valid?
-    assert_includes cs.errors[:character], "must exist"
+    assert_not new_cs.valid?
+    assert_includes new_cs.errors[:character], "must exist"
   end
 
   it "invalid without skill_group" do
-    cs = CharacterSkill.new(character: characters(:one))
+    new_cs = CharacterSkill.new(character:)
 
-    assert_not cs.valid?
-    assert_includes cs.errors[:skill_group], "must exist"
+    assert_not new_cs.valid?
+    assert_includes new_cs.errors[:skill_group], "must exist"
   end
 
   it "invalid with duplicate skill_group for the same character" do
-    existing = character_skills(:one)
-    cs =
-      CharacterSkill.new(
-        character: existing.character,
-        skill_group: existing.skill_group
-      )
+    cs
+    new_cs = CharacterSkill.new(character:, skill_group:)
 
-    assert_not cs.valid?
-    assert_includes cs.errors[:skill_group_id], "has already been taken"
+    assert_not new_cs.valid?
+    assert_includes new_cs.errors[:skill_group_id], "has already been taken"
   end
 
   it "valid with same skill_group for a different character" do
-    existing = character_skills(:one)
-    cs =
-      CharacterSkill.new(
-        character: characters(:two),
-        skill_group: existing.skill_group
-      )
+    cs
+    new_cs = CharacterSkill.new(character: another_character, skill_group:)
 
-    assert cs.valid?
+    assert new_cs.valid?
   end
 
   it "belongs_to character association" do
-    assert_equal characters(:one), character_skills(:one).character
+    assert_equal character, cs.character
   end
 
   it "belongs_to skill_group association" do
-    assert_equal skill_groups(:sword_mastery_skills),
-                 character_skills(:one).skill_group
+    assert_equal skill_group, cs.skill_group
   end
 
   it "current_skill returns the skill at current_skill_level" do
-    cs = character_skills(:one)
+    skill_1
 
-    assert_equal skills(:blade_passive_skill), cs.current_skill
+    assert_equal skill_1, cs.current_skill
   end
 
   it "current_skill returns nil when current_skill_level is 0" do
-    cs =
-      CharacterSkill.new(
-        character: characters(:one),
-        skill_group: skill_groups(:cold_force_skills),
-        current_skill_level: 0
-      )
+    new_cs =
+      CharacterSkill.new(character:, skill_group:, current_skill_level: 0)
 
-    assert_nil cs.current_skill
+    assert_nil new_cs.current_skill
   end
 
   it "current_skill returns nil when current_skill_level is nil" do
-    cs =
-      CharacterSkill.new(
-        character: characters(:one),
-        skill_group: skill_groups(:cold_force_skills)
-      )
+    new_cs = CharacterSkill.new(character:, skill_group:)
 
-    assert_nil cs.current_skill
+    assert_nil new_cs.current_skill
   end
 
   it "target_skill returns the skill at target_skill_level" do
-    cs = character_skills(:one)
+    skill_1
 
-    assert_equal skills(:blade_passive_skill), cs.target_skill
+    assert_equal skill_1, cs.target_skill
   end
 
   it "target_skill returns nil when target_skill_level is 0" do
-    cs =
-      CharacterSkill.new(
-        character: characters(:one),
-        skill_group: skill_groups(:cold_force_skills),
-        target_skill_level: 0
-      )
+    new_cs = CharacterSkill.new(character:, skill_group:, target_skill_level: 0)
 
-    assert_nil cs.target_skill
+    assert_nil new_cs.target_skill
   end
 
   it "target_skill returns nil when target_skill_level is nil" do
-    cs =
-      CharacterSkill.new(
-        character: characters(:one),
-        skill_group: skill_groups(:cold_force_skills)
-      )
+    new_cs = CharacterSkill.new(character:, skill_group:)
 
-    assert_nil cs.target_skill
+    assert_nil new_cs.target_skill
   end
 end

@@ -1,19 +1,19 @@
 require "test_helper"
 
 class Characters::CreateServiceTest < ActiveSupport::TestCase
+  let(:race) { create(:race) }
+
   it "creates a character with required fields" do
-    result =
-      Characters::CreateService.call(name: "Hero", race_id: races(:chinese).id)
+    result = Characters::CreateService.call(name: "Hero", race_id: race.id)
 
     assert result.success?
     assert_instance_of Character, result.data
     assert_equal "Hero", result.data.name
-    assert_equal races(:chinese).id, result.data.race_id
+    assert_equal race.id, result.data.race_id
   end
 
   it "sets current_level and target_level to 0 by default" do
-    result =
-      Characters::CreateService.call(name: "Hero", race_id: races(:chinese).id)
+    result = Characters::CreateService.call(name: "Hero", race_id: race.id)
 
     assert result.success?
     assert_equal 0, result.data.current_level
@@ -24,7 +24,7 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
     result =
       Characters::CreateService.call(
         name: "Hero",
-        race_id: races(:chinese).id,
+        race_id: race.id,
         current_level: 30,
         target_level: 80
       )
@@ -35,15 +35,14 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
   end
 
   it "fails without name" do
-    result = Characters::CreateService.call(race_id: races(:chinese).id)
+    result = Characters::CreateService.call(race_id: race.id)
 
     assert_not result.success?
     assert result.errors.any? { |e| e.include?("Name") }
   end
 
   it "fails with blank name" do
-    result =
-      Characters::CreateService.call(name: "", race_id: races(:chinese).id)
+    result = Characters::CreateService.call(name: "", race_id: race.id)
 
     assert_not result.success?
     assert result.errors.any? { |e| e.include?("Name") }
@@ -60,7 +59,7 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
     result =
       Characters::CreateService.call(
         name: "Hero",
-        race_id: races(:chinese).id,
+        race_id: race.id,
         current_level: Character::MAX_LEVEL + 1
       )
 
@@ -72,7 +71,7 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
     result =
       Characters::CreateService.call(
         name: "Hero",
-        race_id: races(:chinese).id,
+        race_id: race.id,
         target_level: -1
       )
 
@@ -84,7 +83,7 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
     result =
       Characters::CreateService.call(
         name: "Hero",
-        race_id: races(:chinese).id,
+        race_id: race.id,
         current_level: 80,
         target_level: 30
       )
@@ -93,7 +92,7 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
   end
 
   it "returns errors array on failure" do
-    result = Characters::CreateService.call(race_id: races(:chinese).id)
+    result = Characters::CreateService.call(race_id: race.id)
 
     assert_instance_of Array, result.errors
     assert_empty result.warnings
@@ -101,10 +100,7 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
 
   it "persists the character to the database" do
     assert_difference "Character.count", 1 do
-      Characters::CreateService.call(
-        name: "Persisted",
-        race_id: races(:chinese).id
-      )
+      Characters::CreateService.call(name: "Persisted", race_id: race.id)
     end
   end
 end

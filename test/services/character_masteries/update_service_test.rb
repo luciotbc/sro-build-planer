@@ -2,18 +2,36 @@ require "test_helper"
 
 class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
   before do
-    @char = characters(:one)
-    @char.update!(current_level: 80, target_level: 100)
-    @mastery = masteries(:blade_sword)
+    @chinese_race = create(:race)
+    @blade_mastery = create(:mastery, race: @chinese_race)
+    @spear_mastery = create(:mastery, race: @chinese_race)
+    @sword_sg =
+      create(:skill_group, mastery: @blade_mastery, max_skill_level: 2)
+    @spear_sg = create(:skill_group, mastery: @spear_mastery)
+    create(:skill, skill_group: @sword_sg, skill_level: 1, mastery_level_req: 1)
+    create(:skill, skill_group: @sword_sg, skill_level: 2, mastery_level_req: 5)
+    @char =
+      create(
+        :character,
+        race: @chinese_race,
+        current_level: 80,
+        target_level: 100
+      )
     @cm =
       CharacterMastery.create!(
         character: @char,
-        mastery: @mastery,
+        mastery: @blade_mastery,
         current_mastery_level: 60,
         target_mastery_level: 80
       )
-    # fixture character_skills(:one) --- sword_mastery_skills, levels 1/1
-    @cs = character_skills(:one)
+    @cs =
+      create(
+        :character_skill,
+        character: @char,
+        skill_group: @sword_sg,
+        current_skill_level: 1,
+        target_skill_level: 1
+      )
   end
 
   # --------- existence validation -------------------------------------------
@@ -22,7 +40,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterMasteries::UpdateService.call(
         @char,
-        mastery_id: masteries(:spear).id,
+        mastery_id: @spear_mastery.id,
         current_mastery_level: 30
       )
 
@@ -35,7 +53,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
   it "updates current_mastery_level" do
     CharacterMasteries::UpdateService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       current_mastery_level: 70
     )
 
@@ -45,7 +63,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
   it "updates target_mastery_level" do
     CharacterMasteries::UpdateService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       target_mastery_level: 90
     )
 
@@ -56,7 +74,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterMasteries::UpdateService.call(
         @char,
-        mastery_id: @mastery.id,
+        mastery_id: @blade_mastery.id,
         current_mastery_level: 55,
         target_mastery_level: 75
       )
@@ -69,7 +87,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
   it "does not change fields not included in params" do
     CharacterMasteries::UpdateService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       current_mastery_level: 50
     )
 
@@ -80,7 +98,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterMasteries::UpdateService.call(
         @char,
-        mastery_id: @mastery.id,
+        mastery_id: @blade_mastery.id,
         current_mastery_level: 55
       )
 
@@ -94,7 +112,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterMasteries::UpdateService.call(
         @char,
-        mastery_id: @mastery.id,
+        mastery_id: @blade_mastery.id,
         current_mastery_level: 90
       )
 
@@ -109,7 +127,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterMasteries::UpdateService.call(
         @char,
-        mastery_id: @mastery.id,
+        mastery_id: @blade_mastery.id,
         target_mastery_level: 110
       )
 
@@ -124,7 +142,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterMasteries::UpdateService.call(
         @char,
-        mastery_id: @mastery.id,
+        mastery_id: @blade_mastery.id,
         current_mastery_level: 50
       )
 
@@ -137,7 +155,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterMasteries::UpdateService.call(
         @char,
-        mastery_id: @mastery.id,
+        mastery_id: @blade_mastery.id,
         target_mastery_level: 75
       )
 
@@ -148,27 +166,26 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
   # --------- current_skill_level cascade -----------------------------------
 
   it "cascades current_skill_level when mastery drops below skill requirement" do
-    @cs.update!(current_skill_level: 2) # blade_active_skill, mastery_level_req 5
+    @cs.update!(current_skill_level: 2)
 
     result =
       CharacterMasteries::UpdateService.call(
         @char,
-        mastery_id: @mastery.id,
+        mastery_id: @blade_mastery.id,
         current_mastery_level: 3
       )
 
     assert result.success?
-    # blade_passive_skill (level 1, mastery_req 1) is the smallest that fits
     assert_equal 1, @cs.reload.current_skill_level
     assert result.warnings.any? { |w| w.include?("current_skill_level") }
   end
 
   it "sets current_skill_level to 0 when no skill fits the new mastery" do
-    @cs.update!(current_skill_level: 1) # blade_passive_skill, mastery_level_req 1
+    @cs.update!(current_skill_level: 1)
 
     CharacterMasteries::UpdateService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       current_mastery_level: 0
     )
 
@@ -181,7 +198,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterMasteries::UpdateService.call(
         @char,
-        mastery_id: @mastery.id,
+        mastery_id: @blade_mastery.id,
         current_mastery_level: 0
       )
 
@@ -196,7 +213,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterMasteries::UpdateService.call(
         @char,
-        mastery_id: @mastery.id,
+        mastery_id: @blade_mastery.id,
         current_mastery_level: 70
       )
 
@@ -209,13 +226,13 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
     spear_cs =
       CharacterSkill.create!(
         character: @char,
-        skill_group: skill_groups(:spear_mastery_skills),
+        skill_group: @spear_sg,
         current_skill_level: 1
       )
 
     CharacterMasteries::UpdateService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       current_mastery_level: 0
     )
 
@@ -228,7 +245,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterMasteries::UpdateService.call(
         @char,
-        mastery_id: @mastery.id,
+        mastery_id: @blade_mastery.id,
         target_mastery_level: 30
       )
 
@@ -239,12 +256,12 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
   # --------- target_skill_level cascade ------------------------------------
 
   it "cascades target_skill_level when target mastery drops below skill requirement" do
-    @cs.update!(target_skill_level: 2) # blade_active_skill, mastery_level_req 5
+    @cs.update!(target_skill_level: 2)
 
     result =
       CharacterMasteries::UpdateService.call(
         @char,
-        mastery_id: @mastery.id,
+        mastery_id: @blade_mastery.id,
         target_mastery_level: 3
       )
 
@@ -258,7 +275,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
 
     CharacterMasteries::UpdateService.call(
       @char,
-      mastery_id: @mastery.id,
+      mastery_id: @blade_mastery.id,
       target_mastery_level: 0
     )
 
@@ -273,7 +290,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
     result =
       CharacterMasteries::UpdateService.call(
         @char,
-        mastery_id: @mastery.id,
+        mastery_id: @blade_mastery.id,
         current_mastery_level: 3,
         target_mastery_level: 3
       )
