@@ -42,7 +42,8 @@ module CharacterSkills
       updates = {}
       updates[:current_skill_level] = 0 if field == :current || field == :both
       updates[:target_skill_level] = 0 if field == :target || field == :both
-      cs.update!(updates)
+
+      ApplicationRecord.transaction { cs.update!(updates) }
 
       ServiceResult.ok(data: cs)
     rescue ActiveRecord::RecordInvalid => e
