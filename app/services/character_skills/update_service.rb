@@ -61,7 +61,7 @@ module CharacterSkills
         end
       end
 
-      ActiveRecord::Base.transaction do
+      ApplicationRecord.transaction do
         if new_current && new_current > cs.current_skill_level.to_i
           resolve_prerequisites(sg, Set.new)
           update_mastery(sg, new_current)

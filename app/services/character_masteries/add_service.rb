@@ -31,7 +31,7 @@ module CharacterMasteries
       current_mastery_level = @params.fetch(:current_mastery_level, 0)
       target_mastery_level = @params.fetch(:target_mastery_level, 0)
 
-      ActiveRecord::Base.transaction do
+      ApplicationRecord.transaction do
         sync_character_levels(current_mastery_level, target_mastery_level)
 
         cm =

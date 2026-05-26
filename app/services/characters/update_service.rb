@@ -59,7 +59,7 @@ module Characters
     end
 
     def persist!(race_changing)
-      ActiveRecord::Base.transaction do
+      ApplicationRecord.transaction do
         if race_changing
           @character.character_skills.destroy_all
           @character.character_masteries.destroy_all

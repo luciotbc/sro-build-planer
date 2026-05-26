@@ -46,7 +46,7 @@ module CharacterSkills
       return ServiceResult.fail(errors:) if errors.any?
 
       cs = nil
-      ActiveRecord::Base.transaction do
+      ApplicationRecord.transaction do
         resolve_prerequisites(sg, Set.new) if current_level > 0
         ensure_mastery(sg, current_level, target_level)
         cs =

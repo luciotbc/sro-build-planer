@@ -41,7 +41,7 @@ module CharacterMasteries
         skill_updates[:target_skill_level] = 0
       end
 
-      ActiveRecord::Base.transaction do
+      ApplicationRecord.transaction do
         cm.update!(mastery_updates)
         char_skills_for(cm.mastery_id).update_all(skill_updates)
       end
