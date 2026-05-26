@@ -31,12 +31,12 @@ module CharacterMasteries
       mastery_updates = {}
       skill_updates = {}
 
-      if field == :current || field == :both
+      if field.in?(%i[current both])
         mastery_updates[:current_mastery_level] = 0
         skill_updates[:current_skill_level] = 0
       end
 
-      if field == :target || field == :both
+      if field.in?(%i[target both])
         mastery_updates[:target_mastery_level] = 0
         skill_updates[:target_skill_level] = 0
       end

@@ -26,7 +26,7 @@ module CharacterSkills
         )
       end
 
-      if field == :current || field == :both
+      if field.in?(%i[current both])
         blocking = find_blocking_dependents(cs.skill_group)
         if blocking.any?
           return(
@@ -40,8 +40,8 @@ module CharacterSkills
       end
 
       updates = {}
-      updates[:current_skill_level] = 0 if field == :current || field == :both
-      updates[:target_skill_level] = 0 if field == :target || field == :both
+      updates[:current_skill_level] = 0 if field.in?(%i[current both])
+      updates[:target_skill_level] = 0 if field.in?(%i[target both])
 
       ApplicationRecord.transaction { cs.update!(updates) }
 
