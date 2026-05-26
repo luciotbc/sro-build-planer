@@ -8,57 +8,33 @@ module Characters
     end
 
     def call
-      errors = []
+      race_changing =
+        @params.key?(:race_id) && @params[:race_id] != @character.race_id
 
-      validate_name(errors)
-      race_changing = validate_race(errors)
-      validate_levels(errors)
-      check_mastery_compatibility(errors) unless race_changing || errors.any?
+      @character.assign_attributes(
+        @params.slice(:name, :race_id, :current_level, :target_level)
+      )
+      unless @character.valid?
+        return ServiceResult.fail(errors: @character.errors.full_messages)
+      end
 
-      return ServiceResult.fail(errors:) if errors.any?
+      mastery_errors = mastery_compatibility_errors unless race_changing
+      return ServiceResult.fail(errors: mastery_errors) if mastery_errors&.any?
 
       persist!(race_changing)
       ServiceResult.ok(data: @character)
+    rescue ActiveRecord::RecordInvalid => e
+      ServiceResult.fail(errors: e.record.errors.full_messages)
     rescue => e
       ServiceResult.fail(errors: [e.message])
     end
 
     private
 
-    def validate_name(errors)
-      return unless @params.key?(:name)
-
-      errors << "Name can't be blank" if @params[:name].blank?
-    end
-
-    def validate_race(errors)
-      return false unless @params.key?(:race_id)
-      return false if @params[:race_id] == @character.race_id
-
-      errors << "Race must exist" unless Race.exists?(@params[:race_id])
-      true
-    end
-
-    def validate_levels(errors)
-      %i[current_level target_level].each do |attr|
-        next unless @params.key?(attr)
-
-        value = @params[attr]
-        next if value.nil?
-
-        unless value.is_a?(Integer)
-          errors << "#{attr.to_s.humanize} must be an integer"
-          next
-        end
-
-        if value < 0 || value > Character::MAX_LEVEL
-          errors << "#{attr.to_s.humanize} must be between 0 and #{Character::MAX_LEVEL}"
-        end
+    def mastery_compatibility_errors
+      unless @params.key?(:current_level) || @params.key?(:target_level)
+        return []
       end
-    end
-
-    def check_mastery_compatibility(errors)
-      return unless @params.key?(:current_level) || @params.key?(:target_level)
 
       new_current = @params.fetch(:current_level, @character.current_level)
       new_target = @params.fetch(:target_level, @character.target_level)
@@ -72,10 +48,10 @@ module Characters
               exceeds?(cm.target_mastery_level, new_target)
           end
 
-      return if incompatible.empty?
+      return [] if incompatible.empty?
 
       names = incompatible.map { |cm| cm.mastery.name }.join(", ")
-      errors << "Cannot reduce level: incompatible masteries: #{names}"
+      ["Cannot reduce level: incompatible masteries: #{names}"]
     end
 
     def exceeds?(mastery_level, char_level)
