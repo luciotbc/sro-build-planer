@@ -1,41 +1,41 @@
 require "test_helper"
 
 class CharacterTest < ActiveSupport::TestCase
-  test "valid with name and race" do
+  it "valid with name and race" do
     assert Character.new(name: "Test Character", race: races(:chinese)).valid?
   end
 
-  test "invalid without name" do
+  it "invalid without name" do
     character = Character.new(race: races(:chinese))
 
     assert_not character.valid?
     assert_includes character.errors[:name], "can't be blank"
   end
 
-  test "invalid without race" do
+  it "invalid without race" do
     character = Character.new(name: "Test Character")
 
     assert_not character.valid?
     assert_includes character.errors[:race], "must exist"
   end
 
-  test "belongs_to race association" do
+  it "belongs_to race association" do
     assert_equal races(:chinese), characters(:one).race
   end
 
-  test "has_many character_masteries" do
+  it "has_many character_masteries" do
     assert_respond_to characters(:one), :character_masteries
   end
 
-  test "has_many character_skills" do
+  it "has_many character_skills" do
     assert_respond_to characters(:one), :character_skills
   end
 
-  test "MAX_LEVEL constant is 150" do
+  it "MAX_LEVEL constant is 150" do
     assert_equal 150, Character::MAX_LEVEL
   end
 
-  test "valid with current_level and target_level within range" do
+  it "valid with current_level and target_level within range" do
     character =
       Character.new(
         name: "Test",
@@ -47,20 +47,20 @@ class CharacterTest < ActiveSupport::TestCase
     assert character.valid?
   end
 
-  test "valid with nil current_level and target_level" do
+  it "valid with nil current_level and target_level" do
     character = Character.new(name: "Test", race: races(:chinese))
 
     assert character.valid?
   end
 
-  test "valid with current_level of 0" do
+  it "valid with current_level of 0" do
     character =
       Character.new(name: "Test", race: races(:chinese), current_level: 0)
 
     assert character.valid?
   end
 
-  test "invalid with current_level below 0" do
+  it "invalid with current_level below 0" do
     character =
       Character.new(name: "Test", race: races(:chinese), current_level: -1)
 
@@ -69,7 +69,7 @@ class CharacterTest < ActiveSupport::TestCase
                     "must be greater than or equal to 0"
   end
 
-  test "invalid with current_level above MAX_LEVEL" do
+  it "invalid with current_level above MAX_LEVEL" do
     character =
       Character.new(
         name: "Test",
@@ -82,14 +82,14 @@ class CharacterTest < ActiveSupport::TestCase
                     "must be less than or equal to #{Character::MAX_LEVEL}"
   end
 
-  test "valid with target_level of 0" do
+  it "valid with target_level of 0" do
     character =
       Character.new(name: "Test", race: races(:chinese), target_level: 0)
 
     assert character.valid?
   end
 
-  test "invalid with target_level below 0" do
+  it "invalid with target_level below 0" do
     character =
       Character.new(name: "Test", race: races(:chinese), target_level: -1)
 
@@ -98,7 +98,7 @@ class CharacterTest < ActiveSupport::TestCase
                     "must be greater than or equal to 0"
   end
 
-  test "invalid with target_level above MAX_LEVEL" do
+  it "invalid with target_level above MAX_LEVEL" do
     character =
       Character.new(
         name: "Test",
@@ -111,7 +111,7 @@ class CharacterTest < ActiveSupport::TestCase
                     "must be less than or equal to #{Character::MAX_LEVEL}"
   end
 
-  test "invalid with non-integer current_level" do
+  it "invalid with non-integer current_level" do
     character =
       Character.new(name: "Test", race: races(:chinese), current_level: 1.5)
 
@@ -119,21 +119,21 @@ class CharacterTest < ActiveSupport::TestCase
     assert_includes character.errors[:current_level], "must be an integer"
   end
 
-  test "invalid with blank name" do
+  it "invalid with blank name" do
     character = Character.new(name: "", race: races(:chinese))
 
     assert_not character.valid?
     assert_includes character.errors[:name], "can't be blank"
   end
 
-  test "invalid with nonexistent race_id" do
+  it "invalid with nonexistent race_id" do
     character = Character.new(name: "Test", race_id: 0)
 
     assert_not character.valid?
     assert_includes character.errors[:race], "must exist"
   end
 
-  test "target_level can be lower than current_level without error" do
+  it "target_level can be lower than current_level without error" do
     character =
       Character.new(
         name: "Test",

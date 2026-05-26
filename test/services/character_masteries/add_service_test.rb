@@ -1,9 +1,9 @@
 require "test_helper"
 
 class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
-  # ───────── validation order ───────────────────────────────────────────────
+  # --------- validation order -----------------------------------------------
 
-  test "fails with non-existent mastery_id" do
+  it "fails with non-existent mastery_id" do
     result =
       CharacterMasteries::AddService.call(characters(:one), mastery_id: 0)
 
@@ -11,7 +11,7 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("Mastery must exist") }
   end
 
-  test "fails when mastery race differs from character race" do
+  it "fails when mastery race differs from character race" do
     result =
       CharacterMasteries::AddService.call(
         characters(:one),
@@ -22,7 +22,7 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("race") }
   end
 
-  test "fails when mastery already added to character" do
+  it "fails when mastery already added to character" do
     char = characters(:one)
     CharacterMastery.create!(character: char, mastery: masteries(:blade_sword))
 
@@ -36,9 +36,9 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("already been added") }
   end
 
-  # ───────── happy path ────────────────────────────────────────────────────
+  # --------- happy path ----------------------------------------------------
 
-  test "creates CharacterMastery with default levels" do
+  it "creates CharacterMastery with default levels" do
     result =
       CharacterMasteries::AddService.call(
         characters(:one),
@@ -51,7 +51,7 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
     assert_equal 0, result.data.target_mastery_level
   end
 
-  test "creates CharacterMastery with provided levels" do
+  it "creates CharacterMastery with provided levels" do
     result =
       CharacterMasteries::AddService.call(
         characters(:one),
@@ -65,7 +65,7 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
     assert_equal 40, result.data.target_mastery_level
   end
 
-  test "persists the CharacterMastery" do
+  it "persists the CharacterMastery" do
     assert_difference "CharacterMastery.count", 1 do
       CharacterMasteries::AddService.call(
         characters(:one),
@@ -74,9 +74,9 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
     end
   end
 
-  # ───────── auto-update character levels ──────────────────────────────────
+  # --------- auto-update character levels ----------------------------------
 
-  test "raises character current_level when mastery level exceeds it" do
+  it "raises character current_level when mastery level exceeds it" do
     char = characters(:one)
     char.update!(current_level: 10)
 
@@ -94,7 +94,7 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
            }
   end
 
-  test "raises character target_level when mastery level exceeds it" do
+  it "raises character target_level when mastery level exceeds it" do
     char = characters(:one)
     char.update!(target_level: 10)
 
@@ -112,7 +112,7 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
            }
   end
 
-  test "emits two warnings when both levels are raised" do
+  it "emits two warnings when both levels are raised" do
     char = characters(:one)
     char.update!(current_level: 5, target_level: 5)
 
@@ -130,7 +130,7 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
     assert_equal 40, char.reload.target_level
   end
 
-  test "does not update character level when mastery level is equal" do
+  it "does not update character level when mastery level is equal" do
     char = characters(:one)
     char.update!(current_level: 20)
 
@@ -146,7 +146,7 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
     assert_equal 20, char.reload.current_level
   end
 
-  test "does not update character level when mastery level is lower" do
+  it "does not update character level when mastery level is lower" do
     char = characters(:one)
     char.update!(current_level: 50)
 
@@ -162,7 +162,7 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
     assert_equal 50, char.reload.current_level
   end
 
-  test "returns warnings in ServiceResult" do
+  it "returns warnings in ServiceResult" do
     char = characters(:one)
     char.update!(current_level: 0)
 

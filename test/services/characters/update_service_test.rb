@@ -1,9 +1,9 @@
 require "test_helper"
 
 class Characters::UpdateServiceTest < ActiveSupport::TestCase
-  # ───────── name ─────────────────────────────────────────────────────────────
+  # --------- name -------------------------------------------------------------
 
-  test "updates the character name" do
+  it "updates the character name" do
     result =
       Characters::UpdateService.call(characters(:one), name: "Updated Name")
 
@@ -11,23 +11,23 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal "Updated Name", characters(:one).reload.name
   end
 
-  test "fails with blank name" do
+  it "fails with blank name" do
     result = Characters::UpdateService.call(characters(:one), name: "")
 
     assert_not result.success?
     assert result.errors.any? { |e| e.include?("Name") }
   end
 
-  test "fails with nil name" do
+  it "fails with nil name" do
     result = Characters::UpdateService.call(characters(:one), name: nil)
 
     assert_not result.success?
     assert result.errors.any? { |e| e.include?("Name") }
   end
 
-  # ───────── race change ──────────────────────────────────────────────────────
+  # --------- race change ------------------------------------------------------
 
-  test "updates race and purges masteries and skills when race changes" do
+  it "updates race and purges masteries and skills when race changes" do
     char = characters(:one)
     CharacterMastery.create!(character: char, mastery: masteries(:blade_sword))
     CharacterSkill.create!(
@@ -43,14 +43,14 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal 0, char.character_skills.count
   end
 
-  test "fails with non-existent race_id" do
+  it "fails with non-existent race_id" do
     result = Characters::UpdateService.call(characters(:one), race_id: 0)
 
     assert_not result.success?
     assert result.errors.any? { |e| e.include?("Race") }
   end
 
-  test "does not change race when race_id is unchanged" do
+  it "does not change race when race_id is unchanged" do
     char = characters(:one)
     original_race_id = char.race_id
 
@@ -60,9 +60,9 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal original_race_id, char.reload.race_id
   end
 
-  # ───────── level changes ────────────────────────────────────────────────────
+  # --------- level changes ----------------------------------------------------
 
-  test "updates current_level and target_level" do
+  it "updates current_level and target_level" do
     result =
       Characters::UpdateService.call(
         characters(:one),
@@ -75,14 +75,14 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal 100, characters(:one).reload.target_level
   end
 
-  test "accepts level of 0" do
+  it "accepts level of 0" do
     result = Characters::UpdateService.call(characters(:one), current_level: 0)
 
     assert result.success?
     assert_equal 0, characters(:one).reload.current_level
   end
 
-  test "fails with current_level above MAX_LEVEL" do
+  it "fails with current_level above MAX_LEVEL" do
     result =
       Characters::UpdateService.call(
         characters(:one),
@@ -93,16 +93,16 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("Current level") }
   end
 
-  test "fails with negative target_level" do
+  it "fails with negative target_level" do
     result = Characters::UpdateService.call(characters(:one), target_level: -1)
 
     assert_not result.success?
     assert result.errors.any? { |e| e.include?("Target level") }
   end
 
-  # ───────── mastery compatibility ─────────────────────────────────────────────
+  # --------- mastery compatibility ---------------------------------------------
 
-  test "fails when reducing current_level below existing current_mastery_level" do
+  it "fails when reducing current_level below existing current_mastery_level" do
     char = characters(:one)
     char.update!(current_level: 80)
     CharacterMastery.create!(
@@ -117,7 +117,7 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("Blade") }
   end
 
-  test "fails when reducing target_level below existing target_mastery_level" do
+  it "fails when reducing target_level below existing target_mastery_level" do
     char = characters(:one)
     char.update!(target_level: 100)
     CharacterMastery.create!(
@@ -132,7 +132,7 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("Spear") }
   end
 
-  test "lists all incompatible masteries in the error" do
+  it "lists all incompatible masteries in the error" do
     char = characters(:one)
     char.update!(current_level: 80)
     CharacterMastery.create!(
@@ -154,7 +154,7 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
     assert_match "Spear", error
   end
 
-  test "succeeds when new level equals existing mastery level" do
+  it "succeeds when new level equals existing mastery level" do
     char = characters(:one)
     char.update!(current_level: 80)
     CharacterMastery.create!(
@@ -168,7 +168,7 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
     assert result.success?
   end
 
-  test "preserves other character fields when race changes" do
+  it "preserves other character fields when race changes" do
     char = characters(:one)
     original_name = char.name
     original_current_level = char.current_level
@@ -181,7 +181,7 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal races(:european).id, char.race_id
   end
 
-  test "skips mastery check when race is also changing" do
+  it "skips mastery check when race is also changing" do
     char = characters(:one)
     char.update!(current_level: 80)
     CharacterMastery.create!(
@@ -201,7 +201,7 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal 0, char.character_masteries.count
   end
 
-  test "does not save anything on failure" do
+  it "does not save anything on failure" do
     char = characters(:one)
     original_name = char.name
 

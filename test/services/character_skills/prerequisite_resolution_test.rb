@@ -4,8 +4,8 @@ require "test_helper"
 # Each branch of the spec is exercised in isolation.
 #
 # Fixture graph (relevant edges):
-#   spear_mastery_skills  → sword_mastery_skills (required_skill_level: 1)
-#   cold_force_skills     → sword_mastery_skills (required_skill_level: 3)
+#   spear_mastery_skills  --- sword_mastery_skills (required_skill_level: 1)
+#   cold_force_skills     --- sword_mastery_skills (required_skill_level: 3)
 #
 # Dynamic requirements created inside individual tests extend this graph
 # for 3-level chain and cycle scenarios.
@@ -27,9 +27,9 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
     )
   end
 
-  # ───────── branch: does not exist → create ───────────────────────────────
+  # --------- branch: does not exist --- create -------------------------------
 
-  test "creates missing prerequisite automatically" do
+  it "creates missing prerequisite automatically" do
     char = fresh_char
     add_skill(char, :spear_mastery_skills, 1)
 
@@ -41,7 +41,7 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
     )
   end
 
-  test "sets created prerequisite to required_skill_level" do
+  it "sets created prerequisite to required_skill_level" do
     char = fresh_char
     add_skill(char, :spear_mastery_skills, 1)
 
@@ -54,9 +54,9 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
     assert_equal 1, cs.target_skill_level
   end
 
-  # ───────── branch: exists, level sufficient → skip ───────────────────────
+  # --------- branch: exists, level sufficient --- skip -----------------------
 
-  test "does not modify prerequisite when current_skill_level is already sufficient" do
+  it "does not modify prerequisite when current_skill_level is already sufficient" do
     char = fresh_char
     CharacterSkill.create!(
       character: char,
@@ -75,7 +75,7 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
     assert_equal 2, cs.current_skill_level
   end
 
-  test "does not emit a warning when prerequisite is already sufficient" do
+  it "does not emit a warning when prerequisite is already sufficient" do
     char = fresh_char
     CharacterSkill.create!(
       character: char,
@@ -90,9 +90,9 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
            }
   end
 
-  # ───────── branch: exists, level insufficient → upgrade ──────────────────
+  # --------- branch: exists, level insufficient --- upgrade ------------------
 
-  test "upgrades prerequisite when current_skill_level is below required" do
+  it "upgrades prerequisite when current_skill_level is below required" do
     char = fresh_char
     CharacterSkill.create!(
       character: char,
@@ -111,7 +111,7 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
     assert_equal 1, cs.current_skill_level
   end
 
-  test "emits warning when prerequisite is upgraded" do
+  it "emits warning when prerequisite is upgraded" do
     char = fresh_char
     CharacterSkill.create!(
       character: char,
@@ -124,17 +124,17 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
     assert result.warnings.any? { |w| w.include?("updated to 1") }
   end
 
-  # ───────── DFS: 3-level chain ─────────────────────────────────────────────
+  # --------- DFS: 3-level chain ---------------------------------------------
 
-  # Graph after adding the dynamic edge spear → cold:
-  #   spear → sword  (fixture, level 1)
-  #   spear → cold   (dynamic, level 1)
-  #   cold  → sword  (fixture, level 3)
+  # Graph after adding the dynamic edge spear --- cold:
+  #   spear --- sword  (fixture, level 1)
+  #   spear --- cold   (dynamic, level 1)
+  #   cold  --- sword  (fixture, level 3)
   #
   # Adding spear creates sword (spear's direct dep, level 1),
   # then creates cold (dynamic dep), whose own dep on sword at 3 upgrades it.
 
-  test "creates entire chain when no prerequisites exist (3 levels)" do
+  it "creates entire chain when no prerequisites exist (3 levels)" do
     char = fresh_char
     SkillGroupRequirement.create!(
       skill_group: skill_groups(:spear_mastery_skills),
@@ -161,9 +161,9 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
     )
   end
 
-  test "upgrades transitive prerequisite when existing skill is insufficient (3 levels)" do
+  it "upgrades transitive prerequisite when existing skill is insufficient (3 levels)" do
     char = fresh_char
-    # sword exists at 0 — below cold's requirement of 3
+    # sword exists at 0 --- below cold's requirement of 3
     sword_cs =
       CharacterSkill.create!(
         character: char,
@@ -192,13 +192,13 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
            "sword must have been upgraded to satisfy cold's transitive requirement"
   end
 
-  # ───────── cycle protection ───────────────────────────────────────────────
+  # --------- cycle protection -----------------------------------------------
 
-  # Cycle: spear → sword (fixture) → spear (dynamic)
+  # Cycle: spear --- sword (fixture) --- spear (dynamic)
   # The visited set prevents infinite recursion; the already_visited guard prevents
   # double-creation of the root skill mid-traversal.
 
-  test "does not loop infinitely when prerequisites contain a cycle" do
+  it "does not loop infinitely when prerequisites contain a cycle" do
     char = fresh_char
     SkillGroupRequirement.create!(
       skill_group: skill_groups(:sword_mastery_skills),
@@ -210,9 +210,9 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
     assert result.success?
   end
 
-  test "creates prerequisite exactly once despite diamond-shaped dependency graph" do
+  it "creates prerequisite exactly once despite diamond-shaped dependency graph" do
     char = fresh_char
-    # Diamond: spear → sword (fixture) and spear → cold (dynamic) → sword (fixture)
+    # Diamond: spear --- sword (fixture) and spear --- cold (dynamic) --- sword (fixture)
     # sword is reachable via two paths but must be created only once.
     SkillGroupRequirement.create!(
       skill_group: skill_groups(:spear_mastery_skills),

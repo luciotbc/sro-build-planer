@@ -1,7 +1,7 @@
 require "test_helper"
 
 class Characters::DeleteServiceTest < ActiveSupport::TestCase
-  test "deletes the character" do
+  it "deletes the character" do
     char = characters(:one)
 
     assert_difference "Character.count", -1 do
@@ -9,7 +9,7 @@ class Characters::DeleteServiceTest < ActiveSupport::TestCase
     end
   end
 
-  test "returns a successful ServiceResult" do
+  it "returns a successful ServiceResult" do
     result = Characters::DeleteService.call(characters(:two))
 
     assert result.success?
@@ -17,7 +17,7 @@ class Characters::DeleteServiceTest < ActiveSupport::TestCase
     assert_empty result.errors
   end
 
-  test "hard-deletes all CharacterSkills before deleting the character" do
+  it "hard-deletes all CharacterSkills before deleting the character" do
     char = characters(:one)
     CharacterSkill.create!(
       character: char,
@@ -30,7 +30,7 @@ class Characters::DeleteServiceTest < ActiveSupport::TestCase
     assert_equal 0, CharacterSkill.where(character_id: char.id).count
   end
 
-  test "hard-deletes all CharacterMasteries before deleting the character" do
+  it "hard-deletes all CharacterMasteries before deleting the character" do
     char = characters(:one)
     CharacterMastery.create!(character: char, mastery: masteries(:blade_sword))
 
@@ -39,7 +39,7 @@ class Characters::DeleteServiceTest < ActiveSupport::TestCase
     end
   end
 
-  test "deletes character with multiple masteries and skills" do
+  it "deletes character with multiple masteries and skills" do
     char = characters(:one)
     CharacterMastery.create!(character: char, mastery: masteries(:blade_sword))
     CharacterMastery.create!(character: char, mastery: masteries(:spear))

@@ -1,7 +1,7 @@
 require "test_helper"
 
 class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
-  # ───────── helpers ────────────────────────────────────────────────────────
+  # --------- helpers --------------------------------------------------------
 
   def fresh_char
     Character.create!(
@@ -12,9 +12,9 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     )
   end
 
-  # ───────── validations ────────────────────────────────────────────────────
+  # --------- validations ----------------------------------------------------
 
-  test "fails when skill_group does not exist" do
+  it "fails when skill_group does not exist" do
     result =
       CharacterSkills::AddService.call(
         characters(:one),
@@ -26,7 +26,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("SkillGroup must exist") }
   end
 
-  test "fails when skill_group race differs from character race" do
+  it "fails when skill_group race differs from character race" do
     result =
       CharacterSkills::AddService.call(
         characters(:one),
@@ -38,7 +38,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("race") }
   end
 
-  test "fails when skill already added to this character" do
+  it "fails when skill already added to this character" do
     result =
       CharacterSkills::AddService.call(
         characters(:one),
@@ -50,7 +50,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("already been added") }
   end
 
-  test "fails when current_skill_level is nil" do
+  it "fails when current_skill_level is nil" do
     result =
       CharacterSkills::AddService.call(
         characters(:one),
@@ -63,7 +63,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
            }
   end
 
-  test "fails when current_skill_level is negative" do
+  it "fails when current_skill_level is negative" do
     result =
       CharacterSkills::AddService.call(
         characters(:one),
@@ -77,7 +77,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
            }
   end
 
-  test "fails when current_skill_level exceeds max_skill_level" do
+  it "fails when current_skill_level exceeds max_skill_level" do
     result =
       CharacterSkills::AddService.call(
         fresh_char,
@@ -91,7 +91,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
            }
   end
 
-  test "fails when target_skill_level is negative" do
+  it "fails when target_skill_level is negative" do
     result =
       CharacterSkills::AddService.call(
         fresh_char,
@@ -106,7 +106,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
            }
   end
 
-  test "fails when target_skill_level exceeds max_skill_level" do
+  it "fails when target_skill_level exceeds max_skill_level" do
     result =
       CharacterSkills::AddService.call(
         fresh_char,
@@ -121,9 +121,9 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
            }
   end
 
-  # ───────── happy path ────────────────────────────────────────────────────
+  # --------- happy path ----------------------------------------------------
 
-  test "creates CharacterSkill with provided levels" do
+  it "creates CharacterSkill with provided levels" do
     char = fresh_char
     result =
       CharacterSkills::AddService.call(
@@ -139,7 +139,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert_equal 2, result.data.target_skill_level
   end
 
-  test "defaults target_skill_level to 0 when not provided" do
+  it "defaults target_skill_level to 0 when not provided" do
     char = fresh_char
     result =
       CharacterSkills::AddService.call(
@@ -152,7 +152,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert_equal 0, result.data.target_skill_level
   end
 
-  test "accepts current_skill_level of 0" do
+  it "accepts current_skill_level of 0" do
     char = fresh_char
     result =
       CharacterSkills::AddService.call(
@@ -165,7 +165,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert_equal 0, result.data.current_skill_level
   end
 
-  test "persists CharacterSkill to the database" do
+  it "persists CharacterSkill to the database" do
     assert_difference "CharacterSkill.count", 1 do
       CharacterSkills::AddService.call(
         fresh_char,
@@ -175,9 +175,9 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     end
   end
 
-  # ───────── CharacterMastery auto-create ──────────────────────────────────
+  # --------- CharacterMastery auto-create ----------------------------------
 
-  test "auto-creates CharacterMastery when not present" do
+  it "auto-creates CharacterMastery when not present" do
     char = fresh_char
     assert_difference "CharacterMastery.count", 1 do
       CharacterSkills::AddService.call(
@@ -188,7 +188,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     end
   end
 
-  test "sets mastery levels from the skill mastery_level_req" do
+  it "sets mastery levels from the skill mastery_level_req" do
     char = fresh_char
     CharacterSkills::AddService.call(
       char,
@@ -208,7 +208,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert_equal 5, cm.target_mastery_level
   end
 
-  test "adds warning when CharacterMastery is auto-created" do
+  it "adds warning when CharacterMastery is auto-created" do
     result =
       CharacterSkills::AddService.call(
         fresh_char,
@@ -219,9 +219,9 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert result.warnings.any? { |w| w.include?("created automatically") }
   end
 
-  # ───────── CharacterMastery auto-update ──────────────────────────────────
+  # --------- CharacterMastery auto-update ----------------------------------
 
-  test "updates CharacterMastery.current_mastery_level when too low" do
+  it "updates CharacterMastery.current_mastery_level when too low" do
     char = fresh_char
     mastery = masteries(:blade_sword)
     cm =
@@ -241,7 +241,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert_equal 5, cm.reload.current_mastery_level
   end
 
-  test "adds warning when CharacterMastery is updated" do
+  it "adds warning when CharacterMastery is updated" do
     char = fresh_char
     CharacterMastery.create!(
       character: char,
@@ -259,7 +259,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert result.warnings.any? { |w| w.include?("updated to") }
   end
 
-  test "does not update CharacterMastery when level is already sufficient" do
+  it "does not update CharacterMastery when level is already sufficient" do
     char = fresh_char
     mastery = masteries(:blade_sword)
     cm =
@@ -278,9 +278,9 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert_equal 10, cm.reload.current_mastery_level
   end
 
-  # ───────── character level auto-update ───────────────────────────────────
+  # --------- character level auto-update -----------------------------------
 
-  test "auto-updates character current_level when mastery exceeds it" do
+  it "auto-updates character current_level when mastery exceeds it" do
     char = fresh_char # current_level = 0
     CharacterSkills::AddService.call(
       char,
@@ -291,7 +291,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert_equal 1, char.reload.current_level
   end
 
-  test "adds warning when character level is auto-updated" do
+  it "adds warning when character level is auto-updated" do
     char = fresh_char
     result =
       CharacterSkills::AddService.call(
@@ -303,9 +303,9 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert result.warnings.any? { |w| w.include?("character.current_level") }
   end
 
-  # ───────── warnings accumulation ────────────────────────────────────────
+  # --------- warnings accumulation ----------------------------------------
 
-  test "warnings accumulate across prerequisite and mastery auto-creation" do
+  it "warnings accumulate across prerequisite and mastery auto-creation" do
     # Adding spear (requires sword at 1) to a fresh char:
     #   1. CharacterMastery for blade_sword auto-created (sword prereq)
     #   2. character.current_level raised (sword mastery req > 0)
@@ -339,9 +339,9 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
            "expected at least 4 accumulated warnings, got #{result.warnings.size}"
   end
 
-  # ───────── prerequisite resolution ───────────────────────────────────────
+  # --------- prerequisite resolution ---------------------------------------
 
-  test "auto-adds prerequisite skill when not present" do
+  it "auto-adds prerequisite skill when not present" do
     char = fresh_char
     # spear requires sword at level 1; char has no skills yet
     assert_difference "CharacterSkill.count", 2 do
@@ -361,7 +361,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert_equal 1, prereq_cs.current_skill_level
   end
 
-  test "adds warning when prerequisite is auto-added" do
+  it "adds warning when prerequisite is auto-added" do
     result =
       CharacterSkills::AddService.call(
         fresh_char,
@@ -372,7 +372,7 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert result.warnings.any? { |w| w.include?("added automatically") }
   end
 
-  test "upgrades existing prerequisite when level is insufficient" do
+  it "upgrades existing prerequisite when level is insufficient" do
     # characters(:one) already has sword at level 1; cold requires sword at 3
     result =
       CharacterSkills::AddService.call(
@@ -388,8 +388,8 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
            }
   end
 
-  test "does not add or modify prerequisite when already at sufficient level" do
-    # characters(:one) has sword at level 1; spear requires sword at 1 — already met
+  it "does not add or modify prerequisite when already at sufficient level" do
+    # characters(:one) has sword at level 1; spear requires sword at 1 --- already met
     CharacterSkills::AddService.call(
       characters(:one),
       skill_group_id: skill_groups(:spear_mastery_skills).id,
@@ -405,9 +405,9 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
                  ).count
   end
 
-  test "does not resolve prerequisites when current_skill_level is 0" do
+  it "does not resolve prerequisites when current_skill_level is 0" do
     char = fresh_char
-    # spear requires sword at level 1, but current_skill_level is 0 → no prereq resolution
+    # spear requires sword at level 1, but current_skill_level is 0 --- no prereq resolution
     assert_difference "CharacterSkill.count", 1 do
       CharacterSkills::AddService.call(
         char,

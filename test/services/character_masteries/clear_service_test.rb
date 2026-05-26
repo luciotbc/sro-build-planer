@@ -1,7 +1,7 @@
 require "test_helper"
 
 class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
-  setup do
+  before do
     @char = characters(:one)
     @mastery = masteries(:blade_sword)
     @cm =
@@ -11,14 +11,14 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
         current_mastery_level: 60,
         target_mastery_level: 80
       )
-    # character_skills(:one) → sword_mastery_skills (belongs to blade_sword)
+    # character_skills(:one) --- sword_mastery_skills (belongs to blade_sword)
     @cs = character_skills(:one)
     @cs.update!(current_skill_level: 2, target_skill_level: 2)
   end
 
-  # ───────── validation ────────────────────────────────────────────────────
+  # --------- validation ----------------------------------------------------
 
-  test "fails when CharacterMastery does not exist" do
+  it "fails when CharacterMastery does not exist" do
     result =
       CharacterMasteries::ClearService.call(
         @char,
@@ -30,7 +30,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("not found") }
   end
 
-  test "fails with an invalid field value" do
+  it "fails with an invalid field value" do
     result =
       CharacterMasteries::ClearService.call(
         @char,
@@ -42,9 +42,9 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("field") }
   end
 
-  # ───────── field: :current ───────────────────────────────────────────────
+  # --------- field: :current -----------------------------------------------
 
-  test "zeros current_mastery_level when field is :current" do
+  it "zeros current_mastery_level when field is :current" do
     CharacterMasteries::ClearService.call(
       @char,
       mastery_id: @mastery.id,
@@ -54,7 +54,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cm.reload.current_mastery_level
   end
 
-  test "zeros current_skill_level for all skills in the mastery when field is :current" do
+  it "zeros current_skill_level for all skills in the mastery when field is :current" do
     CharacterMasteries::ClearService.call(
       @char,
       mastery_id: @mastery.id,
@@ -64,7 +64,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cs.reload.current_skill_level
   end
 
-  test "does not touch target fields when field is :current" do
+  it "does not touch target fields when field is :current" do
     CharacterMasteries::ClearService.call(
       @char,
       mastery_id: @mastery.id,
@@ -75,9 +75,9 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 2, @cs.reload.target_skill_level
   end
 
-  # ───────── field: :target ────────────────────────────────────────────────
+  # --------- field: :target ------------------------------------------------
 
-  test "zeros target_mastery_level when field is :target" do
+  it "zeros target_mastery_level when field is :target" do
     CharacterMasteries::ClearService.call(
       @char,
       mastery_id: @mastery.id,
@@ -87,7 +87,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cm.reload.target_mastery_level
   end
 
-  test "zeros target_skill_level for all skills in the mastery when field is :target" do
+  it "zeros target_skill_level for all skills in the mastery when field is :target" do
     CharacterMasteries::ClearService.call(
       @char,
       mastery_id: @mastery.id,
@@ -97,7 +97,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cs.reload.target_skill_level
   end
 
-  test "does not touch current fields when field is :target" do
+  it "does not touch current fields when field is :target" do
     CharacterMasteries::ClearService.call(
       @char,
       mastery_id: @mastery.id,
@@ -108,9 +108,9 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 2, @cs.reload.current_skill_level
   end
 
-  # ───────── field: :both ──────────────────────────────────────────────────
+  # --------- field: :both --------------------------------------------------
 
-  test "zeros both mastery levels when field is :both" do
+  it "zeros both mastery levels when field is :both" do
     CharacterMasteries::ClearService.call(
       @char,
       mastery_id: @mastery.id,
@@ -122,7 +122,7 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cm.target_mastery_level
   end
 
-  test "zeros both skill levels when field is :both" do
+  it "zeros both skill levels when field is :both" do
     CharacterMasteries::ClearService.call(
       @char,
       mastery_id: @mastery.id,
@@ -134,9 +134,9 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cs.target_skill_level
   end
 
-  # ───────── isolation ─────────────────────────────────────────────────────
+  # --------- isolation -----------------------------------------------------
 
-  test "does not affect skills of a different mastery" do
+  it "does not affect skills of a different mastery" do
     spear_cm =
       CharacterMastery.create!(
         character: @char,
@@ -160,9 +160,9 @@ class CharacterMasteries::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 1, spear_cs.reload.current_skill_level
   end
 
-  # ───────── return value ──────────────────────────────────────────────────
+  # --------- return value --------------------------------------------------
 
-  test "returns successful ServiceResult with the CharacterMastery" do
+  it "returns successful ServiceResult with the CharacterMastery" do
     result =
       CharacterMasteries::ClearService.call(
         @char,

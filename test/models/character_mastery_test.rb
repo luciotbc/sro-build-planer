@@ -1,7 +1,7 @@
 require "test_helper"
 
 class CharacterMasteryTest < ActiveSupport::TestCase
-  test "valid with character and mastery" do
+  it "valid with character and mastery" do
     cm =
       CharacterMastery.new(
         character: characters(:one),
@@ -11,21 +11,21 @@ class CharacterMasteryTest < ActiveSupport::TestCase
     assert cm.valid?
   end
 
-  test "invalid without character" do
+  it "invalid without character" do
     cm = CharacterMastery.new(mastery: masteries(:blade_sword))
 
     assert_not cm.valid?
     assert_includes cm.errors[:character], "must exist"
   end
 
-  test "invalid without mastery" do
+  it "invalid without mastery" do
     cm = CharacterMastery.new(character: characters(:one))
 
     assert_not cm.valid?
     assert_includes cm.errors[:mastery], "must exist"
   end
 
-  test "belongs_to character association" do
+  it "belongs_to character association" do
     cm =
       CharacterMastery.create!(
         character: characters(:one),
@@ -35,7 +35,7 @@ class CharacterMasteryTest < ActiveSupport::TestCase
     assert_equal characters(:one), cm.character
   end
 
-  test "belongs_to mastery association" do
+  it "belongs_to mastery association" do
     cm =
       CharacterMastery.create!(
         character: characters(:one),
@@ -45,7 +45,7 @@ class CharacterMasteryTest < ActiveSupport::TestCase
     assert_equal masteries(:spear), cm.mastery
   end
 
-  test "valid with nil mastery levels" do
+  it "valid with nil mastery levels" do
     cm =
       CharacterMastery.new(
         character: characters(:one),
@@ -55,7 +55,7 @@ class CharacterMasteryTest < ActiveSupport::TestCase
     assert cm.valid?
   end
 
-  test "valid with mastery levels within range" do
+  it "valid with mastery levels within range" do
     cm =
       CharacterMastery.new(
         character: characters(:one),
@@ -67,7 +67,7 @@ class CharacterMasteryTest < ActiveSupport::TestCase
     assert cm.valid?
   end
 
-  test "invalid with current_mastery_level below 0" do
+  it "invalid with current_mastery_level below 0" do
     cm =
       CharacterMastery.new(
         character: characters(:one),
@@ -80,7 +80,7 @@ class CharacterMasteryTest < ActiveSupport::TestCase
                     "must be greater than or equal to 0"
   end
 
-  test "invalid with current_mastery_level above MAX_LEVEL" do
+  it "invalid with current_mastery_level above MAX_LEVEL" do
     cm =
       CharacterMastery.new(
         character: characters(:one),
@@ -93,7 +93,7 @@ class CharacterMasteryTest < ActiveSupport::TestCase
                     "must be less than or equal to #{Character::MAX_LEVEL}"
   end
 
-  test "invalid with target_mastery_level below 0" do
+  it "invalid with target_mastery_level below 0" do
     cm =
       CharacterMastery.new(
         character: characters(:one),
@@ -106,7 +106,7 @@ class CharacterMasteryTest < ActiveSupport::TestCase
                     "must be greater than or equal to 0"
   end
 
-  test "invalid with target_mastery_level above MAX_LEVEL" do
+  it "invalid with target_mastery_level above MAX_LEVEL" do
     cm =
       CharacterMastery.new(
         character: characters(:one),

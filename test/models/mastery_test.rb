@@ -1,7 +1,7 @@
 require "test_helper"
 
 class MasteryTest < ActiveSupport::TestCase
-  test "valid with external_id, name, mastery_type, and race" do
+  it "valid with external_id, name, mastery_type, and race" do
     race = races(:chinese)
     mastery =
       Mastery.new(
@@ -14,7 +14,7 @@ class MasteryTest < ActiveSupport::TestCase
     assert mastery.valid?
   end
 
-  test "invalid without external_id" do
+  it "invalid without external_id" do
     race = races(:chinese)
     mastery =
       Mastery.new(name: "Test Mastery", mastery_type: "Weapon", race: race)
@@ -23,7 +23,7 @@ class MasteryTest < ActiveSupport::TestCase
     assert_includes mastery.errors[:external_id], "can't be blank"
   end
 
-  test "invalid with duplicate external_id" do
+  it "invalid with duplicate external_id" do
     existing_mastery = masteries(:blade_sword)
     race = races(:chinese)
     mastery =
@@ -38,7 +38,7 @@ class MasteryTest < ActiveSupport::TestCase
     assert_includes mastery.errors[:external_id], "has already been taken"
   end
 
-  test "invalid without name" do
+  it "invalid without name" do
     race = races(:chinese)
     mastery = Mastery.new(external_id: 1000, mastery_type: "Weapon", race: race)
 
@@ -46,7 +46,7 @@ class MasteryTest < ActiveSupport::TestCase
     assert_includes mastery.errors[:name], "can't be blank"
   end
 
-  test "invalid without mastery_type" do
+  it "invalid without mastery_type" do
     race = races(:chinese)
     mastery = Mastery.new(external_id: 1001, name: "Test Mastery", race: race)
 
@@ -54,7 +54,7 @@ class MasteryTest < ActiveSupport::TestCase
     assert_includes mastery.errors[:mastery_type], "can't be blank"
   end
 
-  test "invalid with invalid mastery_type" do
+  it "invalid with invalid mastery_type" do
     race = races(:chinese)
     mastery =
       Mastery.new(
@@ -68,7 +68,7 @@ class MasteryTest < ActiveSupport::TestCase
     assert_includes mastery.errors[:mastery_type], "is not included in the list"
   end
 
-  test "invalid without race" do
+  it "invalid without race" do
     mastery =
       Mastery.new(
         external_id: 1003,
@@ -80,13 +80,13 @@ class MasteryTest < ActiveSupport::TestCase
     assert_includes mastery.errors[:race], "must exist"
   end
 
-  test "belongs_to race association" do
+  it "belongs_to race association" do
     mastery = masteries(:blade_sword)
 
     assert_equal races(:chinese), mastery.race
   end
 
-  test "database rejects null name" do
+  it "database rejects null name" do
     race = races(:chinese)
     mastery =
       Mastery.new(
@@ -101,7 +101,7 @@ class MasteryTest < ActiveSupport::TestCase
     end
   end
 
-  test "database rejects null mastery_type" do
+  it "database rejects null mastery_type" do
     race = races(:chinese)
     mastery =
       Mastery.new(
@@ -116,7 +116,7 @@ class MasteryTest < ActiveSupport::TestCase
     end
   end
 
-  test "database rejects null race_id" do
+  it "database rejects null race_id" do
     mastery =
       Mastery.new(
         external_id: 1006,

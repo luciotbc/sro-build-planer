@@ -1,7 +1,7 @@
 require "test_helper"
 
 class SkillTest < ActiveSupport::TestCase
-  test "valid with all required attributes" do
+  it "valid with all required attributes" do
     skill_group = skill_groups(:sword_mastery_skills)
     skill =
       Skill.new(
@@ -14,7 +14,7 @@ class SkillTest < ActiveSupport::TestCase
     assert skill.valid?
   end
 
-  test "invalid without external_id" do
+  it "invalid without external_id" do
     skill_group = skill_groups(:sword_mastery_skills)
     skill =
       Skill.new(
@@ -27,7 +27,7 @@ class SkillTest < ActiveSupport::TestCase
     assert_includes skill.errors[:external_id], "can't be blank"
   end
 
-  test "invalid with duplicate external_id" do
+  it "invalid with duplicate external_id" do
     existing_skill = skills(:blade_passive_skill)
     skill_group = skill_groups(:sword_mastery_skills)
     skill =
@@ -42,7 +42,7 @@ class SkillTest < ActiveSupport::TestCase
     assert_includes skill.errors[:external_id], "has already been taken"
   end
 
-  test "invalid without external_skill_code" do
+  it "invalid without external_skill_code" do
     skill_group = skill_groups(:sword_mastery_skills)
     skill =
       Skill.new(external_id: 2001, skill_group: skill_group, skill_level: 1)
@@ -51,7 +51,7 @@ class SkillTest < ActiveSupport::TestCase
     assert_includes skill.errors[:external_skill_code], "can't be blank"
   end
 
-  test "invalid with duplicate external_skill_code" do
+  it "invalid with duplicate external_skill_code" do
     existing_skill = skills(:blade_passive_skill)
     skill_group = skill_groups(:sword_mastery_skills)
     skill =
@@ -66,7 +66,7 @@ class SkillTest < ActiveSupport::TestCase
     assert_includes skill.errors[:external_skill_code], "has already been taken"
   end
 
-  test "invalid without skill_level" do
+  it "invalid without skill_level" do
     skill_group = skill_groups(:sword_mastery_skills)
     skill =
       Skill.new(
@@ -79,7 +79,7 @@ class SkillTest < ActiveSupport::TestCase
     assert_includes skill.errors[:skill_level], "can't be blank"
   end
 
-  test "invalid without skill_group" do
+  it "invalid without skill_group" do
     skill =
       Skill.new(
         external_id: 2005,
@@ -90,13 +90,13 @@ class SkillTest < ActiveSupport::TestCase
     assert_not skill.valid?
   end
 
-  test "belongs_to skill_group association" do
+  it "belongs_to skill_group association" do
     skill = skills(:blade_passive_skill)
 
     assert_equal skill_groups(:sword_mastery_skills), skill.skill_group
   end
 
-  test "database rejects null external_id" do
+  it "database rejects null external_id" do
     skill_group = skill_groups(:sword_mastery_skills)
     skill =
       Skill.new(
@@ -111,7 +111,7 @@ class SkillTest < ActiveSupport::TestCase
     end
   end
 
-  test "database rejects null external_skill_code" do
+  it "database rejects null external_skill_code" do
     skill_group = skill_groups(:sword_mastery_skills)
     skill =
       Skill.new(
@@ -126,7 +126,7 @@ class SkillTest < ActiveSupport::TestCase
     end
   end
 
-  test "database rejects null skill_level" do
+  it "database rejects null skill_level" do
     skill_group = skill_groups(:sword_mastery_skills)
     skill =
       Skill.new(
@@ -141,7 +141,7 @@ class SkillTest < ActiveSupport::TestCase
     end
   end
 
-  test "sp_cost and mastery_level_req are nullable" do
+  it "sp_cost and mastery_level_req are nullable" do
     skill_group = skill_groups(:sword_mastery_skills)
     skill =
       Skill.new(

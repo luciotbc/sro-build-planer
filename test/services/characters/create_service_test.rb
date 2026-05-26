@@ -1,7 +1,7 @@
 require "test_helper"
 
 class Characters::CreateServiceTest < ActiveSupport::TestCase
-  test "creates a character with required fields" do
+  it "creates a character with required fields" do
     result =
       Characters::CreateService.call(name: "Hero", race_id: races(:chinese).id)
 
@@ -11,7 +11,7 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
     assert_equal races(:chinese).id, result.data.race_id
   end
 
-  test "sets current_level and target_level to 0 by default" do
+  it "sets current_level and target_level to 0 by default" do
     result =
       Characters::CreateService.call(name: "Hero", race_id: races(:chinese).id)
 
@@ -20,7 +20,7 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
     assert_equal 0, result.data.target_level
   end
 
-  test "accepts optional current_level and target_level" do
+  it "accepts optional current_level and target_level" do
     result =
       Characters::CreateService.call(
         name: "Hero",
@@ -34,14 +34,14 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
     assert_equal 80, result.data.target_level
   end
 
-  test "fails without name" do
+  it "fails without name" do
     result = Characters::CreateService.call(race_id: races(:chinese).id)
 
     assert_not result.success?
     assert result.errors.any? { |e| e.include?("Name") }
   end
 
-  test "fails with blank name" do
+  it "fails with blank name" do
     result =
       Characters::CreateService.call(name: "", race_id: races(:chinese).id)
 
@@ -49,14 +49,14 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("Name") }
   end
 
-  test "fails with non-existent race_id" do
+  it "fails with non-existent race_id" do
     result = Characters::CreateService.call(name: "Hero", race_id: 0)
 
     assert_not result.success?
     assert result.errors.any? { |e| e.include?("Race") }
   end
 
-  test "fails with current_level above MAX_LEVEL" do
+  it "fails with current_level above MAX_LEVEL" do
     result =
       Characters::CreateService.call(
         name: "Hero",
@@ -68,7 +68,7 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("Current level") }
   end
 
-  test "fails with negative target_level" do
+  it "fails with negative target_level" do
     result =
       Characters::CreateService.call(
         name: "Hero",
@@ -80,7 +80,7 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("Target level") }
   end
 
-  test "target_level can be lower than current_level" do
+  it "target_level can be lower than current_level" do
     result =
       Characters::CreateService.call(
         name: "Hero",
@@ -92,14 +92,14 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
     assert result.success?
   end
 
-  test "returns errors array on failure" do
+  it "returns errors array on failure" do
     result = Characters::CreateService.call(race_id: races(:chinese).id)
 
     assert_instance_of Array, result.errors
     assert_empty result.warnings
   end
 
-  test "persists the character to the database" do
+  it "persists the character to the database" do
     assert_difference "Character.count", 1 do
       Characters::CreateService.call(
         name: "Persisted",

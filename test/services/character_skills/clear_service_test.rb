@@ -1,16 +1,16 @@
 require "test_helper"
 
 class CharacterSkills::ClearServiceTest < ActiveSupport::TestCase
-  setup do
+  before do
     @char = characters(:one)
-    # character_skills(:one) → sword_mastery_skills, levels 1/1
+    # character_skills(:one) --- sword_mastery_skills, levels 1/1
     @cs = character_skills(:one)
     @cs.update!(current_skill_level: 2, target_skill_level: 2)
   end
 
-  # ───────── validations ────────────────────────────────────────────────────
+  # --------- validations ----------------------------------------------------
 
-  test "fails when CharacterSkill does not exist" do
+  it "fails when CharacterSkill does not exist" do
     result =
       CharacterSkills::ClearService.call(
         @char,
@@ -22,7 +22,7 @@ class CharacterSkills::ClearServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("not found") }
   end
 
-  test "fails with an invalid field value" do
+  it "fails with an invalid field value" do
     result =
       CharacterSkills::ClearService.call(
         @char,
@@ -34,9 +34,9 @@ class CharacterSkills::ClearServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("field") }
   end
 
-  # ───────── field: :current ───────────────────────────────────────────────
+  # --------- field: :current -----------------------------------------------
 
-  test "zeros current_skill_level when field is :current" do
+  it "zeros current_skill_level when field is :current" do
     CharacterSkills::ClearService.call(
       @char,
       skill_group_id: skill_groups(:sword_mastery_skills).id,
@@ -46,7 +46,7 @@ class CharacterSkills::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cs.reload.current_skill_level
   end
 
-  test "does not touch target_skill_level when field is :current" do
+  it "does not touch target_skill_level when field is :current" do
     CharacterSkills::ClearService.call(
       @char,
       skill_group_id: skill_groups(:sword_mastery_skills).id,
@@ -56,9 +56,9 @@ class CharacterSkills::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 2, @cs.reload.target_skill_level
   end
 
-  # ───────── field: :target ────────────────────────────────────────────────
+  # --------- field: :target ------------------------------------------------
 
-  test "zeros target_skill_level when field is :target" do
+  it "zeros target_skill_level when field is :target" do
     CharacterSkills::ClearService.call(
       @char,
       skill_group_id: skill_groups(:sword_mastery_skills).id,
@@ -68,7 +68,7 @@ class CharacterSkills::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cs.reload.target_skill_level
   end
 
-  test "does not touch current_skill_level when field is :target" do
+  it "does not touch current_skill_level when field is :target" do
     CharacterSkills::ClearService.call(
       @char,
       skill_group_id: skill_groups(:sword_mastery_skills).id,
@@ -78,9 +78,9 @@ class CharacterSkills::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 2, @cs.reload.current_skill_level
   end
 
-  # ───────── field: :both ──────────────────────────────────────────────────
+  # --------- field: :both --------------------------------------------------
 
-  test "zeros both levels when field is :both" do
+  it "zeros both levels when field is :both" do
     CharacterSkills::ClearService.call(
       @char,
       skill_group_id: skill_groups(:sword_mastery_skills).id,
@@ -92,9 +92,9 @@ class CharacterSkills::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cs.target_skill_level
   end
 
-  # ───────── blocking dependents on :current ───────────────────────────────
+  # --------- blocking dependents on :current -------------------------------
 
-  test "fails when clearing current_skill_level would violate a dependent's requirement" do
+  it "fails when clearing current_skill_level would violate a dependent's requirement" do
     # spear requires sword at level 1; add spear with current_skill_level 1
     CharacterSkill.create!(
       character: @char,
@@ -115,7 +115,7 @@ class CharacterSkills::ClearServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("Spear Skills") }
   end
 
-  test "fails when clearing :both and current_skill_level has a blocking dependent" do
+  it "fails when clearing :both and current_skill_level has a blocking dependent" do
     CharacterSkill.create!(
       character: @char,
       skill_group: skill_groups(:spear_mastery_skills),
@@ -134,7 +134,7 @@ class CharacterSkills::ClearServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("blocked by") }
   end
 
-  test "does not check dependents when field is :target" do
+  it "does not check dependents when field is :target" do
     # even with a blocking dependent, :target clears without a check
     CharacterSkill.create!(
       character: @char,
@@ -154,7 +154,7 @@ class CharacterSkills::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cs.reload.target_skill_level
   end
 
-  test "does not block when dependent's current_skill_level is 0" do
+  it "does not block when dependent's current_skill_level is 0" do
     CharacterSkill.create!(
       character: @char,
       skill_group: skill_groups(:spear_mastery_skills),
@@ -173,7 +173,7 @@ class CharacterSkills::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cs.reload.current_skill_level
   end
 
-  test "does not block when no dependents exist for the character" do
+  it "does not block when no dependents exist for the character" do
     result =
       CharacterSkills::ClearService.call(
         @char,
@@ -185,9 +185,9 @@ class CharacterSkills::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cs.reload.current_skill_level
   end
 
-  # ───────── return value ──────────────────────────────────────────────────
+  # --------- return value --------------------------------------------------
 
-  test "returns successful ServiceResult with the CharacterSkill" do
+  it "returns successful ServiceResult with the CharacterSkill" do
     result =
       CharacterSkills::ClearService.call(
         @char,

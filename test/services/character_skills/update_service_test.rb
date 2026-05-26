@@ -1,11 +1,11 @@
 require "test_helper"
 
 class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
-  # ───────── helpers ────────────────────────────────────────────────────────
+  # --------- helpers --------------------------------------------------------
 
   def setup
     @char = characters(:one)
-    # characters(:one) already has character_skills(:one) → sword_mastery_skills at 1/1
+    # characters(:one) already has character_skills(:one) --- sword_mastery_skills at 1/1
     @cs = character_skills(:one)
     @sg = skill_groups(:sword_mastery_skills)
     CharacterMastery.create!(
@@ -25,9 +25,9 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     )
   end
 
-  # ───────── existence validation ───────────────────────────────────────────
+  # --------- existence validation -------------------------------------------
 
-  test "fails when CharacterSkill does not exist for the character" do
+  it "fails when CharacterSkill does not exist for the character" do
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -39,9 +39,9 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("not found") }
   end
 
-  # ───────── immutable fields ───────────────────────────────────────────────
+  # --------- immutable fields -----------------------------------------------
 
-  test "fails when character_id is provided" do
+  it "fails when character_id is provided" do
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -55,7 +55,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
            }
   end
 
-  test "still finds the CharacterSkill when skill_group_id matches the existing one" do
+  it "still finds the CharacterSkill when skill_group_id matches the existing one" do
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -67,9 +67,9 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal @cs, result.data
   end
 
-  # ───────── level range validations ───────────────────────────────────────
+  # --------- level range validations ---------------------------------------
 
-  test "fails when current_skill_level is negative" do
+  it "fails when current_skill_level is negative" do
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -83,7 +83,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
            }
   end
 
-  test "fails when current_skill_level exceeds max_skill_level" do
+  it "fails when current_skill_level exceeds max_skill_level" do
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -97,7 +97,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
            }
   end
 
-  test "fails when target_skill_level is negative" do
+  it "fails when target_skill_level is negative" do
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -111,7 +111,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
            }
   end
 
-  test "fails when target_skill_level exceeds max_skill_level" do
+  it "fails when target_skill_level exceeds max_skill_level" do
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -125,9 +125,9 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
            }
   end
 
-  # ───────── happy path ─────────────────────────────────────────────────────
+  # --------- happy path -----------------------------------------------------
 
-  test "updates current_skill_level" do
+  it "updates current_skill_level" do
     CharacterSkills::UpdateService.call(
       @char,
       skill_group_id: @sg.id,
@@ -137,7 +137,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal 2, @cs.reload.current_skill_level
   end
 
-  test "updates target_skill_level" do
+  it "updates target_skill_level" do
     CharacterSkills::UpdateService.call(
       @char,
       skill_group_id: @sg.id,
@@ -147,7 +147,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal 2, @cs.reload.target_skill_level
   end
 
-  test "updates both levels in one call" do
+  it "updates both levels in one call" do
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -162,7 +162,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal 2, @cs.target_skill_level
   end
 
-  test "does not change fields not provided in params" do
+  it "does not change fields not provided in params" do
     CharacterSkills::UpdateService.call(
       @char,
       skill_group_id: @sg.id,
@@ -172,7 +172,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal 1, @cs.reload.target_skill_level
   end
 
-  test "returns successful ServiceResult with CharacterSkill" do
+  it "returns successful ServiceResult with CharacterSkill" do
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -184,7 +184,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert_instance_of CharacterSkill, result.data
   end
 
-  test "accepts current_skill_level of 0" do
+  it "accepts current_skill_level of 0" do
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -196,7 +196,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cs.reload.current_skill_level
   end
 
-  test "accepts target_skill_level of 0" do
+  it "accepts target_skill_level of 0" do
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -208,7 +208,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cs.reload.target_skill_level
   end
 
-  test "returns not found when skill_group_id does not match any CharacterSkill for the character" do
+  it "returns not found when skill_group_id does not match any CharacterSkill for the character" do
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -220,9 +220,9 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("not found") }
   end
 
-  # ───────── blocking dependents on decrease ────────────────────────────────
+  # --------- blocking dependents on decrease --------------------------------
 
-  test "fails when decreasing current_skill_level below a dependent's requirement" do
+  it "fails when decreasing current_skill_level below a dependent's requirement" do
     # cold_force_skills requires sword at level 3; char has sword at 1
     # first add spear (requires sword at 1) to make it a dependent
     CharacterSkill.create!(
@@ -232,7 +232,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
       target_skill_level: 1
     )
 
-    # sword is at level 1, spear requires sword at 1 → cannot drop sword to 0
+    # sword is at level 1, spear requires sword at 1 --- cannot drop sword to 0
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -245,7 +245,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert result.errors.any? { |e| e.include?("Spear Skills") }
   end
 
-  test "does not block when dependent's current_skill_level is 0" do
+  it "does not block when dependent's current_skill_level is 0" do
     CharacterSkill.create!(
       character: @char,
       skill_group: skill_groups(:spear_mastery_skills),
@@ -263,8 +263,8 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert result.success?
   end
 
-  test "does not block when no dependents exist for the character" do
-    # char has no spear or cold skill → free to decrease sword
+  it "does not block when no dependents exist for the character" do
+    # char has no spear or cold skill --- free to decrease sword
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -276,10 +276,10 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cs.reload.current_skill_level
   end
 
-  # ───────── prerequisite resolution on increase ───────────────────────────
+  # --------- prerequisite resolution on increase ---------------------------
 
-  test "does not resolve prerequisites when current_skill_level is not increasing" do
-    # sword at 1, only update target → no prereq logic fires
+  it "does not resolve prerequisites when current_skill_level is not increasing" do
+    # sword at 1, only update target --- no prereq logic fires
     assert_no_difference "CharacterSkill.count" do
       CharacterSkills::UpdateService.call(
         @char,
@@ -289,7 +289,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     end
   end
 
-  test "does not resolve prerequisites when decreasing current_skill_level" do
+  it "does not resolve prerequisites when decreasing current_skill_level" do
     @cs.update!(current_skill_level: 2)
 
     assert_no_difference "CharacterSkill.count" do
@@ -303,7 +303,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
 
   # CharacterMastery auto-update on increase
 
-  test "updates CharacterMastery when current_skill_level increases" do
+  it "updates CharacterMastery when current_skill_level increases" do
     cm =
       CharacterMastery.find_by(
         character: @char,
@@ -320,7 +320,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal 5, cm.reload.current_mastery_level
   end
 
-  test "adds warning when CharacterMastery is updated" do
+  it "adds warning when CharacterMastery is updated" do
     result =
       CharacterSkills::UpdateService.call(
         @char,
@@ -331,7 +331,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert result.warnings.any? { |w| w.include?("updated to") }
   end
 
-  test "does not update CharacterMastery when level is already sufficient" do
+  it "does not update CharacterMastery when level is already sufficient" do
     cm =
       CharacterMastery.find_by(
         character: @char,
@@ -350,7 +350,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
 
   # character level auto-update on increase
 
-  test "auto-updates character current_level when mastery exceeds it" do
+  it "auto-updates character current_level when mastery exceeds it" do
     @char.update!(current_level: 0)
     cm =
       CharacterMastery.find_by(
@@ -369,7 +369,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal 5, @char.reload.current_level
   end
 
-  test "adds warning when character level is auto-updated" do
+  it "adds warning when character level is auto-updated" do
     @char.update!(current_level: 0)
     cm =
       CharacterMastery.find_by(
