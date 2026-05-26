@@ -25,7 +25,11 @@ module CharacterSkills
             end
           elsif existing.current_skill_level.to_i < required_level
             existing.update!(current_skill_level: required_level)
-            @warnings << "prerequisite '#{required_group.name}' current_skill_level updated to #{required_level}"
+            @warnings << I18n.t(
+              "warnings.prerequisite_level_updated",
+              name: required_group.name,
+              level: required_level
+            )
             resolve_prerequisites(required_group, visited)
           end
         end
@@ -36,7 +40,11 @@ module CharacterSkills
       return unless mastery_level > char_level
 
       @character.update!(attr => mastery_level)
-      @warnings << "character.#{attr} updated to #{mastery_level}"
+      @warnings << I18n.t(
+        "warnings.character_level_updated",
+        attr: attr,
+        value: mastery_level
+      )
     end
   end
 end

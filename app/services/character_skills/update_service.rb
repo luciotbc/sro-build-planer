@@ -125,7 +125,7 @@ module CharacterSkills
         current_skill_level: level,
         target_skill_level: level
       )
-      @warnings << "prerequisite '#{skill_group.name}' added automatically"
+      @warnings << I18n.t("warnings.prerequisite_added", name: skill_group.name)
     end
 
     def update_mastery(skill_group, current_level)
@@ -142,11 +142,18 @@ module CharacterSkills
           current_mastery_level: current_req,
           target_mastery_level: 0
         )
-        @warnings << "CharacterMastery '#{mastery.name}' created automatically"
+        @warnings << I18n.t(
+          "warnings.character_mastery_created",
+          name: mastery.name
+        )
         sync_character_level(:current_level, current_req)
       elsif cm.current_mastery_level.to_i < current_req
         cm.update!(current_mastery_level: current_req)
-        @warnings << "CharacterMastery '#{mastery.name}' current_mastery_level updated to #{current_req}"
+        @warnings << I18n.t(
+          "warnings.character_mastery_level_updated",
+          name: mastery.name,
+          level: current_req
+        )
         sync_character_level(:current_level, current_req)
       end
     end

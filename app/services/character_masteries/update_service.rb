@@ -66,7 +66,11 @@ module CharacterMasteries
       return unless new_mastery_level > char_level
 
       @character.update!(char_attr => new_mastery_level)
-      @warnings << "character.#{char_attr} updated to #{new_mastery_level}"
+      @warnings << I18n.t(
+        "warnings.character_level_updated",
+        attr: char_attr,
+        value: new_mastery_level
+      )
     end
 
     def cascade_skills(skill_level_attr, skill_method, new_mastery_level)
@@ -84,7 +88,12 @@ module CharacterMasteries
             .pick(:skill_level) || 0
 
         cs.update!(skill_level_attr => new_skill_level)
-        @warnings << "skill '#{cs.skill_group.name}' #{skill_level_attr} adjusted to #{new_skill_level}"
+        @warnings << I18n.t(
+          "warnings.skill_level_adjusted",
+          name: cs.skill_group.name,
+          attr: skill_level_attr,
+          level: new_skill_level
+        )
       end
     end
 
