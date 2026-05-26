@@ -1,5 +1,7 @@
 module CharacterSkills
   class UpdateService
+    include PrerequisiteResolver
+
     def self.call(character, params) = new(character, params).call
 
     def initialize(character, params)
@@ -115,35 +117,6 @@ module CharacterSkills
       end
     end
 
-    def resolve_prerequisites(skill_group, visited)
-      return if visited.include?(skill_group.id)
-      visited.add(skill_group.id)
-
-      skill_group
-        .skill_group_requirements
-        .includes(required_group: :mastery)
-        .each do |req|
-          required_group = req.required_group
-          required_level = req.required_skill_level.to_i
-          next if required_level == 0
-
-          existing =
-            @character.character_skills.find_by(skill_group: required_group)
-
-          if existing.nil?
-            already_visited = visited.include?(required_group.id)
-            resolve_prerequisites(required_group, visited)
-            unless already_visited
-              add_prerequisite(required_group, required_level)
-            end
-          elsif existing.current_skill_level.to_i < required_level
-            existing.update!(current_skill_level: required_level)
-            @warnings << "prerequisite '#{required_group.name}' current_skill_level updated to #{required_level}"
-            resolve_prerequisites(required_group, visited)
-          end
-        end
-    end
-
     def add_prerequisite(skill_group, level)
       update_mastery(skill_group, level)
       CharacterSkill.create!(
@@ -176,14 +149,6 @@ module CharacterSkills
         @warnings << "CharacterMastery '#{mastery.name}' current_mastery_level updated to #{current_req}"
         sync_character_level(:current_level, current_req)
       end
-    end
-
-    def sync_character_level(attr, mastery_level)
-      char_level = @character.public_send(attr).to_i
-      return unless mastery_level > char_level
-
-      @character.update!(attr => mastery_level)
-      @warnings << "character.#{attr} updated to #{mastery_level}"
     end
   end
 end
