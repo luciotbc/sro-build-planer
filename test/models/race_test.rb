@@ -1,47 +1,46 @@
 require "test_helper"
 
 class RaceTest < ActiveSupport::TestCase
-  test "valid with external_id and name" do
-    race = Race.new(external_id: 3, name: "Orc")
+  let(:race) { create(:race) }
 
-    assert race.valid?
+  it "valid with external_id and name" do
+    r = Race.new(external_id: 3, name: "Orc")
+
+    assert r.valid?
   end
 
-  test "invalid without external_id" do
-    race = Race.new(name: "Orc")
+  it "invalid without external_id" do
+    r = Race.new(name: "Orc")
 
-    assert_not race.valid?
-    assert_includes race.errors[:external_id], "can't be blank"
+    assert_not r.valid?
+    assert_includes r.errors[:external_id], "can't be blank"
   end
 
-  test "invalid with duplicate external_id" do
-    existing_race = races(:chinese)
-    race = Race.new(external_id: existing_race.external_id, name: "New Race")
+  it "invalid with duplicate external_id" do
+    r = Race.new(external_id: race.external_id, name: "New Race")
 
-    assert_not race.valid?
-    assert_includes race.errors[:external_id], "has already been taken"
+    assert_not r.valid?
+    assert_includes r.errors[:external_id], "has already been taken"
   end
 
-  test "invalid without name" do
-    race = Race.new(external_id: 4)
+  it "invalid without name" do
+    r = Race.new(external_id: 4)
 
-    assert_not race.valid?
-    assert_includes race.errors[:name], "can't be blank"
+    assert_not r.valid?
+    assert_includes r.errors[:name], "can't be blank"
   end
 
-  test "database rejects null name" do
-    race = Race.new(external_id: 4, name: nil)
+  it "database rejects null name" do
+    r = Race.new(external_id: 4, name: nil)
 
-    assert_raises(ActiveRecord::NotNullViolation) do
-      race.save!(validate: false)
-    end
+    assert_raises(ActiveRecord::NotNullViolation) { r.save!(validate: false) }
   end
 
-  test "has_many masteries" do
-    assert_respond_to races(:chinese), :masteries
+  it "has_many masteries" do
+    assert_respond_to race, :masteries
   end
 
-  test "has_many characters" do
-    assert_respond_to races(:chinese), :characters
+  it "has_many characters" do
+    assert_respond_to race, :characters
   end
 end

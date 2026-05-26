@@ -29,3 +29,10 @@
 
 en:
   hello: "Hello world"
+  warnings:
+    character_level_updated: "character.%{attr} updated to %{value}"
+    character_mastery_created: "CharacterMastery '%{name}' created automatically"
+    character_mastery_level_updated: "CharacterMastery '%{name}' current_mastery_level updated to %{level}"
+    prerequisite_added: "prerequisite '%{name}' added automatically"
+    prerequisite_level_updated: "prerequisite '%{name}' current_skill_level updated to %{level}"
+    skill_level_adjusted: "skill '%{name}' %{attr} adjusted to %{level}"

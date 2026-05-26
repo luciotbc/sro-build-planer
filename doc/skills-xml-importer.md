@@ -90,7 +90,7 @@ A single learnable skill with multiple upgrade levels.
 | `desc`        | `description`         | Short description shown in tooltips        |
 | `pict`        | `icon_path`           | `.ddj` extension normalized to `.png`      |
 | `col`         | `col_position`        | 0-based column within the series grid      |
-| *(skill count)* | `max_level`         | Number of `<skill>` children               |
+| *(skill count)* | `max_skill_level`   | Number of `<skill>` children               |
 
 `mastery_id` and `skill_series_id` are resolved from ancestor elements.
 
@@ -118,7 +118,7 @@ Each `<skill>` carries up to three prerequisite slots. A slot is ignored when `p
 
 | XML attributes    | DB columns                                                     |
 |-------------------|----------------------------------------------------------------|
-| `prv1`, `prvrq1`  | `required_group_id` (skillgroup external_id), `required_level` |
+| `prv1`, `prvrq1`  | `required_group_id` (skillgroup external_id), `required_skill_level` |
 | `prv2`, `prvrq2`  | same                                                           |
 | `prv3`, `prvrq3`  | same                                                           |
 
