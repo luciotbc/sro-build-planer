@@ -2,6 +2,7 @@ class CharacterMastery < ApplicationRecord
   belongs_to :character
   belongs_to :mastery
 
+  validates :mastery_id, uniqueness: { scope: :character_id }
   validates :current_mastery_level,
             numericality: {
               only_integer: true,
