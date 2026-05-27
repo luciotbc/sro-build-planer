@@ -90,3 +90,39 @@ The XML importer is more complete — it populates `SkillSeries`, `SkillGroupReq
 RuboCop is configured to inherit `syntax_tree` formatting rules plus `rubocop-rails-omakase`. The formatter is `syntax_tree` (not standard RuboCop auto-correct). Run `bin/rubocop -A` to auto-fix.
 
 The pre-commit hook (`.githooks/pre-commit`) automatically runs `stree write` on staged `.rb`/`.rake` files and then `bin/rubocop` — commits will fail if rubocop finds violations. Make sure hooks are installed: `git config core.hooksPath .githooks`.
+
+**stree rejects non-ASCII characters.** Never use box-drawing characters (─, U+2500) or any non-ASCII in Ruby files — they break `stree write` in a US-ASCII locale. Use plain ASCII separators (`# -----`) instead.
+
+## Rails Way Patterns
+
+Established conventions from the PR #4 audit. Apply these consistently.
+
+### Models & Associations
+
+- **`dependent: :destroy` is the correct cascade.** Never manually `delete_all` before `destroy!` — it bypasses AR callbacks and is redundant when the association declares `dependent: :destroy`.
+- **Uniqueness requires both a DB index and a model validation.** `validates :uniqueness` alone has a TOCTOU race window. Always add a unique index in a migration alongside the validation.
+- **Declare `inverse_of` on both sides** of every association to enable AR in-memory caching and avoid redundant queries.
+- **Don't duplicate model validations in services.** Use `model.assign_attributes(params)` + `model.valid?` and return `model.errors.full_messages`. The service stays correct if model rules change.
+
+### Service Objects
+
+- **Use `ApplicationRecord.transaction`**, not `ActiveRecord::Base.transaction`.
+- **Rescue `RecordInvalid` specifically.** Always have `rescue ActiveRecord::RecordInvalid => e` returning `e.record.errors.full_messages`. A broad `rescue => e` with `[e.message]` gives a single concatenated blob instead of structured errors.
+- **Extract shared algorithms into modules.** Copy-pasted logic across services should become a module (`include`d in both). Example: `CharacterSkills::PrerequisiteResolver`.
+- **Fix N+1s in filter loops.** `find_by` inside `filter_map` over a relation is O(n) queries. Pre-load with `.where(ids).index_by(&:skill_group_id)` and do hash lookups.
+- **Wrap every multi-step write in a transaction.** Any service that updates more than one record must use `ApplicationRecord.transaction`.
+
+### I18n
+
+- **All user-facing strings go through I18n.** `@warnings <<` calls, error messages, everything — use `I18n.t("warnings.key", interpolations)`. Keys live under `en.warnings.*` in `config/locales/en.yml`. Never hardcode English strings in service objects.
+
+### Testing
+
+- **Minitest::Spec DSL** is enabled via `require "minitest/spec"` + `extend Minitest::Spec::DSL` in `ActiveSupport::TestCase`. Use `it`, `before`, `let` throughout.
+- **FactoryBot over fixtures.** All tests use FactoryBot factories (`test/factories/`). No fixture accessors (`races(:chinese)` etc.). Set up data in `before` blocks with instance variables; use `let` for simple lazy objects.
+- **`let` is lazy** — blocks run only when first referenced. Reference a `let` name explicitly before calling something that queries it.
+- **One commit per logical issue** when applying a batch of fixes for review.
+
+### Ruby Idioms
+
+- **`field.in?(%i[current both])`** over `field == :current || field == :both` for set-membership checks.
