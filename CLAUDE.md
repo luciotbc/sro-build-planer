@@ -63,6 +63,26 @@ Character [race, current_level, target_level]
 
 All static records carry an `external_id` (from the game's data) used as the stable upsert key. Skills also carry `external_skill_code` as a secondary unique key.
 
+### Authentication
+
+Rails 8's built-in authentication (`rails generate authentication`) is active:
+
+- `Authentication` concern (included in `ApplicationController`) enforces `before_action :require_authentication` by default on every controller. Unauthenticated requests are redirected to `new_session_path`.
+- Use `allow_unauthenticated_access only: [:action]` on any controller that needs public access.
+- `Current.session` / `Current.user` (via `ActiveSupport::CurrentAttributes`) provide the logged-in user throughout a request. Set in `Authentication#resume_session`.
+- Sessions are stored as DB rows (`Session` model) and identified by a signed `session_id` cookie.
+
+### ServiceResult
+
+All service objects return a `ServiceResult`:
+
+```ruby
+ServiceResult.ok(data: record, warnings: [])   # success
+ServiceResult.fail(errors: ["msg"])             # failure
+```
+
+Callers check `.success?` and read `.data`, `.warnings`, `.errors`. Services must never raise on expected failures — use `rescue ActiveRecord::RecordInvalid => e` returning `ServiceResult.fail(errors: e.record.errors.full_messages)`.
+
 ### Data Import Pipeline
 
 Two importers, both idempotent (skip existing records):
@@ -121,7 +141,7 @@ Established conventions from the PR #4 audit. Apply these consistently.
 - **Minitest::Spec DSL** is enabled via `require "minitest/spec"` + `extend Minitest::Spec::DSL` in `ActiveSupport::TestCase`. Use `it`, `before`, `let` throughout.
 - **FactoryBot over fixtures.** All tests use FactoryBot factories (`test/factories/`). No fixture accessors (`races(:chinese)` etc.). Set up data in `before` blocks with instance variables; use `let` for simple lazy objects.
 - **`let` is lazy** — blocks run only when first referenced. Reference a `let` name explicitly before calling something that queries it.
-- **One commit per logical issue** when applying a batch of fixes for review.
+- **`sign_in_as(user)` / `sign_out`** from `SessionTestHelper` are available in all `ActionDispatch::IntegrationTest` tests. Use them to set up authenticated requests; `sign_in_as` creates a real `Session` row and sets the signed cookie.
 
 ### Ruby Idioms
 
