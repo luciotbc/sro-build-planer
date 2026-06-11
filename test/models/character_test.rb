@@ -128,6 +128,27 @@ class CharacterTest < ActiveSupport::TestCase
     assert_includes character.errors[:race], "must exist"
   end
 
+  it "valid without a user (imported or legacy data)" do
+    assert Character.new(name: "Test", race:).valid?
+  end
+
+  it "belongs_to user association" do
+    user = create(:user)
+    character = create(:character, race:, user:)
+
+    assert_equal user, character.user
+    assert_includes user.characters, character
+  end
+
+  it "is destroyed when its user is destroyed" do
+    user = create(:user)
+    character = create(:character, race:, user:)
+
+    user.destroy!
+
+    assert_not Character.exists?(character.id)
+  end
+
   it "target_level can be lower than current_level without error" do
     character =
       Character.new(name: "Test", race:, current_level: 80, target_level: 30)
