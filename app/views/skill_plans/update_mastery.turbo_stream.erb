@@ -1,0 +1,7 @@
+<%= turbo_stream.replace "mastery_summary" do %>
+  <%= render "skill_plans/mastery_summary", window: @window %>
+<% end %>
+
+<%= turbo_stream.update "editor_flash" do %>
+  <%= render "skill_plans/flash" %>
+<% end %>

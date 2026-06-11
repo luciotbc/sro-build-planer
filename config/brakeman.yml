@@ -1,0 +1,6 @@
+# Brakeman configuration.
+# doc/design holds reference HTML/ERB exported from the design tool — not app
+# code; its ERB comment examples are not parseable templates.
+---
+:skip_files:
+  - doc/design/

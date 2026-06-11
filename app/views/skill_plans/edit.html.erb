@@ -1,0 +1,16 @@
+<% content_for :title, kind == :current ? "Edit Current Skills" : "Edit Planned Skills" %>
+<% content_for :topbar_actions do %>
+  <%= characters_pill(Current.user.characters.size) %>
+<% end %>
+
+<div class="mx-auto flex max-w-[800px] flex-col gap-3.5">
+  <%= render "shared/char_bar",
+  name: current_character.name,
+  race: current_character.race.name,
+  level_cap: current_character.target_level,
+  glyph: race_glyph(current_character.race, size: 34) %>
+
+  <%= turbo_frame_tag "skill_editor", target: "_top" do %>
+    <%= render "skill_plans/editor_panel", window: @window %>
+  <% end %>
+</div>

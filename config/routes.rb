@@ -10,7 +10,15 @@ Rails.application.routes.draw do
 
   get "skill_window" => "home#skill_window", :as => :skill_window
 
-  resource :skill_plan, only: %i[edit]
+  resource :skill_plan, only: %i[edit] do
+    patch "skills/:skill_group_id" => "skill_plans#update_skill", :as => :skill
+    patch "masteries/:mastery_id" => "skill_plans#update_mastery",
+          :as => :mastery
+    post "masteries/:mastery_id/max_skills" => "skill_plans#max_skills",
+         :as => :max_skills
+    post "masteries/:mastery_id/clear" => "skill_plans#clear_mastery",
+         :as => :clear
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

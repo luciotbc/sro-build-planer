@@ -1,0 +1,63 @@
+<%#
+  skill_plans/skill_row — icon + name + level with -/+ stepper forms.
+  Each row carries a dom id so a Turbo Stream can swap it after the server
+  clamps the level.
+  locals: group: SkillGroup, window: Characters::SkillWindow
+%>
+<% cs = window.character_skills[group.id]
+   level = plan_level(cs)
+   max = group.max_skill_level.to_i
+   maxed = max.positive? && level >= max %>
+<div id="plan_skill_<%= group.id %>"
+     class="flex min-h-16 items-center gap-3 border-t border-line px-3.5 py-2.5 first:border-t-0">
+  <span class="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-control
+               bg-gradient-to-b from-[#0a0a0b] to-[#161618] text-[15px] font-extrabold text-brass-hi
+               shadow-[0_0_0_1px_#6b5a30_inset,0_0_0_2px_#000_inset]"
+        title="<%= group.name %>">
+    <%= group.name.to_s.first %>
+  </span>
+
+  <div class="flex min-w-0 flex-1 flex-col gap-[3px]">
+    <span class="text-sm font-semibold text-text"><%= group.name %></span>
+    <span class="flex items-center gap-1.5 text-[13px]">
+      <span class="text-[15px] font-extrabold text-brass-hi tnum"><%= level %></span>
+      <span class="text-text-mute">/</span>
+      <span class="text-text-mute tnum"><%= max %></span>
+      <% if maxed %>
+        <span class="ml-1.5 rounded bg-brass px-1.5 py-px text-[10px] font-extrabold tracking-[0.4px] text-bg">MAX</span>
+      <% end %>
+    </span>
+  </div>
+
+  <div class="flex shrink-0 items-center gap-2">
+    <% if level.positive? %>
+      <%= button_to "−",
+      skill_skill_plan_path(group.id),
+      method: :patch,
+      params: {
+        kind: params[:kind],
+        level: level - 1
+      },
+      class:
+        "flex h-tap w-tap items-center justify-center rounded-control border border-line " \
+          "bg-card-hi text-xl font-extrabold text-text cursor-pointer select-none " \
+          "hover:bg-card hover:border-[#3a3f4b] active:scale-95" %>
+    <% end %>
+    <% if maxed %>
+      <span class="inline-flex h-tap min-w-[54px] items-center justify-center rounded-control
+                   border border-brass-hi/25 bg-brass-hi/10 text-xs font-extrabold tracking-[0.6px] text-brass-hi">MAX</span>
+    <% else %>
+      <%= button_to "+",
+      skill_skill_plan_path(group.id),
+      method: :patch,
+      params: {
+        kind: params[:kind],
+        level: level + 1
+      },
+      class:
+        "flex h-tap w-tap items-center justify-center rounded-control border-0 " \
+          "bg-gradient-to-b from-brass-hi to-brass text-xl font-extrabold text-bg " \
+          "cursor-pointer select-none hover:brightness-105 active:scale-95" %>
+    <% end %>
+  </div>
+</div>

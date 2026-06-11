@@ -1,0 +1,6 @@
+<% if flash[:alert].present? %>
+  <p class="rounded-field border border-red/40 bg-red/10 px-3 py-2 text-[13px] text-red"><%= flash[:alert] %></p>
+<% end %>
+<% Array(flash[:warnings]).each do |warning| %>
+  <p class="rounded-field border border-brass/30 bg-brass/10 px-3 py-2 text-[13px] text-brass-hi"><%= warning %></p>
+<% end %>

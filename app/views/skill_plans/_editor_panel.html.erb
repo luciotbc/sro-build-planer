@@ -1,0 +1,116 @@
+<%#
+  skill_plans/editor_panel — the whole editor card (tabs, mastery summary,
+  bulk actions, series with skill rows, footer actions).
+  locals: window: Characters::SkillWindow
+%>
+<% type_tabs =
+  window.mastery_types.map { |type| { id: type, label: type, href: edit_skill_plan_path(kind: params[:kind], group: type) } }
+mastery_tabs =
+  window.masteries.map { |m| { id: m.id, label: m.name, href: edit_skill_plan_path(kind: params[:kind], group: window.active_type, mastery_id: m.id) } } %>
+
+<section id="skill_editor_panel"
+         class="flex flex-col gap-3.5 rounded-panel border border-line bg-card p-3.5 md:p-4.5">
+  <div class="flex items-center justify-between gap-2.5">
+    <h2 class="text-[13px] font-bold uppercase tracking-[0.6px] text-text-dim">
+      <%= kind == :current ? "Current Skills" : "Future Skills" %>
+    </h2>
+    <span class="inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[11px] font-extrabold tracking-[0.8px]
+                 <%= kind == :current ? "bg-white/[0.08] text-text" : "bg-brass-hi/[0.16] text-brass-hi" %>">
+      <%= kind == :current ? "CURRENT" : "PLANNING" %>
+    </span>
+  </div>
+
+  <div id="editor_flash">
+    <%= render "skill_plans/flash" %>
+  </div>
+
+  <% if window.mastery.nil? %>
+    <p class="rounded-control bg-card-hi px-3 py-2.5 text-[13px] text-text-dim">
+      No skill data imported yet. Run <code class="text-brass-hi">bin/rails import:skills_xml</code>.
+    </p>
+  <% else %>
+    <div class="flex flex-col gap-3 rounded-tab bg-card-hi p-3.5">
+      <%= render "shared/tabs",
+      variant: :pill,
+      name: "group",
+      active: window.active_type,
+      tabs: type_tabs %>
+      <%= render "shared/tabs",
+      variant: :underline,
+      name: "mastery",
+      active: window.mastery.id,
+      tabs: mastery_tabs %>
+    </div>
+
+    <%= render "skill_plans/mastery_summary", window: window %>
+
+    <div class="flex flex-wrap gap-2">
+      <%= button_to "Max mastery",
+      mastery_skill_plan_path(window.mastery.id),
+      method: :patch,
+      params: {
+        kind: params[:kind],
+        level: window.mastery_level_cap
+      },
+      class: "btn-ghost flex-1 min-w-[120px]" %>
+      <%= button_to "Max skills",
+      max_skills_skill_plan_path(window.mastery.id),
+      params: {
+        kind: params[:kind]
+      },
+      class: "btn-ghost flex-1 min-w-[120px]" %>
+      <%= button_to "Clear all",
+      clear_skill_plan_path(window.mastery.id),
+      params: {
+        kind: params[:kind]
+      },
+      class: "btn-danger flex-1 min-w-[120px]" %>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <% window.series.each do |series, groups| %>
+        <section class="overflow-hidden rounded-tab border border-line bg-card-hi">
+          <header class="flex items-center gap-2.5 border-b border-line bg-white/[0.02] px-4 py-3">
+            <span class="flex h-7 w-7 items-center justify-center rounded-lg border border-brass/25
+                         bg-gradient-to-b from-brass/20 to-brass/5 text-sm font-extrabold text-brass-hi">✦</span>
+            <span class="flex-1 text-[13px] font-bold tracking-[0.2px]"><%= series.title %></span>
+            <span class="text-[11px] text-text-mute tnum">
+              <%= groups.count { |g| window.character_skills[g.id] && plan_level(window.character_skills[g.id]).positive? } %>/<%= groups.size %>
+            </span>
+          </header>
+          <div class="flex flex-col">
+            <%= render partial: "skill_plans/skill_row",
+            collection: groups,
+            as: :group,
+            locals: {
+              window: window
+            } %>
+          </div>
+        </section>
+      <% end %>
+    </div>
+
+    <div class="h-px bg-line"></div>
+    <div class="flex gap-2.5">
+      <%= render "shared/button",
+      label: "Done",
+      variant: :ghost,
+      href: root_path,
+      html: {
+        class: "flex-1",
+        data: {
+          turbo_frame: "_top"
+        }
+      } %>
+      <%= render "shared/button",
+      label: "Back to overview",
+      href: root_path,
+      html: {
+        class: "flex-[2]",
+        data: {
+          turbo_frame: "_top"
+        }
+      } %>
+    </div>
+  <% end %>
+</section>

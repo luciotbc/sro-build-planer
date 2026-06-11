@@ -1,0 +1,62 @@
+<%#
+  skill_plans/mastery_summary — mastery name, levels, stepper + progress bar.
+  Replaced by Turbo Streams after every level change.
+  locals: window: Characters::SkillWindow
+%>
+<% level = plan_mastery_level(window)
+   cap = window.mastery_level_cap
+   skills_total = window.character_skills.values.sum { |cs| plan_level(cs) }
+   skills_max = window.series.flat_map { |_, groups| groups }.sum { |g| g.max_skill_level.to_i } %>
+<section id="mastery_summary"
+         class="flex flex-col gap-3.5 rounded-tab bg-card-hi px-4 py-3.5">
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <h3 class="flex items-center gap-2.5 text-lg font-extrabold tracking-[-0.3px]">
+      <span class="flex h-8 w-8 items-center justify-center rounded-lg border border-brass/30
+                   bg-card text-[15px] font-extrabold text-brass-hi"><%= window.mastery.name.first %></span>
+      <%= window.mastery.name %>
+      <span class="text-[13px] font-medium text-text-mute">· mastery</span>
+    </h3>
+    <div class="flex flex-wrap gap-3.5">
+      <span class="inline-flex items-baseline gap-1.5">
+        <span class="text-[11px] font-bold uppercase tracking-[0.6px] text-text-dim">Mastery Lv</span>
+        <span class="text-lg font-extrabold tnum"><%= level %></span>
+        <span class="text-xs text-text-mute tnum">/<%= cap %></span>
+      </span>
+      <span class="inline-flex items-baseline gap-1.5">
+        <span class="text-[11px] font-bold uppercase tracking-[0.6px] text-text-dim">Skills</span>
+        <span class="text-lg font-extrabold tnum"><%= skills_total %></span>
+        <span class="text-xs text-text-mute tnum">/<%= skills_max %></span>
+      </span>
+    </div>
+  </div>
+  <div class="flex items-center gap-2.5">
+    <%= button_to "−",
+    mastery_skill_plan_path(window.mastery.id),
+    method: :patch,
+    params: {
+      kind: params[:kind],
+      level: level - 1
+    },
+    disabled: level <= 0,
+    class:
+      "flex h-tap w-tap items-center justify-center rounded-control border border-line " \
+        "bg-card text-xl font-extrabold text-text cursor-pointer hover:bg-card-hi " \
+        "disabled:cursor-not-allowed disabled:opacity-40" %>
+    <div class="h-2 flex-1 overflow-hidden rounded-full bg-white/5">
+      <div class="h-full bg-gradient-to-r from-brass to-brass-hi transition-[width] duration-200"
+           style="width: <%= cap.positive? ? (level * 100.0 / cap).round(1) : 0 %>%"></div>
+    </div>
+    <%= button_to "+",
+    mastery_skill_plan_path(window.mastery.id),
+    method: :patch,
+    params: {
+      kind: params[:kind],
+      level: level + 1
+    },
+    disabled: level >= cap,
+    class:
+      "flex h-tap w-tap items-center justify-center rounded-control border-0 " \
+        "bg-gradient-to-b from-brass-hi to-brass text-xl font-extrabold text-bg " \
+        "cursor-pointer hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40" %>
+  </div>
+</section>
