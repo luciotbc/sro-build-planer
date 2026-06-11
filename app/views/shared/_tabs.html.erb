@@ -1,0 +1,49 @@
+<%#
+  shared/tabs — pill tabs (mastery types) + underline subtabs (masteries)
+  Driven by the `tabs` Stimulus controller.
+  ----------------------------------------------------------------------------
+  locals:
+    tabs:    Array of { id:, label:, href: (optional) }
+    variant: :pill | :underline   (default :pill)
+    active:  id of the initially active tab (default first)
+    name:    String — value broadcast on tabs:change (default "tab")
+    frame:   String — optional turbo frame targeted by tab links
+  ----------------------------------------------------------------------------
+  Example:
+    render "shared/tabs", variant: :pill, tabs: [
+          { id: "weapon", label: "Weapon" }, { id: "force", label: "Force" } ] 
+%>
+<% variant = local_assigns.fetch(:variant, :pill)
+   active = local_assigns[:active] || tabs.first[:id]
+   name = local_assigns.fetch(:name, "tab")
+   frame = local_assigns[:frame]
+   pill_classes = "flex flex-1 min-h-tap items-center justify-center rounded-[7px] " \
+                  "text-[13px] font-bold text-text-dim cursor-pointer " \
+                  "[&.on]:bg-bg [&.on]:text-text [&.on]:shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
+   underline_classes = "relative flex flex-1 min-w-0 min-h-tap items-center justify-center " \
+                       "text-[13px] font-semibold text-text-mute hover:text-text-dim cursor-pointer " \
+                       "[&.on]:text-text " \
+                       "after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 " \
+                       "after:bottom-2 after:h-0.5 after:w-3/5 after:max-w-16 after:rounded-[1px] " \
+                       "after:bg-brass after:opacity-0 [&.on]:after:opacity-100"
+   item_classes = variant == :underline ? underline_classes : pill_classes
+   wrapper_classes =
+     if variant == :underline
+       "flex w-full gap-1"
+     else
+       "flex w-full gap-1 rounded-field bg-card-hi p-1"
+     end %>
+<div class="<%= wrapper_classes %>"
+     data-controller="tabs" data-tabs-active-class="on"
+     data-tabs-name-value="<%= name %>">
+  <% tabs.each do |t| %>
+    <% classes = [item_classes, ("on" if t[:id].to_s == active.to_s)].compact.join(" ")
+       data = { tabs_target: "tab", tab_id: t[:id], action: "tabs#select" }
+       data[:turbo_frame] = frame if frame %>
+    <% if t[:href] %>
+      <%= link_to t[:label], t[:href], class: classes, data: data %>
+    <% else %>
+      <%= button_tag t[:label], type: "button", class: classes, data: data %>
+    <% end %>
+  <% end %>
+</div>

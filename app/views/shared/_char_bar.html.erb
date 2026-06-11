@@ -1,0 +1,30 @@
+<%#
+  shared/char_bar — character identity bar (avatar + name + race + level cap)
+  ----------------------------------------------------------------------------
+  locals:
+    name:      String
+    race:      String   ("Chinese" / "European")
+    level_cap: Integer
+    glyph:     String   inline SVG / image_tag for the race crest (optional)
+  ----------------------------------------------------------------------------
+  Example:
+    render "shared/char_bar", name: "BuckTBC", race: "Chinese", level_cap: 110 
+%>
+<div class="flex flex-wrap items-center justify-between gap-x-5 gap-y-3.5
+            rounded-tab bg-card-hi border border-line px-4 py-3.5">
+  <div class="flex shrink-0 items-center gap-3.5 min-w-0">
+    <span class="flex shrink-0 items-center justify-center rounded-full
+                 shadow-[0_0_0_3px_var(--color-brass)_inset,0_0_0_1px_rgba(0,0,0,0.6),0_0_14px_rgba(212,168,71,0.25)]"
+          style="background:radial-gradient(circle at 50% 40%, rgba(139,31,31,0.5), var(--color-card));width:52px;height:52px;">
+      <%= local_assigns[:glyph] %>
+    </span>
+    <div class="flex flex-col gap-px min-w-0">
+      <h1 class="text-2xl font-extrabold leading-[1.1] tracking-[-0.5px] text-brass-hi"><%= name %></h1>
+      <span class="text-[13px] font-bold tracking-[0.2px] text-text-mute"><%= race %></span>
+    </div>
+  </div>
+  <div class="inline-flex shrink-0 items-baseline gap-2">
+    <span class="text-[13px] font-bold uppercase tracking-[0.5px] text-text-dim">Level&nbsp;Cap</span>
+    <span class="text-[26px] font-extrabold tracking-[-0.5px] text-white tnum"><%= level_cap %></span>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "App" %></title>
+    <title><%= content_for(:title) || "Skill Planner" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="App">
@@ -23,9 +23,11 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="min-h-screen bg-bg text-text">
+    <%= render "shared/topbar", actions: content_for(:topbar_actions) %>
+    <main class="mx-auto max-w-[1280px] px-4 pb-24 pt-4 md:px-8 md:pb-16 md:pt-5">
       <%= yield %>
     </main>
+    <turbo-frame id="modal"></turbo-frame>
   </body>
 </html>

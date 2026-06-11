@@ -1,0 +1,25 @@
+<%#
+  shared/badge — pill / tag / legend chip
+  ----------------------------------------------------------------------------
+  locals:
+    label: String
+    tone:  :neutral | :current | :planned | :max | :lock   (default :neutral)
+    html:  Hash extra attrs
+  ----------------------------------------------------------------------------
+  Examples:
+    render "shared/badge", label: "Current", tone: :current 
+     render "shared/badge", label: "MAX",     tone: :max 
+%>
+<% tone = local_assigns.fetch(:tone, :neutral)
+   html = (local_assigns[:html] || {}).dup
+   tones = {
+     neutral: "bg-white/[0.08] text-text",
+     current: "bg-white/[0.08] text-text",
+     planned: "bg-brass-hi/[0.14] text-brass-hi",
+     max: "bg-brass text-bg",
+     lock: "bg-white/[0.04] text-text-dim uppercase tracking-[0.6px]"
+   }
+   base = "inline-flex items-center gap-1.5 rounded-[999px] px-2.5 py-1 " \
+          "text-[11px] font-bold tracking-[0.4px]"
+   classes = [base, tones[tone], html.delete(:class)].compact.join(" ") %>
+<span class="<%= classes %>" <%= tag.attributes(html) %>><%= label %></span>

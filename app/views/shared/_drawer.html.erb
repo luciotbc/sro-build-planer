@@ -1,0 +1,25 @@
+<%#
+  shared/drawer — right-side slide-over (the Characters list)
+  Uses the `dialog` Stimulus controller; slides in from the right.
+  ----------------------------------------------------------------------------
+  locals:
+    title: String
+    open:  Bool — showModal() on connect (default true)
+  Usage:
+    render "shared/drawer", title: "Your characters" do  ...rows...  end 
+%>
+<dialog data-controller="dialog"
+        data-dialog-open-value="<%= local_assigns.fetch(:open, true) %>"
+        data-action="click->dialog#backdropClose"
+        class="m-0 ml-auto h-full max-h-none w-[min(420px,92vw)] max-w-none bg-bg p-0
+               border-l border-line backdrop:bg-black/50 backdrop:backdrop-blur-sm
+               open:flex open:flex-col">
+  <div class="flex h-full flex-col" data-action="click->dialog#stop">
+    <header class="flex shrink-0 items-center justify-between border-b border-line px-4 py-3.5">
+      <span class="text-base font-bold"><%= local_assigns[:title] || "Your characters" %></span>
+      <button type="button" data-action="dialog#close"
+              class="flex h-9 w-9 items-center justify-center rounded-field bg-card border border-line text-text-dim hover:text-text cursor-pointer" aria-label="Close">×</button>
+    </header>
+    <div class="flex-1 overflow-y-auto px-2 pb-4 pt-2"><%= yield %></div>
+  </div>
+</dialog>

@@ -1,0 +1,38 @@
+<%#
+  shared/modal — centered overlay panel (desktop) / full-height (mobile)
+  Built on the native <dialog> element + `dialog` Stimulus controller so Esc,
+  backdrop-click and focus-trap come for free.
+  ----------------------------------------------------------------------------
+  locals:
+    title:     String (optional header label)
+    size:      :md | :lg   (default :md -> 420px; :lg -> 820px editor)
+    open:      Bool — showModal() on connect (default true)
+  ----------------------------------------------------------------------------
+  Usage:
+    render "shared/modal", title: "Sign in" do  ...form...  end 
+%>
+<% size = local_assigns.fetch(:size, :md)
+   width = size == :lg ? "md:w-[min(820px,92vw)] md:h-[min(880px,92vh)]" : "md:w-[min(420px,100%)]" %>
+<dialog data-controller="dialog"
+        data-dialog-open-value="<%= local_assigns.fetch(:open, true) %>"
+        data-action="click->dialog#backdropClose"
+        class="m-0 h-full max-h-none w-full max-w-none bg-transparent p-0
+               backdrop:bg-black/60 backdrop:backdrop-blur-sm
+               open:flex open:flex-col open:items-stretch open:justify-end
+               md:open:items-center md:open:justify-center">
+  <div class="flex h-full w-full flex-col bg-bg <%= width %> mx-auto
+              md:h-auto md:rounded-panel md:border md:border-line md:shadow-[0_30px_80px_rgba(0,0,0,0.6)] md:overflow-hidden"
+       data-action="click->dialog#stop">
+    <header class="flex shrink-0 items-center justify-between gap-3 border-b border-line px-4 py-3
+                   bg-gradient-to-b from-white/[0.02] to-transparent">
+      <button type="button" data-action="dialog#close"
+              class="flex h-11 w-11 items-center justify-center rounded-control bg-card border border-line text-text hover:bg-card-hi cursor-pointer" aria-label="Back">←</button>
+      <span class="text-base font-bold tracking-[-0.2px]"><%= local_assigns[:title] %></span>
+      <button type="button" data-action="dialog#close"
+              class="flex h-11 w-11 items-center justify-center rounded-control bg-card border border-line text-text-dim hover:text-text hover:bg-card-hi cursor-pointer" aria-label="Close">×</button>
+    </header>
+    <div class="flex-1 overflow-y-auto p-4 md:px-7 md:py-5">
+      <%= yield %>
+    </div>
+  </div>
+</dialog>
