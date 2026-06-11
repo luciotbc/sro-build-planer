@@ -4,10 +4,10 @@
    --color-brass -> bg-brass / text-brass / border-brass, etc.
    ============================================================================= */
 
-@import "tailwindcss";
-
 /* Inter (self-host via @font-face for production if needed). */
 @import url("https://rsms.me/inter/inter.css");
+
+@import "tailwindcss";
 
 @theme {
   /* Surfaces */

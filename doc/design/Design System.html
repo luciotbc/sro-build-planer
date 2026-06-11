@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+<style data-omelette-injected>html,body{background:transparent}</style><script data-omelette-injected>(()=>{var j=[];var x=false;var S=30000;var f=3000;document.addEventListener("DOMContentLoaded",()=>{const H=window.Babel;const G="om-src-id";if(H&&H.registerPlugin&&!(H.availablePlugins&&H.availablePlugins[G])){H.registerPlugin(G,({types:Y})=>({visitor:{JSXOpeningElement(U,Q){const J=U.node;if(J.name&&J.name.type==="JSXMemberExpression")return;for(let V=0;V<J.attributes.length;V++){const L=J.attributes[V];if(L.type==="JSXAttribute"&&L.name&&L.name.name==="data-om-id")return}const W=Q.file&&Q.file.opts&&Q.file.opts.filename||"?";const Z=J.loc&&J.loc.start;const z=`jsx:${W}:${J.start??0}:${Z?Z.line:0}:${Z?Z.column+1:0}`;J.attributes.push(Y.jsxAttribute(Y.jsxIdentifier("data-om-id"),Y.stringLiteral(z)))}}}))}const k="om-text-extract";let A=false;if(x&&H&&H.registerPlugin&&!(H.availablePlugins&&H.availablePlugins[k])){const Y=window.React;if(Y&&Y.useSyncExternalStore&&Y.createElement){A=true;const U={};const Q=new Set;let J=0;window.__omTextO=U;window.__omTextSet=(z)=>{for(const V in z){const L=z[V];if(L==null)delete U[V];else U[V]=L}J++;Q.forEach((V)=>V())};const W=(z)=>{Q.add(z);return()=>Q.delete(z)};const Z=()=>J;window.__OmT=function z(V){Y.useSyncExternalStore(W,Z,Z);return Y.createElement("span",{"data-om-text":V.i,className:"__om-t"},V.i in U?U[V.i]:V.children)};H.registerPlugin(k,({types:z})=>{const V={style:1,script:1,noscript:1,textarea:1,title:1,option:1,text:1,tspan:1,textPath:1};const L={placeholder:1,alt:1,title:1,label:1,"aria-label":1,"aria-description":1,"aria-placeholder":1};const _=($,C)=>z.logicalExpression("??",z.memberExpression(z.logicalExpression("||",z.memberExpression(z.identifier("window"),z.identifier("__omTextO")),z.objectExpression([])),z.stringLiteral($),true),C);const E=($)=>$.file&&$.file.opts&&$.file.opts.filename||"?";const B=($)=>$.file&&$.file.code||"";const b=($,C)=>{const X=(F)=>F&&F.start!=null&&F.end!=null&&(F.type==="StringLiteral"||F.type==="TemplateLiteral"&&F.expressions.length===0)?[F.start,F.end]:null;const N=X(C);if(N)return N;if(C&&C.type==="Identifier"){const F=$.scope.getBinding(C.name);if(F&&F.constant&&F.path.node.type==="VariableDeclarator"){return X(F.path.node.init)}}return null};const M=($,C,X)=>{const N=$.node;let F=false;const w=(K,q)=>{F=true;return z.jsxElement(z.jsxOpeningElement(z.jsxIdentifier("__OmT"),[z.jsxAttribute(z.jsxIdentifier("i"),z.stringLiteral(K))],false),z.jsxClosingElement(z.jsxIdentifier("__OmT")),[q],false)};const D=N.children.map((K)=>{if(K.type==="JSXText"){if(K.start==null||K.end==null)return K;const q=X.slice(K.start,K.end);const R=q.length-q.trimStart().length;const m=q.length-q.trimEnd().length;if(R+m>=q.length)return K;return w(`txt:${C}:${K.start+R}:${K.end-m}`,K)}if(K.type==="JSXExpressionContainer"){const q=b($,K.expression);if(q)return w(`str:${C}:${q[0]}:${q[1]}`,K)}return K});if(F)N.children=D};return{visitor:{JSXOpeningElement($,C){const X=$.node;const N=E(C);const F={};for(let w=0;w<X.attributes.length;w++){const D=X.attributes[w];if(D.type!=="JSXAttribute"||!D.name)continue;const K=D.name.name;if(!L[K])continue;if(!D.value||D.value.type!=="StringLiteral")continue;if(D.value.start==null||D.value.end==null)continue;const q=`txt:${N}:${D.value.start}:${D.value.end}`;F[K]=q;D.value=z.jsxExpressionContainer(_(q,z.stringLiteral(D.value.value)))}if(Object.keys(F).length){X.attributes.push(z.jsxAttribute(z.jsxIdentifier("data-om-text-attrs"),z.stringLiteral(JSON.stringify(F))))}},JSXElement($,C){const X=$.node.openingElement;const N=X&&X.name&&X.name.name;if(N==="__OmT")return;if(typeof N==="string"&&V[N])return;M($,E(C),B(C))},JSXFragment($,C){M($,E(C),B(C))}}}})}}const u=A?["transform-react-jsx-source",G,k]:["transform-react-jsx-source",G];document.querySelectorAll('script[type="text/babel"],script[type="text/jsx"]').forEach((Y,U)=>{const Q=Y.getAttribute("data-plugins")||"";const J=u.filter((W)=>Q.indexOf(W)<0);if(J.length){Y.setAttribute("data-plugins",Q?`${Q},${J.join(",")}`:J.join(","))}if(!Y.hasAttribute("data-filename")){Y.setAttribute("data-filename",Y.getAttribute("src")||`inline-${U}`)}})});var y=window.parent;if(y&&y!==window){const H=(Q,J)=>{try{y.postMessage({__omelette_log:true,type:Q,data:J},"*")}catch{}};["log","warn","error"].forEach((Q)=>{const J=console[Q];console[Q]=(...W)=>{const Z=W.map((z)=>{try{return typeof z==="object"?JSON.stringify(z):String(z)}catch{try{return String(z)}catch{return"[unstringifiable]"}}}).join(" ");H(Q,Z);J.apply(console,W)}});window.addEventListener("error",(Q)=>{const J=Q.target;if(J&&J!==window&&J.tagName){const W=J.src||J.href||"";H("resource_error",`${J.tagName} failed to load: ${W}`)}else{H("error",`${Q.message||"Unknown error"} at ${Q.filename||"?"}:${Q.lineno||0}:${Q.colno||0}`)}},true);window.addEventListener("unhandledrejection",(Q)=>{const J=Q.reason;const W=J instanceof Error?`${J.message} ${J.stack}`:String(J);H("error",`Unhandled rejection: ${W}`)});const G=()=>{try{y.postMessage({type:"omelette:height",height:document.documentElement.scrollHeight},"*")}catch{}};if(document.readyState==="complete")G();else window.addEventListener("load",G);if(window.ResizeObserver)new ResizeObserver(G).observe(document.documentElement);const k={};let A=0;window.claude={complete(Q){return new Promise((J,W)=>{if(!j.length){W(new Error("claude.complete: no parent origin"));return}const Z=`c${++A}`;const z=()=>setTimeout(()=>{delete k[Z];W(new Error(`claude.complete: no data for ${S/1000}s`))},S);const V=z();k[Z]={resolve:J,reject:W,text:"",t:V,arm:z};try{for(const L of j){y.postMessage({__om_api:true,id:Z,body:Q},L)}}catch(L){clearTimeout(V);delete k[Z];W(L)}})}};const u={};let Y=0;window.omelette={writeFile:(Q,J)=>new Promise((W,Z)=>{if(!j.length){W();return}const z=`f${++Y}`;const V=setTimeout(()=>{delete u[z];W()},f);u[z]={resolve:W,reject:Z,t:V};try{for(const L of j){y.postMessage({__om_file:true,id:z,op:"write",path:Q,content:J},L)}}catch{clearTimeout(V);delete u[z];W()}})};const U=(Q)=>{try{return JSON.stringify(Q)}catch{return JSON.stringify(String(Q))}};window.addEventListener("message",(Q)=>{if(j.indexOf(Q.origin)<0)return;if(Q.source!==y)return;const J=Q.data;if(!J)return;if(J.type==="omelette-preview-refresh"){if(typeof J.token!=="string"||!/^[0-9a-f.-]+(\.(rc|pr-[0-9]+))?(\.[0-9]+\.[0-9a-f]{16})?$/.test(J.token))return;const z=Math.max(1,Math.floor((J.expiresAt||0)-Date.now()/1000));document.cookie="__Host-omelette-preview="+J.token+"; Path=/; Secure; SameSite=None; Partitioned; Max-Age="+z;return}if(J.__om_file_r){const z=u[J.id];if(!z)return;clearTimeout(z.t);delete u[J.id];if(J.ok)z.resolve();else z.reject(new Error(J.error||"write failed"));return}if(J.__om_api_r){const z=k[J.id];if(!z)return;if(J.error!=null){clearTimeout(z.t);delete k[J.id];z.reject(new Error(J.error));return}if(J.chunk!=null){clearTimeout(z.t);z.t=z.arm();z.text+=J.chunk;return}if(J.done){clearTimeout(z.t);delete k[J.id];z.resolve(J.text!=null?J.text:z.text);return}return}if(!J.__om_eval)return;const W=J;const Z=(z)=>{Q.source.postMessage({...z,__om_eval_r:1,id:W.id},Q.origin)};try{const z=(0,eval)(W.code);if(z&&typeof z.then==="function"){z.then((V)=>Z({ok:1,v:U(V)}),(V)=>Z({ok:0,e:String(V)}))}else{Z({ok:1,v:U(z)})}}catch(z){Z({ok:0,e:String(z)})}})}})();
+</script>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SRO Builder — Design System</title>
+<link rel="preconnect" href="https://rsms.me/" />
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+<link rel="stylesheet" href="ds-styles.css" />
+</head>
+<body>
+
+<!-- ───────── Top bar ───────── -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">S</span>
+      <span>SRO Builder</span>
+      <span class="brand-sub">· Design System</span>
+    </div>
+    <div class="stack-chips">
+      <span class="chip"><b>Rails</b> 8</span>
+      <span class="chip"><b>Tailwind</b> 4</span>
+      <span class="chip"><b>Hotwire</b> Turbo + Stimulus</span>
+      <span class="chip"><b>ERB</b> partials</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ───────── Hero ───────── -->
+  <div class="hero">
+    <div class="hero-kicker">Skill Planner UI Kit</div>
+    <h1>A dark, <em>brass-on-charcoal</em><br />system for Rails&nbsp;&amp;&nbsp;Hotwire.</h1>
+    <p>Every token, partial and controller below is lifted straight from the live
+       Skill Planner. Tokens are defined once in a Tailwind&nbsp;4 <code style="font-family:var(--mono);color:var(--brass-hi)">@theme</code>
+       block and become utilities; components ship as plain <code style="font-family:var(--mono);color:var(--brass-hi)">app/views/shared</code>
+       partials with Stimulus behaviour and Turbo wiring. Copy any block and paste it into your app.</p>
+    <div class="hero-meta">
+      <span class="chip"><b>11</b>&nbsp;color tokens</span>
+      <span class="chip"><b>9</b>&nbsp;ERB partials</span>
+      <span class="chip"><b>3</b>&nbsp;Stimulus controllers</span>
+      <span class="chip"><b>2</b>&nbsp;Turbo patterns</span>
+    </div>
+  </div>
+
+  <!-- ───────── TOC ───────── -->
+  <nav class="toc">
+    <a href="#setup">Setup</a>
+    <a href="#color">Color</a>
+    <a href="#type">Type</a>
+    <a href="#radius">Radius</a>
+    <a href="#buttons">Buttons</a>
+    <a href="#topbar">Top bar</a>
+    <a href="#tabs">Tabs</a>
+    <a href="#badges">Badges</a>
+    <a href="#stats">Stat rows</a>
+    <a href="#identity">Identity bar</a>
+    <a href="#skillrow">Skill row</a>
+    <a href="#overlays">Overlays</a>
+    <a href="#hotwire">Hotwire</a>
+  </nav>
+
+  <!-- ───────── Setup ───────── -->
+  <section class="block" id="setup">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">01 — FOUNDATION</div>
+        <h2 class="sec-title">Setup &amp; tokens</h2>
+      </div>
+      <p class="sec-desc">One CSS entrypoint. The <code style="font-family:var(--mono);color:var(--brass-hi)">@theme</code>
+        block defines design tokens that Tailwind compiles into utilities — so
+        <code style="font-family:var(--mono);color:var(--brass-hi)">bg-card</code>,
+        <code style="font-family:var(--mono);color:var(--brass-hi)">text-brass</code> and
+        <code style="font-family:var(--mono);color:var(--brass-hi)">rounded-panel</code> all just work.</p>
+    </div>
+    <div class="spec">
+      <div class="code">
+        <div class="code-head">
+          <button class="code-tab on">CSS entrypoint</button>
+          <span class="code-path">rails/app/assets/stylesheets/application.tailwind.css</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="code-body">
+          <div class="code-pane on" data-src="rails/app/assets/stylesheets/application.tailwind.css" data-lang="css"><pre><code></code></pre></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout"><span class="ic">i</span>
+      <span><b>Why CSS-first?</b> Tailwind 4 reads tokens from <code style="font-family:var(--mono);color:var(--brass-hi)">@theme</code> rather than a JS config.
+        Keeping the original <code style="font-family:var(--mono);color:var(--brass-hi)">--color-*</code> names means existing inline
+        <code style="font-family:var(--mono);color:var(--brass-hi)">var(--brass)</code> references keep resolving during migration.</span>
+    </div>
+  </section>
+
+  <!-- ───────── Color ───────── -->
+  <section class="block" id="color">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">02 — FOUNDATION</div>
+        <h2 class="sec-title">Color</h2>
+      </div>
+      <p class="sec-desc">Four charcoal surfaces, a three-step text ramp, the brass brand pair, and three semantics. White is reserved for "current" values; brass for "planned".</p>
+    </div>
+    <div class="preview col">
+      <div class="pv-note">// utility names shown below each chip — e.g. bg-card / text-brass / border-line</div>
+      <div class="swatch-grid" id="swatches"></div>
+    </div>
+  </section>
+
+  <!-- ───────── Type ───────── -->
+  <section class="block" id="type">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">03 — FOUNDATION</div>
+        <h2 class="sec-title">Typography</h2>
+      </div>
+      <p class="sec-desc">Inter throughout. Display weights are extrabold with tight tracking; labels are bold uppercase at 0.6px tracking. Numerals are always tabular.</p>
+    </div>
+    <div class="preview col">
+      <div class="type-grid">
+        <div class="type-row">
+          <span class="type-spec"><b>Display</b><br/>24px · 800 · -0.5px</span>
+          <span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:var(--brass-hi)">BuckTBC</span>
+        </div>
+        <div class="type-row">
+          <span class="type-spec"><b>Stat value</b><br/>26px · 800 · tnum</span>
+          <span class="tnum" style="font-size:26px;font-weight:800;letter-spacing:-0.5px;color:#fff">110</span>
+        </div>
+        <div class="type-row">
+          <span class="type-spec"><b>Body</b><br/>14px · 600</span>
+          <span style="font-size:14px;font-weight:600">Heuksal — sword mastery series</span>
+        </div>
+        <div class="type-row">
+          <span class="type-spec"><b>Label</b><br/>11–14px · 700 · 0.6px · UPPER</span>
+          <span style="font-size:11px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:var(--text-dim)">Skill points</span>
+        </div>
+        <div class="type-row">
+          <span class="type-spec"><b>Micro</b><br/>11px · 700 · pills</span>
+          <span style="font-size:11px;font-weight:700;color:var(--text-mute)">Lv 110 · 32 skills</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── Radius ───────── -->
+  <section class="block" id="radius">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">04 — FOUNDATION</div>
+        <h2 class="sec-title">Radius &amp; surfaces</h2>
+      </div>
+      <p class="sec-desc">A four-step radius scale maps to roles. Panels nest: <code style="font-family:var(--mono);color:var(--brass-hi)">card</code> holds <code style="font-family:var(--mono);color:var(--brass-hi)">card-hi</code> insets, separated only by <code style="font-family:var(--mono);color:var(--brass-hi)">line</code> hairlines.</p>
+    </div>
+    <div class="preview">
+      <div class="radius-grid">
+        <div class="radius-demo"><div class="radius-box" style="border-radius:10px"></div><div class="radius-cap"><b>rounded-field</b>10px · inputs</div></div>
+        <div class="radius-demo"><div class="radius-box" style="border-radius:12px"></div><div class="radius-cap"><b>rounded-control</b>12px · steppers</div></div>
+        <div class="radius-demo"><div class="radius-box" style="border-radius:14px"></div><div class="radius-cap"><b>rounded-tab</b>14px · wells</div></div>
+        <div class="radius-demo"><div class="radius-box" style="border-radius:18px"></div><div class="radius-cap"><b>rounded-panel</b>18px · cards</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── Buttons ───────── -->
+  <section class="block" id="buttons">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">05 — COMPONENT</div>
+        <h2 class="sec-title">Buttons</h2>
+      </div>
+      <p class="sec-desc">One partial, three variants. Brass-gradient primary, carded ghost, square icon. All clear the 44px touch target.</p>
+    </div>
+    <div class="spec">
+      <div class="preview">
+        <button class="btn-primary">Edit Planned</button>
+        <button class="btn-ghost">Edit Current</button>
+        <button class="icon-btn" aria-label="Close">×</button>
+        <button class="chars-pill"><span class="lbl">Characters</span><span class="count">3</span></button>
+      </div>
+      <div class="code">
+        <div class="code-head">
+          <button class="code-tab on">ERB partial</button>
+          <button class="code-tab">@utility</button>
+          <span class="code-path">rails/app/views/shared/_button.html.erb</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="code-body">
+          <div class="code-pane on" data-src="rails/app/views/shared/_button.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="utility recipe" data-lang="css" data-inline><pre><code>/* application.tailwind.css — shorthand used by the partial */
+@utility btn-primary {
+  @apply inline-flex items-center justify-center rounded-field
+         min-h-tap px-4 py-[9px] text-[13px] font-extrabold
+         tracking-[0.2px] text-bg cursor-pointer
+         bg-gradient-to-b from-brass-hi to-brass;
+}
+@utility btn-ghost {
+  @apply inline-flex items-center justify-center rounded-field
+         min-h-tap px-4 py-[9px] text-[13px] font-semibold
+         text-text cursor-pointer bg-card border border-line
+         hover:bg-card-hi;
+}</code></pre></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── Top bar ───────── -->
+  <section class="block" id="topbar">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">06 — COMPONENT</div>
+        <h2 class="sec-title">Top bar + brand mark</h2>
+      </div>
+      <p class="sec-desc">Sticky, frosted, full-bleed. Brand lock-up on the left, an <code style="font-family:var(--mono);color:var(--brass-hi)">:actions</code> slot on the right that holds the login button or the characters pill.</p>
+    </div>
+    <div class="spec">
+      <div class="preview col" style="padding:0;overflow:hidden">
+        <div style="background:rgba(12,14,18,0.85);border-bottom:1px solid var(--line);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;">
+            <div class="brand"><span class="brand-mark">S</span><span>Skill Planner</span></div>
+            <button class="chars-pill"><span class="lbl">Characters</span><span class="count">3</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="code">
+        <div class="code-head">
+          <button class="code-tab on">ERB partial</button>
+          <span class="code-path">rails/app/views/shared/_topbar.html.erb</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="code-body">
+          <div class="code-pane on" data-src="rails/app/views/shared/_topbar.html.erb" data-lang="erb"><pre><code></code></pre></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── Tabs ───────── -->
+  <section class="block" id="tabs">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">07 — COMPONENT</div>
+        <h2 class="sec-title">Tabs — pill &amp; underline</h2>
+      </div>
+      <p class="sec-desc">Two variants from one partial. Pills (a well with a raised active chip) pick the mastery type; underline subtabs pick the mastery. Driven by the <code style="font-family:var(--mono);color:var(--brass-hi)">tabs</code> controller, which emits <code style="font-family:var(--mono);color:var(--brass-hi)">tabs:change</code>.</p>
+    </div>
+    <div class="spec">
+      <div class="preview col center" style="gap:22px">
+        <div class="ro-tabs">
+          <button class="ro-tab on">Weapon</button>
+          <button class="ro-tab">Force</button>
+          <button class="ro-tab">Recovery</button>
+        </div>
+        <div class="ro-subtabs">
+          <button class="ro-subtab on">Bicheon</button>
+          <button class="ro-subtab">Heuksal</button>
+          <button class="ro-subtab">Pacheon</button>
+        </div>
+      </div>
+      <div class="code">
+        <div class="code-head">
+          <button class="code-tab on">ERB partial</button>
+          <button class="code-tab">Stimulus</button>
+          <span class="code-path">rails/app/views/shared/_tabs.html.erb</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="code-body">
+          <div class="code-pane on" data-src="rails/app/views/shared/_tabs.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="rails/app/javascript/controllers/tabs_controller.js" data-lang="js"><pre><code></code></pre></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── Badges ───────── -->
+  <section class="block" id="badges">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">08 — COMPONENT</div>
+        <h2 class="sec-title">Badges, pills &amp; tags</h2>
+      </div>
+      <p class="sec-desc">Tone-driven chips. The <code style="font-family:var(--mono);color:var(--brass-hi)">Current → Planned</code> legend establishes the white/brass language used everywhere else.</p>
+    </div>
+    <div class="spec">
+      <div class="preview">
+        <span class="bdg bdg-current">Current</span>
+        <span class="bdg bdg-planned">Planned</span>
+        <span class="bdg bdg-max">MAX</span>
+        <span class="bdg bdg-lock">active</span>
+        <span class="legend-badge"><span class="c">Current</span><span class="a">→</span><span class="p">Planned</span></span>
+      </div>
+      <div class="code">
+        <div class="code-head">
+          <button class="code-tab on">ERB partial</button>
+          <span class="code-path">rails/app/views/shared/_badge.html.erb</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="code-body">
+          <div class="code-pane on" data-src="rails/app/views/shared/_badge.html.erb" data-lang="erb"><pre><code></code></pre></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── Stat rows ───────── -->
+  <section class="block" id="stats">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">09 — COMPONENT</div>
+        <h2 class="sec-title">Stat rows</h2>
+      </div>
+      <p class="sec-desc">The signature pattern: white <b style="color:#fff">current</b> + green <b style="color:var(--green)">delta</b> = brass <b style="color:var(--brass-hi)">planned</b>. Stack several in a divided card; each row is the unit a Turbo Stream re-renders.</p>
+    </div>
+    <div class="spec">
+      <div class="preview center">
+        <div class="stat-merged">
+          <div class="stat-line"><span class="stat-label" style="text-transform:none;letter-spacing:0">Skill points</span>
+            <span class="stat-eq"><span class="stat-cur">3,210,000</span><span class="stat-op">+</span><span class="stat-delta">3,230,000</span><span class="stat-op">=</span><span class="stat-future">6,440,000</span></span></div>
+          <div class="stat-line"><span class="stat-label" style="text-transform:none;letter-spacing:0">Mastery total</span>
+            <span class="stat-eq"><span class="stat-cur">210</span><span class="stat-op">+</span><span class="stat-delta">230</span><span class="stat-op">=</span><span class="stat-future">440</span></span></div>
+          <div class="stat-line"><span class="stat-label" style="text-transform:none;letter-spacing:0">Required level</span>
+            <span class="stat-eq"><span class="stat-cur">92</span><span class="stat-op">+</span><span class="stat-delta">18</span><span class="stat-op">=</span><span class="stat-future">110</span></span></div>
+        </div>
+      </div>
+      <div class="code">
+        <div class="code-head">
+          <button class="code-tab on">ERB partial</button>
+          <button class="code-tab">Usage</button>
+          <span class="code-path">rails/app/views/shared/_stat_row.html.erb</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="code-body">
+          <div class="code-pane on" data-src="rails/app/views/shared/_stat_row.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="usage" data-lang="erb" data-inline><pre><code>&lt;div id="plan_summary"&gt;
+  &lt;div class="overflow-hidden rounded-control bg-card-hi border border-line"&gt;
+    &lt;%= render "shared/stat_row", label: "Skill points",
+          current: 3_210_000, planned: 6_440_000, format: :comma %&gt;
+    &lt;%= render "shared/stat_row", label: "Mastery total",
+          current: 210, planned: 440 %&gt;
+    &lt;%= render "shared/stat_row", label: "Required level",
+          current: 92, planned: 110 %&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── Identity bar ───────── -->
+  <section class="block" id="identity">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">10 — COMPONENT</div>
+        <h2 class="sec-title">Character identity bar</h2>
+      </div>
+      <p class="sec-desc">Crest avatar, name in brass, race + level cap. Shared verbatim by the home hero and the editor header so the two screens read as one product.</p>
+    </div>
+    <div class="spec">
+      <div class="preview center">
+        <div class="char-bar">
+          <div class="char-bar-id">
+            <div class="char-avatar">华</div>
+            <div>
+              <div class="char-bar-name">BuckTBC</div>
+              <div class="char-bar-race">Chinese</div>
+            </div>
+          </div>
+          <div class="char-bar-level">
+            <span class="char-bar-level-label">Level&nbsp;Cap</span>
+            <span class="char-bar-level-val">110</span>
+          </div>
+        </div>
+      </div>
+      <div class="code">
+        <div class="code-head">
+          <button class="code-tab on">ERB partial</button>
+          <span class="code-path">rails/app/views/shared/_char_bar.html.erb</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="code-body">
+          <div class="code-pane on" data-src="rails/app/views/shared/_char_bar.html.erb" data-lang="erb"><pre><code></code></pre></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── Skill row ───────── -->
+  <section class="block" id="skillrow">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">11 — COMPONENT</div>
+        <h2 class="sec-title">Skill row + stepper</h2>
+      </div>
+      <p class="sec-desc">Icon, name, brass level, and a − / + stepper (brass primary on +). Each row is a <code style="font-family:var(--mono);color:var(--brass-hi)">dom_id</code> target so a Turbo Stream can swap it after the server clamps the level.</p>
+    </div>
+    <div class="spec">
+      <div class="preview center">
+        <div class="skill-card">
+          <div class="fs-skill-row">
+            <button class="fs-skill-icon"><img src="assets/skill-a.png" alt="" /></button>
+            <div class="fs-skill-meta">
+              <span class="fs-skill-name">Cyclone I</span>
+              <span class="fs-skill-level"><span class="fs-level-num">16</span></span>
+            </div>
+            <div class="fs-skill-controls">
+              <button class="fs-step-btn">−</button>
+              <button class="fs-step-btn primary">+</button>
+            </div>
+          </div>
+          <div class="fs-skill-row">
+            <button class="fs-skill-icon"><img src="assets/skill-c.png" alt="" /></button>
+            <div class="fs-skill-meta">
+              <span class="fs-skill-name">Cyclone II</span>
+              <span class="fs-skill-level"><span class="fs-level-num">42</span><span class="bdg bdg-max" style="margin-left:6px;padding:1px 6px;border-radius:4px;font-size:10px">MAX</span></span>
+            </div>
+            <div class="fs-skill-controls">
+              <button class="fs-step-btn">−</button>
+              <button class="fs-step-btn primary">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="code">
+        <div class="code-head">
+          <button class="code-tab on">ERB partial</button>
+          <button class="code-tab">Stimulus</button>
+          <span class="code-path">rails/app/views/shared/_skill_row.html.erb</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="code-body">
+          <div class="code-pane on" data-src="rails/app/views/shared/_skill_row.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="rails/app/javascript/controllers/stepper_controller.js" data-lang="js"><pre><code></code></pre></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── Overlays ───────── -->
+  <section class="block" id="overlays">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">12 — COMPONENT</div>
+        <h2 class="sec-title">Overlays — modal · drawer · sheet</h2>
+      </div>
+      <p class="sec-desc">All three are native <code style="font-family:var(--mono);color:var(--brass-hi)">&lt;dialog&gt;</code> elements sharing the <code style="font-family:var(--mono);color:var(--brass-hi)">dialog</code> controller, so Esc, backdrop-dismiss and focus-trap are free. Modal centers (full-height on mobile); drawer slides from the right; sheet rises from the bottom.</p>
+    </div>
+    <div class="spec">
+      <div class="preview" style="gap:24px;align-items:stretch">
+        <!-- modal mini -->
+        <div style="flex:1;min-width:220px;display:flex;flex-direction:column;gap:8px">
+          <div style="border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg)">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line)">
+              <span class="icon-btn" style="width:30px;height:30px;font-size:15px">←</span>
+              <span style="font-size:13px;font-weight:700">Edit — Planned</span>
+              <span class="icon-btn" style="width:30px;height:30px;font-size:15px">×</span>
+            </div>
+            <div style="padding:16px;display:flex;flex-direction:column;gap:8px">
+              <div style="height:8px;width:70%;background:var(--card-hi);border-radius:4px"></div>
+              <div style="height:8px;width:90%;background:var(--card-hi);border-radius:4px"></div>
+              <div style="height:8px;width:55%;background:var(--card-hi);border-radius:4px"></div>
+            </div>
+          </div>
+          <div class="radius-cap" style="text-align:left"><b>shared/modal</b></div>
+        </div>
+        <!-- drawer mini -->
+        <div style="flex:1;min-width:220px;display:flex;flex-direction:column;gap:8px">
+          <div style="border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg);display:flex;justify-content:flex-end">
+            <div style="width:62%;border-left:1px solid var(--line);padding:12px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:700">Characters</span><span class="icon-btn" style="width:26px;height:26px;font-size:13px">×</span></div>
+              <div style="height:34px;background:var(--card);border-radius:10px"></div>
+              <div style="height:34px;background:var(--card);border-radius:10px"></div>
+            </div>
+          </div>
+          <div class="radius-cap" style="text-align:left"><b>shared/drawer</b></div>
+        </div>
+        <!-- sheet mini -->
+        <div style="flex:1;min-width:220px;display:flex;flex-direction:column;gap:8px">
+          <div style="border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column;justify-content:flex-end">
+            <div style="height:30px"></div>
+            <div style="border-top:1px solid var(--line);border-radius:14px 14px 0 0;padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--card-hi)">
+              <div style="font-size:13px;font-weight:800">Cyclone III</div>
+              <div style="height:8px;width:80%;background:var(--card);border-radius:4px"></div>
+              <button class="btn-primary" style="min-height:34px">Done</button>
+            </div>
+          </div>
+          <div class="radius-cap" style="text-align:left"><b>shared/sheet</b></div>
+        </div>
+      </div>
+      <div class="code">
+        <div class="code-head">
+          <button class="code-tab on">modal</button>
+          <button class="code-tab">drawer</button>
+          <button class="code-tab">sheet</button>
+          <button class="code-tab">Stimulus</button>
+          <span class="code-path">rails/app/views/shared/_modal.html.erb</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="code-body">
+          <div class="code-pane on" data-src="rails/app/views/shared/_modal.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="rails/app/views/shared/_drawer.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="rails/app/views/shared/_sheet.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="rails/app/javascript/controllers/dialog_controller.js" data-lang="js"><pre><code></code></pre></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── Hotwire ───────── -->
+  <section class="block" id="hotwire">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">13 — PATTERNS</div>
+        <h2 class="sec-title">Hotwire — Turbo Frame &amp; Stream</h2>
+      </div>
+      <p class="sec-desc">Two end-to-end recipes: the editor pops in a lazy <code style="font-family:var(--mono);color:var(--brass-hi)">&lt;turbo-frame&gt;</code> modal, and stepper changes broadcast a Turbo Stream that swaps the skill row + recomputes the summary totals — no reload.</p>
+    </div>
+    <div class="spec">
+      <div class="code">
+        <div class="code-head">
+          <button class="code-tab on">Turbo Frame modal</button>
+          <button class="code-tab">Turbo Stream stats</button>
+          <span class="code-path">rails/app/views/hotwire/turbo_frame_modal.html.erb</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="code-body">
+          <div class="code-pane on" data-src="rails/app/views/hotwire/turbo_frame_modal.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="rails/app/views/hotwire/turbo_stream_stats.turbo_stream.erb" data-lang="erb"><pre><code></code></pre></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout"><span class="ic">↳</span>
+      <span><b>Flow:</b> <span class="kbd">Edit Planned</span> link targets <code style="font-family:var(--mono);color:var(--brass-hi)">#modal</code> →
+        controller renders the <code style="font-family:var(--mono);color:var(--brass-hi)">&lt;dialog&gt;</code> partial inside the frame →
+        <code style="font-family:var(--mono);color:var(--brass-hi)">dialog#open</code> fires on frame load. A <span class="kbd">+</span> tap PATCHes,
+        the server replies with the stream above, and <code style="font-family:var(--mono);color:var(--brass-hi)">#plan_summary</code> re-renders in place.</span>
+    </div>
+  </section>
+
+  <div class="foot">
+    SRO Builder Design System · derived from the live Skill Planner home &amp; editor.
+    Tokens → <span class="kbd">application.tailwind.css</span> · Components → <span class="kbd">app/views/shared</span> ·
+    Behaviour → <span class="kbd">app/javascript/controllers</span>. Dark theme only.
+  </div>
+
+</div>
+
+<script>
+  // Build color swatches from the token table.
+  const TOKENS = [
+    ["Background","bg-bg","#0c0e12"],
+    ["Card","bg-card","#15181f"],
+    ["Card raised","bg-card-hi","#1c2029"],
+    ["Line","border-line","#262a33"],
+    ["Text","text-text","#e6e8ec"],
+    ["Text dim","text-text-dim","#8b919e"],
+    ["Text mute","text-text-mute","#5c6270"],
+    ["Brass","text-brass","#d4a847"],
+    ["Brass hi","text-brass-hi","#f4d878"],
+    ["Blue","text-blue","#4ea3ff"],
+    ["Red","text-red","#e85a4a"],
+    ["Green","text-green","#38b676"],
+  ];
+  const grid = document.getElementById("swatches");
+  grid.innerHTML = TOKENS.map(([name,util,hex]) => `
+    <div class="swatch">
+      <div class="swatch-chip" style="background:${hex}"></div>
+      <div class="swatch-meta">
+        <span class="swatch-name">${name}</span>
+        <span class="swatch-util">${util}</span>
+        <span class="swatch-hex">${hex}</span>
+      </div>
+    </div>`).join("");
+</script>
+<script src="ds.js"></script>
+
+</body>
+</html>
