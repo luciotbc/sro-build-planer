@@ -68,6 +68,7 @@ group :development do
 
   # Generate Entity-Relationship Diagrams
   gem "rails-erd", require: false
+  gem "ruby-graphviz", require: false
 end
 
 group :test do
