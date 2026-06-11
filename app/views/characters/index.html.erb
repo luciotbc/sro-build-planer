@@ -1,0 +1,20 @@
+<%= turbo_frame_tag "modal" do %>
+  <%= render "shared/drawer", title: "Your characters" do %>
+    <% @characters.each do |character| %>
+      <%= render "characters/character_row",
+      character: character,
+      active: character == current_character %>
+    <% end %>
+
+    <%= link_to new_character_path,
+    data: {
+      turbo_frame: "modal"
+    },
+    class:
+      "flex w-full items-center justify-center gap-2 rounded-control border " \
+        "border-dashed border-line px-3 py-2.5 mx-1 my-2 text-[13px] " \
+        "font-semibold text-text-dim hover:text-text hover:bg-card cursor-pointer" do %>
+      + New character
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,4 +1,89 @@
-<div>
-  <h1 class="font-bold text-4xl">Home#index</h1>
-  <p>Find me in app/views/home/index.html.erb</p>
+<% content_for :title, "Skill Planner" %>
+<% content_for :topbar_actions do %>
+  <% if authenticated? %>
+    <%= characters_pill(Current.user.characters.size) %>
+  <% else %>
+    <%= render "shared/button", label: "Log in", href: new_session_path %>
+  <% end %>
+<% end %>
+
+<div class="mx-auto flex max-w-[800px] flex-col gap-3.5">
+  <% if current_character %>
+    <%= render "shared/char_bar",
+    name: current_character.name,
+    race: current_character.race.name,
+    level_cap: current_character.target_level,
+    glyph: race_glyph(current_character.race, size: 34) %>
+
+    <section class="flex flex-col gap-3 rounded-panel border border-line bg-card p-3.5 md:p-4.5">
+      <div class="flex items-center justify-between gap-2.5">
+        <h2 class="text-[13px] font-bold uppercase tracking-[0.6px] text-text-dim">Skills</h2>
+        <span class="inline-flex items-center gap-1.5 rounded-[999px] border border-line bg-card-hi px-2.5 py-1.5 text-[11px] font-bold tracking-[0.3px]">
+          <span class="text-white">Current</span>
+          <span class="text-text-mute">→</span>
+          <span class="text-brass-hi">Planned</span>
+        </span>
+      </div>
+
+      <%= render "home/skill_window", window: @window %>
+
+      <div class="mt-auto flex items-center gap-2 border-t border-line pt-2.5">
+        <%= render "shared/button",
+        label: "Edit Current",
+        variant: :ghost,
+        href: edit_skill_plan_path(kind: "current"),
+        html: {
+          class: "flex-1"
+        } %>
+        <span class="px-0.5 text-lg font-bold text-text-mute" aria-hidden="true">→</span>
+        <%= render "shared/button",
+        label: "Edit Planned",
+        href: edit_skill_plan_path(kind: "future"),
+        html: {
+          class: "flex-1"
+        } %>
+      </div>
+    </section>
+
+    <section class="flex flex-col gap-3 rounded-panel border border-line bg-card p-3.5 md:p-4.5">
+      <h2 class="text-[13px] font-bold uppercase tracking-[0.6px] text-text-dim">Summary</h2>
+      <div id="plan_summary">
+        <div class="overflow-hidden rounded-control border border-line bg-card-hi">
+          <%= render "shared/stat_row",
+          label: "Skill points",
+          current: @summary.sp_current,
+          planned: @summary.sp_planned,
+          format: :comma %>
+          <%= render "shared/stat_row",
+          label: "Mastery total",
+          current: @summary.mastery_current,
+          planned: @summary.mastery_planned %>
+          <%= render "shared/stat_row",
+          label: "Required level",
+          current: @summary.level_current,
+          planned: @summary.level_planned %>
+        </div>
+      </div>
+    </section>
+  <% elsif authenticated? %>
+    <div class="rounded-panel border border-line bg-card p-8 text-center">
+      <p class="mb-4 text-sm text-text-dim">You have no characters yet.</p>
+      <%= render "shared/button",
+      label: "+ New character",
+      href: new_character_path,
+      html: {
+        data: {
+          turbo_frame: "modal"
+        }
+      } %>
+    </div>
+  <% else %>
+    <div class="rounded-panel border border-line bg-card p-8 text-center">
+      <h1 class="mb-2 text-2xl font-extrabold tracking-[-0.5px] text-brass-hi">Plan your Silkroad build</h1>
+      <p class="mb-4 text-sm text-text-dim">
+        Sign in to create characters and plan skill builds for any level cap.
+      </p>
+      <%= render "shared/button", label: "Log in", href: new_session_path %>
+    </div>
+  <% end %>
 </div>

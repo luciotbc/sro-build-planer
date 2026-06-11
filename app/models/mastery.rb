@@ -1,4 +1,6 @@
 class Mastery < ApplicationRecord
+  MASTERY_TYPES = %w[Weapon Force Physical Magical Support].freeze
+
   belongs_to :race
   has_many :skill_groups, dependent: :destroy
   has_many :skill_series, dependent: :destroy
@@ -7,9 +9,5 @@ class Mastery < ApplicationRecord
 
   validates :external_id, presence: true, uniqueness: true
   validates :name, presence: true
-  validates :mastery_type,
-            presence: true,
-            inclusion: {
-              in: %w[Weapon Force Physical Magical Support]
-            }
+  validates :mastery_type, presence: true, inclusion: { in: MASTERY_TYPES }
 end

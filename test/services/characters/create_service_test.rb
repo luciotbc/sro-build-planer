@@ -103,4 +103,12 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
       Characters::CreateService.call(name: "Persisted", race_id: race.id)
     end
   end
+  it "assigns the character to the given user" do
+    user = create(:user)
+    result =
+      Characters::CreateService.call(name: "Hero", race_id: race.id, user:)
+
+    assert result.success?
+    assert_equal user, result.data.user
+  end
 end

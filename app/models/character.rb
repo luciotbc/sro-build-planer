@@ -1,6 +1,15 @@
 class Character < ApplicationRecord
   MAX_LEVEL = 150
 
+  # Server level caps selectable when creating a character (design: cc-caps).
+  LEVEL_CAPS = {
+    90 => "Classic",
+    100 => "Legacy",
+    110 => "Standard",
+    120 => "High",
+    130 => "Extreme"
+  }.freeze
+
   belongs_to :race
   belongs_to :user, optional: true, inverse_of: :characters
   has_many :character_masteries, dependent: :destroy, inverse_of: :character

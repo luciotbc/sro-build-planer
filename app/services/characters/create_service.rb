@@ -11,6 +11,7 @@ module Characters
         Character.new(
           name: @params[:name],
           race_id: @params[:race_id],
+          user: @params[:user],
           current_level: @params.fetch(:current_level, 0),
           target_level: @params.fetch(:target_level, 0)
         )

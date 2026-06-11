@@ -1,0 +1,97 @@
+<%#
+  home/skill_window — read-only skills view inside the home planner card.
+  Hierarchy: mastery type pills -> mastery subtabs -> mastery summary ->
+  series rows (skill icon + "current -> planned") -> totals footer.
+  locals: window: Characters::SkillWindow
+%>
+<%= turbo_frame_tag "skill_window" do %>
+  <div class="flex w-full flex-col gap-3">
+    <% if window.mastery.nil? %>
+      <p class="rounded-control bg-card-hi px-3 py-2.5 text-[13px] text-text-dim">
+        No skill data imported yet. Run <code class="text-brass-hi">bin/rails import:skills_xml</code>.
+      </p>
+    <% else %>
+      <% type_tabs =
+        window.mastery_types.map { |type| { id: type, label: type, href: skill_window_path(group: type) } }
+      mastery_tabs =
+        window.masteries.map { |m| { id: m.id, label: m.name, href: skill_window_path(group: window.active_type, mastery_id: m.id) } } %>
+
+      <%= render "shared/tabs",
+      variant: :pill,
+      name: "group",
+      active: window.active_type,
+      tabs: type_tabs %>
+
+      <%= render "shared/tabs",
+      variant: :underline,
+      name: "mastery",
+      active: window.mastery.id,
+      tabs: mastery_tabs %>
+
+      <div class="flex flex-wrap items-center justify-between gap-2.5 rounded-field bg-card-hi px-3 py-2.5">
+        <div class="inline-flex min-w-0 items-center gap-2.5">
+          <span class="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-[7px]
+                       border border-brass/30 bg-card text-[13px] font-extrabold text-brass-hi">
+            <%= window.mastery.name.first %>
+          </span>
+          <span class="text-sm font-bold tracking-[-0.1px]"><%= window.mastery.name %></span>
+        </div>
+        <span class="inline-flex items-baseline gap-1">
+          <span class="mr-0.5 text-[11px] font-bold uppercase tracking-[0.6px] text-text-dim">Lv</span>
+          <span class="text-sm font-extrabold tnum">
+            <span class="text-white"><%= window.mastery_level_current %></span>
+            <span class="font-semibold text-text-mute">→</span>
+            <span class="text-brass-hi"><%= window.mastery_level_planned %></span>
+          </span>
+          <span class="text-[11px] text-text-mute tnum">/<%= window.mastery_level_cap %></span>
+        </span>
+      </div>
+
+      <div class="flex flex-col gap-3.5 px-0.5 py-1">
+        <% window.series.each do |series, groups| %>
+          <div class="flex flex-wrap items-center gap-2.5">
+            <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg
+                         border border-brass/20 bg-brass/10 text-lg font-extrabold text-brass-hi"
+                  title="<%= series.title %>">✦</span>
+            <% groups.each do |group| %>
+              <% cs = window.character_skills[group.id]
+                 learned = cs && (cs.current_skill_level.to_i.positive? || cs.target_skill_level.to_i.positive?) %>
+              <div class="flex flex-col items-center gap-1 rounded-lg py-1.5 <%= "opacity-35" unless learned %>">
+                <span class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-lg
+                             border border-line bg-card-hi p-[3px] text-[13px] font-bold text-text-dim"
+                      title="<%= group.name %>">
+                  <%= group.name.to_s.first %>
+                </span>
+                <span class="whitespace-nowrap text-xs font-bold tnum">
+                  <% if learned %>
+                    <span class="text-white"><%= cs.current_skill_level.to_i %></span>
+                    <span class="font-semibold text-text-mute">→</span>
+                    <span class="text-brass-hi"><%= cs.target_skill_level.to_i %></span>
+                  <% else %>
+                    <span class="text-text-mute">—</span>
+                  <% end %>
+                </span>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="flex flex-col gap-2 rounded-field bg-card-hi px-3 py-2.5">
+        <%= render "home/footer_row",
+        label: "Skill points",
+        current: window.summary.sp_current,
+        planned: window.summary.sp_planned,
+        format: :comma %>
+        <%= render "home/footer_row",
+        label: "Mastery level total",
+        current: window.summary.mastery_current,
+        planned: window.summary.mastery_planned %>
+        <%= render "home/footer_row",
+        label: "Required level",
+        current: window.summary.level_current,
+        planned: window.summary.level_planned %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

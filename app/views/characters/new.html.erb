@@ -1,0 +1,60 @@
+<%= turbo_frame_tag "modal" do %>
+  <%= render "shared/modal", title: "New character" do %>
+    <%= form_with model: @character, url: characters_path, data: { turbo_frame: "_top" } do |f| %>
+      <div class="flex flex-col gap-4.5">
+        <% if flash[:alert].present? %>
+          <p class="rounded-field border border-red/40 bg-red/10 px-3 py-2 text-[13px] text-red"><%= flash[:alert] %></p>
+        <% end %>
+
+        <div class="flex flex-col gap-2">
+          <%= f.label :name, "Character name",
+          class:
+            "text-[11px] font-bold uppercase tracking-[0.8px] text-text-dim" %>
+          <%= f.text_field :name,
+          placeholder: "My character",
+          autofocus: true,
+          class:
+            "w-full rounded-field bg-card border border-line px-3 py-2.5 " \
+              "text-sm text-text focus:border-brass focus:outline-none" %>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <span class="text-[11px] font-bold uppercase tracking-[0.8px] text-text-dim">Char type</span>
+          <div class="grid grid-cols-2 gap-2.5">
+            <% @races.each do |race| %>
+              <label class="flex cursor-pointer items-center gap-3 rounded-control border border-line
+                            bg-card-hi px-3.5 py-3 min-h-[60px] hover:border-[#3a3f4b]
+                            has-checked:border-brass has-checked:shadow-[0_0_0_1px_var(--color-brass)_inset]">
+                <%= f.radio_button :race_id, race.id, checked: race == @races.first, class: "sr-only" %>
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-card border border-line">
+                  <%= race_glyph(race, size: 26) %>
+                </span>
+                <span class="flex min-w-0 flex-col gap-px">
+                  <span class="text-sm font-bold"><%= race.name %></span>
+                  <span class="text-[11px] font-semibold text-text-mute">Choose</span>
+                </span>
+              </label>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <span class="text-[11px] font-bold uppercase tracking-[0.8px] text-text-dim">Server level cap</span>
+          <div class="grid grid-cols-5 gap-2">
+            <% Character::LEVEL_CAPS.each do |cap, tier| %>
+              <label class="flex cursor-pointer flex-col items-center gap-0.5 rounded-control border border-line
+                            bg-card-hi px-1 py-3 text-center hover:border-[#3a3f4b]
+                            has-checked:border-brass has-checked:shadow-[0_0_0_1px_var(--color-brass)_inset]">
+                <%= f.radio_button :target_level, cap, checked: cap == 110, class: "sr-only" %>
+                <span class="text-lg font-extrabold tracking-[-0.3px] tnum"><%= cap %></span>
+                <span class="text-[9px] font-bold uppercase tracking-[0.6px] text-text-mute"><%= tier %></span>
+              </label>
+            <% end %>
+          </div>
+        </div>
+
+        <%= f.submit "Start Build", class: "btn-primary w-full min-h-[52px] text-[15px] rounded-control" %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
