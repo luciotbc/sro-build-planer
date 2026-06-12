@@ -9,7 +9,9 @@ module ActiveSupport
     extend Minitest::Spec::DSL
     include FactoryBot::Syntax::Methods
 
-    # Run tests in parallel with specified workers
-    parallelize(workers: :number_of_processors)
+    # Parallel (forked) runs hang: describe-block classes are anonymous and
+    # cannot be marshaled over DRb (rails/rails#39021), so workers crash and
+    # the master waits forever. The suite runs in ~3s serially.
+    parallelize(workers: 1)
   end
 end
