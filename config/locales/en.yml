@@ -29,6 +29,9 @@
 
 en:
   hello: "Hello world"
+  errors:
+    character:
+      invalid_target_level: "Target level must be one of: %{valid}"
   warnings:
     character_level_updated: "character.%{attr} updated to %{value}"
     character_mastery_created: "CharacterMastery '%{name}' created automatically"

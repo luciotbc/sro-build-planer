@@ -111,6 +111,21 @@ class CharactersControllerTest < ActionDispatch::IntegrationTest
 
       assert_response :unprocessable_entity
     end
+
+    it "rejects a forged target_level not in LEVEL_CAPS" do
+      assert_no_difference -> { Character.count } do
+        post characters_path,
+             params: {
+               character: {
+                 name: "Hacker",
+                 race_id: @race.id,
+                 target_level: 150
+               }
+             }
+      end
+
+      assert_response :unprocessable_entity
+    end
   end
 
   describe "POST /characters/:id/select" do
