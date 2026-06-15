@@ -48,11 +48,13 @@ module Characters
     end
 
     def series
+      return @series = [] unless mastery
+
       @series ||=
         mastery
           .skill_series
           .order(:row_position)
-          .includes(skill_groups: [])
+          .includes(:skill_groups)
           .map { |s| [s, s.skill_groups.sort_by { |g| g.col_position.to_i }] }
     end
 
