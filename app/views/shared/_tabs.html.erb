@@ -34,16 +34,23 @@
        "flex w-full gap-1 rounded-field bg-card-hi p-1"
      end %>
 <div class="<%= wrapper_classes %>"
+     role="tablist"
      data-controller="tabs" data-tabs-active-class="on"
-     data-tabs-name-value="<%= name %>">
+     data-tabs-name-value="<%= name %>"
+     data-action="keydown->tabs#navigate">
   <% tabs.each do |t| %>
-    <% classes = [item_classes, ("on" if t[:id].to_s == active.to_s)].compact.join(" ")
+    <% is_active = t[:id].to_s == active.to_s
+       classes = [item_classes, ("on" if is_active)].compact.join(" ")
        data = { tabs_target: "tab", tab_id: t[:id], action: "tabs#select" }
        data[:turbo_frame] = frame if frame %>
     <% if t[:href] %>
-      <%= link_to t[:label], t[:href], class: classes, data: data %>
+      <%= link_to t[:label], t[:href], class: classes,
+            role: "tab", aria: { selected: is_active },
+            tabindex: is_active ? "0" : "-1", data: data %>
     <% else %>
-      <%= button_tag t[:label], type: "button", class: classes, data: data %>
+      <%= button_tag t[:label], type: "button", class: classes,
+            role: "tab", aria: { selected: is_active },
+            tabindex: is_active ? "0" : "-1", data: data %>
     <% end %>
   <% end %>
 </div>

@@ -31,6 +31,25 @@ class TabsPartialTest < ActionView::TestCase
 
       assert_select "button.on[data-tab-id=force]"
     end
+
+    it "renders a tablist role on the wrapper" do
+      render partial: "shared/tabs", locals: { tabs: tabs }
+
+      assert_select "[role=tablist]", count: 1
+    end
+
+    it "renders role=tab on every tab" do
+      render partial: "shared/tabs", locals: { tabs: tabs }
+
+      assert_select "button[role=tab]", count: 3
+    end
+
+    it "sets aria-selected=true on the active tab and false on others" do
+      render partial: "shared/tabs", locals: { tabs: tabs, active: "force" }
+
+      assert_select "button[data-tab-id=force][aria-selected=true]", count: 1
+      assert_select "button[aria-selected=false]", count: 2
+    end
   end
 
   describe "shared/tabs (underline variant)" do
