@@ -59,7 +59,7 @@ Character [race, current_level, target_level]
   └── CharacterSkill → SkillGroup [current_skill_level, target_skill_level]
 ```
 
-`CharacterSkill.current_skill_level` / `target_skill_level` record where the player is now and where they want to reach — these are the core "build plan" state. `LevelDatum.sp_cumulative` gives total SP available at any level.
+`CharacterSkill.current_skill_level` / `target_skill_level` record where the player is now and where they want to reach — these are the core "build plan" state. `LevelDatum.sp_cumulative` gives total SP available at any level. `Character::LEVEL_CAPS` (`{90 => "Classic", 100 => "Legacy", 110 => "Standard", 120 => "High", 130 => "Extreme"}`) is the authoritative list of selectable server tiers.
 
 All static records carry an `external_id` (from the game's data) used as the stable upsert key. Skills also carry `external_skill_code` as a secondary unique key.
 
@@ -92,12 +92,29 @@ Two importers, both idempotent (skip existing records):
 
 The XML importer is more complete — it populates `SkillSeries`, `SkillGroupRequirement`, and `LevelDatum` which the CSV importer does not.
 
+### Skill Plan Editor
+
+The skill plan editor (`skill_plans/edit`, `SkillPlansController`) has a `kind` concept that threads through the entire stack:
+
+- `kind == :current` — the player edits what they have **now** (`current_skill_level` / `current_mastery_level`)
+- anything else — edits the **target build** (`target_skill_level` / `target_mastery_level`)
+
+`kind` is a private helper method on the controller (exposed via `helper_method`) and surfaces in `SkillPlansHelper#plan_level` / `#plan_mastery_level`. Every service call picks the right attribute based on `kind`.
+
+**`CurrentCharacter` concern** (`app/controllers/concerns/current_character.rb`) provides `current_character` to all controllers. The active character is stored in `session[:character_id]` and falls back to the user's most recently created character. `SkillPlansController` requires a character via `before_action :require_character`.
+
+**`Characters::SkillWindow`** (`app/services/characters/skill_window.rb`) is a read-only presenter (not a mutating service) that resolves the active mastery type/tab, its series/groups, and the character's skill levels per group. It drives both the home skill window card and the editor. **`Characters::PlanSummary`** is similarly a read-only presenter for SP and mastery totals.
+
+**Turbo Stream response pattern** — all mutating controller actions use `respond_with_stream(result)`. On success it yields to render a `.turbo_stream.erb` template; on failure it renders `skill_plans/errors.turbo_stream.erb` with HTTP 422. The four stream templates are: `update_skill`, `update_mastery`, `refresh_editor` (full editor panel re-render), and `errors`.
+
 ### Frontend Stack
 
 - **Hotwire** (Turbo + Stimulus) for interactivity — no separate JS build step
 - **Tailwind CSS** — compiled via `bin/rails tailwindcss:watch` (included in `bin/dev`)
 - **importmap-rails** for JS module loading (no Node/webpack)
 - Assets served via **Propshaft**
+
+**Shared view components** live in `app/views/shared/`: `_topbar`, `_tabs`, `_button`, `_badge`, `_char_bar`, `_stat_row`, `_drawer`, `_modal`, `_sheet`. The `_tabs` partial is driven by `tabs_controller.js` and handles both `:pill` and `:underline` variants; it broadcasts a `tabs:change` custom event. Partial signatures are documented in `<%# locals: ... %>` comments at the top of each file. View tests for these partials live in `test/views/shared/`.
 
 ### Infrastructure
 
@@ -142,6 +159,7 @@ Established conventions from the PR #4 audit. Apply these consistently.
 - **FactoryBot over fixtures.** All tests use FactoryBot factories (`test/factories/`). No fixture accessors (`races(:chinese)` etc.). Set up data in `before` blocks with instance variables; use `let` for simple lazy objects.
 - **`let` is lazy** — blocks run only when first referenced. Reference a `let` name explicitly before calling something that queries it.
 - **`sign_in_as(user)` / `sign_out`** from `SessionTestHelper` are available in all `ActionDispatch::IntegrationTest` tests. Use them to set up authenticated requests; `sign_in_as` creates a real `Session` row and sets the signed cookie.
+- **View tests** for shared partials live in `test/views/shared/`. They use `render_views` and assert on rendered HTML. Follow this pattern when adding new shared components.
 
 ### Ruby Idioms
 
