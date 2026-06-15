@@ -5,7 +5,7 @@ class PasswordsController < ApplicationController
              within: 3.minutes,
              only: :create,
              with: -> do
-               redirect_to new_password_path, alert: "Try again later."
+               redirect_to new_password_path, alert: t(".alert_rate_limit")
              end
 
   def new
@@ -16,9 +16,7 @@ class PasswordsController < ApplicationController
       PasswordsMailer.reset(user).deliver_later
     end
 
-    redirect_to new_session_path,
-                notice:
-                  "Password reset instructions sent (if user with that email address exists)."
+    redirect_to new_session_path, notice: t(".notice_reset_sent")
   end
 
   def edit
@@ -27,10 +25,10 @@ class PasswordsController < ApplicationController
   def update
     if @user.update(params.permit(:password, :password_confirmation))
       @user.sessions.destroy_all
-      redirect_to new_session_path, notice: "Password has been reset."
+      redirect_to new_session_path, notice: t(".notice_reset_ok")
     else
       redirect_to edit_password_path(params[:token]),
-                  alert: "Passwords did not match."
+                  alert: t(".alert_mismatch")
     end
   end
 
@@ -40,6 +38,6 @@ class PasswordsController < ApplicationController
     @user = User.find_by_password_reset_token!(params[:token])
   rescue ActiveSupport::MessageVerifier::InvalidSignature
     redirect_to new_password_path,
-                alert: "Password reset link is invalid or has expired."
+                alert: I18n.t("passwords.set_user_by_token.alert_bad_token")
   end
 end

@@ -29,6 +29,34 @@
 
 en:
   hello: "Hello world"
+  characters:
+    create:
+      notice_created: "Character created."
+    new:
+      label_name: "Character name"
+      placeholder_name: "My character"
+      label_race: "Char type"
+      label_choose: "Choose"
+      label_level_cap: "Server level cap"
+      submit: "Start Build"
+  sessions:
+    create:
+      alert_rate_limit: "Try again later."
+      alert_invalid: "Try another email address or password."
+  passwords:
+    create:
+      alert_rate_limit: "Try again later."
+      notice_reset_sent: "Password reset instructions sent (if user with that email address exists)."
+    update:
+      notice_reset_ok: "Password has been reset."
+      alert_mismatch: "Passwords did not match."
+    set_user_by_token:
+      alert_bad_token: "Password reset link is invalid or has expired."
+  home:
+    index:
+      no_characters: "You have no characters yet."
+      guest_heading: "Plan your Silkroad build"
+      guest_body: "Sign in to create characters and plan skill builds for any level cap."
   errors:
     character:
       invalid_target_level: "Target level must be one of: %{valid}"

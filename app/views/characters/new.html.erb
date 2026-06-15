@@ -7,11 +7,11 @@
         <% end %>
 
         <div class="flex flex-col gap-2">
-          <%= f.label :name, "Character name",
+          <%= f.label :name, t(".label_name"),
           class:
             "text-[11px] font-bold uppercase tracking-[0.8px] text-text-dim" %>
           <%= f.text_field :name,
-          placeholder: "My character",
+          placeholder: t(".placeholder_name"),
           autofocus: true,
           class:
             "w-full rounded-field bg-card border border-line px-3 py-2.5 " \
@@ -19,7 +19,7 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <span class="text-[11px] font-bold uppercase tracking-[0.8px] text-text-dim">Char type</span>
+          <span class="text-[11px] font-bold uppercase tracking-[0.8px] text-text-dim"><%= t(".label_race") %></span>
           <div class="grid grid-cols-2 gap-2.5">
             <% @races.each do |race| %>
               <label class="flex cursor-pointer items-center gap-3 rounded-control border border-line
@@ -31,7 +31,7 @@
                 </span>
                 <span class="flex min-w-0 flex-col gap-px">
                   <span class="text-sm font-bold"><%= race.name %></span>
-                  <span class="text-[11px] font-semibold text-text-mute">Choose</span>
+                  <span class="text-[11px] font-semibold text-text-mute"><%= t(".label_choose") %></span>
                 </span>
               </label>
             <% end %>
@@ -39,7 +39,7 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <span class="text-[11px] font-bold uppercase tracking-[0.8px] text-text-dim">Server level cap</span>
+          <span class="text-[11px] font-bold uppercase tracking-[0.8px] text-text-dim"><%= t(".label_level_cap") %></span>
           <div class="grid grid-cols-5 gap-2">
             <% Character::LEVEL_CAPS.each do |cap, tier| %>
               <label class="flex cursor-pointer flex-col items-center gap-0.5 rounded-control border border-line
@@ -53,7 +53,7 @@
           </div>
         </div>
 
-        <%= f.submit "Start Build", class: "btn-primary w-full min-h-[52px] text-[15px] rounded-control" %>
+        <%= f.submit t(".submit"), class: "btn-primary w-full min-h-[52px] text-[15px] rounded-control" %>
       </div>
     <% end %>
   <% end %>

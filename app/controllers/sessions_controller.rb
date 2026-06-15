@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
              within: 3.minutes,
              only: :create,
              with: -> do
-               redirect_to new_session_path, alert: "Try again later."
+               redirect_to new_session_path, alert: t(".alert_rate_limit")
              end
 
   def new
@@ -15,8 +15,7 @@ class SessionsController < ApplicationController
       start_new_session_for user
       redirect_to after_authentication_url
     else
-      redirect_to new_session_path,
-                  alert: "Try another email address or password."
+      redirect_to new_session_path, alert: t(".alert_invalid")
     end
   end
 

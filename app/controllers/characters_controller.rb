@@ -14,7 +14,7 @@ class CharactersController < ApplicationController
 
     if result.success?
       select_character(result.data)
-      redirect_to root_path, notice: "Character created"
+      redirect_to root_path, notice: t(".notice_created")
     else
       @character = Current.user.characters.build(character_params.except(:user))
       @races = Race.order(:external_id)

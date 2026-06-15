@@ -67,7 +67,7 @@
     </section>
   <% elsif authenticated? %>
     <div class="rounded-panel border border-line bg-card p-8 text-center">
-      <p class="mb-4 text-sm text-text-dim">You have no characters yet.</p>
+      <p class="mb-4 text-sm text-text-dim"><%= t(".no_characters") %></p>
       <%= render "shared/button",
       label: "+ New character",
       href: new_character_path,
@@ -79,9 +79,9 @@
     </div>
   <% else %>
     <div class="rounded-panel border border-line bg-card p-8 text-center">
-      <h1 class="mb-2 text-2xl font-extrabold tracking-[-0.5px] text-brass-hi">Plan your Silkroad build</h1>
+      <h1 class="mb-2 text-2xl font-extrabold tracking-[-0.5px] text-brass-hi"><%= t(".guest_heading") %></h1>
       <p class="mb-4 text-sm text-text-dim">
-        Sign in to create characters and plan skill builds for any level cap.
+        <%= t(".guest_body") %>
       </p>
       <%= render "shared/button", label: "Log in", href: new_session_path %>
     </div>
