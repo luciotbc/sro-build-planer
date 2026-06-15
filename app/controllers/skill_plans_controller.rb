@@ -23,21 +23,17 @@ class SkillPlansController < ApplicationController
 
   def max_skills
     build_window(nil, params[:mastery_id])
-    results =
-      @window
-        .series
-        .flat_map { |_, groups| groups }
-        .map { |group| set_skill_level(group.id, group.max_skill_level.to_i) }
-    failed = results.reject(&:success?)
+    groups = @window.series.flat_map { |_, groups| groups }
     result =
-      if failed.any?
-        ServiceResult.fail(errors: failed.flat_map(&:errors))
-      else
-        ServiceResult.ok
-      end
-    respond_with_stream(result) do
+      CharacterSkills::MaxAllService.call(current_character, groups, kind: kind)
+    if result.success?
+      flash.now[:warnings] = result.warnings if result.warnings.any?
       build_window(nil, params[:mastery_id])
       render :refresh_editor
+    else
+      flash.now[:alert] = result.errors.to_sentence
+      build_window(nil, params[:mastery_id])
+      render :refresh_editor, status: :unprocessable_entity
     end
   end
 
