@@ -1,17 +1,34 @@
-<div class="mx-auto md:w-2/3 w-full">
-  <% if alert = flash[:alert] %>
-    <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg inline-block" id="alert"><%= alert %></p>
-  <% end %>
+<div class="-mx-4 -mt-4 flex min-h-[calc(100vh-5rem)] items-center justify-center p-4 md:-mx-8 md:-mt-5">
+  <div class="w-full max-w-[400px] rounded-panel border border-line bg-card p-6">
+    <h1 class="mb-6 text-2xl font-extrabold tracking-[-0.3px]">Reset password</h1>
 
-  <h1 class="font-bold text-4xl">Forgot your password?</h1>
+    <% if alert = flash[:alert] %>
+      <div class="mb-4 rounded-field border border-red/40 bg-red/10 px-3 py-2 text-[13px] text-red" id="alert"><%= alert %></div>
+    <% end %>
 
-  <%= form_with url: passwords_path, class: "contents" do |form| %>
-    <div class="my-5">
-      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "block shadow-sm rounded-md border border-gray-400 focus:outline-solid focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+    <% if notice = flash[:notice] %>
+      <div class="mb-4 rounded-field border border-green/40 bg-green/10 px-3 py-2 text-[13px] text-green" id="notice"><%= notice %></div>
+    <% end %>
+
+    <%= form_with url: passwords_path do |form| %>
+      <div class="flex flex-col gap-2">
+        <%= form.label :email_address, "Email",
+            class: "text-[11px] font-bold uppercase tracking-[0.8px] text-text-dim" %>
+        <%= form.email_field :email_address,
+            required: true,
+            autofocus: true,
+            autocomplete: "username",
+            value: params[:email_address],
+            class: "w-full rounded-field bg-card-hi border border-line px-3 py-2.5 text-sm text-text focus:border-brass focus:outline-none" %>
+      </div>
+
+      <%= form.submit "Email reset instructions",
+          class: "btn-primary w-full min-h-[52px] text-[15px] rounded-control mt-6" %>
+    <% end %>
+
+    <div class="mt-4 text-center">
+      <%= link_to "Back to sign in", new_session_path,
+          class: "text-sm text-text-dim underline hover:no-underline" %>
     </div>
-
-    <div class="inline">
-      <%= form.submit "Email reset instructions", class: "w-full sm:w-auto text-center rounded-lg px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
-    </div>
-  <% end %>
+  </div>
 </div>
