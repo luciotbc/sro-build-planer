@@ -19,8 +19,12 @@ export default class extends Controller {
 
   close() {
     this.element.close()
-    // Dialogs rendered inside a turbo frame are removed so they can be
-    // re-requested; static dialogs (e.g. login) just close.
+  }
+
+  // Handles the native `close` event — fires on programmatic close() AND on Esc.
+  // Dialogs rendered inside a turbo frame are removed so they can be
+  // re-requested; static dialogs (e.g. login) just close.
+  closed() {
     const frame = this.element.closest("turbo-frame")
     if (frame) this.element.remove()
   }

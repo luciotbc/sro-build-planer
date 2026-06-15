@@ -10,7 +10,7 @@
 %>
 <dialog data-controller="dialog"
         data-dialog-open-value="<%= local_assigns.fetch(:open, true) %>"
-        data-action="click->dialog#backdropClose"
+        data-action="click->dialog#backdropClose close->dialog#closed"
         class="m-0 ml-auto h-full max-h-none w-[min(420px,92vw)] max-w-none bg-bg p-0
                border-l border-line backdrop:bg-black/50 backdrop:backdrop-blur-sm
                open:flex open:flex-col">

@@ -15,7 +15,7 @@
    width = size == :lg ? "md:w-[min(820px,92vw)] md:h-[min(880px,92vh)]" : "md:w-[min(420px,100%)]" %>
 <dialog data-controller="dialog"
         data-dialog-open-value="<%= local_assigns.fetch(:open, true) %>"
-        data-action="click->dialog#backdropClose"
+        data-action="click->dialog#backdropClose close->dialog#closed"
         class="m-0 h-full max-h-none w-full max-w-none bg-transparent p-0
                backdrop:bg-black/60 backdrop:backdrop-blur-sm
                open:flex open:flex-col open:items-stretch open:justify-end

@@ -11,7 +11,7 @@
 %>
 <dialog data-controller="dialog"
         data-dialog-open-value="<%= local_assigns.fetch(:open, true) %>"
-        data-action="click->dialog#backdropClose"
+        data-action="click->dialog#backdropClose close->dialog#closed"
         class="m-0 mt-auto w-full max-w-none bg-transparent p-0
                backdrop:bg-black/60 sm:m-auto sm:max-w-[480px] sm:p-6">
   <div class="w-full rounded-t-panel border-t border-line bg-bg p-5
