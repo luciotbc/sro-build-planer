@@ -4,8 +4,21 @@
    --color-brass -> bg-brass / text-brass / border-brass, etc.
    ============================================================================= */
 
-/* Inter (self-host via @font-face for production if needed). */
-@import url("https://rsms.me/inter/inter.css");
+@font-face {
+  font-family: "Inter";
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  src: url("Inter.var.woff2") format("woff2-variations"), url("Inter.var.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+  src: url("Inter.var.woff2") format("woff2-variations"), url("Inter.var.woff2") format("woff2");
+}
 
 @import "tailwindcss";
 
