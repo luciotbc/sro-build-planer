@@ -78,16 +78,19 @@
       </div>
 
       <div class="flex flex-col gap-2 rounded-field bg-card-hi px-3 py-2.5">
-        <%= render "home/footer_row",
+        <%= render "shared/stat_row",
+        size: :sm,
         label: "Skill points",
         current: window.summary.sp_current,
         planned: window.summary.sp_planned,
         format: :comma %>
-        <%= render "home/footer_row",
+        <%= render "shared/stat_row",
+        size: :sm,
         label: "Mastery level total",
         current: window.summary.mastery_current,
         planned: window.summary.mastery_planned %>
-        <%= render "home/footer_row",
+        <%= render "shared/stat_row",
+        size: :sm,
         label: "Required level",
         current: window.summary.level_current,
         planned: window.summary.level_planned %>

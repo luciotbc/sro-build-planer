@@ -1,5 +1,5 @@
 <%#
-  shared/stat_row — "current (+delta) = planned" line
+  shared/stat_row - "current (+delta) = planned" line
   The signature pattern of the app: white current value, green delta, brass total.
   ----------------------------------------------------------------------------
   locals:
@@ -7,24 +7,42 @@
     current: Numeric
     planned: Numeric
     format:  :int | :comma   (default :int)
+    size:    :sm | nil       (default nil = full size)
   ----------------------------------------------------------------------------
-  Wrap several in a divided card:
+  Full-size: wrap in a divided card:
     <div class="overflow-hidden rounded-control bg-card-hi border border-line">
-      render "shared/stat_row", label: "Skill points", current: 3_210_000, planned: 6_440_000, format: :comma 
-       render "shared/stat_row", label: "Mastery total", current: 210, planned: 440 
+      render "shared/stat_row", label: "Skill points", current: 3_210_000, planned: 6_440_000, format: :comma
+      render "shared/stat_row", label: "Mastery total", current: 210, planned: 440
     </div>
+
+  Compact (:sm): no border/padding wrapper, tighter text scale.
 %>
 <% fmt = ->(n) { local_assigns[:format] == :comma ? number_with_delimiter(n) : n }
-   delta = planned - current %>
-<div class="flex flex-wrap items-baseline gap-x-3 gap-y-2.5 border-t border-line px-3.5 py-3.5 first:border-t-0">
-  <span class="text-sm font-bold uppercase tracking-[0.6px] text-text-dim"><%= label %></span>
-  <span class="ml-auto inline-flex items-baseline gap-2 tnum">
-    <span class="font-bold text-white"><%= fmt.(current) %></span>
-    <% if delta != 0 %>
-      <span class="text-text-mute font-bold"><%= delta.positive? ? "+" : "−" %></span>
-      <span class="text-[11px] font-bold <%= delta.positive? ? "text-green" : "text-red" %>"><%= fmt.(delta.abs) %></span>
-    <% end %>
-    <span class="text-text-mute font-bold">=</span>
-    <span class="font-extrabold text-brass-hi"><%= fmt.(planned) %></span>
-  </span>
-</div>
+   delta = planned - current
+   sm = local_assigns[:size] == :sm %>
+<% if sm %>
+  <div class="flex items-baseline justify-between gap-2.5">
+    <span class="text-[11px] font-bold uppercase tracking-[0.6px] text-text-dim"><%= label %></span>
+    <span class="inline-flex items-baseline gap-1.5 whitespace-nowrap text-[13px] font-extrabold tnum">
+      <span class="text-white"><%= fmt.(current) %></span>
+      <% if delta != 0 %>
+        <span class="mx-0.5 text-[11px] font-bold <%= delta.positive? ? "text-green" : "text-red" %>"><%= "#{delta.positive? ? "+" : "−"}#{fmt.(delta.abs)}" %></span>
+      <% end %>
+      <span class="font-semibold text-text-mute">=</span>
+      <span class="text-brass-hi"><%= fmt.(planned) %></span>
+    </span>
+  </div>
+<% else %>
+  <div class="flex flex-wrap items-baseline gap-x-3 gap-y-2.5 border-t border-line px-3.5 py-3.5 first:border-t-0">
+    <span class="text-sm font-bold uppercase tracking-[0.6px] text-text-dim"><%= label %></span>
+    <span class="ml-auto inline-flex items-baseline gap-2 tnum">
+      <span class="font-bold text-white"><%= fmt.(current) %></span>
+      <% if delta != 0 %>
+        <span class="text-text-mute font-bold"><%= delta.positive? ? "+" : "−" %></span>
+        <span class="text-[11px] font-bold <%= delta.positive? ? "text-green" : "text-red" %>"><%= fmt.(delta.abs) %></span>
+      <% end %>
+      <span class="text-text-mute font-bold">=</span>
+      <span class="font-extrabold text-brass-hi"><%= fmt.(planned) %></span>
+    </span>
+  </div>
+<% end %>
