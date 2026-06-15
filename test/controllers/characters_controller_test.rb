@@ -39,6 +39,24 @@ class CharactersControllerTest < ActionDispatch::IntegrationTest
 
       assert_select "turbo-frame#modal"
     end
+
+    it "loads characters without N+1 queries" do
+      create_list(:character, 3, user: @user, race: @race)
+
+      query_count = 0
+      counter = ->(_name, _start, _finish, _id, payload) do
+        query_count += 1 unless payload[:name] == "SCHEMA"
+      end
+      ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+        get characters_path
+      end
+
+      assert_operator query_count,
+                      :<=,
+                      10,
+                      "Expected at most 10 queries but got #{query_count}"
+      assert_response :success
+    end
   end
 
   describe "GET /characters/new" do

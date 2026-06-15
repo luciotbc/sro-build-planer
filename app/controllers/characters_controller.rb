@@ -1,6 +1,7 @@
 class CharactersController < ApplicationController
   def index
-    @characters = Current.user.characters.includes(:race).order(:id)
+    @characters =
+      Current.user.characters.includes(:race, :character_skills).order(:id)
   end
 
   def new
