@@ -38,4 +38,37 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_session_path
     assert_empty cookies[:session_id]
   end
+
+  test "logout clears character_id so next user does not inherit it" do
+    race = create(:race)
+    user_a = create(:user, password: "pass")
+    char_a = create(:character, user: user_a, race: race)
+
+    user_b = create(:user, password: "pass")
+
+    # Sign in as user A and select their character
+    post session_path,
+         params: {
+           email_address: user_a.email_address,
+           password: "pass"
+         }
+    post select_character_path(char_a)
+
+    # Logout via the real destroy action (clears session)
+    delete session_path
+    assert_redirected_to new_session_path
+
+    # Sign in as user B (no characters)
+    post session_path,
+         params: {
+           email_address: user_b.email_address,
+           password: "pass"
+         }
+    assert_redirected_to root_path
+
+    # Home page must not show user A's character
+    get root_path
+    assert_response :success
+    assert_no_match char_a.name, response.body
+  end
 end
