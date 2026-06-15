@@ -26,12 +26,12 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
         name: "Hero",
         race_id: race.id,
         current_level: 30,
-        target_level: 80
+        target_level: 90
       )
 
     assert result.success?
     assert_equal 30, result.data.current_level
-    assert_equal 80, result.data.target_level
+    assert_equal 90, result.data.target_level
   end
 
   it "fails without name" do
@@ -84,8 +84,8 @@ class Characters::CreateServiceTest < ActiveSupport::TestCase
       Characters::CreateService.call(
         name: "Hero",
         race_id: race.id,
-        current_level: 80,
-        target_level: 30
+        current_level: 110,
+        target_level: 90
       )
 
     assert result.success?
