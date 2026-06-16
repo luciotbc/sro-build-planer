@@ -29,3 +29,7 @@ To regenerate the diagram after schema changes:
 ```bash
 bin/rails docs:erd
 ```
+
+### Design System
+
+The compiled design system is available at `public/design-system/index.html` and served statically at `/design-system/index.html`. Source files (HTML prototypes, CSS, JSX and Rails reference partials) live under `doc/design/`.

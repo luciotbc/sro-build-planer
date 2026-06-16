@@ -11,15 +11,17 @@ This is a Rails 8.1 application for planning character builds in **Silkroad Onli
 ```bash
 # Setup
 bundle install
-bin/rails db:setup          # creates DB, loads schema, runs seeds
+git config core.hooksPath .githooks   # enable pre-commit hooks
+bin/rails db:setup                    # creates DB, loads schema, runs seeds
 
 # Development (runs Rails server + Tailwind CSS watcher)
 bin/dev
 
-# Tests
-bin/rails test                                  # all tests
-bin/rails test test/models/skill_test.rb        # single file
-bin/rails test test/models/skill_test.rb:42     # single test by line
+# Tests — MUST use PARALLEL_WORKERS=1 (Minitest::Spec describe blocks create anonymous
+# classes that crash DRb/Marshal when parallelized)
+PARALLEL_WORKERS=1 bin/rails test                                  # all tests
+PARALLEL_WORKERS=1 bin/rails test test/models/skill_test.rb        # single file
+PARALLEL_WORKERS=1 bin/rails test test/models/skill_test.rb:42     # single test by line
 
 # Linting & formatting
 bin/rubocop                 # RuboCop (inherits syntax_tree + rubocop-rails-omakase)
@@ -33,6 +35,9 @@ bin/ci
 bin/rails import:skills                         # import from doc/import/SRO_Skills_Complete.csv (CSV)
 bin/rails import:skills[/path/to/other.csv]    # import from a specific CSV
 bin/rails import:skills_xml                    # import from doc/import/skill_ch.xml + skill_eu.xml (XML, preferred)
+
+# Documentation
+bin/rails docs:erd          # regenerate doc/diagrams/db-erd.svg after schema changes
 ```
 
 ## Architecture
@@ -78,12 +83,29 @@ The XML importer is more complete — it populates `SkillSeries`, `SkillGroupReq
 - **Tailwind CSS** — compiled via `bin/rails tailwindcss:watch` (included in `bin/dev`)
 - **importmap-rails** for JS module loading (no Node/webpack)
 - Assets served via **Propshaft**
+- **Design system** — compiled reference at `public/design-system/index.html` (served at `/design-system/index.html`); source prototypes and partials under `doc/design/`
 
 ### Infrastructure
 
 - **SQLite** for all stores: main DB, job queue (Solid Queue), cache (Solid Cache), WebSocket (Solid Cable)
 - **Solid Queue** for background jobs (configured in `config/queue.yml`)
 - Deployment via **Kamal** (`config/deploy.yml`)
+
+### Service Layer
+
+Business logic lives in `app/services/` under domain namespaces: `Characters::CreateService`, `CharacterSkills::AddService`, etc. Every service exposes a single `self.call(params)` entry point and returns a `ServiceResult`:
+
+```ruby
+result = Characters::CreateService.call(params)
+result.success?   # => true / false
+result.data       # payload on success
+result.errors     # array of strings on failure
+result.warnings   # non-fatal notices (present on both success and failure)
+```
+
+### Test Stack
+
+Tests use **Minitest** with **Minitest::Spec DSL** (`describe`/`it` blocks) and **FactoryBot** for fixtures. All factories live in `test/factories/`. Use `build`, `create`, `build_list`, etc. directly in tests (FactoryBot methods are mixed into `ActiveSupport::TestCase`).
 
 ### Code Style
 
