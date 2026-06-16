@@ -1,0 +1,46 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# Blade Mastery - Passive Skill
+blade_passive_skill:
+  external_id: 1001
+  external_skill_code: "BLADE_PASSIVE_001"
+  skill_group: sword_mastery_skills
+  skill_level: 1
+  sp_cost: 0
+  mastery_level_req: 1
+
+# Blade Mastery - Active Skill
+blade_active_skill:
+  external_id: 1002
+  external_skill_code: "BLADE_ACTIVE_001"
+  skill_group: sword_mastery_skills
+  skill_level: 2
+  sp_cost: 50
+  mastery_level_req: 5
+
+# Spear Mastery - Active Skill
+spear_active_skill:
+  external_id: 1003
+  external_skill_code: "SPEAR_ACTIVE_001"
+  skill_group: spear_mastery_skills
+  skill_level: 1
+  sp_cost: 40
+  mastery_level_req: 3
+
+# Cold Force - Passive Skill
+cold_passive_skill:
+  external_id: 1004
+  external_skill_code: "COLD_PASSIVE_001"
+  skill_group: cold_force_skills
+  skill_level: 1
+  sp_cost: 0
+  mastery_level_req: 1
+
+# Warrior Mastery - Active Skill
+warrior_active_skill:
+  external_id: 1005
+  external_skill_code: "WARRIOR_ACTIVE_001"
+  skill_group: warrior_skills
+  skill_level: 1
+  sp_cost: 30
+  mastery_level_req: 2

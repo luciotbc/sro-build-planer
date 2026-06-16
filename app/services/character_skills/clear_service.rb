@@ -1,0 +1,82 @@
+module CharacterSkills
+  class ClearService
+    VALID_FIELDS = %i[current target both].freeze
+
+    def self.call(character, params) = new(character, params).call
+
+    def initialize(character, params)
+      @character = character
+      @params = params
+    end
+
+    def call
+      cs =
+        CharacterSkill.includes(:skill_group).find_by(
+          character: @character,
+          skill_group_id: @params[:skill_group_id]
+        )
+      return ServiceResult.fail(errors: ["CharacterSkill not found"]) unless cs
+
+      field = @params[:field]
+      unless VALID_FIELDS.include?(field)
+        return(
+          ServiceResult.fail(
+            errors: ["field must be :current, :target, or :both"]
+          )
+        )
+      end
+
+      if field.in?(%i[current both])
+        blocking = find_blocking_dependents(cs.skill_group)
+        if blocking.any?
+          return(
+            ServiceResult.fail(
+              errors: [
+                "Cannot clear current_skill_level: blocked by #{blocking.join(", ")}"
+              ]
+            )
+          )
+        end
+      end
+
+      updates = {}
+      updates[:current_skill_level] = 0 if field.in?(%i[current both])
+      updates[:target_skill_level] = 0 if field.in?(%i[target both])
+
+      ApplicationRecord.transaction { cs.update!(updates) }
+
+      ServiceResult.ok(data: cs)
+    rescue ActiveRecord::RecordInvalid => e
+      ServiceResult.fail(errors: e.record.errors.full_messages)
+    rescue => e
+      ServiceResult.fail(errors: [e.message])
+    end
+
+    private
+
+    def find_blocking_dependents(skill_group)
+      reqs =
+        SkillGroupRequirement.includes(:skill_group).where(
+          required_group: skill_group
+        )
+
+      return [] if reqs.empty?
+
+      cs_by_sg =
+        @character
+          .character_skills
+          .where(skill_group_id: reqs.map(&:skill_group_id))
+          .index_by(&:skill_group_id)
+
+      reqs.filter_map do |req|
+        dep_cs = cs_by_sg[req.skill_group_id]
+        next unless dep_cs
+        unless dep_cs.current_skill_level.to_i >= req.required_skill_level.to_i
+          next
+        end
+
+        req.skill_group.name
+      end
+    end
+  end
+end

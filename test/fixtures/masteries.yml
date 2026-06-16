@@ -1,0 +1,83 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Chinese Weapon Masteries
+blade_sword:
+  external_id: 257
+  name: Blade
+  mastery_type: Weapon
+  race: chinese
+
+spear:
+  external_id: 258
+  name: Spear
+  mastery_type: Weapon
+  race: chinese
+
+bow:
+  external_id: 259
+  name: Bow
+  mastery_type: Weapon
+  race: chinese
+
+# Chinese Force Masteries
+cold_ice:
+  external_id: 273
+  name: Cold
+  mastery_type: Force
+  race: chinese
+
+lightning:
+  external_id: 274
+  name: Lightning
+  mastery_type: Force
+  race: chinese
+
+fire:
+  external_id: 275
+  name: Fire
+  mastery_type: Force
+  race: chinese
+
+bicheon_support:
+  external_id: 276
+  name: Bicheon
+  mastery_type: Force
+  race: chinese
+
+# European Physical Masteries
+warrior:
+  external_id: 513
+  name: Warrior
+  mastery_type: Physical
+  race: european
+
+rogue:
+  external_id: 515
+  name: Rogue
+  mastery_type: Physical
+  race: european
+
+# European Magical Masteries
+wizard:
+  external_id: 514
+  name: Wizard
+  mastery_type: Magical
+  race: european
+
+warlock:
+  external_id: 516
+  name: Warlock
+  mastery_type: Magical
+  race: european
+
+# European Support Masteries
+bard:
+  external_id: 517
+  name: Bard
+  mastery_type: Support
+  race: european
+
+cleric:
+  external_id: 518
+  name: Cleric
+  mastery_type: Support
+  race: european

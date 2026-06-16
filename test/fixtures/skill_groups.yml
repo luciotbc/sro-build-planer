@@ -1,0 +1,47 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# Blade Mastery Skill Group
+sword_mastery_skills:
+  external_group_code: "SG_BLADE_001"
+  name: "Blade Skills"
+  tooltip: "Basic blade sword skills"
+  description: "A collection of fundamental blade sword techniques"
+  icon_path: "/assets/icons/blade.png"
+  mastery: blade_sword
+  max_skill_level: 2
+
+# Spear Mastery Skill Group
+spear_mastery_skills:
+  external_group_code: "SG_SPEAR_001"
+  name: "Spear Skills"
+  tooltip: "Basic spear techniques"
+  description: "A collection of fundamental spear techniques"
+  icon_path: "/assets/icons/spear.png"
+  mastery: spear
+
+# Cold Force Skill Group
+cold_force_skills:
+  external_group_code: "SG_COLD_001"
+  name: "Cold Force Skills"
+  tooltip: "Ice and cold-based abilities"
+  description: "A collection of cold and ice-based force techniques"
+  icon_path: "/assets/icons/cold.png"
+  mastery: cold_ice
+
+# Warrior Mastery Skill Group
+warrior_skills:
+  external_group_code: "SG_WARRIOR_001"
+  name: "Warrior Skills"
+  tooltip: "Physical warrior techniques"
+  description: "A collection of warrior combat techniques"
+  icon_path: "/assets/icons/warrior.png"
+  mastery: warrior
+
+# Wizard Mastery Skill Group
+wizard_skills:
+  external_group_code: "SG_WIZARD_001"
+  name: "Wizard Skills"
+  tooltip: "Magical spellcasting"
+  description: "A collection of wizard magical spells"
+  icon_path: "/assets/icons/wizard.png"
+  mastery: wizard
