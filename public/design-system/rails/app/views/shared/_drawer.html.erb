@@ -1,0 +1,32 @@
+<%#
+  shared/drawer — right-side slide-over (the Characters list)
+  Uses the `dialog` Stimulus controller; slide-in is a CSS animation on [open].
+  --------------------------------------------------------------------------
+  locals:
+    title:  String
+  Usage:
+    <%= render "shared/drawer", title: "Your characters" do %> …rows… <% end %>
+%>
+<dialog data-controller="dialog" data-action="click->dialog#backdropClose"
+        class="m-0 ml-auto h-full max-h-none w-[min(420px,92vw)] max-w-none bg-bg p-0
+               border-l border-line backdrop:bg-black/50 backdrop:backdrop-blur-sm
+               open:flex open:flex-col animate-[slidein_200ms_ease-out]"
+        data-action="click->dialog#stop">
+  <header class="flex items-center justify-between border-b border-line px-4 py-3.5">
+    <span class="text-base font-bold"><%= local_assigns[:title] || "Your characters" %></span>
+    <button type="button" data-action="dialog#close"
+            class="flex h-9 w-9 items-center justify-center rounded-field bg-card border border-line text-text-dim hover:text-text cursor-pointer" aria-label="Close">×</button>
+  </header>
+  <div class="overflow-y-auto px-2 pb-4 pt-2"><%= yield %></div>
+</dialog>
+
+<%# A single drawer row (compose inside the body):
+  <button class="flex w-full items-center gap-3 rounded-control px-3 py-2.5 text-left hover:bg-card [&.on]:bg-card">
+    <span class="flex h-[38px] w-[38px] items-center justify-center rounded-control border border-line">◆</span>
+    <span class="min-w-0 flex-1">
+      <span class="block text-sm font-bold">BuckTBC</span>
+      <span class="flex items-center gap-1.5 text-[11px] text-text-dim">Chinese • Lv 110 • 32 skills</span>
+    </span>
+    <%= render "shared/badge", label: "active", tone: :lock %>
+  </button>
+%>

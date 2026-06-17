@@ -1,0 +1,30 @@
+<%#
+  shared/sheet — mobile bottom sheet (skill info popover)
+  Anchored to the bottom on phones, centers into a card ≥700px. Same `dialog`
+  controller as modal/drawer.
+  --------------------------------------------------------------------------
+  locals:
+    title:  String
+  Usage:
+    <%= render "shared/sheet", title: "Cyclone III" do %> …details… <% end %>
+%>
+<dialog data-controller="dialog" data-action="click->dialog#backdropClose"
+        class="m-0 mt-auto w-full max-w-none bg-transparent p-0
+               backdrop:bg-black/60 sm:m-auto sm:max-w-[480px] sm:p-6">
+  <div class="w-full rounded-t-panel border-t border-line bg-bg p-5
+              sm:rounded-panel sm:border"
+       data-action="click->dialog#stop">
+    <% if local_assigns[:title] %>
+      <div class="mb-3.5 text-[17px] font-extrabold tracking-[-0.2px]"><%= title %></div>
+    <% end %>
+    <%= yield %>
+    <button type="button" data-action="dialog#close"
+            class="btn-primary mt-4 w-full">Done</button>
+  </div>
+</dialog>
+
+<%# Definition rows for the body:
+  <div class="flex justify-between border-b border-line py-2 text-[13px] text-text-dim">
+    <span>Mastery</span><b class="text-text">Cyclone</b>
+  </div>
+%>

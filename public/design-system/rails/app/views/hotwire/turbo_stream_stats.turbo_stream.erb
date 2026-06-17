@@ -1,0 +1,39 @@
+<%#
+  HOTWIRE PATTERN — live "current → planned" stat updates via Turbo Stream
+  ===========================================================================
+  When the stepper PATCHes a skill level, the controller replies with this
+  Turbo Stream. It swaps the single skill row AND re-renders the summary totals
+  in place, so the brass "planned" numbers and green deltas update without a
+  reload. Wrap each updatable region in a dom_id'd container.
+  ===========================================================================
+
+  Controller (app/controllers/skills_controller.rb):
+
+    def update
+      @skill = current_character.skills.find(params[:id])
+      @skill.update!(level: params[:level])
+      @summary = current_character.plan_summary   # { skill_points:, mastery_total:, required_level: }
+      respond_to do |format|
+        format.turbo_stream                       # → this template
+        format.html { redirect_to character_path(current_character) }
+      end
+    end
+%>
+
+<%# Replace just the one skill row that changed (matches id="skill_<id>"). %>
+<%= turbo_stream.replace "skill_#{@skill.id}" do %>
+  <%= render "shared/skill_row", skill: @skill.to_row %>
+<% end %>
+
+<%# Re-render the summary card body so totals + deltas recompute. %>
+<%= turbo_stream.update "plan_summary" do %>
+  <div class="overflow-hidden rounded-control bg-card-hi border border-line">
+    <%= render "shared/stat_row", label: "Skill points",  current: @summary[:sp_current],  planned: @summary[:sp_planned],  format: :comma %>
+    <%= render "shared/stat_row", label: "Mastery total", current: @summary[:ms_current],  planned: @summary[:ms_planned] %>
+    <%= render "shared/stat_row", label: "Required level", current: @summary[:lv_current],  planned: @summary[:lv_planned] %>
+  </div>
+<% end %>
+
+<%# On the page, the summary lives in a matching container:
+     <div id="plan_summary"> … </div>
+%>

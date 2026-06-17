@@ -1,0 +1,29 @@
+<%#
+  shared/topbar — sticky frosted top bar with brand mark + actions slot
+  --------------------------------------------------------------------------
+  locals:
+    title:   String  (default "Skill Planner")
+    actions: String  rendered HTML for the right side (buttons / chars-pill)
+  Usage:
+    <%= render "shared/topbar", actions: capture { render "shared/button", label: "Log in" } %>
+%>
+<header class="sticky top-0 z-10 border-b border-line
+               bg-bg/85 backdrop-blur-md backdrop-saturate-150">
+  <div class="mx-auto max-w-[1280px] flex items-center justify-between gap-3 px-4 py-3 md:px-8 md:py-3.5">
+    <%= link_to root_path, class: "flex items-center gap-2.5 font-bold text-base tracking-[0.2px]" do %>
+      <span class="flex h-7 w-7 items-center justify-center rounded-[7px] text-bg
+                   font-black text-sm bg-gradient-to-br from-brass to-[#6b4a18]">S</span>
+      <span><%= local_assigns[:title] || "Skill Planner" %></span>
+    <% end %>
+    <nav class="hidden md:flex flex-1 justify-center gap-1.5"><%= yield :nav if content_for?(:nav) %></nav>
+    <div class="flex items-center gap-2"><%= local_assigns[:actions] %></div>
+  </div>
+</header>
+
+<%#  chars-pill — the logged-in account control that lives in :actions  %>
+<%# Re-usable snippet:
+  <button class="flex items-center gap-2 rounded-[999px] bg-card border border-line pl-2.5 pr-1.5 py-1.5 cursor-pointer">
+    <span class="text-xs text-text-dim">Characters</span>
+    <span class="flex h-5 w-5 items-center justify-center rounded-full bg-brass text-bg text-[11px] font-extrabold tnum">3</span>
+  </button>
+%>

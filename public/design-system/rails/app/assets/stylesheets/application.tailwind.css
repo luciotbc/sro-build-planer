@@ -1,3 +1,9 @@
+/* =============================================================================
+   SRO Builder — Design System tokens (Tailwind v4, CSS-first)
+   Import this as your single Tailwind entrypoint. Every token below becomes a
+   utility: --color-brass → bg-brass / text-brass / border-brass, etc.
+   ============================================================================= */
+
 @import "tailwindcss";
 
 @theme {
@@ -15,7 +21,6 @@
   /* ── Brand (brass) ────────────────────────────────────────────────────── */
   --color-brass:     #d4a847;   /* primary accent            → text-brass     */
   --color-brass-hi:  #f4d878;   /* highlight / planned value → text-brass-hi  */
-  --color-brass-dk:  #6b4a18;   /* deep shade                → bg-brass-dk    */
 
   /* ── Semantic ─────────────────────────────────────────────────────────── */
   --color-blue:      #4ea3ff;
@@ -25,8 +30,8 @@
   /* ── Radius ───────────────────────────────────────────────────────────── */
   --radius-field:    10px;      /* inputs, small buttons     → rounded-field  */
   --radius-control:  12px;      /* step buttons, chips       → rounded-control*/
-  --radius-tab:      14px;      /* tab wells, identity bar   → rounded-tab    */
-  --radius-panel:    18px;      /* cards, modals, drawers    → rounded-panel  */
+  --radius-tab:      14px;      /* tab wells, identity bar   → rounded-tab     */
+  --radius-panel:    18px;      /* cards, modals, drawers    → rounded-panel   */
 
   /* ── Type family ──────────────────────────────────────────────────────── */
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -35,6 +40,7 @@
   --spacing-tap: 44px;          /* min-h-tap / w-tap                          */
 }
 
+/* App-level base: the radial backdrop both screens share. */
 @layer base {
   html, body {
     background: var(--color-bg);
@@ -44,10 +50,17 @@
   }
   body {
     min-height: 100vh;
-    background: radial-gradient(1200px 800px at 50% -10%, #1a1d24 0%, #0c0e12 60%);
+    background:
+      radial-gradient(1200px 800px at 50% -10%, #1a1d24 0%, #0c0e12 60%);
   }
+  /* Tabular numerals everywhere we show levels / points. */
   .tnum { font-variant-numeric: tabular-nums; }
 }
+
+/* =============================================================================
+   Component shorthands (@utility) — optional sugar so partials stay readable.
+   Each is just the utility recipe captured once; use them or inline the classes.
+   ============================================================================= */
 
 @utility btn-primary {
   @apply inline-flex items-center justify-center rounded-field min-h-tap px-4 py-[9px]
