@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "App" %></title>
+    <title><%= content_for(:title) || "SRO Lab" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="App">
@@ -24,7 +24,8 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <%= render "shared/topbar" %>
+    <main class="mx-auto max-w-7xl px-4 py-8 md:px-8">
       <%= yield %>
     </main>
   </body>
