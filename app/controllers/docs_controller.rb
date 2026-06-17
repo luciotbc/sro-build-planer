@@ -1,4 +1,6 @@
 class DocsController < ApplicationController
+  allow_unauthenticated_access only: :design_system
+
   before_action :ensure_development
 
   # Living design system reference - renders inside the app shell using only the
