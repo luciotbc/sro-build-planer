@@ -1,0 +1,30 @@
+<%#
+  shared/stat_row — one "current + delta = planned" stat line
+  -----------------------------------------------------------------------
+  Renders a single .stat-line. Wrap several in a <div class="stat-merged">
+  to get the bordered, merged panel shown on the design-system page.
+  locals:
+    label:   String          required; the stat name (e.g. "Skill points")
+    current: Integer/String  required; current value
+    delta:   Integer/String  required; the change to apply
+    planned: Integer/String  required; resulting value
+  Usage:
+    render "shared/stat_row", label: "Skill points",
+           current: "3,210,000", delta: "3,230,000", planned: "6,440,000"
+%>
+<%
+  label   = local_assigns.fetch(:label)
+  current = local_assigns.fetch(:current)
+  delta   = local_assigns.fetch(:delta)
+  planned = local_assigns.fetch(:planned)
+%>
+<div class="stat-line">
+  <span class="stat-label"><%= label %></span>
+  <span class="stat-eq">
+    <span class="stat-cur"><%= current %></span>
+    <span class="stat-op">+</span>
+    <span class="stat-delta"><%= delta %></span>
+    <span class="stat-op">=</span>
+    <span class="stat-future"><%= planned %></span>
+  </span>
+</div>

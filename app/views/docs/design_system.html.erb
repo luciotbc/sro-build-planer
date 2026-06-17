@@ -1,0 +1,235 @@
+<% content_for :title, "SRO Lab — Design System" %>
+
+<%#
+  Living design system reference. Every preview is rendered from a real
+  app/views/shared partial, styled with the app's own @theme tokens and component
+  classes — no external CSS/JS — so the docs stay in lockstep with production.
+%>
+
+<% color_tokens = [
+     [ "--color-bg", "bg-bg", "#0c0e12", "app background" ],
+     [ "--color-card", "bg-card", "#15181f", "default panel" ],
+     [ "--color-card-hi", "bg-card-hi", "#1c2029", "raised panel / inset" ],
+     [ "--color-line", "border-line", "#262a33", "hairline borders" ],
+     [ "--color-text", "text-text", "#e6e8ec", "primary copy" ],
+     [ "--color-text-dim", "text-text-dim", "#8b919e", "secondary / labels" ],
+     [ "--color-text-mute", "text-text-mute", "#5c6270", "tertiary / disabled" ],
+     [ "--color-brass", "text-brass", "#d4a847", "primary accent" ],
+     [ "--color-brass-hi", "text-brass-hi", "#f4d878", "highlight / planned" ],
+     [ "--color-brass-dk", "bg-brass-dk", "#6b4a18", "deep shade" ],
+     [ "--color-blue", "text-blue", "#4ea3ff", "informational" ],
+     [ "--color-red", "text-red", "#e85a4a", "destructive / decrease" ],
+     [ "--color-green", "text-green", "#38b676", "positive / increase" ]
+   ] %>
+
+<% radius_tokens = [
+     [ "rounded-field", "10px", "inputs, small buttons" ],
+     [ "rounded-control", "12px", "step buttons, chips" ],
+     [ "rounded-tab", "14px", "tab wells, identity bar" ],
+     [ "rounded-panel", "18px", "cards, modals, drawers" ]
+   ] %>
+
+<% toc = { color: "Color", type: "Type", radius: "Radius", logo: "Logo",
+           buttons: "Buttons", tabs: "Tabs", badges: "Badges", stats: "Stat rows",
+           identity: "Character bar", skillrow: "Skill row", overlays: "Overlays",
+           hotwire: "Hotwire" } %>
+
+<div class="space-y-12">
+  <%# ── Intro ───────────────────────────────────────────────────────────── %>
+  <header class="space-y-3">
+    <p class="text-xs font-bold uppercase tracking-[2px] text-brass">Skill Planner UI Kit</p>
+    <h1 class="text-4xl font-extrabold tracking-tight text-text">Design System</h1>
+    <p class="max-w-2xl text-text-dim">
+      Every token, partial and component class below is rendered live by the app —
+      from the <code class="text-brass-hi">@theme</code> block in
+      <code class="text-brass-hi">app/assets/tailwind/application.css</code> and the
+      shared ERB partials in <code class="text-brass-hi">app/views/shared</code>.
+      Copy a snippet and it behaves identically in production.
+    </p>
+  </header>
+
+  <%# ── Table of contents ───────────────────────────────────────────────── %>
+  <nav class="flex flex-wrap gap-2">
+    <% toc.each do |anchor, label| %>
+      <a href="#<%= anchor %>" class="rounded-control border border-line bg-card px-3 py-1.5 text-[13px] font-semibold text-text-dim hover:bg-card-hi hover:text-text">
+        <%= label %>
+      </a>
+    <% end %>
+  </nav>
+
+  <%# ── Color ───────────────────────────────────────────────────────────── %>
+  <section id="color" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Color</h2>
+      <p class="text-text-dim">White is reserved for "current" values; brass for "planned".</p>
+    </div>
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+      <% color_tokens.each do |name, utility, hex, desc| %>
+        <div class="overflow-hidden rounded-tab border border-line bg-card">
+          <div class="h-16 w-full" style="background: var(<%= name %>)"></div>
+          <div class="space-y-0.5 p-3">
+            <p class="text-[13px] font-bold text-text"><%= utility %></p>
+            <p class="text-[11px] tnum text-text-mute"><%= hex %></p>
+            <p class="text-[11px] text-text-dim"><%= desc %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <%# ── Typography ──────────────────────────────────────────────────────── %>
+  <section id="type" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Typography</h2>
+      <p class="text-text-dim">Inter throughout (<code class="text-brass-hi">--font-sans</code>). Numerals are tabular via <code class="text-brass-hi">tnum</code>.</p>
+    </div>
+    <div class="space-y-2 rounded-panel border border-line bg-card p-6">
+      <p class="text-4xl font-extrabold tracking-tight text-text">Display — extrabold tight</p>
+      <p class="text-xl font-bold text-text">Heading — bold</p>
+      <p class="text-base text-text">Body — primary copy</p>
+      <p class="text-xs font-bold uppercase tracking-[0.6px] text-text-dim">Label — uppercase 0.6px</p>
+      <p class="tnum text-base text-text">Tabular numerals 0123456789</p>
+    </div>
+  </section>
+
+  <%# ── Radius ──────────────────────────────────────────────────────────── %>
+  <section id="radius" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Radius</h2>
+      <p class="text-text-dim">Smallest for inputs, largest for cards and overlays.</p>
+    </div>
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <% radius_tokens.each do |utility, value, desc| %>
+        <div class="space-y-2">
+          <div class="<%= utility %> h-20 border border-line bg-card-hi"></div>
+          <p class="text-[13px] font-bold text-text"><%= utility %></p>
+          <p class="text-[11px] tnum text-text-mute"><%= value %></p>
+          <p class="text-[11px] text-text-dim"><%= desc %></p>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <%# ── Logo ────────────────────────────────────────────────────────────── %>
+  <section id="logo" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Logo / brand mark</h2>
+      <p class="text-text-dim">Served from <code class="text-brass-hi">app/assets/images</code> and reused by the top bar.</p>
+    </div>
+    <div class="flex items-center gap-6 rounded-panel border border-line bg-card p-6">
+      <%= image_tag "logo.svg", alt: "SRO Lab", class: "h-12 w-12" %>
+      <%= image_tag "icon.svg", alt: "SRO Lab", class: "h-8 w-8" %>
+    </div>
+  </section>
+
+  <%# ── Buttons ─────────────────────────────────────────────────────────── %>
+  <section id="buttons" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Buttons</h2>
+      <p class="text-text-dim">One partial, four variants over the <code class="text-brass-hi">btn-primary</code> / <code class="text-brass-hi">btn-ghost</code> / <code class="text-brass-hi">icon-btn</code> / <code class="text-brass-hi">chars-pill</code> classes.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3 rounded-panel border border-line bg-card p-6">
+      <%= render "shared/button", label: "Edit Planned" %>
+      <%= render "shared/button", label: "Edit Current", variant: :ghost %>
+      <%= render "shared/button", label: "×", variant: :icon, attrs: { "aria-label": "Close" } %>
+      <%= render "shared/chars_pill", count: 3 %>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:button] %>
+  </section>
+
+  <%# ── Tabs ────────────────────────────────────────────────────────────── %>
+  <section id="tabs" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Tabs</h2>
+      <p class="text-text-dim">Two variants from one partial, driven by the <code class="text-brass-hi">tabs</code> controller (click to switch).</p>
+    </div>
+    <div class="flex flex-col items-center gap-5 rounded-panel border border-line bg-card p-6">
+      <%= render "shared/tabs", items: [ "Weapon", "Force", "Recovery" ] %>
+      <%= render "shared/tabs", items: [ "Bicheon", "Heuksal", "Pacheon" ], variant: :underline %>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:tabs] %>
+  </section>
+
+  <%# ── Badges ──────────────────────────────────────────────────────────── %>
+  <section id="badges" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Badges</h2>
+      <p class="text-text-dim">Tone-driven pills. The <code class="text-brass-hi">current → planned</code> legend sets the white/brass language.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3 rounded-panel border border-line bg-card p-6">
+      <%= render "shared/badge", text: "Current" %>
+      <%= render "shared/badge", text: "Planned", variant: :planned %>
+      <%= render "shared/badge", text: "MAX", variant: :max %>
+      <%= render "shared/badge", text: "active", variant: :lock %>
+      <%= render "shared/legend_badge" %>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:badge] %>
+  </section>
+
+  <%# ── Stat rows ───────────────────────────────────────────────────────── %>
+  <section id="stats" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Stat rows</h2>
+      <p class="text-text-dim">White current + green delta = brass planned. Stack several in a divided card.</p>
+    </div>
+    <div class="flex justify-center rounded-panel border border-line bg-card p-6">
+      <div class="stat-merged">
+        <%= render "shared/stat_row", label: "Skill points", current: "3,210,000", delta: "3,230,000", planned: "6,440,000" %>
+        <%= render "shared/stat_row", label: "Mastery total", current: 210, delta: 230, planned: 440 %>
+        <%= render "shared/stat_row", label: "Required level", current: 92, delta: 18, planned: 110 %>
+      </div>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:stat_row] %>
+  </section>
+
+  <%# ── Character bar ────────────────────────────────────────────────────── %>
+  <section id="identity" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Character identity bar</h2>
+      <p class="text-text-dim">Crest avatar, name in brass, race + level cap.</p>
+    </div>
+    <div class="flex justify-center rounded-panel border border-line bg-card p-6">
+      <%= render "shared/char_bar", name: "BuckTBC", race: "Chinese", level: 110, initial: "华" %>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:char_bar] %>
+  </section>
+
+  <%# ── Skill row ───────────────────────────────────────────────────────── %>
+  <section id="skillrow" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Skill row + stepper</h2>
+      <p class="text-text-dim">Icon, name, brass level and a − / + stepper driven by the <code class="text-brass-hi">stepper</code> controller (clamps at 0 and max).</p>
+    </div>
+    <div class="flex justify-center rounded-panel border border-line bg-card p-6">
+      <div class="skill-card">
+        <%= render "shared/skill_row", name: "Cyclone I", icon: "skill-a.png", level: 16, max: 30 %>
+        <%= render "shared/skill_row", name: "Cyclone II", icon: "skill-c.png", level: 42, max: 42 %>
+      </div>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:skill_row] %>
+  </section>
+
+  <%# ── Overlays ────────────────────────────────────────────────────────── %>
+  <section id="overlays" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Overlays — modal · drawer · sheet</h2>
+      <p class="text-text-dim">Native <code class="text-brass-hi">&lt;dialog&gt;</code> elements sharing the <code class="text-brass-hi">dialog</code> controller — Esc, backdrop-dismiss and focus-trap are free. Click to open.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3 rounded-panel border border-line bg-card p-6">
+      <%= render "shared/modal", title: "Edit — Planned", trigger_label: "Open modal" %>
+      <%= render "shared/drawer", title: "Characters", trigger_label: "Open drawer" %>
+      <%= render "shared/sheet", title: "Filters", trigger_label: "Open sheet" %>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:overlays] %>
+  </section>
+
+  <%# ── Hotwire ─────────────────────────────────────────────────────────── %>
+  <section id="hotwire" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Hotwire patterns</h2>
+      <p class="text-text-dim">Reference snippets for when character/skill screens are built — a lazy Turbo Frame modal and a Turbo Stream stat update.</p>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:turbo_frame] %>
+    <%= render "docs/snippet", code: @snippets[:turbo_stream] %>
+  </section>
+</div>
