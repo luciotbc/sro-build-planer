@@ -4,33 +4,63 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SRO Lab — Design System</title>
+
+<!-- Brand favicon: the brass S-emblem, vector first with a raster fallback. -->
+<link rel="icon" href="design-system/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="design-system/logo.png" sizes="any">
+<link rel="apple-touch-icon" href="design-system/logo.png">
+
+<!-- Type -->
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+
+<!-- Tailwind v4 (browser build) — defines the LIVE token engine for this page. -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style type="text/tailwindcss">
+  /* ── SRO Lab design tokens — the single source of truth ──────────────────
+     Defined once here; Tailwind emits both utilities (bg-card, text-brass,
+     rounded-panel…) and the var(--color-*) / var(--radius-*) this page's CSS
+     reuses. Mirrors rails/app/assets/stylesheets/application.tailwind.css.
+     `static` keeps every token in :root even when a utility isn't used, so the
+     page's var(--color-*) references always resolve. */
+  @theme static {
+    /* Surfaces */
+    --color-bg:        #0c0e12;
+    --color-card:      #15181f;
+    --color-card-hi:   #1c2029;
+    --color-line:      #262a33;
+    /* Text */
+    --color-text:      #e6e8ec;
+    --color-text-dim:  #8b919e;
+    --color-text-mute: #5c6270;
+    /* Brand (brass) */
+    --color-brass:     #d4a847;
+    --color-brass-hi:  #f4d878;
+    --color-brass-dk:  #6b4a18;
+    /* Semantic */
+    --color-blue:      #4ea3ff;
+    --color-red:       #e85a4a;
+    --color-green:     #38b676;
+    /* Radius */
+    --radius-field:    10px;
+    --radius-control:  12px;
+    --radius-tab:      14px;
+    --radius-panel:    18px;
+    /* Type + touch */
+    --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --spacing-tap: 44px;
+  }
+</style>
+
 <link rel="stylesheet" href="design-system/ds-styles.css">
 </head>
 <body>
-
-<template id="__bundler_thumbnail" data-bg-color="#0c0e12">
-  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-    <rect width="1200" height="800" fill="#0c0e12"/>
-    <rect x="470" y="300" width="120" height="120" rx="28" fill="url(#g)"/>
-    <text x="530" y="388" font-family="Inter,system-ui,sans-serif" font-size="78" font-weight="900" fill="#0c0e12" text-anchor="middle">S</text>
-    <text x="630" y="470" font-family="Inter,system-ui,sans-serif" font-size="40" font-weight="800" fill="#f4d878" text-anchor="middle" letter-spacing="-1">SRO Lab</text>
-    <text x="630" y="512" font-family="Inter,system-ui,sans-serif" font-size="20" font-weight="600" fill="#5c6270" text-anchor="middle" letter-spacing="2">DESIGN SYSTEM</text>
-    <defs>
-      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#d4a847"/>
-        <stop offset="1" stop-color="#6b4a18"/>
-      </linearGradient>
-    </defs>
-  </svg>
-</template>
 
 <!-- ───────── Top bar ───────── -->
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand">
-      <span class="brand-mark">S</span>
+      <span class="brand-mark"><img src="design-system/logo.svg" alt="SRO Lab"></span>
       <span>SRO Lab</span>
       <span class="brand-sub">· Design System</span>
     </div>
@@ -50,11 +80,11 @@
     <div class="hero-kicker">Skill Planner UI Kit</div>
     <h1>A dark, <em>brass-on-charcoal</em><br>system for Rails&nbsp;&amp;&nbsp;Hotwire.</h1>
     <p>Every token, partial and controller below is lifted straight from the live
-       Skill Planner. Tokens are defined once in a Tailwind&nbsp;4 <code style="font-family:var(--mono);color:var(--brass-hi)">@theme</code>
-       block and become utilities; components ship as plain <code style="font-family:var(--mono);color:var(--brass-hi)">app/views/shared</code>
+       Skill Planner. Tokens are defined once in a Tailwind&nbsp;4 <code>@theme</code>
+       block and become utilities; components ship as plain <code>app/views/shared</code>
        partials with Stimulus behaviour and Turbo wiring. Copy any block and paste it into your app.</p>
     <div class="hero-meta">
-      <span class="chip"><b>11</b>&nbsp;color tokens</span>
+      <span class="chip"><b>12</b>&nbsp;color tokens</span>
       <span class="chip"><b>9</b>&nbsp;ERB partials</span>
       <span class="chip"><b>3</b>&nbsp;Stimulus controllers</span>
       <span class="chip"><b>2</b>&nbsp;Turbo patterns</span>
@@ -67,6 +97,7 @@
     <a href="#color">Color</a>
     <a href="#type">Type</a>
     <a href="#radius">Radius</a>
+    <a href="#logo">Logo</a>
     <a href="#buttons">Buttons</a>
     <a href="#topbar">Top bar</a>
     <a href="#tabs">Tabs</a>
@@ -85,11 +116,7 @@
         <div class="sec-num">01 — FOUNDATION</div>
         <h2 class="sec-title">Setup &amp; tokens</h2>
       </div>
-      <p class="sec-desc">One CSS entrypoint. The <code style="font-family:var(--mono);color:var(--brass-hi)">@theme</code>
-        block defines design tokens that Tailwind compiles into utilities — so
-        <code style="font-family:var(--mono);color:var(--brass-hi)">bg-card</code>,
-        <code style="font-family:var(--mono);color:var(--brass-hi)">text-brass</code> and
-        <code style="font-family:var(--mono);color:var(--brass-hi)">rounded-panel</code> all just work.</p>
+      <p class="sec-desc">One CSS entrypoint. The <code>@theme</code> block defines design tokens that Tailwind compiles into utilities — so <code>bg-card</code>, <code>text-brass</code> and <code>rounded-panel</code> all just work. This very page loads that same block live.</p>
     </div>
     <div class="spec">
       <div class="code">
@@ -99,90 +126,12 @@
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="rails/app/assets/stylesheets/application.tailwind.css" data-lang="css" data-inline><pre><code>/* =============================================================================
-   SRO Lab — Design System tokens (Tailwind v4, CSS-first)
-   Import this as your single Tailwind entrypoint. Every token below becomes a
-   utility: --color-brass → bg-brass / text-brass / border-brass, etc.
-   ============================================================================= */
-
-@import "tailwindcss";
-
-/* Pull Inter in (or self-host via @font-face for production). */
-@import url("https://rsms.me/inter/inter.css");
-
-@theme {
-  /* ── Surfaces ─────────────────────────────────────────────────────────── */
-  --color-bg:        #0c0e12;   /* app background            → bg-bg          */
-  --color-card:      #15181f;   /* default panel             → bg-card        */
-  --color-card-hi:   #1c2029;   /* raised panel / inset      → bg-card-hi     */
-  --color-line:      #262a33;   /* hairline borders          → border-line    */
-
-  /* ── Text ─────────────────────────────────────────────────────────────── */
-  --color-text:      #e6e8ec;   /* primary copy              → text-text      */
-  --color-text-dim:  #8b919e;   /* secondary / labels        → text-text-dim  */
-  --color-text-mute: #5c6270;   /* tertiary / disabled       → text-text-mute */
-
-  /* ── Brand (brass) ────────────────────────────────────────────────────── */
-  --color-brass:     #d4a847;   /* primary accent            → text-brass     */
-  --color-brass-hi:  #f4d878;   /* highlight / planned value → text-brass-hi  */
-
-  /* ── Semantic ─────────────────────────────────────────────────────────── */
-  --color-blue:      #4ea3ff;
-  --color-red:       #e85a4a;   /* destructive / decrease    */
-  --color-green:     #38b676;   /* positive delta / increase */
-
-  /* ── Radius ───────────────────────────────────────────────────────────── */
-  --radius-field:    10px;      /* inputs, small buttons     → rounded-field  */
-  --radius-control:  12px;      /* step buttons, chips       → rounded-control*/
-  --radius-tab:      14px;      /* tab wells, identity bar   → rounded-tab     */
-  --radius-panel:    18px;      /* cards, modals, drawers    → rounded-panel   */
-
-  /* ── Type family ──────────────────────────────────────────────────────── */
-  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-
-  /* ── Min hit target (touch) ───────────────────────────────────────────── */
-  --spacing-tap: 44px;          /* min-h-tap / w-tap                          */
-}
-
-/* App-level base: the radial backdrop both screens share. */
-@layer base {
-  html, body {
-    background: var(--color-bg);
-    color: var(--color-text);
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-  }
-  body {
-    min-height: 100vh;
-    background:
-      radial-gradient(1200px 800px at 50% -10%, #1a1d24 0%, #0c0e12 60%);
-  }
-  /* Tabular numerals everywhere we show levels / points. */
-  .tnum { font-variant-numeric: tabular-nums; }
-}
-
-/* =============================================================================
-   Component shorthands (@utility) — optional sugar so partials stay readable.
-   Each is just the utility recipe captured once; use them or inline the classes.
-   ============================================================================= */
-
-@utility btn-primary {
-  @apply inline-flex items-center justify-center rounded-field min-h-tap px-4 py-[9px]
-         text-[13px] font-extrabold tracking-[0.2px] text-bg cursor-pointer
-         bg-gradient-to-b from-brass-hi to-brass;
-}
-@utility btn-ghost {
-  @apply inline-flex items-center justify-center rounded-field min-h-tap px-4 py-[9px]
-         text-[13px] font-semibold text-text cursor-pointer
-         bg-card border border-line hover:bg-card-hi;
-}</code></pre></div>
+          <div class="code-pane on" data-src="design-system/rails/app/assets/stylesheets/application.tailwind.css" data-lang="css"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
     <div class="callout"><span class="ic">i</span>
-      <span><b>Why CSS-first?</b> Tailwind 4 reads tokens from <code style="font-family:var(--mono);color:var(--brass-hi)">@theme</code> rather than a JS config.
-        Keeping the original <code style="font-family:var(--mono);color:var(--brass-hi)">--color-*</code> names means existing inline
-        <code style="font-family:var(--mono);color:var(--brass-hi)">var(--brass)</code> references keep resolving during migration.</span>
+      <span><b>Why CSS-first?</b> Tailwind 4 reads tokens from <code>@theme</code> rather than a JS config. Keeping the original <code>--color-*</code> names means existing inline <code>var(--color-brass)</code> references keep resolving during migration.</span>
     </div>
   </section>
 
@@ -193,11 +142,11 @@
         <div class="sec-num">02 — FOUNDATION</div>
         <h2 class="sec-title">Color</h2>
       </div>
-      <p class="sec-desc">Four charcoal surfaces, a three-step text ramp, the brass brand pair, and three semantics. White is reserved for "current" values; brass for "planned".</p>
+      <p class="sec-desc">Four charcoal surfaces, a three-step text ramp, the brass brand trio, and three semantics. White is reserved for "current" values; brass for "planned".</p>
     </div>
     <div class="preview col">
-      <div class="pv-note">// utility names shown below each chip — e.g. bg-card / text-brass / border-line</div>
-      <div class="swatch-grid" id="swatches"></div>
+      <div class="pv-note">// utility name shown under each chip — e.g. bg-card / text-brass / border-line</div>
+      <div class="swatch-board" id="swatches"></div>
     </div>
   </section>
 
@@ -214,7 +163,7 @@
       <div class="type-grid">
         <div class="type-row">
           <span class="type-spec"><b>Display</b><br>24px · 800 · -0.5px</span>
-          <span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:var(--brass-hi)">BuckTBC</span>
+          <span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:var(--color-brass-hi)">BuckTBC</span>
         </div>
         <div class="type-row">
           <span class="type-spec"><b>Stat value</b><br>26px · 800 · tnum</span>
@@ -226,11 +175,11 @@
         </div>
         <div class="type-row">
           <span class="type-spec"><b>Label</b><br>11–14px · 700 · 0.6px · UPPER</span>
-          <span style="font-size:11px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:var(--text-dim)">Skill points</span>
+          <span style="font-size:11px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:var(--color-text-dim)">Skill points</span>
         </div>
         <div class="type-row">
           <span class="type-spec"><b>Micro</b><br>11px · 700 · pills</span>
-          <span style="font-size:11px;font-weight:700;color:var(--text-mute)">Lv 110 · 32 skills</span>
+          <span style="font-size:11px;font-weight:700;color:var(--color-text-mute)">Lv 110 · 32 skills</span>
         </div>
       </div>
     </div>
@@ -243,15 +192,78 @@
         <div class="sec-num">04 — FOUNDATION</div>
         <h2 class="sec-title">Radius &amp; surfaces</h2>
       </div>
-      <p class="sec-desc">A four-step radius scale maps to roles. Panels nest: <code style="font-family:var(--mono);color:var(--brass-hi)">card</code> holds <code style="font-family:var(--mono);color:var(--brass-hi)">card-hi</code> insets, separated only by <code style="font-family:var(--mono);color:var(--brass-hi)">line</code> hairlines.</p>
+      <p class="sec-desc">A four-step radius scale maps to roles. The demo squares below carry real Tailwind <code>rounded-*</code> utilities generated from the <code>@theme</code> radius tokens.</p>
     </div>
     <div class="preview">
       <div class="radius-grid">
-        <div class="radius-demo"><div class="radius-box" style="border-radius:10px"></div><div class="radius-cap"><b>rounded-field</b>10px · inputs</div></div>
-        <div class="radius-demo"><div class="radius-box" style="border-radius:12px"></div><div class="radius-cap"><b>rounded-control</b>12px · steppers</div></div>
-        <div class="radius-demo"><div class="radius-box" style="border-radius:14px"></div><div class="radius-cap"><b>rounded-tab</b>14px · wells</div></div>
-        <div class="radius-demo"><div class="radius-box" style="border-radius:18px"></div><div class="radius-cap"><b>rounded-panel</b>18px · cards</div></div>
+        <div class="radius-demo"><div class="radius-box rounded-field"></div><div class="radius-cap"><b>rounded-field</b>10px · inputs</div></div>
+        <div class="radius-demo"><div class="radius-box rounded-control"></div><div class="radius-cap"><b>rounded-control</b>12px · steppers</div></div>
+        <div class="radius-demo"><div class="radius-box rounded-tab"></div><div class="radius-cap"><b>rounded-tab</b>14px · wells</div></div>
+        <div class="radius-demo"><div class="radius-box rounded-panel"></div><div class="radius-cap"><b>rounded-panel</b>18px · cards</div></div>
       </div>
+    </div>
+  </section>
+
+  <!-- ───────── Logo & favicon ───────── -->
+  <section class="block" id="logo">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">05 — IDENTITY</div>
+        <h2 class="sec-title">Logo &amp; favicon</h2>
+      </div>
+      <p class="sec-desc">A single brass S-emblem — a faceted hex gem — carries the whole brand. Ships as <code>logo.svg</code> (scales to any size) with a <code>logo.png</code> raster fallback and an SVG <code>favicon</code>.</p>
+    </div>
+
+    <div class="spec">
+      <div class="preview center">
+        <div class="logo-board">
+          <div class="logo-size"><img src="design-system/logo.svg" width="120" alt="SRO Lab logo"><div class="logo-cap">120px</div></div>
+          <div class="logo-size"><img src="design-system/logo.svg" width="64" alt=""><div class="logo-cap">64px</div></div>
+          <div class="logo-size"><img src="design-system/logo.svg" width="40" alt=""><div class="logo-cap">40px</div></div>
+          <div class="logo-size"><img src="design-system/logo.svg" width="24" alt=""><div class="logo-cap">24px</div></div>
+        </div>
+      </div>
+
+      <div class="preview col">
+        <div class="pv-note">// brand lock-up — emblem + wordmark on the three approved backgrounds</div>
+        <div class="lockup-grid">
+          <div class="lockup on-dark"><img src="design-system/logo.svg" alt=""><div class="lockup-name">SRO&nbsp;Lab<span>on bg</span></div></div>
+          <div class="lockup on-card"><img src="design-system/logo.svg" alt=""><div class="lockup-name">SRO&nbsp;Lab<span>on card-hi</span></div></div>
+          <div class="lockup on-brass"><img src="design-system/logo.png" alt=""><div class="lockup-name">SRO&nbsp;Lab<span>on brass</span></div></div>
+        </div>
+      </div>
+
+      <div class="preview col">
+        <div class="pv-note">// favicon — renders crisp at tab scale (16px) and as a 512px touch icon</div>
+        <div class="favicon-row">
+          <span class="fav-tab"><img src="design-system/favicon.svg" alt=""> SRO Lab — Design System</span>
+          <span class="fav-dot"><img src="design-system/favicon.svg" alt=""></span>
+          <span class="logo-cap">favicon.svg · 16px</span>
+        </div>
+      </div>
+
+      <div class="code">
+        <div class="code-head">
+          <button class="code-tab on">Favicon &amp; touch icon</button>
+          <button class="code-tab">Inline brand mark</button>
+          <span class="code-path">app/views/layouts/application.html.erb</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="code-body">
+          <div class="code-pane on" data-src="layout head" data-lang="html" data-inline><pre><code>&lt;%# &lt;head&gt; — brand favicon: vector first, raster fallback, touch icon %&gt;
+&lt;link rel="icon" href="&lt;%= asset_path "design-system/favicon.svg" %&gt;" type="image/svg+xml"&gt;
+&lt;link rel="alternate icon" href="&lt;%= asset_path "design-system/logo.png" %&gt;" sizes="any"&gt;
+&lt;link rel="apple-touch-icon" href="&lt;%= asset_path "design-system/logo.png" %&gt;"&gt;</code></pre></div>
+          <div class="code-pane" data-src="brand mark" data-lang="erb" data-inline><pre><code>&lt;%# Emblem lock-up reused by the top bar and the splash %&gt;
+&lt;%= link_to root_path, class: "flex items-center gap-2.5 font-bold text-base" do %&gt;
+  &lt;%= image_tag "design-system/logo.svg", alt: "SRO Lab", class: "h-7 w-7" %&gt;
+  &lt;span&gt;SRO Lab&lt;/span&gt;
+&lt;% end %&gt;</code></pre></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout"><span class="ic">i</span>
+      <span><b>Asset paths.</b> <code>logo.svg</code>, <code>logo.png</code> and <code>favicon.svg</code> live in <span class="kbd">app/assets/images</span>. The SVG is the master — the PNG (512px, transparent) is only for surfaces that can't render SVG, like the touch icon.</span>
     </div>
   </section>
 
@@ -259,7 +271,7 @@
   <section class="block" id="buttons">
     <div class="sec-head">
       <div>
-        <div class="sec-num">05 — COMPONENT</div>
+        <div class="sec-num">06 — COMPONENT</div>
         <h2 class="sec-title">Buttons</h2>
       </div>
       <p class="sec-desc">One partial, three variants. Brass-gradient primary, carded ghost, square icon. All clear the 44px touch target.</p>
@@ -279,38 +291,7 @@
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="rails/app/views/shared/_button.html.erb" data-lang="erb" data-inline><pre><code>&lt;%#
-  shared/button — primary | ghost | icon
-  --------------------------------------------------------------------------
-  locals:
-    label:   String (ignored when variant: :icon — pass a block/icon instead)
-    variant: :primary | :ghost | :icon   (default :primary)
-    href:    String  → renders an &lt;a&gt;; otherwise a &lt;button&gt;
-    type:    String  → button type        (default "button")
-    block:   Bool    → full-width          (default false)
-    html:    Hash    → extra attrs merged onto the element (data-*, aria-*, etc.)
-  --------------------------------------------------------------------------
-  Examples:
-    &lt;%= render "shared/button", label: "Edit Planned" %&gt;
-    &lt;%= render "shared/button", label: "Cancel", variant: :ghost %&gt;
-    &lt;%= render "shared/button", variant: :icon, html: { "aria-label": "Close" } do %&gt;×&lt;% end %&gt;
-%&gt;
-&lt;% variant ||= :primary
-   html  ||= {}
-   recipe = {
-     primary: "btn-primary",
-     ghost:   "btn-ghost",
-     icon:    "inline-flex items-center justify-center w-9 h-9 rounded-field " \
-              "bg-card border border-line text-text-dim hover:text-text hover:bg-card-hi cursor-pointer",
-   }
-   classes = ["transition", recipe[variant], (local_assigns[:block] ? "w-full" : nil), html.delete(:class)].compact.join(" ")
-   tag_name = local_assigns[:href].present? ? :a : :button
-   attrs = { class: classes }
-   attrs[:href] = href if tag_name == :a
-   attrs[:type] = (local_assigns[:type] || "button") if tag_name == :button
-   attrs.merge!(html)
-%&gt;
-&lt;%= content_tag tag_name, attrs do %&gt;&lt;%= block_given? ? yield : label %&gt;&lt;% end %&gt;</code></pre></div>
+          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_button.html.erb" data-lang="erb"><pre><code></code></pre></div>
           <div class="code-pane" data-src="utility recipe" data-lang="css" data-inline><pre><code>/* application.tailwind.css — shorthand used by the partial */
 @utility btn-primary {
   @apply inline-flex items-center justify-center rounded-field
@@ -333,16 +314,16 @@
   <section class="block" id="topbar">
     <div class="sec-head">
       <div>
-        <div class="sec-num">06 — COMPONENT</div>
+        <div class="sec-num">07 — COMPONENT</div>
         <h2 class="sec-title">Top bar + brand mark</h2>
       </div>
-      <p class="sec-desc">Sticky, frosted, full-bleed. Brand lock-up on the left, an <code style="font-family:var(--mono);color:var(--brass-hi)">:actions</code> slot on the right that holds the login button or the characters pill.</p>
+      <p class="sec-desc">Sticky, frosted, full-bleed. Brand lock-up on the left, an <code>:actions</code> slot on the right that holds the login button or the characters pill.</p>
     </div>
     <div class="spec">
       <div class="preview col" style="padding:0;overflow:hidden">
-        <div style="background:rgba(12,14,18,0.85);border-bottom:1px solid var(--line);">
+        <div style="background:rgba(12,14,18,0.85);border-bottom:1px solid var(--color-line);">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;">
-            <div class="brand"><span class="brand-mark">S</span><span>Skill Planner</span></div>
+            <div class="brand"><span class="brand-mark"><img src="design-system/logo.svg" alt=""></span><span>SRO Lab</span></div>
             <button class="chars-pill"><span class="lbl">Characters</span><span class="count">3</span></button>
           </div>
         </div>
@@ -354,35 +335,7 @@
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="rails/app/views/shared/_topbar.html.erb" data-lang="erb" data-inline><pre><code>&lt;%#
-  shared/topbar — sticky frosted top bar with brand mark + actions slot
-  --------------------------------------------------------------------------
-  locals:
-    title:   String  (default "Skill Planner")
-    actions: String  rendered HTML for the right side (buttons / chars-pill)
-  Usage:
-    &lt;%= render "shared/topbar", actions: capture { render "shared/button", label: "Log in" } %&gt;
-%&gt;
-&lt;header class="sticky top-0 z-10 border-b border-line
-               bg-bg/85 backdrop-blur-md backdrop-saturate-150"&gt;
-  &lt;div class="mx-auto max-w-[1280px] flex items-center justify-between gap-3 px-4 py-3 md:px-8 md:py-3.5"&gt;
-    &lt;%= link_to root_path, class: "flex items-center gap-2.5 font-bold text-base tracking-[0.2px]" do %&gt;
-      &lt;span class="flex h-7 w-7 items-center justify-center rounded-[7px] text-bg
-                   font-black text-sm bg-gradient-to-br from-brass to-[#6b4a18]"&gt;S&lt;/span&gt;
-      &lt;span&gt;&lt;%= local_assigns[:title] || "Skill Planner" %&gt;&lt;/span&gt;
-    &lt;% end %&gt;
-    &lt;nav class="hidden md:flex flex-1 justify-center gap-1.5"&gt;&lt;%= yield :nav if content_for?(:nav) %&gt;&lt;/nav&gt;
-    &lt;div class="flex items-center gap-2"&gt;&lt;%= local_assigns[:actions] %&gt;&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/header&gt;
-
-&lt;%#  chars-pill — the logged-in account control that lives in :actions  %&gt;
-&lt;%# Re-usable snippet:
-  &lt;button class="flex items-center gap-2 rounded-[999px] bg-card border border-line pl-2.5 pr-1.5 py-1.5 cursor-pointer"&gt;
-    &lt;span class="text-xs text-text-dim"&gt;Characters&lt;/span&gt;
-    &lt;span class="flex h-5 w-5 items-center justify-center rounded-full bg-brass text-bg text-[11px] font-extrabold tnum"&gt;3&lt;/span&gt;
-  &lt;/button&gt;
-%&gt;</code></pre></div>
+          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_topbar.html.erb" data-lang="erb"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
@@ -392,10 +345,10 @@
   <section class="block" id="tabs">
     <div class="sec-head">
       <div>
-        <div class="sec-num">07 — COMPONENT</div>
+        <div class="sec-num">08 — COMPONENT</div>
         <h2 class="sec-title">Tabs — pill &amp; underline</h2>
       </div>
-      <p class="sec-desc">Two variants from one partial. Pills (a well with a raised active chip) pick the mastery type; underline subtabs pick the mastery. Driven by the <code style="font-family:var(--mono);color:var(--brass-hi)">tabs</code> controller, which emits <code style="font-family:var(--mono);color:var(--brass-hi)">tabs:change</code>.</p>
+      <p class="sec-desc">Two variants from one partial. Pills (a well with a raised active chip) pick the mastery type; underline subtabs pick the mastery. Driven by the <code>tabs</code> controller, which emits <code>tabs:change</code>.</p>
     </div>
     <div class="spec">
       <div class="preview col center" style="gap:22px">
@@ -418,84 +371,8 @@
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="rails/app/views/shared/_tabs.html.erb" data-lang="erb" data-inline><pre><code>&lt;%#
-  shared/tabs — pill tabs (mastery types) + underline subtabs (masteries)
-  Driven by the `tabs` Stimulus controller (app/javascript/controllers/tabs_controller.js)
-  --------------------------------------------------------------------------
-  locals:
-    tabs:     Array of { id:, label: }
-    variant:  :pill | :underline       (default :pill)
-    active:   id of the initially active tab   (default first)
-    name:     String — value broadcast on tabs:change (default "tab")
-  --------------------------------------------------------------------------
-  Example:
-    &lt;%= render "shared/tabs", variant: :pill, tabs: [
-          { id: "weapon", label: "Weapon" }, { id: "force", label: "Force" } ] %&gt;
-%&gt;
-&lt;% variant ||= :pill
-   active  ||= tabs.first[:id]
-   name    ||= "tab" %&gt;
-
-&lt;% if variant == :underline %&gt;
-  &lt;div class="flex w-full gap-1"
-       data-controller="tabs" data-tabs-active-class="on"
-       data-tabs-name-value="&lt;%= name %&gt;"&gt;
-    &lt;% tabs.each do |t| %&gt;
-      &lt;button type="button"
-              data-tabs-target="tab" data-tab-id="&lt;%= t[:id] %&gt;"
-              data-action="tabs#select"
-              class="relative flex flex-1 min-w-0 min-h-tap items-center justify-center
-                     text-[13px] font-semibold text-text-mute hover:text-text-dim
-                     [&amp;.on]:text-text
-                     after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2
-                     after:bottom-2 after:h-0.5 after:w-3/5 after:max-w-16 after:rounded-px
-                     after:bg-brass after:opacity-0 [&amp;.on]:after:opacity-100
-                     &lt;%= 'on' if t[:id] == active %&gt;"&gt;
-        &lt;%= t[:label] %&gt;
-      &lt;/button&gt;
-    &lt;% end %&gt;
-  &lt;/div&gt;
-&lt;% else %&gt;
-  &lt;div class="flex gap-1 rounded-field bg-card-hi p-1"
-       data-controller="tabs" data-tabs-active-class="on"
-       data-tabs-name-value="&lt;%= name %&gt;"&gt;
-    &lt;% tabs.each do |t| %&gt;
-      &lt;button type="button"
-              data-tabs-target="tab" data-tab-id="&lt;%= t[:id] %&gt;"
-              data-action="tabs#select"
-              class="flex flex-1 min-h-tap items-center justify-center rounded-[7px]
-                     text-[13px] font-bold text-text-dim
-                     [&amp;.on]:bg-bg [&amp;.on]:text-text [&amp;.on]:shadow-[0_1px_2px_rgba(0,0,0,0.4)]
-                     &lt;%= 'on' if t[:id] == active %&gt;"&gt;
-        &lt;%= t[:label] %&gt;
-      &lt;/button&gt;
-    &lt;% end %&gt;
-  &lt;/div&gt;
-&lt;% end %&gt;</code></pre></div>
-          <div class="code-pane" data-src="rails/app/javascript/controllers/tabs_controller.js" data-lang="js" data-inline><pre><code>import { Controller } from "@hotwired/stimulus"
-
-// Connects to data-controller="tabs"
-// Toggles an active class across [data-tabs-target="tab"] buttons and emits a
-// `tabs:change` event ({ id, name }) other controllers / Turbo Frames can hear.
-//
-//   targets : tab        — each clickable tab button (carries data-tab-id)
-//   classes : active     — class applied to the selected tab (data-tabs-active-class)
-//   values  : name:String— logical group name broadcast on change
-//
-//   &lt;div data-controller="tabs" data-tabs-active-class="on" data-tabs-name-value="group"&gt;
-//     &lt;button data-tabs-target="tab" data-tab-id="weapon" data-action="tabs#select"&gt;Weapon&lt;/button&gt;
-//   &lt;/div&gt;
-export default class extends Controller {
-  static targets = ["tab"]
-  static classes = ["active"]
-  static values  = { name: String }
-
-  select(event) {
-    // 1. move the active class to event.currentTarget
-    // 2. dispatch("change", { detail: { id, name: this.nameValue } })
-    //    → e.g. swap a Turbo Frame's src, or filter a list
-  }
-}</code></pre></div>
+          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_tabs.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="design-system/rails/app/javascript/controllers/tabs_controller.js" data-lang="js"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
@@ -505,10 +382,10 @@ export default class extends Controller {
   <section class="block" id="badges">
     <div class="sec-head">
       <div>
-        <div class="sec-num">08 — COMPONENT</div>
+        <div class="sec-num">09 — COMPONENT</div>
         <h2 class="sec-title">Badges, pills &amp; tags</h2>
       </div>
-      <p class="sec-desc">Tone-driven chips. The <code style="font-family:var(--mono);color:var(--brass-hi)">Current → Planned</code> legend establishes the white/brass language used everywhere else.</p>
+      <p class="sec-desc">Tone-driven chips. The <code>Current → Planned</code> legend establishes the white/brass language used everywhere else.</p>
     </div>
     <div class="spec">
       <div class="preview">
@@ -525,40 +402,7 @@ export default class extends Controller {
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="rails/app/views/shared/_badge.html.erb" data-lang="erb" data-inline><pre><code>&lt;%#
-  shared/badge — pill / tag / legend chip
-  --------------------------------------------------------------------------
-  locals:
-    label:   String
-    tone:    :neutral | :current | :planned | :max | :lock   (default :neutral)
-    html:    Hash extra attrs
-  --------------------------------------------------------------------------
-  Examples:
-    &lt;%= render "shared/badge", label: "Current", tone: :current %&gt;
-    &lt;%= render "shared/badge", label: "MAX",     tone: :max %&gt;
-%&gt;
-&lt;% tone ||= :neutral
-   html ||= {}
-   tones = {
-     neutral: "bg-white/[0.08] text-text",
-     current: "bg-white/[0.08] text-text",
-     planned: "bg-brass-hi/[0.14] text-brass-hi",
-     max:     "bg-brass text-bg",
-     lock:    "bg-white/[0.04] text-text-dim uppercase tracking-[0.6px]",
-   }
-   base = "inline-flex items-center gap-1.5 rounded-[999px] px-2.5 py-1 " \
-          "text-[11px] font-bold tracking-[0.4px]"
-   classes = [base, tones[tone], html.delete(:class)].compact.join(" ")
-%&gt;
-&lt;span class="&lt;%= classes %&gt;" &lt;%= tag.attributes(html) %&gt;&gt;&lt;%= label %&gt;&lt;/span&gt;
-
-&lt;%# Legend chip (Current → Planned) — composed, not a separate partial:
-  &lt;span class="inline-flex items-center gap-1.5 rounded-[999px] bg-card-hi border border-line px-2.5 py-1.5 text-[11px] font-bold"&gt;
-    &lt;span class="text-white"&gt;Current&lt;/span&gt;
-    &lt;span class="text-text-mute"&gt;→&lt;/span&gt;
-    &lt;span class="text-brass-hi"&gt;Planned&lt;/span&gt;
-  &lt;/span&gt;
-%&gt;</code></pre></div>
+          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_badge.html.erb" data-lang="erb"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
@@ -568,19 +412,19 @@ export default class extends Controller {
   <section class="block" id="stats">
     <div class="sec-head">
       <div>
-        <div class="sec-num">09 — COMPONENT</div>
+        <div class="sec-num">10 — COMPONENT</div>
         <h2 class="sec-title">Stat rows</h2>
       </div>
-      <p class="sec-desc">The signature pattern: white <b style="color:#fff">current</b> + green <b style="color:var(--green)">delta</b> = brass <b style="color:var(--brass-hi)">planned</b>. Stack several in a divided card; each row is the unit a Turbo Stream re-renders.</p>
+      <p class="sec-desc">The signature pattern: white <b style="color:#fff">current</b> + green <b style="color:var(--color-green)">delta</b> = brass <b style="color:var(--color-brass-hi)">planned</b>. Stack several in a divided card; each row is the unit a Turbo Stream re-renders.</p>
     </div>
     <div class="spec">
       <div class="preview center">
         <div class="stat-merged">
-          <div class="stat-line"><span class="stat-label" style="text-transform:none;letter-spacing:0">Skill points</span>
+          <div class="stat-line"><span class="stat-label">Skill points</span>
             <span class="stat-eq"><span class="stat-cur">3,210,000</span><span class="stat-op">+</span><span class="stat-delta">3,230,000</span><span class="stat-op">=</span><span class="stat-future">6,440,000</span></span></div>
-          <div class="stat-line"><span class="stat-label" style="text-transform:none;letter-spacing:0">Mastery total</span>
+          <div class="stat-line"><span class="stat-label">Mastery total</span>
             <span class="stat-eq"><span class="stat-cur">210</span><span class="stat-op">+</span><span class="stat-delta">230</span><span class="stat-op">=</span><span class="stat-future">440</span></span></div>
-          <div class="stat-line"><span class="stat-label" style="text-transform:none;letter-spacing:0">Required level</span>
+          <div class="stat-line"><span class="stat-label">Required level</span>
             <span class="stat-eq"><span class="stat-cur">92</span><span class="stat-op">+</span><span class="stat-delta">18</span><span class="stat-op">=</span><span class="stat-future">110</span></span></div>
         </div>
       </div>
@@ -592,36 +436,7 @@ export default class extends Controller {
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="rails/app/views/shared/_stat_row.html.erb" data-lang="erb" data-inline><pre><code>&lt;%#
-  shared/stat_row — "current (+delta) = planned" line
-  The signature pattern of the app: a white current value, green delta, brass total.
-  --------------------------------------------------------------------------
-  locals:
-    label:    String
-    current:  Numeric
-    planned:  Numeric
-    format:   :int | :comma     (default :int)
-  --------------------------------------------------------------------------
-  Wrap several in a divided card:
-    &lt;div class="overflow-hidden rounded-control bg-card-hi border border-line"&gt;
-      &lt;%= render "shared/stat_row", label: "Skill points",  current: 3_210_000, planned: 6_440_000, format: :comma %&gt;
-      &lt;%= render "shared/stat_row", label: "Mastery total", current: 210,       planned: 440 %&gt;
-    &lt;/div&gt;
-%&gt;
-&lt;% fmt   = -&gt;(n) { local_assigns[:format] == :comma ? number_with_delimiter(n) : n }
-   delta = planned - current %&gt;
-&lt;div class="flex flex-wrap items-baseline gap-x-3 gap-y-2.5 border-t border-line px-3.5 py-3.5 first:border-t-0"&gt;
-  &lt;span class="text-sm font-bold uppercase tracking-[0.6px] text-text-dim"&gt;&lt;%= label %&gt;&lt;/span&gt;
-  &lt;span class="ml-auto inline-flex items-baseline gap-2 tnum"&gt;
-    &lt;span class="font-bold text-white"&gt;&lt;%= fmt.(current) %&gt;&lt;/span&gt;
-    &lt;% if delta != 0 %&gt;
-      &lt;span class="text-text-mute font-bold"&gt;&lt;%= delta.positive? ? "+" : "−" %&gt;&lt;/span&gt;
-      &lt;span class="text-[11px] font-bold &lt;%= delta.positive? ? 'text-green' : 'text-red' %&gt;"&gt;&lt;%= fmt.(delta.abs) %&gt;&lt;/span&gt;
-    &lt;% end %&gt;
-    &lt;span class="text-text-mute font-bold"&gt;=&lt;/span&gt;
-    &lt;span class="font-extrabold text-brass-hi"&gt;&lt;%= fmt.(planned) %&gt;&lt;/span&gt;
-  &lt;/span&gt;
-&lt;/div&gt;</code></pre></div>
+          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_stat_row.html.erb" data-lang="erb"><pre><code></code></pre></div>
           <div class="code-pane" data-src="usage" data-lang="erb" data-inline><pre><code>&lt;div id="plan_summary"&gt;
   &lt;div class="overflow-hidden rounded-control bg-card-hi border border-line"&gt;
     &lt;%= render "shared/stat_row", label: "Skill points",
@@ -641,7 +456,7 @@ export default class extends Controller {
   <section class="block" id="identity">
     <div class="sec-head">
       <div>
-        <div class="sec-num">10 — COMPONENT</div>
+        <div class="sec-num">11 — COMPONENT</div>
         <h2 class="sec-title">Character identity bar</h2>
       </div>
       <p class="sec-desc">Crest avatar, name in brass, race + level cap. Shared verbatim by the home hero and the editor header so the two screens read as one product.</p>
@@ -669,36 +484,7 @@ export default class extends Controller {
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="rails/app/views/shared/_char_bar.html.erb" data-lang="erb" data-inline><pre><code>&lt;%#
-  shared/char_bar — character identity bar (avatar + name + race + level cap)
-  --------------------------------------------------------------------------
-  locals:
-    name:       String
-    race:       String   ("Chinese" / "European")
-    level_cap:  Integer
-    glyph:      String   inline SVG / image_tag for the race crest (optional)
-  --------------------------------------------------------------------------
-  Example:
-    &lt;%= render "shared/char_bar", name: "BuckTBC", race: "Chinese", level_cap: 110 %&gt;
-%&gt;
-&lt;div class="flex flex-wrap items-center justify-between gap-x-5 gap-y-3.5
-            rounded-tab bg-card-hi border border-line px-4 py-3.5"&gt;
-  &lt;div class="flex shrink-0 items-center gap-3.5 min-w-0"&gt;
-    &lt;span class="flex h-13 w-13 shrink-0 items-center justify-center rounded-full
-                 shadow-[0_0_0_3px_var(--color-brass)_inset,0_0_0_1px_rgba(0,0,0,0.6),0_0_14px_rgba(212,168,71,0.25)]"
-          style="background:radial-gradient(circle at 50% 40%, rgba(139,31,31,0.5), var(--color-card));width:52px;height:52px;"&gt;
-      &lt;%= local_assigns[:glyph] %&gt;
-    &lt;/span&gt;
-    &lt;div class="flex flex-col gap-px min-w-0"&gt;
-      &lt;h1 class="text-2xl font-extrabold leading-[1.1] tracking-[-0.5px] text-brass-hi"&gt;&lt;%= name %&gt;&lt;/h1&gt;
-      &lt;span class="text-[13px] font-bold tracking-[0.2px] text-text-mute"&gt;&lt;%= race %&gt;&lt;/span&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-  &lt;div class="inline-flex shrink-0 items-baseline gap-2"&gt;
-    &lt;span class="text-[13px] font-bold uppercase tracking-[0.5px] text-text-dim"&gt;Level&amp;nbsp;Cap&lt;/span&gt;
-    &lt;span class="text-[26px] font-extrabold tracking-[-0.5px] text-white tnum"&gt;&lt;%= level_cap %&gt;&lt;/span&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</code></pre></div>
+          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_char_bar.html.erb" data-lang="erb"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
@@ -708,10 +494,10 @@ export default class extends Controller {
   <section class="block" id="skillrow">
     <div class="sec-head">
       <div>
-        <div class="sec-num">11 — COMPONENT</div>
+        <div class="sec-num">12 — COMPONENT</div>
         <h2 class="sec-title">Skill row + stepper</h2>
       </div>
-      <p class="sec-desc">Icon, name, brass level, and a − / + stepper (brass primary on +). Each row is a <code style="font-family:var(--mono);color:var(--brass-hi)">dom_id</code> target so a Turbo Stream can swap it after the server clamps the level.</p>
+      <p class="sec-desc">Icon, name, brass level, and a − / + stepper (brass primary on +). Each row is a <code>dom_id</code> target so a Turbo Stream can swap it after the server clamps the level.</p>
     </div>
     <div class="spec">
       <div class="preview center">
@@ -748,84 +534,8 @@ export default class extends Controller {
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="rails/app/views/shared/_skill_row.html.erb" data-lang="erb" data-inline><pre><code>&lt;%#
-  shared/skill_row — skill icon + name + level, with − / + stepper
-  Driven by the `stepper` Stimulus controller. Each row is self-contained so it
-  can be swapped by a Turbo Stream after a server-side level change.
-  --------------------------------------------------------------------------
-  locals:
-    skill:  an object/hash responding to id, name, level, max
-  --------------------------------------------------------------------------
-  Wrap rows inside a series card:
-    &lt;div class="overflow-hidden rounded-tab bg-card-hi"&gt;
-      &lt;%= render partial: "shared/skill_row", collection: @skills, as: :skill %&gt;
-    &lt;/div&gt;
-%&gt;
-&lt;% maxed = skill[:level] &gt;= skill[:max] %&gt;
-&lt;div id="skill_&lt;%= skill[:id] %&gt;"
-     class="flex min-h-16 items-center gap-3 border-t border-line px-3.5 py-2.5 first:border-t-0"
-     data-controller="stepper"
-     data-stepper-level-value="&lt;%= skill[:level] %&gt;"
-     data-stepper-max-value="&lt;%= skill[:max] %&gt;"
-     data-stepper-url-value="&lt;%= skill_path(skill[:id]) %&gt;"&gt;
-
-  &lt;button type="button"
-          class="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-control cursor-pointer
-                 bg-gradient-to-b from-[#0a0a0b] to-[#161618]
-                 shadow-[0_0_0_1px_#6b5a30_inset,0_0_0_2px_#000_inset]
-                 hover:shadow-[0_0_0_1px_var(--color-brass-hi)_inset,0_0_0_2px_#000_inset]"
-          data-action="stepper#info"&gt;
-    &lt;%= image_tag skill[:icon], class: "h-9 w-9 rounded-md", alt: "" if skill[:icon] %&gt;
-  &lt;/button&gt;
-
-  &lt;div class="flex min-w-0 flex-1 flex-col gap-[3px]"&gt;
-    &lt;span class="text-sm font-semibold text-text"&gt;&lt;%= skill[:name] %&gt;&lt;/span&gt;
-    &lt;span class="flex items-center gap-1.5 text-[13px]"&gt;
-      &lt;span class="text-[15px] font-extrabold text-brass-hi tnum" data-stepper-target="level"&gt;&lt;%= skill[:level] %&gt;&lt;/span&gt;
-      &lt;% if maxed %&gt;&lt;span class="ml-1.5 rounded px-1.5 py-px text-[10px] font-extrabold tracking-[0.4px] bg-brass text-bg"&gt;MAX&lt;/span&gt;&lt;% end %&gt;
-    &lt;/span&gt;
-  &lt;/div&gt;
-
-  &lt;div class="flex shrink-0 items-center gap-2"&gt;
-    &lt;button type="button" data-action="stepper#dec" data-stepper-target="dec"
-            class="flex h-11 w-11 items-center justify-center rounded-control cursor-pointer select-none
-                   bg-card-hi border border-line text-text text-xl font-extrabold
-                   hover:bg-card hover:border-[#3a3f4b] active:scale-95"&gt;−&lt;/button&gt;
-    &lt;button type="button" data-action="stepper#inc" data-stepper-target="inc"
-            class="flex h-11 w-11 items-center justify-center rounded-control cursor-pointer select-none
-                   border-0 text-bg text-xl font-extrabold bg-gradient-to-b from-brass-hi to-brass
-                   active:scale-95"&gt;+&lt;/button&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</code></pre></div>
-          <div class="code-pane" data-src="rails/app/javascript/controllers/stepper_controller.js" data-lang="js" data-inline><pre><code>import { Controller } from "@hotwired/stimulus"
-
-// Connects to data-controller="stepper"
-// Drives a skill row's − / + buttons. Optimistically updates the level label,
-// clamps to [0, max], disables buttons at the bounds, then PATCHes the server.
-// The server may reply with a Turbo Stream that replaces #skill_&lt;id&gt; and the
-// summary totals — see hotwire/turbo_stream_stats.turbo_stream.erb.
-//
-//   targets : level, inc, dec
-//   values  : level:Number, max:Number, url:String
-//
-//   &lt;div data-controller="stepper"
-//        data-stepper-level-value="9" data-stepper-max-value="42"
-//        data-stepper-url-value="/skills/42"&gt;
-export default class extends Controller {
-  static targets = ["level", "inc", "dec"]
-  static values  = { level: Number, max: Number, url: String }
-
-  inc()  { /* this.set(this.levelValue + 1) */ }
-  dec()  { /* this.set(this.levelValue - 1) */ }
-  info() { /* open the skill info sheet */ }
-
-  set(next) {
-    // clamp 0..max, write levelTarget.textContent, toggle disabled at bounds,
-    // then: patch(this.urlValue, { level: next }) with the Turbo Stream accept header.
-  }
-
-  levelValueChanged() { /* sync UI when value changes from outside (Turbo) */ }
-}</code></pre></div>
+          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_skill_row.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="design-system/rails/app/javascript/controllers/stepper_controller.js" data-lang="js"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
@@ -835,47 +545,44 @@ export default class extends Controller {
   <section class="block" id="overlays">
     <div class="sec-head">
       <div>
-        <div class="sec-num">12 — COMPONENT</div>
+        <div class="sec-num">13 — COMPONENT</div>
         <h2 class="sec-title">Overlays — modal · drawer · sheet</h2>
       </div>
-      <p class="sec-desc">All three are native <code style="font-family:var(--mono);color:var(--brass-hi)">&lt;dialog&gt;</code> elements sharing the <code style="font-family:var(--mono);color:var(--brass-hi)">dialog</code> controller, so Esc, backdrop-dismiss and focus-trap are free. Modal centers (full-height on mobile); drawer slides from the right; sheet rises from the bottom.</p>
+      <p class="sec-desc">All three are native <code>&lt;dialog&gt;</code> elements sharing the <code>dialog</code> controller, so Esc, backdrop-dismiss and focus-trap are free. Modal centers (full-height on mobile); drawer slides from the right; sheet rises from the bottom.</p>
     </div>
     <div class="spec">
       <div class="preview" style="gap:24px;align-items:stretch">
-        <!-- modal mini -->
         <div style="flex:1;min-width:220px;display:flex;flex-direction:column;gap:8px">
-          <div style="border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg)">
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line)">
+          <div style="border:1px solid var(--color-line);border-radius:14px;overflow:hidden;background:var(--color-bg)">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--color-line)">
               <span class="icon-btn" style="width:30px;height:30px;font-size:15px">←</span>
               <span style="font-size:13px;font-weight:700">Edit — Planned</span>
               <span class="icon-btn" style="width:30px;height:30px;font-size:15px">×</span>
             </div>
             <div style="padding:16px;display:flex;flex-direction:column;gap:8px">
-              <div style="height:8px;width:70%;background:var(--card-hi);border-radius:4px"></div>
-              <div style="height:8px;width:90%;background:var(--card-hi);border-radius:4px"></div>
-              <div style="height:8px;width:55%;background:var(--card-hi);border-radius:4px"></div>
+              <div style="height:8px;width:70%;background:var(--color-card-hi);border-radius:4px"></div>
+              <div style="height:8px;width:90%;background:var(--color-card-hi);border-radius:4px"></div>
+              <div style="height:8px;width:55%;background:var(--color-card-hi);border-radius:4px"></div>
             </div>
           </div>
           <div class="radius-cap" style="text-align:left"><b>shared/modal</b></div>
         </div>
-        <!-- drawer mini -->
         <div style="flex:1;min-width:220px;display:flex;flex-direction:column;gap:8px">
-          <div style="border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg);display:flex;justify-content:flex-end">
-            <div style="width:62%;border-left:1px solid var(--line);padding:12px;display:flex;flex-direction:column;gap:8px">
+          <div style="border:1px solid var(--color-line);border-radius:14px;overflow:hidden;background:var(--color-bg);display:flex;justify-content:flex-end">
+            <div style="width:62%;border-left:1px solid var(--color-line);padding:12px;display:flex;flex-direction:column;gap:8px">
               <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:700">Characters</span><span class="icon-btn" style="width:26px;height:26px;font-size:13px">×</span></div>
-              <div style="height:34px;background:var(--card);border-radius:10px"></div>
-              <div style="height:34px;background:var(--card);border-radius:10px"></div>
+              <div style="height:34px;background:var(--color-card);border-radius:10px"></div>
+              <div style="height:34px;background:var(--color-card);border-radius:10px"></div>
             </div>
           </div>
           <div class="radius-cap" style="text-align:left"><b>shared/drawer</b></div>
         </div>
-        <!-- sheet mini -->
         <div style="flex:1;min-width:220px;display:flex;flex-direction:column;gap:8px">
-          <div style="border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column;justify-content:flex-end">
+          <div style="border:1px solid var(--color-line);border-radius:14px;overflow:hidden;background:var(--color-bg);display:flex;flex-direction:column;justify-content:flex-end">
             <div style="height:30px"></div>
-            <div style="border-top:1px solid var(--line);border-radius:14px 14px 0 0;padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--card-hi)">
+            <div style="border-top:1px solid var(--color-line);border-radius:14px 14px 0 0;padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--color-card-hi)">
               <div style="font-size:13px;font-weight:800">Cyclone III</div>
-              <div style="height:8px;width:80%;background:var(--card);border-radius:4px"></div>
+              <div style="height:8px;width:80%;background:var(--color-card);border-radius:4px"></div>
               <button class="btn-primary" style="min-height:34px">Done</button>
             </div>
           </div>
@@ -892,125 +599,10 @@ export default class extends Controller {
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="rails/app/views/shared/_modal.html.erb" data-lang="erb" data-inline><pre><code>&lt;%#
-  shared/modal — centered overlay panel (desktop) / full-height (mobile)
-  Built on the native &lt;dialog&gt; element + `dialog` Stimulus controller so Esc,
-  backdrop-click and focus-trap come for free. Pairs with a Turbo Frame so the
-  editor can be lazy-loaded — see hotwire/turbo_frame_modal.html.erb.
-  --------------------------------------------------------------------------
-  locals:
-    title:  String (optional header label)
-    size:   :md | :lg            (default :md → 420px; :lg → 820px editor)
-  --------------------------------------------------------------------------
-  Usage (static):
-    &lt;%= render "shared/modal", title: "Sign in" do %&gt; …form… &lt;% end %&gt;
-  Usage (Turbo-driven): wrap the &lt;dialog&gt; body in &lt;turbo-frame id="modal"&gt;.
-%&gt;
-&lt;% size ||= :md
-   width = size == :lg ? "md:w-[min(820px,92vw)] md:h-[min(880px,92vh)]" : "md:w-[min(420px,100%)]" %&gt;
-&lt;dialog data-controller="dialog" data-action="click-&gt;dialog#backdropClose close-&gt;dialog#close"
-        class="m-0 w-full max-w-none bg-transparent p-0 backdrop:bg-black/60 backdrop:backdrop-blur-sm
-               open:flex open:flex-col open:items-stretch open:justify-end
-               md:open:items-center md:open:justify-center"&gt;
-  &lt;div class="flex h-full w-full flex-col bg-bg &lt;%= width %&gt;
-              md:h-auto md:rounded-panel md:border md:border-line md:shadow-[0_30px_80px_rgba(0,0,0,0.6)] md:overflow-hidden"
-       data-action="click-&gt;dialog#stop"&gt;
-    &lt;header class="flex shrink-0 items-center justify-between gap-3 border-b border-line px-4 py-3
-                   bg-gradient-to-b from-white/[0.02] to-transparent"&gt;
-      &lt;button type="button" data-action="dialog#close"
-              class="flex h-11 w-11 items-center justify-center rounded-control bg-card border border-line text-text hover:bg-card-hi cursor-pointer"&gt;←&lt;/button&gt;
-      &lt;span class="text-base font-bold tracking-[-0.2px]"&gt;&lt;%= local_assigns[:title] %&gt;&lt;/span&gt;
-      &lt;button type="button" data-action="dialog#close"
-              class="flex h-11 w-11 items-center justify-center rounded-control bg-card border border-line text-text-dim hover:text-text hover:bg-card-hi cursor-pointer" aria-label="Close"&gt;×&lt;/button&gt;
-    &lt;/header&gt;
-    &lt;div class="flex-1 overflow-y-auto p-4 md:px-7 md:py-5"&gt;
-      &lt;%= yield %&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-&lt;/dialog&gt;</code></pre></div>
-          <div class="code-pane" data-src="rails/app/views/shared/_drawer.html.erb" data-lang="erb" data-inline><pre><code>&lt;%#
-  shared/drawer — right-side slide-over (the Characters list)
-  Uses the `dialog` Stimulus controller; slide-in is a CSS animation on [open].
-  --------------------------------------------------------------------------
-  locals:
-    title:  String
-  Usage:
-    &lt;%= render "shared/drawer", title: "Your characters" do %&gt; …rows… &lt;% end %&gt;
-%&gt;
-&lt;dialog data-controller="dialog" data-action="click-&gt;dialog#backdropClose"
-        class="m-0 ml-auto h-full max-h-none w-[min(420px,92vw)] max-w-none bg-bg p-0
-               border-l border-line backdrop:bg-black/50 backdrop:backdrop-blur-sm
-               open:flex open:flex-col animate-[slidein_200ms_ease-out]"
-        data-action="click-&gt;dialog#stop"&gt;
-  &lt;header class="flex items-center justify-between border-b border-line px-4 py-3.5"&gt;
-    &lt;span class="text-base font-bold"&gt;&lt;%= local_assigns[:title] || "Your characters" %&gt;&lt;/span&gt;
-    &lt;button type="button" data-action="dialog#close"
-            class="flex h-9 w-9 items-center justify-center rounded-field bg-card border border-line text-text-dim hover:text-text cursor-pointer" aria-label="Close"&gt;×&lt;/button&gt;
-  &lt;/header&gt;
-  &lt;div class="overflow-y-auto px-2 pb-4 pt-2"&gt;&lt;%= yield %&gt;&lt;/div&gt;
-&lt;/dialog&gt;
-
-&lt;%# A single drawer row (compose inside the body):
-  &lt;button class="flex w-full items-center gap-3 rounded-control px-3 py-2.5 text-left hover:bg-card [&amp;.on]:bg-card"&gt;
-    &lt;span class="flex h-[38px] w-[38px] items-center justify-center rounded-control border border-line"&gt;◆&lt;/span&gt;
-    &lt;span class="min-w-0 flex-1"&gt;
-      &lt;span class="block text-sm font-bold"&gt;BuckTBC&lt;/span&gt;
-      &lt;span class="flex items-center gap-1.5 text-[11px] text-text-dim"&gt;Chinese • Lv 110 • 32 skills&lt;/span&gt;
-    &lt;/span&gt;
-    &lt;%= render "shared/badge", label: "active", tone: :lock %&gt;
-  &lt;/button&gt;
-%&gt;</code></pre></div>
-          <div class="code-pane" data-src="rails/app/views/shared/_sheet.html.erb" data-lang="erb" data-inline><pre><code>&lt;%#
-  shared/sheet — mobile bottom sheet (skill info popover)
-  Anchored to the bottom on phones, centers into a card ≥700px. Same `dialog`
-  controller as modal/drawer.
-  --------------------------------------------------------------------------
-  locals:
-    title:  String
-  Usage:
-    &lt;%= render "shared/sheet", title: "Cyclone III" do %&gt; …details… &lt;% end %&gt;
-%&gt;
-&lt;dialog data-controller="dialog" data-action="click-&gt;dialog#backdropClose"
-        class="m-0 mt-auto w-full max-w-none bg-transparent p-0
-               backdrop:bg-black/60 sm:m-auto sm:max-w-[480px] sm:p-6"&gt;
-  &lt;div class="w-full rounded-t-panel border-t border-line bg-bg p-5
-              sm:rounded-panel sm:border"
-       data-action="click-&gt;dialog#stop"&gt;
-    &lt;% if local_assigns[:title] %&gt;
-      &lt;div class="mb-3.5 text-[17px] font-extrabold tracking-[-0.2px]"&gt;&lt;%= title %&gt;&lt;/div&gt;
-    &lt;% end %&gt;
-    &lt;%= yield %&gt;
-    &lt;button type="button" data-action="dialog#close"
-            class="btn-primary mt-4 w-full"&gt;Done&lt;/button&gt;
-  &lt;/div&gt;
-&lt;/dialog&gt;
-
-&lt;%# Definition rows for the body:
-  &lt;div class="flex justify-between border-b border-line py-2 text-[13px] text-text-dim"&gt;
-    &lt;span&gt;Mastery&lt;/span&gt;&lt;b class="text-text"&gt;Cyclone&lt;/b&gt;
-  &lt;/div&gt;
-%&gt;</code></pre></div>
-          <div class="code-pane" data-src="rails/app/javascript/controllers/dialog_controller.js" data-lang="js" data-inline><pre><code>import { Controller } from "@hotwired/stimulus"
-
-// Connects to data-controller="dialog"
-// Thin wrapper over the native &lt;dialog&gt; element. Powers shared/modal,
-// shared/drawer and shared/sheet — backdrop click, Esc and focus-trap are
-// native; this just opens/closes and stops backdrop bubbling.
-//
-//   connect()        — showModal() if you want it open on render
-//   open()           — el.showModal()
-//   close()          — el.close()  (CSS exit animation can run before remove)
-//   backdropClose(e) — close when the click target IS the &lt;dialog&gt; (the backdrop)
-//   stop(e)          — e.stopPropagation() on the inner panel
-//
-// Turbo tip: render the dialog inside &lt;turbo-frame id="modal"&gt; and call
-// open() on turbo:frame-load so a server response pops the editor automatically.
-export default class extends Controller {
-  open()  { /* this.element.showModal() */ }
-  close() { /* this.element.close() */ }
-  backdropClose(event) { /* if (event.target === this.element) this.close() */ }
-  stop(event) { /* event.stopPropagation() */ }
-}</code></pre></div>
+          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_modal.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="design-system/rails/app/views/shared/_drawer.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="design-system/rails/app/views/shared/_sheet.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="design-system/rails/app/javascript/controllers/dialog_controller.js" data-lang="js"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
@@ -1020,10 +612,10 @@ export default class extends Controller {
   <section class="block" id="hotwire">
     <div class="sec-head">
       <div>
-        <div class="sec-num">13 — PATTERNS</div>
+        <div class="sec-num">14 — PATTERNS</div>
         <h2 class="sec-title">Hotwire — Turbo Frame &amp; Stream</h2>
       </div>
-      <p class="sec-desc">Two end-to-end recipes: the editor pops in a lazy <code style="font-family:var(--mono);color:var(--brass-hi)">&lt;turbo-frame&gt;</code> modal, and stepper changes broadcast a Turbo Stream that swaps the skill row + recomputes the summary totals — no reload.</p>
+      <p class="sec-desc">Two end-to-end recipes: the editor pops in a lazy <code>&lt;turbo-frame&gt;</code> modal, and stepper changes broadcast a Turbo Stream that swaps the skill row + recomputes the summary totals — no reload.</p>
     </div>
     <div class="spec">
       <div class="code">
@@ -1034,90 +626,16 @@ export default class extends Controller {
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="rails/app/views/hotwire/turbo_frame_modal.html.erb" data-lang="erb" data-inline><pre><code>&lt;%#
-  HOTWIRE PATTERN — lazy-loaded editor in a Turbo Frame modal
-  ===========================================================================
-  The home "Skills" card shows read-only levels. "Edit Planned" pops the editor
-  in a modal WITHOUT a full navigation: a permanent &lt;turbo-frame id="modal"&gt;
-  lives in the layout; the link targets it; the controller responds with the
-  modal partial; the dialog controller calls showModal() on frame load.
-  ===========================================================================
-%&gt;
-
-&lt;%# 1. In app/views/layouts/application.html.erb — one persistent frame: %&gt;
-&lt;%#   &lt;turbo-frame id="modal"&gt;&lt;/turbo-frame&gt;                                 %&gt;
-
-&lt;%# 2. The trigger on the home card. data-turbo-frame sends the response into  %&gt;
-&lt;%#    the #modal frame instead of replacing the page.                        %&gt;
-&lt;%= link_to "Edit Planned",
-      edit_character_plan_path(@character, kind: "future"),
-      data: { turbo_frame: "modal" },
-      class: "btn-primary flex-1" %&gt;
-
-&lt;%# 3. PlansController#edit renders ONLY the frame (layout: false is implied   %&gt;
-&lt;%#    when the request targets a frame). app/views/plans/edit.html.erb:       %&gt;
-&lt;turbo-frame id="modal"&gt;
-  &lt;%= render "shared/modal", title: "Edit — Planned", size: :lg do %&gt;
-    &lt;%# the skill editor body: char_bar + tabs + series of skill_row partials %&gt;
-    &lt;%= render "shared/char_bar", name: @character.name, race: @character.race, level_cap: @character.level_cap %&gt;
-    &lt;%= render "shared/tabs", variant: :pill, tabs: @groups %&gt;
-    &lt;div class="mt-3.5 overflow-hidden rounded-tab bg-card-hi"&gt;
-      &lt;%= render partial: "shared/skill_row", collection: @skills, as: :skill %&gt;
-    &lt;/div&gt;
-  &lt;% end %&gt;
-&lt;/turbo-frame&gt;
-
-&lt;%#  4. Auto-open: the dialog controller's connect() calls showModal(); when the
-     user closes, redirect/clear the frame so it can re-open later:
-       Turbo.visit(location.href, { frame: "modal" })  — or render an empty frame.
-%&gt;</code></pre></div>
-          <div class="code-pane" data-src="rails/app/views/hotwire/turbo_stream_stats.turbo_stream.erb" data-lang="erb" data-inline><pre><code>&lt;%#
-  HOTWIRE PATTERN — live "current → planned" stat updates via Turbo Stream
-  ===========================================================================
-  When the stepper PATCHes a skill level, the controller replies with this
-  Turbo Stream. It swaps the single skill row AND re-renders the summary totals
-  in place, so the brass "planned" numbers and green deltas update without a
-  reload. Wrap each updatable region in a dom_id'd container.
-  ===========================================================================
-
-  Controller (app/controllers/skills_controller.rb):
-
-    def update
-      @skill = current_character.skills.find(params[:id])
-      @skill.update!(level: params[:level])
-      @summary = current_character.plan_summary   # { skill_points:, mastery_total:, required_level: }
-      respond_to do |format|
-        format.turbo_stream                       # → this template
-        format.html { redirect_to character_path(current_character) }
-      end
-    end
-%&gt;
-
-&lt;%# Replace just the one skill row that changed (matches id="skill_&lt;id&gt;"). %&gt;
-&lt;%= turbo_stream.replace "skill_#{@skill.id}" do %&gt;
-  &lt;%= render "shared/skill_row", skill: @skill.to_row %&gt;
-&lt;% end %&gt;
-
-&lt;%# Re-render the summary card body so totals + deltas recompute. %&gt;
-&lt;%= turbo_stream.update "plan_summary" do %&gt;
-  &lt;div class="overflow-hidden rounded-control bg-card-hi border border-line"&gt;
-    &lt;%= render "shared/stat_row", label: "Skill points",  current: @summary[:sp_current],  planned: @summary[:sp_planned],  format: :comma %&gt;
-    &lt;%= render "shared/stat_row", label: "Mastery total", current: @summary[:ms_current],  planned: @summary[:ms_planned] %&gt;
-    &lt;%= render "shared/stat_row", label: "Required level", current: @summary[:lv_current],  planned: @summary[:lv_planned] %&gt;
-  &lt;/div&gt;
-&lt;% end %&gt;
-
-&lt;%# On the page, the summary lives in a matching container:
-     &lt;div id="plan_summary"&gt; … &lt;/div&gt;
-%&gt;</code></pre></div>
+          <div class="code-pane on" data-src="design-system/rails/app/views/hotwire/turbo_frame_modal.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="design-system/rails/app/views/hotwire/turbo_stream_stats.turbo_stream.erb" data-lang="erb"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
     <div class="callout"><span class="ic">↳</span>
-      <span><b>Flow:</b> <span class="kbd">Edit Planned</span> link targets <code style="font-family:var(--mono);color:var(--brass-hi)">#modal</code> →
-        controller renders the <code style="font-family:var(--mono);color:var(--brass-hi)">&lt;dialog&gt;</code> partial inside the frame →
-        <code style="font-family:var(--mono);color:var(--brass-hi)">dialog#open</code> fires on frame load. A <span class="kbd">+</span> tap PATCHes,
-        the server replies with the stream above, and <code style="font-family:var(--mono);color:var(--brass-hi)">#plan_summary</code> re-renders in place.</span>
+      <span><b>Flow:</b> <span class="kbd">Edit Planned</span> link targets <code>#modal</code> →
+        controller renders the <code>&lt;dialog&gt;</code> partial inside the frame →
+        <code>dialog#open</code> fires on frame load. A <span class="kbd">+</span> tap PATCHes,
+        the server replies with the stream above, and <code>#plan_summary</code> re-renders in place.</span>
     </div>
   </section>
 
@@ -1129,34 +647,7 @@ export default class extends Controller {
 
 </div>
 
-<script>
-  // Build color swatches from the token table.
-  const TOKENS = [
-    ["Background","bg-bg","#0c0e12"],
-    ["Card","bg-card","#15181f"],
-    ["Card raised","bg-card-hi","#1c2029"],
-    ["Line","border-line","#262a33"],
-    ["Text","text-text","#e6e8ec"],
-    ["Text dim","text-text-dim","#8b919e"],
-    ["Text mute","text-text-mute","#5c6270"],
-    ["Brass","text-brass","#d4a847"],
-    ["Brass hi","text-brass-hi","#f4d878"],
-    ["Blue","text-blue","#4ea3ff"],
-    ["Red","text-red","#e85a4a"],
-    ["Green","text-green","#38b676"],
-  ];
-  const grid = document.getElementById("swatches");
-  grid.innerHTML = TOKENS.map(([name,util,hex]) => `
-    <div class="swatch">
-      <div class="swatch-chip" style="background:${hex}"></div>
-      <div class="swatch-meta">
-        <span class="swatch-name">${name}</span>
-        <span class="swatch-util">${util}</span>
-        <span class="swatch-hex">${hex}</span>
-      </div>
-    </div>`).join("");
-</script>
-<script src="/design-system/ds.js"></script>
+<script src="design-system/ds.js"></script>
 
 </body>
 </html>
