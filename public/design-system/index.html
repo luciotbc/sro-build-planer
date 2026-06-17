@@ -6,13 +6,13 @@
 <title>SRO Lab — Design System</title>
 
 <!-- Brand favicon: the brass S-emblem, vector first with a raster fallback. -->
-<link rel="icon" href="design-system/favicon.svg" type="image/svg+xml">
-<link rel="alternate icon" href="design-system/logo.png" sizes="any">
-<link rel="apple-touch-icon" href="design-system/logo.png">
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="./logo.png" sizes="any">
+<link rel="apple-touch-icon" href="./logo.png">
 
 <!-- Tailwind v4 compiled by tailwindcss-rails — includes SRO Lab design tokens. -->
-<link rel="stylesheet" href="design-system/tailwind.css">
-<link rel="stylesheet" href="design-system/ds-styles.css">
+<link rel="stylesheet" href="./tailwind.css">
+<link rel="stylesheet" href="./ds-styles.css">
 </head>
 <body>
 
@@ -20,7 +20,7 @@
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand">
-      <span class="brand-mark"><img src="design-system/logo.svg" alt="SRO Lab"></span>
+      <span class="brand-mark"><img src="./logo.svg" alt="SRO Lab"></span>
       <span>SRO Lab</span>
       <span class="brand-sub">· Design System</span>
     </div>
@@ -86,7 +86,7 @@
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="design-system/rails/app/assets/stylesheets/application.tailwind.css" data-lang="css"><pre><code></code></pre></div>
+          <div class="code-pane on" data-src="./rails/app/assets/stylesheets/application.tailwind.css" data-lang="css"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
@@ -177,27 +177,27 @@
     <div class="spec">
       <div class="preview center">
         <div class="logo-board">
-          <div class="logo-size"><img src="design-system/logo.svg" width="120" alt="SRO Lab logo"><div class="logo-cap">120px</div></div>
-          <div class="logo-size"><img src="design-system/logo.svg" width="64" alt=""><div class="logo-cap">64px</div></div>
-          <div class="logo-size"><img src="design-system/logo.svg" width="40" alt=""><div class="logo-cap">40px</div></div>
-          <div class="logo-size"><img src="design-system/logo.svg" width="24" alt=""><div class="logo-cap">24px</div></div>
+          <div class="logo-size"><img src="./logo.svg" width="120" alt="SRO Lab logo"><div class="logo-cap">120px</div></div>
+          <div class="logo-size"><img src="./logo.svg" width="64" alt=""><div class="logo-cap">64px</div></div>
+          <div class="logo-size"><img src="./logo.svg" width="40" alt=""><div class="logo-cap">40px</div></div>
+          <div class="logo-size"><img src="./logo.svg" width="24" alt=""><div class="logo-cap">24px</div></div>
         </div>
       </div>
 
       <div class="preview col">
         <div class="pv-note">// brand lock-up — emblem + wordmark on the three approved backgrounds</div>
         <div class="lockup-grid">
-          <div class="lockup on-dark"><img src="design-system/logo.svg" alt=""><div class="lockup-name">SRO&nbsp;Lab<span>on bg</span></div></div>
-          <div class="lockup on-card"><img src="design-system/logo.svg" alt=""><div class="lockup-name">SRO&nbsp;Lab<span>on card-hi</span></div></div>
-          <div class="lockup on-brass"><img src="design-system/logo.png" alt=""><div class="lockup-name">SRO&nbsp;Lab<span>on brass</span></div></div>
+          <div class="lockup on-dark"><img src="./logo.svg" alt=""><div class="lockup-name">SRO&nbsp;Lab<span>on bg</span></div></div>
+          <div class="lockup on-card"><img src="./logo.svg" alt=""><div class="lockup-name">SRO&nbsp;Lab<span>on card-hi</span></div></div>
+          <div class="lockup on-brass"><img src="./logo.png" alt=""><div class="lockup-name">SRO&nbsp;Lab<span>on brass</span></div></div>
         </div>
       </div>
 
       <div class="preview col">
         <div class="pv-note">// favicon — renders crisp at tab scale (16px) and as a 512px touch icon</div>
         <div class="favicon-row">
-          <span class="fav-tab"><img src="design-system/favicon.svg" alt=""> SRO Lab — Design System</span>
-          <span class="fav-dot"><img src="design-system/favicon.svg" alt=""></span>
+          <span class="fav-tab"><img src="./favicon.svg" alt=""> SRO Lab — Design System</span>
+          <span class="fav-dot"><img src="./favicon.svg" alt=""></span>
           <span class="logo-cap">favicon.svg · 16px</span>
         </div>
       </div>
@@ -211,12 +211,12 @@
         </div>
         <div class="code-body">
           <div class="code-pane on" data-src="layout head" data-lang="html" data-inline><pre><code>&lt;%# &lt;head&gt; — brand favicon: vector first, raster fallback, touch icon %&gt;
-&lt;link rel="icon" href="&lt;%= asset_path "design-system/favicon.svg" %&gt;" type="image/svg+xml"&gt;
-&lt;link rel="alternate icon" href="&lt;%= asset_path "design-system/logo.png" %&gt;" sizes="any"&gt;
-&lt;link rel="apple-touch-icon" href="&lt;%= asset_path "design-system/logo.png" %&gt;"&gt;</code></pre></div>
+&lt;link rel="icon" href="&lt;%= asset_path "./favicon.svg" %&gt;" type="image/svg+xml"&gt;
+&lt;link rel="alternate icon" href="&lt;%= asset_path "./logo.png" %&gt;" sizes="any"&gt;
+&lt;link rel="apple-touch-icon" href="&lt;%= asset_path "./logo.png" %&gt;"&gt;</code></pre></div>
           <div class="code-pane" data-src="brand mark" data-lang="erb" data-inline><pre><code>&lt;%# Emblem lock-up reused by the top bar and the splash %&gt;
 &lt;%= link_to root_path, class: "flex items-center gap-2.5 font-bold text-base" do %&gt;
-  &lt;%= image_tag "design-system/logo.svg", alt: "SRO Lab", class: "h-7 w-7" %&gt;
+  &lt;%= image_tag "./logo.svg", alt: "SRO Lab", class: "h-7 w-7" %&gt;
   &lt;span&gt;SRO Lab&lt;/span&gt;
 &lt;% end %&gt;</code></pre></div>
         </div>
@@ -251,7 +251,7 @@
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_button.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane on" data-src="./rails/app/views/shared/_button.html.erb" data-lang="erb"><pre><code></code></pre></div>
           <div class="code-pane" data-src="utility recipe" data-lang="css" data-inline><pre><code>/* application.tailwind.css — shorthand used by the partial */
 @utility btn-primary {
   @apply inline-flex items-center justify-center rounded-field
@@ -283,7 +283,7 @@
       <div class="preview col" style="padding:0;overflow:hidden">
         <div style="background:rgba(12,14,18,0.85);border-bottom:1px solid var(--color-line);">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;">
-            <div class="brand"><span class="brand-mark"><img src="design-system/logo.svg" alt=""></span><span>SRO Lab</span></div>
+            <div class="brand"><span class="brand-mark"><img src="./logo.svg" alt=""></span><span>SRO Lab</span></div>
             <button class="chars-pill"><span class="lbl">Characters</span><span class="count">3</span></button>
           </div>
         </div>
@@ -295,7 +295,7 @@
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_topbar.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane on" data-src="./rails/app/views/shared/_topbar.html.erb" data-lang="erb"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
@@ -331,8 +331,8 @@
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_tabs.html.erb" data-lang="erb"><pre><code></code></pre></div>
-          <div class="code-pane" data-src="design-system/rails/app/javascript/controllers/tabs_controller.js" data-lang="js"><pre><code></code></pre></div>
+          <div class="code-pane on" data-src="./rails/app/views/shared/_tabs.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="./rails/app/javascript/controllers/tabs_controller.js" data-lang="js"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
@@ -362,7 +362,7 @@
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_badge.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane on" data-src="./rails/app/views/shared/_badge.html.erb" data-lang="erb"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
@@ -396,7 +396,7 @@
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_stat_row.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane on" data-src="./rails/app/views/shared/_stat_row.html.erb" data-lang="erb"><pre><code></code></pre></div>
           <div class="code-pane" data-src="usage" data-lang="erb" data-inline><pre><code>&lt;div id="plan_summary"&gt;
   &lt;div class="overflow-hidden rounded-control bg-card-hi border border-line"&gt;
     &lt;%= render "shared/stat_row", label: "Skill points",
@@ -444,7 +444,7 @@
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_char_bar.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane on" data-src="./rails/app/views/shared/_char_bar.html.erb" data-lang="erb"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
@@ -463,7 +463,7 @@
       <div class="preview center">
         <div class="skill-card">
           <div class="fs-skill-row">
-            <button class="fs-skill-icon"><img src="design-system/assets/skill-a.png" alt=""></button>
+            <button class="fs-skill-icon"><img src="./assets/skill-a.png" alt=""></button>
             <div class="fs-skill-meta">
               <span class="fs-skill-name">Cyclone I</span>
               <span class="fs-skill-level"><span class="fs-level-num">16</span></span>
@@ -474,7 +474,7 @@
             </div>
           </div>
           <div class="fs-skill-row">
-            <button class="fs-skill-icon"><img src="design-system/assets/skill-c.png" alt=""></button>
+            <button class="fs-skill-icon"><img src="./assets/skill-c.png" alt=""></button>
             <div class="fs-skill-meta">
               <span class="fs-skill-name">Cyclone II</span>
               <span class="fs-skill-level"><span class="fs-level-num">42</span><span class="bdg bdg-max" style="margin-left:6px;padding:1px 6px;border-radius:4px;font-size:10px">MAX</span></span>
@@ -494,8 +494,8 @@
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_skill_row.html.erb" data-lang="erb"><pre><code></code></pre></div>
-          <div class="code-pane" data-src="design-system/rails/app/javascript/controllers/stepper_controller.js" data-lang="js"><pre><code></code></pre></div>
+          <div class="code-pane on" data-src="./rails/app/views/shared/_skill_row.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="./rails/app/javascript/controllers/stepper_controller.js" data-lang="js"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
@@ -559,10 +559,10 @@
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="design-system/rails/app/views/shared/_modal.html.erb" data-lang="erb"><pre><code></code></pre></div>
-          <div class="code-pane" data-src="design-system/rails/app/views/shared/_drawer.html.erb" data-lang="erb"><pre><code></code></pre></div>
-          <div class="code-pane" data-src="design-system/rails/app/views/shared/_sheet.html.erb" data-lang="erb"><pre><code></code></pre></div>
-          <div class="code-pane" data-src="design-system/rails/app/javascript/controllers/dialog_controller.js" data-lang="js"><pre><code></code></pre></div>
+          <div class="code-pane on" data-src="./rails/app/views/shared/_modal.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="./rails/app/views/shared/_drawer.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="./rails/app/views/shared/_sheet.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="./rails/app/javascript/controllers/dialog_controller.js" data-lang="js"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
@@ -586,8 +586,8 @@
           <button class="copy-btn">Copy</button>
         </div>
         <div class="code-body">
-          <div class="code-pane on" data-src="design-system/rails/app/views/hotwire/turbo_frame_modal.html.erb" data-lang="erb"><pre><code></code></pre></div>
-          <div class="code-pane" data-src="design-system/rails/app/views/hotwire/turbo_stream_stats.turbo_stream.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane on" data-src="./rails/app/views/hotwire/turbo_frame_modal.html.erb" data-lang="erb"><pre><code></code></pre></div>
+          <div class="code-pane" data-src="./rails/app/views/hotwire/turbo_stream_stats.turbo_stream.erb" data-lang="erb"><pre><code></code></pre></div>
         </div>
       </div>
     </div>
@@ -607,7 +607,7 @@
 
 </div>
 
-<script nonce="" src="design-system/ds.js"></script>
+<script nonce="" src="./ds.js"></script>
 
 </body>
 </html>
