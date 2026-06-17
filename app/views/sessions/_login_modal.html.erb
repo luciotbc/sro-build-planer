@@ -8,11 +8,12 @@
   <button type="button" class="btn-primary" data-action="dialog#open">Log in</button>
   <dialog
     class="modal"
+    aria-labelledby="login_modal_title"
     data-dialog-target="dialog"
     data-action="click->dialog#backdropClose"
   >
     <header class="dialog-head">
-      <span>Sign in</span>
+      <span id="login_modal_title">Sign in</span>
       <button
         type="button"
         class="icon-btn"
