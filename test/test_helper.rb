@@ -8,7 +8,11 @@ module ActiveSupport
     extend Minitest::Spec::DSL
     include FactoryBot::Syntax::Methods
 
-    # Run tests in parallel with specified workers
-    parallelize(workers: :number_of_processors)
+    # Parallelism disabled: the Minitest::Spec DSL (describe/it) generates anonymous,
+    # dynamically-named classes that fail to marshal across the DRb boundary used by
+    # process-based parallelization, raising "RuntimeError: result not reported".
+    # Run serially with PARALLEL_WORKERS=1 until the suite is large enough to justify
+    # revisiting (e.g. thread-based parallelization).
+    parallelize(workers: 1)
   end
 end
