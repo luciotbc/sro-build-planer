@@ -1,0 +1,19 @@
+<%#
+  shared/legend_badge — inline "Current → Planned" legend chip
+  -----------------------------------------------------------------------
+  locals:
+    current: String  optional; left label  (default "Current")
+    planned: String  optional; right label (default "Planned")
+  Usage:
+    render "shared/legend_badge"
+    render "shared/legend_badge", current: "Now", planned: "Goal"
+%>
+<%
+  current = local_assigns.fetch(:current, "Current")
+  planned = local_assigns.fetch(:planned, "Planned")
+%>
+<span class="legend-badge">
+  <span class="c"><%= current %></span>
+  <span class="a">&rarr;</span>
+  <span class="p"><%= planned %></span>
+</span>

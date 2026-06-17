@@ -1,0 +1,41 @@
+<%#
+  shared/skill_row — one skill row: icon, name, brass level, and a − / + stepper
+  -----------------------------------------------------------------------
+  Wired to the `stepper` controller: it clamps the level between 0 and `max`
+  and writes the current value into the `output` target.
+  locals:
+    name:  String          required; skill name (e.g. "Cyclone I")
+    icon:  String          required; image filename in app/assets/images
+                           (e.g. "skill-a.png")
+    level: Integer         required; current skill level
+    max:   Integer         required; maximum skill level
+  Usage:
+    render "shared/skill_row", name: "Cyclone I",
+           icon: "skill-a.png", level: 16, max: 30
+%>
+<%
+  name  = local_assigns.fetch(:name)
+  icon  = local_assigns.fetch(:icon)
+  level = local_assigns.fetch(:level)
+  max   = local_assigns.fetch(:max)
+%>
+<div
+  class="fs-skill-row"
+  data-controller="stepper"
+  data-stepper-level-value="<%= level %>"
+  data-stepper-max-value="<%= max %>"
+>
+  <button type="button" class="fs-skill-icon">
+    <%= image_tag icon, alt: "" %>
+  </button>
+  <div class="fs-skill-meta">
+    <span class="fs-skill-name"><%= name %></span>
+    <span class="fs-skill-level">
+      <span class="fs-level-num" data-stepper-target="output"><%= level %></span>
+    </span>
+  </div>
+  <div class="fs-skill-controls">
+    <button type="button" class="fs-step-btn" data-action="stepper#decrement">−</button>
+    <button type="button" class="fs-step-btn primary" data-action="stepper#increment">+</button>
+  </div>
+</div>

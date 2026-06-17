@@ -1,0 +1,31 @@
+<%#
+  shared/char_bar — character identity bar: crest avatar, name, race, level cap
+  -----------------------------------------------------------------------
+  locals:
+    name:    String          required; character name (rendered in brass)
+    race:    String          required; race label (e.g. "Chinese")
+    level:   Integer/String  required; level cap value
+    initial: String          required; avatar glyph (e.g. "华")
+  Usage:
+    render "shared/char_bar", name: "BuckTBC", race: "Chinese",
+           level: 110, initial: "华"
+%>
+<%
+  name    = local_assigns.fetch(:name)
+  race    = local_assigns.fetch(:race)
+  level   = local_assigns.fetch(:level)
+  initial = local_assigns.fetch(:initial)
+%>
+<div class="char-bar">
+  <div class="char-bar-id">
+    <div class="char-avatar"><%= initial %></div>
+    <div>
+      <div class="char-bar-name"><%= name %></div>
+      <div class="char-bar-race"><%= race %></div>
+    </div>
+  </div>
+  <div class="char-bar-level">
+    <span class="char-bar-level-label">Level&nbsp;Cap</span>
+    <span class="char-bar-level-val"><%= level %></span>
+  </div>
+</div>

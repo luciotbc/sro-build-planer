@@ -1,0 +1,18 @@
+<%#
+  shared/chars_pill — rounded pill showing a labelled count (e.g. Characters · 3)
+  -----------------------------------------------------------------------
+  locals:
+    label: String          optional; pill text (default "Characters")
+    count: Integer/String  required; the count rendered in the brass bubble
+  Usage:
+    render "shared/chars_pill", count: 3
+    render "shared/chars_pill", label: "Builds", count: 12
+%>
+<%
+  label = local_assigns.fetch(:label, "Characters")
+  count = local_assigns.fetch(:count)
+%>
+<button class="chars-pill" type="button">
+  <span class="lbl"><%= label %></span>
+  <span class="count"><%= count %></span>
+</button>

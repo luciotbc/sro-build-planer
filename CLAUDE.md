@@ -83,7 +83,7 @@ The XML importer is more complete — it populates `SkillSeries`, `SkillGroupReq
 - **Tailwind CSS** — compiled via `bin/rails tailwindcss:watch` (included in `bin/dev`)
 - **importmap-rails** for JS module loading (no Node/webpack)
 - Assets served via **Propshaft**
-- **Design system** — compiled reference at `public/design-system/index.html` (served at `/design-system/index.html`); source prototypes and partials under `doc/design/`
+- **Design system** — living reference rendered by the app at `/docs/design_system` (`DocsController#design_system`, view `app/views/docs/design_system.html.erb`). Development-only route. Every component is a real `app/views/shared` partial styled by `@layer components` classes in `app/assets/tailwind/application.css`; interactive ones use the `dialog`, `stepper` and `tabs` Stimulus controllers. Docs render the live partials so they cannot drift from production.
 
 ### Infrastructure
 

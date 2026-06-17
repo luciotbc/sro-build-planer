@@ -1,0 +1,23 @@
+<%#
+  shared/button — themed action button (primary / ghost / icon)
+  -----------------------------------------------------------------------
+  locals:
+    label:   String  required; button text, or the glyph for :icon (e.g. "×")
+    variant: Symbol  :primary (default) | :ghost | :icon
+    attrs:   Hash    optional pass-through HTML attrs (default {});
+                     :type defaults to "button", :class is merged onto the
+                     variant class, everything else is splatted as-is.
+                     For :icon, pass aria-label via attrs[:"aria-label"].
+  Usage:
+    render "shared/button", label: "Edit Planned"
+    render "shared/button", label: "Edit Current", variant: :ghost
+    render "shared/button", label: "x", variant: :icon, attrs: { "aria-label": "Close" }
+%>
+<%
+  variant = local_assigns.fetch(:variant, :primary)
+  attrs   = local_assigns.fetch(:attrs, {})
+  base    = { primary: "btn-primary", ghost: "btn-ghost", icon: "icon-btn" }.fetch(variant)
+  classes = [base, attrs[:class]].compact.join(" ")
+  rest    = attrs.except(:type, :class)
+%>
+<%= tag.button label, type: attrs.fetch(:type, "button"), class: classes, **rest %>

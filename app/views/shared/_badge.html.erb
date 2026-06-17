@@ -1,0 +1,16 @@
+<%#
+  shared/badge — small pill badge in one of the build-plan variants
+  -----------------------------------------------------------------------
+  locals:
+    text:    String  required; badge label
+    variant: Symbol  :current (default) | :planned | :max | :lock
+  Usage:
+    render "shared/badge", text: "Current"
+    render "shared/badge", text: "MAX", variant: :max
+    render "shared/badge", text: "active", variant: :lock
+%>
+<%
+  text    = local_assigns.fetch(:text)
+  variant = local_assigns.fetch(:variant, :current)
+%>
+<span class="bdg bdg-<%= variant %>"><%= text %></span>

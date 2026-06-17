@@ -27,6 +27,7 @@
   --radius-control:  12px;      /* step buttons, chips       → rounded-control*/
   --radius-tab:      14px;      /* tab wells, identity bar   → rounded-tab    */
   --radius-panel:    18px;      /* cards, modals, drawers    → rounded-panel  */
+  --radius-pill:     999px;     /* pills, count badges, avatar → rounded-pill */
 
   /* ── Type family ──────────────────────────────────────────────────────── */
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -58,4 +59,478 @@
   @apply inline-flex items-center justify-center rounded-field min-h-tap px-4 py-[9px]
          text-[13px] font-semibold text-text cursor-pointer
          bg-card border border-line hover:bg-card-hi;
+}
+
+@layer components {
+  /* All component colors resolve from the @theme tokens above. White (current)
+     and brass (planned) carry semantic meaning; raw hexes are avoided in favor
+     of tokens and color-mix() tints. Pure-black shadows and the bespoke
+     skill-icon / crest skins are the only intentional non-token values. */
+
+  /* ── Icon button ──────────────────────────────────────────────────────── */
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-field);
+    background: var(--color-card);
+    border: 1px solid var(--color-line);
+    color: var(--color-text-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .icon-btn:hover {
+    color: var(--color-text);
+    background: var(--color-card-hi);
+  }
+
+  /* ── Characters pill ──────────────────────────────────────────────────── */
+  .chars-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 6px 6px 10px;
+    border-radius: var(--radius-pill);
+    background: var(--color-card);
+    border: 1px solid var(--color-line);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .chars-pill .count {
+    background: var(--color-brass);
+    color: var(--color-bg);
+    width: 20px;
+    height: 20px;
+    border-radius: var(--radius-pill);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+  }
+  .chars-pill .lbl {
+    font-size: 12px;
+    color: var(--color-text-dim);
+  }
+
+  /* ── Tabs / sub-tabs ──────────────────────────────────────────────────── */
+  .ro-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--color-card-hi);
+    border-radius: var(--radius-field);
+    padding: 4px;
+    width: 100%;
+    max-width: 380px;
+  }
+  .ro-tab {
+    all: unset;
+    flex: 1;
+    cursor: pointer;
+    min-height: 44px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text-dim);
+    border-radius: 7px;
+  }
+  .ro-tab.on {
+    background: var(--color-bg);
+    color: var(--color-text);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+  .ro-subtabs {
+    display: flex;
+    gap: 4px;
+    width: 100%;
+    max-width: 380px;
+  }
+  .ro-subtab {
+    all: unset;
+    cursor: pointer;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-mute);
+    position: relative;
+  }
+  .ro-subtab:hover {
+    color: var(--color-text-dim);
+  }
+  .ro-subtab.on {
+    color: var(--color-text);
+  }
+  .ro-subtab.on::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 8px;
+    width: 60%;
+    max-width: 64px;
+    height: 2px;
+    background: var(--color-brass);
+    border-radius: 1px;
+  }
+
+  /* ── Badges ───────────────────────────────────────────────────────────── */
+  .bdg {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+  }
+  .bdg-current {
+    background: color-mix(in srgb, var(--color-white) 8%, transparent);
+    color: var(--color-text);
+  }
+  .bdg-planned {
+    background: color-mix(in srgb, var(--color-brass-hi) 14%, transparent);
+    color: var(--color-brass-hi);
+  }
+  .bdg-max {
+    background: var(--color-brass);
+    color: var(--color-bg);
+  }
+  .bdg-lock {
+    background: color-mix(in srgb, var(--color-white) 4%, transparent);
+    color: var(--color-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-size: 10px;
+  }
+  .legend-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: var(--radius-pill);
+    background: var(--color-card-hi);
+    border: 1px solid var(--color-line);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .legend-badge .c {
+    color: var(--color-white);
+  }
+  .legend-badge .a {
+    color: var(--color-text-mute);
+  }
+  .legend-badge .p {
+    color: var(--color-brass-hi);
+  }
+
+  /* ── Merged stat lines ────────────────────────────────────────────────── */
+  .stat-merged {
+    background: var(--color-card-hi);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-control);
+    overflow: hidden;
+    width: 100%;
+    max-width: 460px;
+  }
+  .stat-line {
+    display: flex;
+    align-items: baseline;
+    gap: 10px 12px;
+    flex-wrap: wrap;
+    padding: 14px;
+    border-top: 1px solid var(--color-line);
+  }
+  .stat-line:first-child {
+    border-top: none;
+  }
+  .stat-label {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .stat-eq {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-cur {
+    font-weight: 700;
+    color: var(--color-white);
+  }
+  .stat-op {
+    color: var(--color-text-mute);
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .stat-delta {
+    color: var(--color-green);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .stat-future {
+    color: var(--color-brass-hi);
+    font-weight: 800;
+  }
+
+  /* ── Character identity bar ───────────────────────────────────────────── */
+  .char-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px 20px;
+    flex-wrap: wrap;
+    background: var(--color-card-hi);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-tab);
+    padding: 14px 16px;
+    width: 100%;
+    max-width: 520px;
+  }
+  .char-bar-id {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+  }
+  .char-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-pill);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(
+      circle at 50% 40%,
+      rgba(139, 31, 31, 0.5),
+      var(--color-card)
+    );
+    box-shadow:
+      0 0 0 3px var(--color-brass) inset,
+      0 0 0 1px rgba(0, 0, 0, 0.6),
+      0 0 14px color-mix(in srgb, var(--color-brass) 25%, transparent);
+    color: var(--color-brass-hi);
+    font-size: 24px;
+    font-weight: 800;
+  }
+  .char-bar-name {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--color-brass-hi);
+    line-height: 1.1;
+  }
+  .char-bar-race {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text-mute);
+  }
+  .char-bar-level {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .char-bar-level-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text-dim);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .char-bar-level-val {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--color-white);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.5px;
+  }
+
+  /* ── Skill card + skill rows ──────────────────────────────────────────── */
+  .skill-card {
+    background: var(--color-card-hi);
+    border-radius: var(--radius-tab);
+    overflow: hidden;
+    width: 100%;
+    max-width: 520px;
+  }
+  .fs-skill-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-top: 1px solid var(--color-line);
+    min-height: 64px;
+  }
+  .fs-skill-row:first-child {
+    border-top: none;
+  }
+  .fs-skill-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-control);
+    flex-shrink: 0;
+    overflow: hidden;
+    cursor: pointer;
+    border: 0;
+    /* Engraved game-icon frame: bespoke dark skin (intentionally non-token),
+       with a brass-dk inset edge from the token palette. */
+    background: linear-gradient(180deg, #0a0a0b, #161618);
+    box-shadow:
+      0 0 0 1px var(--color-brass-dk) inset,
+      0 0 0 2px #000 inset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fs-skill-icon img {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    display: block;
+  }
+  .fs-skill-meta {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .fs-skill-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  .fs-skill-level {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+  }
+  .fs-level-num {
+    color: var(--color-brass-hi);
+    font-weight: 800;
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+  }
+  .fs-skill-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .fs-step-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-control);
+    background: var(--color-card-hi);
+    border: 1px solid var(--color-line);
+    color: var(--color-text);
+    font-size: 20px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .fs-step-btn:hover {
+    background: var(--color-card);
+    border-color: #3a3f4b;
+  }
+  .fs-step-btn.primary {
+    @apply bg-gradient-to-b from-brass-hi to-brass;
+    color: var(--color-bg);
+    border: 0;
+  }
+
+  /* ── Native <dialog> overlays ─────────────────────────────────────────── */
+  dialog {
+    border: 0;
+    padding: 0;
+    background: var(--color-card);
+    color: var(--color-text);
+    max-width: 100%;
+    border-radius: var(--radius-panel);
+  }
+  dialog::backdrop {
+    background: rgba(0, 0, 0, 0.6);
+  }
+  dialog .dialog-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--color-line);
+    font-size: 15px;
+    font-weight: 800;
+  }
+  dialog .dialog-body {
+    padding: 18px;
+  }
+
+  /* Centered modal card. */
+  dialog.modal {
+    width: 100%;
+    max-width: 440px;
+    margin: auto;
+    border: 1px solid var(--color-line);
+  }
+  @media (max-width: 480px) {
+    dialog.modal {
+      max-width: 100%;
+      height: 100%;
+      max-height: 100%;
+      border-radius: 0;
+    }
+  }
+
+  /* Right-pinned drawer that slides from the right. */
+  dialog.drawer {
+    height: 100%;
+    max-height: 100%;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 0 0 auto;
+    border-radius: 0;
+    border-left: 1px solid var(--color-line);
+    animation: dialog-slide-right 0.18s ease-out;
+  }
+  @keyframes dialog-slide-right {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  /* Bottom-pinned sheet with rounded top corners. */
+  dialog.sheet {
+    width: 100%;
+    max-width: 100%;
+    margin: auto auto 0;
+    border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+    border-top: 1px solid var(--color-line);
+    animation: dialog-slide-up 0.18s ease-out;
+  }
+  @keyframes dialog-slide-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
 }

@@ -1,0 +1,7 @@
+<%#
+  docs/snippet — renders a code sample as an escaped, styled <pre> block.
+  Doc-page chrome only; uses app tokens, no syntax-highlight dependency.
+  locals:
+    code: String  source to display verbatim
+%>
+<%= tag.pre class: "overflow-x-auto rounded-tab border border-line bg-bg p-4 text-[12.5px] leading-relaxed text-text-dim" do %><code><%= local_assigns.fetch(:code).strip %></code><% end %>
