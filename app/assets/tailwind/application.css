@@ -1,1 +1,61 @@
 @import "tailwindcss";
+
+@theme {
+  /* ── Surfaces ─────────────────────────────────────────────────────────── */
+  --color-bg:        #0c0e12;   /* app background            → bg-bg          */
+  --color-card:      #15181f;   /* default panel             → bg-card        */
+  --color-card-hi:   #1c2029;   /* raised panel / inset      → bg-card-hi     */
+  --color-line:      #262a33;   /* hairline borders          → border-line    */
+
+  /* ── Text ─────────────────────────────────────────────────────────────── */
+  --color-text:      #e6e8ec;   /* primary copy              → text-text      */
+  --color-text-dim:  #8b919e;   /* secondary / labels        → text-text-dim  */
+  --color-text-mute: #5c6270;   /* tertiary / disabled       → text-text-mute */
+
+  /* ── Brand (brass) ────────────────────────────────────────────────────── */
+  --color-brass:     #d4a847;   /* primary accent            → text-brass     */
+  --color-brass-hi:  #f4d878;   /* highlight / planned value → text-brass-hi  */
+  --color-brass-dk:  #6b4a18;   /* deep shade                → bg-brass-dk    */
+
+  /* ── Semantic ─────────────────────────────────────────────────────────── */
+  --color-blue:      #4ea3ff;
+  --color-red:       #e85a4a;   /* destructive / decrease    */
+  --color-green:     #38b676;   /* positive delta / increase */
+
+  /* ── Radius ───────────────────────────────────────────────────────────── */
+  --radius-field:    10px;      /* inputs, small buttons     → rounded-field  */
+  --radius-control:  12px;      /* step buttons, chips       → rounded-control*/
+  --radius-tab:      14px;      /* tab wells, identity bar   → rounded-tab    */
+  --radius-panel:    18px;      /* cards, modals, drawers    → rounded-panel  */
+
+  /* ── Type family ──────────────────────────────────────────────────────── */
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* ── Min hit target (touch) ───────────────────────────────────────────── */
+  --spacing-tap: 44px;          /* min-h-tap / w-tap                          */
+}
+
+@layer base {
+  html, body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    min-height: 100vh;
+    background: radial-gradient(1200px 800px at 50% -10%, #1a1d24 0%, #0c0e12 60%);
+  }
+  .tnum { font-variant-numeric: tabular-nums; }
+}
+
+@utility btn-primary {
+  @apply inline-flex items-center justify-center rounded-field min-h-tap px-4 py-[9px]
+         text-[13px] font-extrabold tracking-[0.2px] text-bg cursor-pointer
+         bg-gradient-to-b from-brass-hi to-brass;
+}
+@utility btn-ghost {
+  @apply inline-flex items-center justify-center rounded-field min-h-tap px-4 py-[9px]
+         text-[13px] font-semibold text-text cursor-pointer
+         bg-card border border-line hover:bg-card-hi;
+}

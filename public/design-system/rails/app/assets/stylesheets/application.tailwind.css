@@ -6,9 +6,6 @@
 
 @import "tailwindcss";
 
-/* Pull Inter in (or self-host via @font-face for production). */
-@import url("https://rsms.me/inter/inter.css");
-
 @theme {
   /* ── Surfaces ─────────────────────────────────────────────────────────── */
   --color-bg:        #0c0e12;   /* app background            → bg-bg          */

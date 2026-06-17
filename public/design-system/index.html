@@ -10,48 +10,8 @@
 <link rel="alternate icon" href="design-system/logo.png" sizes="any">
 <link rel="apple-touch-icon" href="design-system/logo.png">
 
-<!-- Type -->
-<link rel="preconnect" href="https://rsms.me/">
-<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-
-<!-- Tailwind v4 (browser build) — defines the LIVE token engine for this page. -->
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-<style type="text/tailwindcss">
-  /* ── SRO Lab design tokens — the single source of truth ──────────────────
-     Defined once here; Tailwind emits both utilities (bg-card, text-brass,
-     rounded-panel…) and the var(--color-*) / var(--radius-*) this page's CSS
-     reuses. Mirrors rails/app/assets/stylesheets/application.tailwind.css.
-     `static` keeps every token in :root even when a utility isn't used, so the
-     page's var(--color-*) references always resolve. */
-  @theme static {
-    /* Surfaces */
-    --color-bg:        #0c0e12;
-    --color-card:      #15181f;
-    --color-card-hi:   #1c2029;
-    --color-line:      #262a33;
-    /* Text */
-    --color-text:      #e6e8ec;
-    --color-text-dim:  #8b919e;
-    --color-text-mute: #5c6270;
-    /* Brand (brass) */
-    --color-brass:     #d4a847;
-    --color-brass-hi:  #f4d878;
-    --color-brass-dk:  #6b4a18;
-    /* Semantic */
-    --color-blue:      #4ea3ff;
-    --color-red:       #e85a4a;
-    --color-green:     #38b676;
-    /* Radius */
-    --radius-field:    10px;
-    --radius-control:  12px;
-    --radius-tab:      14px;
-    --radius-panel:    18px;
-    /* Type + touch */
-    --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-    --spacing-tap: 44px;
-  }
-</style>
-
+<!-- Tailwind v4 compiled by tailwindcss-rails — includes SRO Lab design tokens. -->
+<link rel="stylesheet" href="design-system/tailwind.css">
 <link rel="stylesheet" href="design-system/ds-styles.css">
 </head>
 <body>
@@ -647,7 +607,7 @@
 
 </div>
 
-<script src="design-system/ds.js"></script>
+<script nonce="" src="design-system/ds.js"></script>
 
 </body>
 </html>
