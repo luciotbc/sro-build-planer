@@ -8,7 +8,7 @@
   --------------------------------------------------------------------------
   Wrap rows inside a series card:
     <div class="overflow-hidden rounded-tab bg-card-hi">
-      <%= render partial: "shared/skill_row", collection: @skills, as: :skill %>
+      render partial: "shared/skill_row", collection: @skills, as: :skill
     </div>
 %>
 <% maxed = skill[:level] >= skill[:max] %>

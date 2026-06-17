@@ -9,8 +9,8 @@
     name:     String — value broadcast on tabs:change (default "tab")
   --------------------------------------------------------------------------
   Example:
-    <%= render "shared/tabs", variant: :pill, tabs: [
-          { id: "weapon", label: "Weapon" }, { id: "force", label: "Force" } ] %>
+    render "shared/tabs", variant: :pill, tabs: [
+      { id: "weapon", label: "Weapon" }, { id: "force", label: "Force" } ]
 %>
 <% variant ||= :pill
    active  ||= tabs.first[:id]

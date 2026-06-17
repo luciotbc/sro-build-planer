@@ -10,8 +10,8 @@
   --------------------------------------------------------------------------
   Wrap several in a divided card:
     <div class="overflow-hidden rounded-control bg-card-hi border border-line">
-      <%= render "shared/stat_row", label: "Skill points",  current: 3_210_000, planned: 6_440_000, format: :comma %>
-      <%= render "shared/stat_row", label: "Mastery total", current: 210,       planned: 440 %>
+      render "shared/stat_row", label: "Skill points",  current: 3_210_000, planned: 6_440_000, format: :comma
+      render "shared/stat_row", label: "Mastery total", current: 210,       planned: 440
     </div>
 %>
 <% fmt   = ->(n) { local_assigns[:format] == :comma ? number_with_delimiter(n) : n }

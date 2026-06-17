@@ -9,7 +9,7 @@
     size:   :md | :lg            (default :md → 420px; :lg → 820px editor)
   --------------------------------------------------------------------------
   Usage (static):
-    <%= render "shared/modal", title: "Sign in" do %> …form… <% end %>
+    render "shared/modal", title: "Sign in" do … form … end
   Usage (Turbo-driven): wrap the <dialog> body in <turbo-frame id="modal">.
 %>
 <% size ||= :md
