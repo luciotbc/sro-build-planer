@@ -27,6 +27,7 @@
   --radius-control:  12px;      /* step buttons, chips       → rounded-control*/
   --radius-tab:      14px;      /* tab wells, identity bar   → rounded-tab    */
   --radius-panel:    18px;      /* cards, modals, drawers    → rounded-panel  */
+  --radius-pill:     999px;     /* pills, count badges, avatar → rounded-pill */
 
   /* ── Type family ──────────────────────────────────────────────────────── */
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -61,9 +62,10 @@
 }
 
 @layer components {
-  /* Non-token helper values reused across components below. */
-  /* Brass gradient: same stops ds-styles uses for filled controls.        */
-  /* (linear-gradient(180deg, var(--color-brass-hi), var(--color-brass)))   */
+  /* All component colors resolve from the @theme tokens above. White (current)
+     and brass (planned) carry semantic meaning; raw hexes are avoided in favor
+     of tokens and color-mix() tints. Pure-black shadows and the bespoke
+     skill-icon / crest skins are the only intentional non-token values. */
 
   /* ── Icon button ──────────────────────────────────────────────────────── */
   .icon-btn {
@@ -90,7 +92,7 @@
     align-items: center;
     gap: 8px;
     padding: 6px 6px 6px 10px;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: var(--color-card);
     border: 1px solid var(--color-line);
     cursor: pointer;
@@ -101,7 +103,7 @@
     color: var(--color-bg);
     width: 20px;
     height: 20px;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -187,17 +189,17 @@
     align-items: center;
     gap: 6px;
     padding: 4px 10px;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.4px;
   }
   .bdg-current {
-    background: rgba(255, 255, 255, 0.08);
+    background: color-mix(in srgb, var(--color-white) 8%, transparent);
     color: var(--color-text);
   }
   .bdg-planned {
-    background: rgba(244, 216, 120, 0.14);
+    background: color-mix(in srgb, var(--color-brass-hi) 14%, transparent);
     color: var(--color-brass-hi);
   }
   .bdg-max {
@@ -205,7 +207,7 @@
     color: var(--color-bg);
   }
   .bdg-lock {
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--color-white) 4%, transparent);
     color: var(--color-text-dim);
     text-transform: uppercase;
     letter-spacing: 0.6px;
@@ -216,7 +218,7 @@
     align-items: center;
     gap: 6px;
     padding: 5px 10px;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: var(--color-card-hi);
     border: 1px solid var(--color-line);
     font-size: 11px;
@@ -224,7 +226,7 @@
     letter-spacing: 0.3px;
   }
   .legend-badge .c {
-    color: #fff;
+    color: var(--color-white);
   }
   .legend-badge .a {
     color: var(--color-text-mute);
@@ -266,7 +268,7 @@
   }
   .stat-cur {
     font-weight: 700;
-    color: #fff;
+    color: var(--color-white);
   }
   .stat-op {
     color: var(--color-text-mute);
@@ -306,7 +308,7 @@
   .char-avatar {
     width: 52px;
     height: 52px;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -318,7 +320,7 @@
     box-shadow:
       0 0 0 3px var(--color-brass) inset,
       0 0 0 1px rgba(0, 0, 0, 0.6),
-      0 0 14px rgba(212, 168, 71, 0.25);
+      0 0 14px color-mix(in srgb, var(--color-brass) 25%, transparent);
     color: var(--color-brass-hi);
     font-size: 24px;
     font-weight: 800;
@@ -350,7 +352,7 @@
   .char-bar-level-val {
     font-size: 26px;
     font-weight: 800;
-    color: #fff;
+    color: var(--color-white);
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.5px;
   }
@@ -382,9 +384,11 @@
     overflow: hidden;
     cursor: pointer;
     border: 0;
+    /* Engraved game-icon frame: bespoke dark skin (intentionally non-token),
+       with a brass-dk inset edge from the token palette. */
     background: linear-gradient(180deg, #0a0a0b, #161618);
     box-shadow:
-      0 0 0 1px #6b5a30 inset,
+      0 0 0 1px var(--color-brass-dk) inset,
       0 0 0 2px #000 inset;
     display: flex;
     align-items: center;
@@ -445,11 +449,7 @@
     border-color: #3a3f4b;
   }
   .fs-step-btn.primary {
-    background: linear-gradient(
-      180deg,
-      var(--color-brass-hi),
-      var(--color-brass)
-    );
+    @apply bg-gradient-to-b from-brass-hi to-brass;
     color: var(--color-bg);
     border: 0;
   }
