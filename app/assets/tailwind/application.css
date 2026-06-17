@@ -44,7 +44,7 @@
   }
   body {
     min-height: 100vh;
-    background: radial-gradient(1200px 800px at 50% -10%, #1a1d24 0%, #0c0e12 60%);
+    background: radial-gradient(1200px 800px at 50% -10%, #1a1d24 0%, var(--color-bg) 60%);
   }
   .tnum { font-variant-numeric: tabular-nums; }
 }

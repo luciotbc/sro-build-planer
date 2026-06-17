@@ -13,6 +13,6 @@ module ActiveSupport
     # process-based parallelization, raising "RuntimeError: result not reported".
     # Run serially with PARALLEL_WORKERS=1 until the suite is large enough to justify
     # revisiting (e.g. thread-based parallelization).
-    parallelize(workers: 1)
+    parallelize(workers: ENV.fetch("PARALLEL_WORKERS", 1).to_i)
   end
 end

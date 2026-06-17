@@ -10,9 +10,9 @@
     html:    Hash    → extra attrs merged onto the element (data-*, aria-*, etc.)
   --------------------------------------------------------------------------
   Examples:
-    <%= render "shared/button", label: "Edit Planned" %>
-    <%= render "shared/button", label: "Cancel", variant: :ghost %>
-    <%= render "shared/button", variant: :icon, html: { "aria-label": "Close" } do %>×<% end %>
+    render "shared/button", label: "Edit Planned"
+    render "shared/button", label: "Cancel", variant: :ghost
+    render "shared/button", variant: :icon, html: { "aria-label": "Close" } do … × … end
 %>
 <% variant ||= :primary
    html  ||= {}

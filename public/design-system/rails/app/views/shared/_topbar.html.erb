@@ -5,7 +5,7 @@
     title:   String  (default "Skill Planner")
     actions: String  rendered HTML for the right side (buttons / chars-pill)
   Usage:
-    <%= render "shared/topbar", actions: capture { render "shared/button", label: "Log in" } %>
+    render "shared/topbar", actions: capture { render "shared/button", label: "Log in" }
 %>
 <header class="sticky top-0 z-10 border-b border-line
                bg-bg/85 backdrop-blur-md backdrop-saturate-150">
