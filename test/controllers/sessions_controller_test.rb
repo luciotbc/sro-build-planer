@@ -30,6 +30,34 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_nil cookies[:session_id]
   end
 
+  test "create with invalid credentials via turbo stream renders error inline" do
+    post session_path,
+         params: {
+           email_address: @user.email_address,
+           password: "wrong"
+         },
+         headers: {
+           "Accept" => "text/vnd.turbo-stream.html"
+         }
+
+    assert_response :unprocessable_entity
+    assert_match "turbo-stream", @response.body
+    assert_match "login_form", @response.body
+    assert_nil cookies[:session_id]
+  end
+
+  test "create with remember_me unchecked still signs in" do
+    post session_path,
+         params: {
+           email_address: @user.email_address,
+           password: "password",
+           remember_me: "0"
+         }
+
+    assert_redirected_to root_path
+    assert cookies[:session_id]
+  end
+
   test "destroy" do
     sign_in_as(User.take)
 
