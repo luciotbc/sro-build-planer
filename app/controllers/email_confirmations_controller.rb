@@ -19,7 +19,10 @@ class EmailConfirmationsController < ApplicationController
     end
 
     redirect_to root_path,
-                notice:
-                  "If your account still needs confirmation, we've sent a new link."
+                flash: {
+                  registered_email: params[:email_address],
+                  notice:
+                    "If your account still needs confirmation, we've sent a new link."
+                }
   end
 end

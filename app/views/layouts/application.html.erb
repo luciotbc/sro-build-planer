@@ -28,7 +28,7 @@
       <% if authenticated? %>
         <%= button_to "Log out", session_path, method: :delete, class: "btn-ghost" %>
       <% else %>
-        <%= render "sessions/login_modal" %>
+        <%= render "sessions/auth_modals" %>
       <% end %>
     <% end %>
     <%= render "shared/topbar", actions: content_for(:topbar_actions) %>

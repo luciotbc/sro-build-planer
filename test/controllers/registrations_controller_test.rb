@@ -24,6 +24,10 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     assert_equal "signup@example.com", flash[:registered_email]
     assert_enqueued_emails 1
+
+    follow_redirect!
+    assert_select "[data-auth-target=confirm]"
+    assert_match "signup@example.com", response.body
   end
 
   it "records the marketing opt-in choice" do
