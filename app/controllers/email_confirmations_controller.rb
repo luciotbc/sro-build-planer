@@ -1,5 +1,9 @@
 class EmailConfirmationsController < ApplicationController
   allow_unauthenticated_access
+  rate_limit to: 5,
+             within: 3.minutes,
+             only: :resend,
+             with: -> { redirect_to root_path, alert: "Try again later." }
 
   def show
     if user = User.find_by_token_for(:email_confirmation, params[:token])
