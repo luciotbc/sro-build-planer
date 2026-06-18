@@ -11,12 +11,6 @@ class RegistrationsController < ApplicationController
   end
 
   def create
-    unless terms_accepted?
-      return(
-        render_form(["You must accept the terms of use and privacy policy."])
-      )
-    end
-
     result = Users::RegisterService.call(registration_params)
 
     if result.success?
@@ -36,11 +30,10 @@ class RegistrationsController < ApplicationController
       email_address: params[:email_address],
       password: params[:password],
       password_confirmation: params[:password_confirmation],
-      email_opt_in: params[:email_opt_in] == "1"
+      email_opt_in: params[:email_opt_in] == "1",
+      terms: params[:terms]
     }
   end
-
-  def terms_accepted? = params[:terms] == "1"
 
   def render_form(errors)
     respond_to do |format|

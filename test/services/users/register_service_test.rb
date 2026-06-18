@@ -6,8 +6,19 @@ class Users::RegisterServiceTest < ActiveSupport::TestCase
       email_address: "new@example.com",
       password: "Password1",
       password_confirmation: "Password1",
-      email_opt_in: true
+      email_opt_in: true,
+      terms: "1"
     }
+  end
+
+  it "fails and creates no user when terms are not accepted" do
+    result = nil
+    assert_no_difference "User.count" do
+      result = Users::RegisterService.call(valid_params.merge(terms: "0"))
+    end
+
+    assert_not result.success?
+    assert result.errors.any? { |e| e.include?("terms") }
   end
 
   it "creates a user with the given attributes" do

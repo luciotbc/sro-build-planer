@@ -7,6 +7,14 @@ module Users
     end
 
     def call
+      unless terms_accepted?
+        return(
+          ServiceResult.fail(
+            errors: ["You must accept the terms of use and privacy policy."]
+          )
+        )
+      end
+
       user =
         User.new(
           email_address: @params[:email_address],
@@ -21,6 +29,12 @@ module Users
       else
         ServiceResult.fail(errors: user.errors.full_messages)
       end
+    end
+
+    private
+
+    def terms_accepted?
+      ActiveModel::Type::Boolean.new.cast(@params[:terms])
     end
   end
 end
