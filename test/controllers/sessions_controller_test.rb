@@ -19,6 +19,20 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert cookies[:session_id]
   end
 
+  test "an unconfirmed user can still sign in" do
+    user = create(:user, password: "Password1")
+    assert_not user.email_confirmed?
+
+    post session_path,
+         params: {
+           email_address: user.email_address,
+           password: "Password1"
+         }
+
+    assert_redirected_to root_path
+    assert cookies[:session_id].present?
+  end
+
   test "create with invalid credentials" do
     post session_path,
          params: {
