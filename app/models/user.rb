@@ -4,7 +4,11 @@ class User < ApplicationRecord
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
-  generates_token_for :email_confirmation, expires_in: 1.day
+  # Embeds email_confirmed_at so a link stops resolving once the account is
+  # confirmed: the token is single-use rather than a 24h reusable login link.
+  generates_token_for :email_confirmation, expires_in: 1.day do
+    email_confirmed_at
+  end
 
   validates :email_address,
             presence: true,

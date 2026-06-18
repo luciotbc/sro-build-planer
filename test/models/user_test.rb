@@ -84,4 +84,12 @@ class UserTest < ActiveSupport::TestCase
     token = user.generate_token_for(:email_confirmation)
     assert_equal user, User.find_by_token_for(:email_confirmation, token)
   end
+
+  test "email_confirmation token is single-use once the account is confirmed" do
+    user = create(:user)
+    token = user.generate_token_for(:email_confirmation)
+    user.confirm_email!
+
+    assert_nil User.find_by_token_for(:email_confirmation, token)
+  end
 end
