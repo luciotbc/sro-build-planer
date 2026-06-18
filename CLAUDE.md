@@ -112,3 +112,17 @@ Tests use **Minitest** with **Minitest::Spec DSL** (`describe`/`it` blocks) and 
 RuboCop is configured to inherit `syntax_tree` formatting rules plus `rubocop-rails-omakase`. The formatter is `syntax_tree` (not standard RuboCop auto-correct). Run `bin/rubocop -A` to auto-fix.
 
 The pre-commit hook (`.githooks/pre-commit`) automatically runs `stree write` on staged `.rb`/`.rake` files and then `bin/rubocop` — commits will fail if rubocop finds violations. Make sure hooks are installed: `git config core.hooksPath .githooks`.
+
+## Development Workflow
+
+The flow used in this repo (e.g. the `feat/register-user` registration feature):
+
+1. **Feature branch off `main`** — one branch per feature (`feat/...`, `fix/...`), PR back to `main`.
+2. **TDD, test-first** — tests are written and committed *before* the implementation. A task is only "done" once `PARALLEL_WORKERS=1 bin/rails test` is green; never declare done before that.
+3. **Conventional Commits, one concern per commit** — `feat:`, `fix:`, `refactor:`, `test:`. Small, focused commits that tell a story.
+4. **Feature-then-harden ordering** — land the happy path first, then close gaps in follow-up commits (e.g. single-use tokens, rate-limiting, abuse/enumeration guards). Security hardening is incremental and visible in the commit log.
+5. **Business logic in services** — anything beyond trivial CRUD goes in an `app/services/` domain service returning a `ServiceResult`; controllers stay thin.
+6. **Migrations + `db/schema.rb` committed together.**
+7. **English-only** — all user-facing text (warnings, errors, messages) in English.
+8. **Pre-commit gate** — `stree write` + `bin/rubocop` run automatically; fix violations before the commit lands.
+9. **Open the PR** with a summary, a per-area change list, and the test command used.
