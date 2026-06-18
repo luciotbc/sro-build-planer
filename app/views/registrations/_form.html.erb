@@ -1,0 +1,94 @@
+<%#
+  registrations/form — shared sign-up form used by the topbar modal and the
+  standalone /registration/new page. Wrapped in #registration_form so the
+  controller can replace it via Turbo Stream to surface errors in place.
+  locals:
+    errors: Array<String>  optional; validation messages rendered above the fields
+%>
+<%
+  field_classes =
+    "w-full rounded-field border border-line bg-card-hi px-3 py-2 " \
+      "text-text placeholder:text-text-mute focus:border-brass focus:outline-none"
+  errors = local_assigns.fetch(:errors, [])
+%>
+<div id="registration_form">
+  <% if errors.any? %>
+    <div
+      class="mb-4 rounded-field border border-red/40 bg-red/10 px-3 py-2 text-sm font-medium text-red"
+    >
+      <ul class="list-inside list-disc space-y-1">
+        <% errors.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with url: registration_path do |form| %>
+    <div class="mb-4">
+      <%= form.label :email_address,
+                     "Email",
+                     class: "mb-1.5 block text-sm font-medium text-text-dim" %>
+      <%= form.email_field :email_address,
+                           required: true,
+                           autofocus: true,
+                           autocomplete: "username",
+                           placeholder: "you@example.com",
+                           value: params[:email_address],
+                           class: field_classes %>
+    </div>
+
+    <div class="mb-4">
+      <%= form.label :password,
+                     "Password",
+                     class: "mb-1.5 block text-sm font-medium text-text-dim" %>
+      <%= form.password_field :password,
+                              required: true,
+                              autocomplete: "new-password",
+                              placeholder: "••••••••",
+                              maxlength: 72,
+                              class: field_classes %>
+      <p class="mt-1.5 text-xs text-text-mute">
+        At least 8 characters, including one uppercase letter and one number.
+      </p>
+    </div>
+
+    <div class="mb-4">
+      <%= form.label :password_confirmation,
+                     "Confirm password",
+                     class: "mb-1.5 block text-sm font-medium text-text-dim" %>
+      <%= form.password_field :password_confirmation,
+                              required: true,
+                              autocomplete: "new-password",
+                              placeholder: "••••••••",
+                              maxlength: 72,
+                              class: field_classes %>
+    </div>
+
+    <label class="mb-3 flex items-start gap-2 text-sm text-text-dim">
+      <%= form.check_box :terms,
+                         { required: true, class: "mt-0.5 h-4 w-4 accent-brass" },
+                         "1",
+                         "0" %>
+      <span>
+        I accept the
+        <%= link_to "terms of use", "#", class: "text-brass underline hover:text-brass-hi" %>
+        and
+        <%= link_to "privacy policy", "#", class: "text-brass underline hover:text-brass-hi" %>.
+      </span>
+    </label>
+
+    <label class="mb-5 flex items-start gap-2 text-sm text-text-dim">
+      <%= form.check_box :email_opt_in,
+                         { checked: true, class: "mt-0.5 h-4 w-4 accent-brass" },
+                         "1",
+                         "0" %>
+      <span>
+        Email me updates about SRO Labs.
+        <span class="text-text-mute">We send these very rarely — only the occasional big release.</span>
+      </span>
+    </label>
+
+    <%= form.submit "Create account", class: "btn-primary w-full" %>
+  <% end %>
+</div>

@@ -1,0 +1,85 @@
+<%#
+  sessions/auth_modals — topbar "Log in" trigger plus the sign-in, sign-up and
+  "check your email" dialogs, all owned by one `auth` Stimulus controller so it
+  can switch between them and auto-open the confirmation dialog after sign-up.
+%>
+<% registered_email = flash[:registered_email] %>
+<div data-controller="auth">
+  <button type="button" class="btn-primary" data-action="auth#showLogin">Log in</button>
+
+  <%# ---- Sign in ---- %>
+  <dialog
+    class="modal"
+    aria-labelledby="login_modal_title"
+    data-auth-target="login"
+    data-action="click->auth#backdropClose"
+  >
+    <header class="dialog-head">
+      <span id="login_modal_title">Sign in</span>
+      <button type="button" class="icon-btn" data-action="auth#close" aria-label="Close">×</button>
+    </header>
+    <div class="dialog-body">
+      <%= render "sessions/form" %>
+      <p class="mt-5 text-sm text-text-dim">
+        New here?
+        <button type="button" class="text-brass underline hover:text-brass-hi" data-action="auth#showSignup">
+          Create an account
+        </button>
+      </p>
+    </div>
+  </dialog>
+
+  <%# ---- Sign up ---- %>
+  <dialog
+    class="modal"
+    aria-labelledby="signup_modal_title"
+    data-auth-target="signup"
+    data-action="click->auth#backdropClose"
+  >
+    <header class="dialog-head">
+      <span id="signup_modal_title">Create account</span>
+      <button type="button" class="icon-btn" data-action="auth#close" aria-label="Close">×</button>
+    </header>
+    <div class="dialog-body">
+      <%= render "registrations/form" %>
+      <p class="mt-5 text-sm text-text-dim">
+        Already have an account?
+        <button type="button" class="text-brass underline hover:text-brass-hi" data-action="auth#showLogin">
+          Sign in
+        </button>
+      </p>
+    </div>
+  </dialog>
+
+  <%# ---- Check your email (auto-opens after a successful sign-up) ---- %>
+  <% if registered_email %>
+    <dialog
+      class="modal"
+      aria-labelledby="confirm_modal_title"
+      data-auth-target="confirm"
+      data-action="click->auth#backdropClose"
+    >
+      <header class="dialog-head">
+        <span id="confirm_modal_title">Check your email</span>
+        <button type="button" class="icon-btn" data-action="auth#close" aria-label="Close">×</button>
+      </header>
+      <div class="dialog-body">
+        <p class="text-sm leading-relaxed text-text-dim">
+          We sent a confirmation link to
+          <span class="font-semibold text-text"><%= registered_email %></span>.
+          Click the link to verify your account and start saving builds.
+        </p>
+        <div class="mt-5 flex items-center justify-between gap-4">
+          <button type="button" class="btn-primary" data-action="auth#showLogin">Got it</button>
+          <%= button_to "Didn't get it? Resend email",
+                        resend_email_confirmation_path,
+                        params: {
+                          email_address: registered_email
+                        },
+                        class:
+                          "text-sm text-text-dim underline hover:text-text bg-transparent border-0 cursor-pointer p-0" %>
+        </div>
+      </div>
+    </dialog>
+  <% end %>
+</div>

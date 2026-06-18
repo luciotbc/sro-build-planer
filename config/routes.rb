@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
+  resource :registration, only: %i[new create]
+  get "email_confirmation/:token" => "email_confirmations#show",
+      :as => :email_confirmation
+  post "email_confirmation/resend" => "email_confirmations#resend",
+       :as => :resend_email_confirmation
   root "home#index"
 
   # Living design system documentation - development only.

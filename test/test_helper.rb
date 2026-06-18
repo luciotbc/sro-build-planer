@@ -8,6 +8,7 @@ module ActiveSupport
   class TestCase
     extend Minitest::Spec::DSL
     include FactoryBot::Syntax::Methods
+    include ActionMailer::TestHelper
     fixtures :all
 
     # Parallelism disabled: the Minitest::Spec DSL (describe/it) generates anonymous,
