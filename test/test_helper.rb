@@ -1,12 +1,14 @@
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
+require_relative "test_helpers/session_test_helper"
 require "minitest/spec"
 
 module ActiveSupport
   class TestCase
     extend Minitest::Spec::DSL
     include FactoryBot::Syntax::Methods
+    fixtures :all
 
     # Parallelism disabled: the Minitest::Spec DSL (describe/it) generates anonymous,
     # dynamically-named classes that fail to marshal across the DRb boundary used by

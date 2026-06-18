@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :race do
-    sequence(:external_id) { |n| n }
+    sequence(:external_id) { |n| n + 1000 }
     sequence(:name) { |n| "Race #{n}" }
 
     trait :chinese do

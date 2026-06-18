@@ -1,0 +1,13 @@
+<div class="mx-auto w-full max-w-md">
+  <% if notice = flash[:notice] %>
+    <p
+      class="mb-4 rounded-field border border-green/40 bg-green/10 px-3 py-2 text-sm font-medium text-green"
+      id="notice"
+    ><%= notice %></p>
+  <% end %>
+
+  <div class="rounded-panel border border-line bg-card p-6 md:p-8">
+    <h1 class="mb-6 text-2xl font-bold text-text">Sign in</h1>
+    <%= render "sessions/form" %>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<%#
+  sessions/form — shared sign-in form used by the topbar modal and the
+  standalone /session/new page. Wrapped in #login_form so the controller can
+  replace it via Turbo Stream to surface errors without leaving the page.
+  locals:
+    alert: String  optional; error message rendered above the fields
+%>
+<%
+  field_classes =
+    "w-full rounded-field border border-line bg-card-hi px-3 py-2 " \
+      "text-text placeholder:text-text-mute focus:border-brass focus:outline-none"
+%>
+<div id="login_form">
+  <% if message = local_assigns[:alert] || flash[:alert] %>
+    <p
+      class="mb-4 rounded-field border border-red/40 bg-red/10 px-3 py-2 text-sm font-medium text-red"
+    ><%= message %></p>
+  <% end %>
+
+  <%= form_with url: session_path do |form| %>
+    <div class="mb-4">
+      <%= form.label :email_address,
+                     "Email",
+                     class: "mb-1.5 block text-sm font-medium text-text-dim" %>
+      <%= form.email_field :email_address,
+                           required: true,
+                           autofocus: true,
+                           autocomplete: "username",
+                           placeholder: "you@example.com",
+                           value: params[:email_address],
+                           class: field_classes %>
+    </div>
+
+    <div class="mb-4">
+      <%= form.label :password,
+                     "Password",
+                     class: "mb-1.5 block text-sm font-medium text-text-dim" %>
+      <%= form.password_field :password,
+                              required: true,
+                              autocomplete: "current-password",
+                              placeholder: "••••••••",
+                              maxlength: 72,
+                              class: field_classes %>
+    </div>
+
+    <label class="mb-5 flex items-center gap-2 text-sm text-text-dim">
+      <%= form.check_box :remember_me,
+                         { checked: true, class: "h-4 w-4 accent-brass" },
+                         "1",
+                         "0" %>
+      Keep me signed in
+    </label>
+
+    <div class="flex items-center justify-between gap-4">
+      <%= form.submit "Sign in", class: "btn-primary" %>
+      <%= link_to "Forgot password?",
+                  new_password_path,
+                  class: "text-sm text-text-dim underline hover:text-text" %>
+    </div>
+  <% end %>
+</div>

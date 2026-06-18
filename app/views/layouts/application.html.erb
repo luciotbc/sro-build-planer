@@ -24,7 +24,14 @@
   </head>
 
   <body>
-    <%= render "shared/topbar" %>
+    <% content_for :topbar_actions do %>
+      <% if authenticated? %>
+        <%= button_to "Log out", session_path, method: :delete, class: "btn-ghost" %>
+      <% else %>
+        <%= render "sessions/login_modal" %>
+      <% end %>
+    <% end %>
+    <%= render "shared/topbar", actions: content_for(:topbar_actions) %>
     <main class="mx-auto max-w-7xl px-4 py-8 md:px-8">
       <%= yield %>
     </main>

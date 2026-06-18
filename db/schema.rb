@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_26_165501) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_17_180320) do
   create_table "character_masteries", force: :cascade do |t|
     t.integer "character_id", null: false
     t.datetime "created_at", null: false
@@ -79,6 +79,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_26_165501) do
     t.index ["external_id"], name: "index_races_on_external_id", unique: true
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "ip_address"
+    t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
   create_table "skill_group_requirements", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "required_group_id", null: false
@@ -139,12 +148,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_26_165501) do
     t.index ["skill_group_id"], name: "index_skills_on_skill_group_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email_address", null: false
+    t.string "password_digest", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email_address"],
+            name: "index_users_on_email_address",
+            unique: true
+  end
+
   add_foreign_key "character_masteries", "characters"
   add_foreign_key "character_masteries", "masteries"
   add_foreign_key "character_skills", "characters"
   add_foreign_key "character_skills", "skill_groups"
   add_foreign_key "characters", "races"
   add_foreign_key "masteries", "races"
+  add_foreign_key "sessions", "users"
   add_foreign_key "skill_group_requirements", "skill_groups"
   add_foreign_key "skill_group_requirements",
                   "skill_groups",
