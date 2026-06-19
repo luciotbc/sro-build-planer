@@ -1,40 +1,40 @@
 # 016 — Responsive / mobile
 
-## Ordem de Execução
-Depende de: 007, 010
-Executar antes de: —. Paralelo a: 015, 017.
+## Execution order
+Depends on: 007, 010
+Run before: —. Parallel with: 015, 017.
 
-## Objetivo
-Adaptar planner e editor a viewports estreitos: drawer→sheet onde fizer sentido, tabs de mastery roláveis, editor utilizável no mobile, respeitando `--spacing-tap` (44px).
+## Objective
+Adapt the planner and editor to narrow viewports: drawer→sheet where it fits, scrollable mastery tabs, a usable editor on mobile, respecting `--spacing-tap` (44px).
 
-## Fluxo de Uso
-Em tela pequena, usuário navega masteries, edita skills (steppers com alvo de toque adequado), abre drawer/sheet de personagens e info panels sem quebra de layout.
+## Usage flow
+On a small screen, the user navigates masteries, edits skills (steppers with adequate touch targets), opens the character drawer/sheet and info panels without layout breakage.
 
-## Referências
-- Mockup: `index.html`, `skills_editor.html` (referência desktop; derivar mobile).
+## References
+- Mockup: `index.html`, `skills_editor.html` (desktop reference; derive mobile).
 - Design System: `_drawer`/`_sheet`, tokens (`--spacing-tap`), tabs.
 - Specs: —.
-- Código: `app/assets/tailwind/application.css`, partials de 006–014.
+- Code: `app/assets/tailwind/application.css`, partials from 006–014.
 
-## Escopo de Implementação
-- **Frontend**: breakpoints Tailwind; converter overlays para `_sheet` no mobile; tabs com scroll horizontal; targets de toque ≥44px; tabelas/stat rows empilháveis.
-- **Estados**: idem desktop, validados em mobile.
+## Implementation scope
+- **Frontend**: Tailwind breakpoints; convert overlays to `_sheet` on mobile; horizontally scrollable tabs; touch targets ≥44px; stackable tables/stat rows.
+- **States**: same as desktop, validated on mobile.
 
-## Critérios de Aceitação
-- [ ] Planner e editor usáveis em ~380px sem overflow horizontal.
-- [ ] Alvos de toque ≥44px; tabs acessíveis no mobile.
-- [ ] Overlays apropriados (sheet) no mobile.
-- [ ] Validado no Chrome (emulação mobile); console limpo.
-- [ ] `PARALLEL_WORKERS=1 bin/rails test` verde.
+## Acceptance criteria
+- [ ] Planner and editor usable at ~380px with no horizontal overflow.
+- [ ] Touch targets ≥44px; tabs accessible on mobile.
+- [ ] Appropriate overlays (sheet) on mobile.
+- [ ] Validated in Chrome (mobile emulation); console clean.
+- [ ] `PARALLEL_WORKERS=1 bin/rails test` green.
 
-## Estratégia de Testes (TDD)
-- System (viewport mobile): navegação de tabs, edição de skill, abertura de drawer/sheet sem quebra.
+## Testing strategy (TDD)
+- System (mobile viewport): tab navigation, skill editing, opening drawer/sheet without breakage.
 
-## Boas Práticas
-Mobile-first onde possível, tokens do DS, a11y de toque, sem CSS forkado.
+## Best practices
+Mobile-first where possible, DS tokens, touch a11y, no forked CSS.
 
-## Modelo LLM Recomendado
-Sonnet — CSS/responsivo.
+## Recommended LLM model
+Sonnet — CSS/responsive.
 
-## Estratégia de Commit
+## Commit strategy
 `feat: responsive planner` · `feat: responsive editor + sheet overlays` · `test: mobile viewport flows`.

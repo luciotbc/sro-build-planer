@@ -10,7 +10,7 @@ A task = a feature integration branch `feature/NNN-slug`; deliver as ordered sma
 
 ## Task index
 
-| # | Task | Depende de | Modelo LLM |
+| # | Task | Depends on | LLM model |
 |---|---|---|---|
 | 000 | [business-rules-spec](000-business-rules-spec.md) ✅ | — | Opus |
 | 001 | [schema-and-ownership-foundation](001-schema-and-ownership-foundation.md) | 000 | Opus |

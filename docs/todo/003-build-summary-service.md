@@ -1,42 +1,42 @@
 # 003 — Build summary service
 
-## Ordem de Execução
-Depende de: 001, 002
-Executar antes de: 007, 009.
+## Execution order
+Depends on: 001, 002
+Run before: 007, 009.
 
-## Objetivo
-`Builds::SummaryService` que calcula os três números do StatsSummary (SKILL POINTS, MASTERY TOTAL, REQUIRED LEVEL) para um personagem, current e planned, conforme [spec 02](../specs/02-sp-and-summary.md).
+## Objective
+`Builds::SummaryService` computing the three StatsSummary numbers (SKILL POINTS, MASTERY TOTAL, REQUIRED LEVEL) for a character, current and planned, per [spec 02](../specs/02-sp-and-summary.md).
 
-## Fluxo de Uso
-Dado um `Character`, retorna `ServiceResult` com estrutura `{ skill_points: {current,planned,delta}, mastery_total: {…}, required_level: {…} }` pronta para a view.
+## Usage flow
+Given a `Character`, returns a `ServiceResult` with `{ skill_points: {current,planned,delta}, mastery_total: {…}, required_level: {…} }` ready for the view.
 
-## Referências
-- Specs: [02](../specs/02-sp-and-summary.md) (R1–R5, atenção R1a), [01](../specs/01-level-and-progression.md).
-- Design System: StatsSummary, Stat (consumidores em 009).
-- Código: `app/models/level_datum.rb`, `skill.rb`, `character_mastery.rb`, `character_skill.rb`, `app/services/service_result.rb`.
+## References
+- Specs: [02](../specs/02-sp-and-summary.md) (R1–R5, mind R1a), [01](../specs/01-level-and-progression.md).
+- Design System: StatsSummary, Stat (consumed in 009).
+- Code: `app/models/level_datum.rb`, `skill.rb`, `character_mastery.rb`, `character_skill.rb`, `app/services/service_result.rb`.
 
-## Escopo de Implementação
-- **Backend**: serviço `self.call(character)`; mastery SP = `Σ_m sp_cumulative(level)` **por mastery** (JOIN, nunca `IN` — R1a); skill SP = `Σ_s Σ_{1..level} sp_cost`; mastery total = `Σ` níveis; required level = `MAX` níveis (current→target).
-- **Performance**: evitar N+1 (preload masteries/skills/level_data; somatórios em memória ou SQL agregado correto).
-- **Validações/erros**: personagem sem masteries/skills → zeros; níveis ausentes em `level_data` → tratar como 0 com warning.
-- **Estados**: retorno determinístico; sem dependência de UI.
+## Implementation scope
+- **Backend**: `self.call(character)`; mastery SP = `Σ per-mastery sp_cumulative(level)` (JOIN, never `IN` — R1a); skill SP = `Σ sp_cost 1..level`; mastery total = `Σ` levels; required level = `MAX` levels (current→target).
+- **Performance**: avoid N+1 (preload masteries/skills/level_data; sum in memory or with correct aggregate SQL).
+- **Validations/errors**: character with no masteries/skills → zeros; levels missing in `level_data` → treat as 0 with a warning.
+- **States**: deterministic return; no UI dependency.
 
-## Critérios de Aceitação
-- [ ] Fórmulas batem com spec 02 (incluindo soma por-mastery, não IN).
-- [ ] current/planned/delta corretos; delta pode ser negativo.
-- [ ] Personagem vazio → todos zeros.
-- [ ] Sem N+1 (verificável em teste com `assert_queries`/contagem).
-- [ ] `PARALLEL_WORKERS=1 bin/rails test` verde.
+## Acceptance criteria
+- [ ] Formulas match spec 02 (including per-mastery sum, not IN).
+- [ ] current/planned/delta correct; delta may be negative.
+- [ ] Empty character → all zeros.
+- [ ] No N+1 (verified in a test with query count).
+- [ ] `PARALLEL_WORKERS=1 bin/rails test` green.
 
-## Estratégia de Testes (TDD)
-- Unit: cenário com 2 masteries no mesmo nível (prova R1a — não deduplica); skill cumulativo 1..N; delta negativo; vazio→zeros.
-- Integração: fixture realista → números esperados.
+## Testing strategy (TDD)
+- Unit: scenario with 2 masteries at the same level (proves R1a — no dedup); cumulative skill 1..N; negative delta; empty → zeros.
+- Integration: realistic fixture → expected numbers.
 
-## Boas Práticas
-SRP, ServiceResult, cálculo puro/testável, sem efeitos colaterais, performance consciente.
+## Best practices
+SRP, ServiceResult, pure/testable computation, no side effects, performance-aware.
 
-## Modelo LLM Recomendado
-Opus — lógica numérica com armadilha de deduplicação (R1a), TDD pesado.
+## Recommended LLM model
+Opus — numeric logic with a dedup trap (R1a), heavy TDD.
 
-## Estratégia de Commit
+## Commit strategy
 `feat: Builds::SummaryService skeleton + result shape` · `test: skill points / mastery total / required level` · `feat: implement per-mastery SP sum (avoid IN dedup)` · `perf: preload to avoid N+1`.

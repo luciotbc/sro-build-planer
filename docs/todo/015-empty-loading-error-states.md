@@ -1,40 +1,40 @@
 # 015 — Empty / loading / error states
 
-## Ordem de Execução
-Depende de: 007, 010
-Executar antes de: —. Paralelo a: 016, 017.
+## Execution order
+Depends on: 007, 010
+Run before: —. Parallel with: 016, 017.
 
-## Objetivo
-States consistentes em todas as telas do feature: sem personagens, sem skills no mastery, carregando, e erros de salvar — com cópia em inglês e a11y.
+## Objective
+Consistent states across all feature screens: no characters, no skills in the mastery, loading, and save errors — with English copy and a11y.
 
-## Fluxo de Uso
-Usuário novo sem personagens vê CTA criar; mastery sem skills mostra vazio; ações mostram loading; falhas mostram erro recuperável.
+## Usage flow
+A new user with no characters sees a create CTA; a mastery with no skills shows empty; actions show loading; failures show a recoverable error.
 
-## Referências
-- Mockup: `index.html`, `skills_editor.html` (estados implícitos).
-- Design System: Hero/CharsDrawer/PlannerCard/SkillEditor (variantes vazias), `_button`.
+## References
+- Mockup: `index.html`, `skills_editor.html` (implicit states).
+- Design System: Hero/CharsDrawer/PlannerCard/SkillEditor (empty variants), `_button`.
 - Specs: [05](../specs/05-character-lifecycle.md) (R10 auth/landing).
-- Código: telas de 006/007/010, controllers.
+- Code: screens from 006/007/010, controllers.
 
-## Escopo de Implementação
-- **Frontend**: empty states (sem personagens → CTA; mastery vazio; drawer vazio); skeleton/spinner de loading; erro inline/toast.
-- **Backend**: garantir que controllers retornam dados/erros consumíveis por esses states.
-- **Estados**: vazio, loading, sucesso, erro — cobertos por tela.
+## Implementation scope
+- **Frontend**: empty states (no characters → CTA; empty mastery; empty drawer); skeleton/spinner loading; inline/toast error.
+- **Backend**: ensure controllers return data/errors consumable by these states.
+- **States**: empty, loading, success, error — covered per screen.
 
-## Critérios de Aceitação
-- [ ] Cada tela tem vazio/loading/erro definidos e estilizados (DS).
-- [ ] Cópia em inglês (regra do projeto), a11y (aria-live em erros).
-- [ ] Sem telas "quebradas" quando faltam dados.
-- [ ] `PARALLEL_WORKERS=1 bin/rails test` verde; console limpo.
+## Acceptance criteria
+- [ ] Each screen has defined and styled empty/loading/error states (DS).
+- [ ] English copy (project rule), a11y (aria-live on errors).
+- [ ] No "broken" screens when data is missing.
+- [ ] `PARALLEL_WORKERS=1 bin/rails test` green; console clean.
 
-## Estratégia de Testes (TDD)
-- Integração/system: user sem personagens → CTA; mastery sem skills → vazio; erro de save → mensagem.
+## Testing strategy (TDD)
+- Integration/system: user with no characters → CTA; mastery with no skills → empty; save error → message.
 
-## Boas Práticas
-Consistência, DS, a11y, English-only, DRY (partial de empty state reutilizável).
+## Best practices
+Consistency, DS, a11y, English-only, DRY (reusable empty-state partial).
 
-## Modelo LLM Recomendado
-Sonnet — estados/UX sobre telas existentes.
+## Recommended LLM model
+Sonnet — states/UX over existing screens.
 
-## Estratégia de Commit
+## Commit strategy
 `feat: empty states (characters/skills)` · `feat: loading + error states` · `test: state coverage`.

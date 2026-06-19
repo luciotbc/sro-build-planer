@@ -1,41 +1,41 @@
 # 008 — Mastery section tabs
 
-## Ordem de Execução
-Depende de: 007
-Executar antes de: 010.
+## Execution order
+Depends on: 007
+Run before: 010.
 
-## Objetivo
-Navegação de masteries do mockup: tabs de tipo (Weapon/Force/Recovery) + sub-tabs de mastery (ex Bicheon/Heuksal/Pacheon), trocando o conteúdo do skill window sem reload (Turbo frame / Stimulus).
+## Objective
+The mockup's mastery navigation: type tabs (Weapon/Force/Recovery) + mastery sub-tabs (e.g. Bicheon/Heuksal/Pacheon), swapping the skill window content without a reload (Turbo frame / Stimulus).
 
-## Fluxo de Uso
-No planner, usuário troca tipo de mastery (linha 1) e mastery específica (linha 2) → skill window atualiza para a mastery escolhida.
+## Usage flow
+In the planner, the user switches mastery type (row 1) and specific mastery (row 2) → the skill window updates to the chosen mastery.
 
-## Referências
-- Mockup: `index.html` e `skills_editor.html` (duas linhas de tabs).
+## References
+- Mockup: `index.html` and `skills_editor.html` (two tab rows).
 - Design System: MasterySection, `_tabs` (default + underline), TopBar.
 - Specs: [glossary](../specs/glossary.md) (mastery vs mastery type).
-- Código: `app/views/shared/_tabs.html.erb`, `app/javascript/controllers/tabs_controller.js`, `app/models/mastery.rb` (mastery_type enum).
+- Code: `app/views/shared/_tabs.html.erb`, `app/javascript/controllers/tabs_controller.js`, `app/models/mastery.rb` (mastery_type enum).
 
-## Escopo de Implementação
-- **Frontend**: `shared/_mastery_section` com tabs de `mastery_type` (linha 1, variante pill) + sub-tabs de masteries daquele tipo/raça (linha 2, variante underline); troca via Turbo Frame (recarrega skill window) ou Stimulus + Turbo.
-- **Backend**: endpoint/param `mastery_id` no show; lista masteries por raça agrupadas por tipo.
-- **Estados**: tipo sem masteries → tab desabilitada/oculta; mastery ativa destacada.
+## Implementation scope
+- **Frontend**: `shared/_mastery_section` with `mastery_type` tabs (row 1, pill variant) + sub-tabs of that type/race's masteries (row 2, underline variant); switch via Turbo Frame (reload skill window) or Stimulus + Turbo.
+- **Backend**: `mastery_id` param/endpoint on show; list masteries by race grouped by type.
+- **States**: type with no masteries → disabled/hidden tab; active mastery highlighted.
 
-## Critérios de Aceitação
-- [ ] Tabs de tipo e sub-tabs renderizadas conforme raça do personagem.
-- [ ] Trocar tab atualiza o skill window sem full reload.
-- [ ] Mastery ativa persistida na navegação (param/estado).
-- [ ] Aderente a mockup + DS (MasterySection, `_tabs`).
-- [ ] `PARALLEL_WORKERS=1 bin/rails test` verde; console limpo.
+## Acceptance criteria
+- [ ] Type tabs and sub-tabs rendered per the character's race.
+- [ ] Switching a tab updates the skill window without a full reload.
+- [ ] Active mastery persisted across navigation (param/state).
+- [ ] Faithful to mockup + DS (MasterySection, `_tabs`).
+- [ ] `PARALLEL_WORKERS=1 bin/rails test` green; console clean.
 
-## Estratégia de Testes (TDD)
-- Integração/system: tabs refletem masteries da raça; trocar tab muda skills exibidos; estado ativo correto.
+## Testing strategy (TDD)
+- Integration/system: tabs reflect the race's masteries; switching a tab changes displayed skills; correct active state.
 
-## Boas Práticas
-Reuso `_tabs`, DS, Turbo, DRY, a11y (roles/aria-selected), I18n.
+## Best practices
+Reuse `_tabs`, DS, Turbo, DRY, a11y (roles/aria-selected), I18n.
 
-## Modelo LLM Recomendado
-Sonnet — wiring de tabs sobre componente existente.
+## Recommended LLM model
+Sonnet — tab wiring over an existing component.
 
-## Estratégia de Commit
+## Commit strategy
 `feat: mastery section type + sub tabs` · `feat: turbo frame skill window swap` · `test: mastery tab navigation`.

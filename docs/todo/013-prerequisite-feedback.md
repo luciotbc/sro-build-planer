@@ -1,42 +1,42 @@
 # 013 — Prerequisite feedback (toasts)
 
-## Ordem de Execução
-Depende de: 010
-Executar antes de: —. Paralelo a: 014.
+## Execution order
+Depends on: 010
+Run before: —. Parallel with: 014.
 
-## Objetivo
-Surface dos `warnings` dos serviços (pré-req auto-adicionado, mastery escalada, class level ajustado, downgrade) como toasts não-bloqueantes no editor.
+## Objective
+Surface the services' `warnings` (auto-added prerequisite, escalated mastery, adjusted class level, downgrade) as non-blocking toasts in the editor.
 
-## Fluxo de Uso
-Ao ajustar um skill que dispara cascata, o usuário vê toasts informando o que mudou automaticamente (ex: "Pierce I adicionado como pré-requisito").
+## Usage flow
+When adjusting a skill triggers a cascade, the user sees toasts describing what changed automatically (e.g. "Pierce I added as a prerequisite").
 
-## Referências
-- Mockup: `skills_editor.html` (feedback de ações).
-- Design System: **Toast — novo componente canônico criado aqui**: partial `app/views/shared/_toast.html.erb` + Stimulus `toast_controller.js`. Reusa tokens (`--color-card`, semânticos `--color-green`/`--color-red`/`--color-blue`) e `_button`/`icon-btn` para dismiss. Não existe ainda no SROLabDS; é registrado na doc viva e republicado via design-sync em 017.
-- Specs: [03](../specs/03-prerequisites-and-cascade.md) (warnings em R3/R4/R5).
-- Código: `ServiceResult#warnings`, serviços `CharacterSkills::*`, I18n `warnings.*` (já existentes).
+## References
+- Mockup: `skills_editor.html` (action feedback).
+- Design System: **Toast — new canonical component created here**: partial `app/views/shared/_toast.html.erb` + Stimulus `toast_controller.js`. Reuses tokens (`--color-card`, semantic `--color-green`/`--color-red`/`--color-blue`) and `_button`/`icon-btn` for dismiss. Not yet in SROLabDS; registered in the living docs and republished via design-sync in 017.
+- Specs: [03](../specs/03-prerequisites-and-cascade.md) (warnings in R3/R4/R5).
+- Code: `ServiceResult#warnings`, `CharacterSkills::*` services, I18n `warnings.*` (already present).
 
-## Escopo de Implementação
-- **Frontend**: criar `app/views/shared/_toast.html.erb` + `app/javascript/controllers/toast_controller.js` renderizando `result.warnings`; auto-dismiss; stack; variante de erro.
-- **Backend**: já retorna warnings; controller/Turbo Stream entrega ao toast.
-- **Validações/erros**: erros (fail) também exibíveis como toast de erro (variante).
-- **Estados**: múltiplos warnings empilham; dismiss manual e automático.
+## Implementation scope
+- **Frontend**: create `app/views/shared/_toast.html.erb` + `app/javascript/controllers/toast_controller.js` rendering `result.warnings`; auto-dismiss; stack; error variant.
+- **Backend**: warnings already returned; controller/Turbo Stream delivers them to the toast.
+- **Validations/errors**: errors (fail) also displayable as an error toast (variant).
+- **States**: multiple warnings stack; manual and automatic dismiss.
 
-## Critérios de Aceitação
-- [ ] Warnings de cascata aparecem como toasts (I18n).
-- [ ] Erros aparecem como toast de erro.
-- [ ] Auto-dismiss + dismiss manual; acessível (aria-live).
-- [ ] Aderente ao DS (após 017 registrar o componente).
-- [ ] `PARALLEL_WORKERS=1 bin/rails test` verde; console limpo.
+## Acceptance criteria
+- [ ] Cascade warnings appear as toasts (I18n).
+- [ ] Errors appear as an error toast.
+- [ ] Auto-dismiss + manual dismiss; accessible (aria-live).
+- [ ] Faithful to the DS (after 017 registers the component).
+- [ ] `PARALLEL_WORKERS=1 bin/rails test` green; console clean.
 
-## Estratégia de Testes (TDD)
-- System/integração: ação com pré-req → toast com texto I18n; erro → toast de erro; aria-live presente.
+## Testing strategy (TDD)
+- System/integration: an action with a prerequisite → toast with I18n text; error → error toast; aria-live present.
 
-## Boas Práticas
-Reuso de warnings existentes, DS, a11y (live region), I18n, DRY.
+## Best practices
+Reuse existing warnings, DS, a11y (live region), I18n, DRY.
 
-## Modelo LLM Recomendado
-Sonnet — fiação de feedback sobre warnings prontos.
+## Recommended LLM model
+Sonnet — feedback wiring over ready-made warnings.
 
-## Estratégia de Commit
+## Commit strategy
 `feat: toast component` · `feat: surface service warnings as toasts` · `test: prerequisite feedback toasts`.

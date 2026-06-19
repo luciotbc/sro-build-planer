@@ -1,42 +1,42 @@
 # 011 — Mastery level control
 
-## Ordem de Execução
-Depende de: 010
-Executar antes de: 012.
+## Execution order
+Depends on: 010
+Run before: 012.
 
-## Objetivo
-Controle de nível da mastery no editor: slider + stepper (− / +) e botão "Max mastery", operando no lado editado, com cascata de skills ao reduzir (clamp dos skills acima do novo nível) conforme regras.
+## Objective
+Mastery level control in the editor: slider + stepper (− / +) and a "Max mastery" button, operating on the edited side, with skill cascade on decrease (auto-downgrade skills above the new level) per the rules.
 
-## Fluxo de Uso
-No editor, usuário arrasta o slider / usa ± / clica "Max mastery" → nível da mastery (lado editado) muda; subir libera skills; "Max mastery" leva ao `server_level_cap`.
+## Usage flow
+In the editor, the user drags the slider / uses ± / clicks "Max mastery" → the mastery level (edited side) changes; raising unlocks skills; "Max mastery" goes to `server_level_cap`.
 
-## Referências
+## References
 - Mockup: `skills_editor.html` (slider + Max mastery).
 - Design System: MasterySection, SkillEditor, `_button`.
 - Specs: [06](../specs/06-edit-flow-and-bulk-actions.md) (R4 Max mastery), [03](../specs/03-prerequisites-and-cascade.md) (**R7 mastery decrease auto-downgrades skills**), [01](../specs/01-level-and-progression.md) (R-cap), [04](../specs/04-skill-access-and-caps.md).
-- Código: `app/javascript/controllers/stepper_controller.js`, `CharacterMasteries::UpdateService` (por-lado após 002).
+- Code: `app/javascript/controllers/stepper_controller.js`, `CharacterMasteries::UpdateService` (per-side after 002).
 
-## Escopo de Implementação
-- **Frontend**: slider de mastery + stepper + "Max mastery" (= `server_level_cap`); exibe `MASTERY LV X / server_cap`.
-- **Backend**: `CharacterMasteries::UpdateService` no lado editado; ao reduzir mastery abaixo do `mastery_level_req` de skills alocados → **auto-downgrade** de cada skill ao maior nível válido (spec 03 R7), com warning por downgrade; sync de class-level cache.
-- **Validações/erros**: nunca acima de `server_level_cap` (erro se tentado); warnings de auto-downgrade (não bloqueia).
-- **Estados**: loading; sucesso; erro (tentativa acima do cap); limites min/max no controle.
+## Implementation scope
+- **Frontend**: mastery slider + stepper + "Max mastery" (= `server_level_cap`); shows `MASTERY LV X / server_cap`.
+- **Backend**: `CharacterMasteries::UpdateService` on the edited side; lowering the mastery below the `mastery_level_req` of allocated skills → **auto-downgrade** each skill to its highest valid level (spec 03 R7), with a warning per downgrade; sync the class-level cache.
+- **Validations/errors**: never above `server_level_cap` (error if attempted); auto-downgrade warnings (non-blocking).
+- **States**: loading; success; error (attempt above cap); min/max bounds on the control.
 
-## Critérios de Aceitação
-- [ ] Slider/stepper alteram a mastery no lado editado; cap = `server_level_cap`.
-- [ ] "Max mastery" leva ao cap.
-- [ ] Reduzir mastery faz auto-downgrade coerente dos skills (spec 03 R7, sem violar caps) + warnings; não bloqueia.
-- [ ] Class-level cache atualizado.
-- [ ] `PARALLEL_WORKERS=1 bin/rails test` verde; console limpo.
+## Acceptance criteria
+- [ ] Slider/stepper change the mastery on the edited side; cap = `server_level_cap`.
+- [ ] "Max mastery" goes to the cap.
+- [ ] Lowering the mastery auto-downgrades skills coherently (spec 03 R7, without violating caps) + warnings; does not block.
+- [ ] Class-level cache updated.
+- [ ] `PARALLEL_WORKERS=1 bin/rails test` green; console clean.
 
-## Estratégia de Testes (TDD)
-- System/integração: Max mastery=cap; reduzir mastery clampa skills; outro lado intacto; sync de level.
+## Testing strategy (TDD)
+- System/integration: Max mastery = cap; lowering the mastery clamps skills; other side untouched; level sync.
 
-## Boas Práticas
-Reuso stepper, DS, SRP, a11y (slider com teclado), I18n.
+## Best practices
+Reuse stepper, DS, SRP, a11y (keyboard slider), I18n.
 
-## Modelo LLM Recomendado
-Opus — regras de cascata ao reduzir, edge cases.
+## Recommended LLM model
+Opus — cascade rules on decrease, edge cases.
 
-## Estratégia de Commit
-`feat: mastery level slider + stepper` · `feat: max mastery action` · `feat: skill clamp on mastery decrease` · `test: mastery control cascade`.
+## Commit strategy
+`feat: mastery level slider + stepper` · `feat: max mastery action` · `feat: skill auto-downgrade on mastery decrease` · `test: mastery control cascade`.

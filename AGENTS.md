@@ -53,7 +53,7 @@ Race (Chinese / European)
         │     └── SkillGroup (one skill "slot"; holds all level variants) [col_position, max_skill_level]
         │           ├── Skill (one level of the skill: skill_level, sp_cost, mp_cost, mastery_level_req)
         │           └── SkillGroupRequirement → required_group (prerequisite unlock edges)
-        └── LevelDatum (XP/SP table per character level, used for SP budget calculations)
+        └── LevelDatum (per-level XP/SP table; sp_cumulative = SP cost to raise one mastery to a given level — see docs/specs/02)
 ```
 
 The character build planning layer sits on top:
@@ -64,7 +64,7 @@ Character [race, current_level, target_level]
   └── CharacterSkill → SkillGroup [current_skill_level, target_skill_level]
 ```
 
-`CharacterSkill.current_skill_level` / `target_skill_level` record where the player is now and where they want to reach — these are the core "build plan" state. `LevelDatum.sp_cumulative` gives total SP available at any level.
+`CharacterSkill.current_skill_level` / `target_skill_level` record where the player is now and where they want to reach — these are the core "build plan" state. `LevelDatum.sp_cumulative` is the SP cost to raise one mastery to a given level (a cost input, not a budget — see docs/specs/02).
 
 All static records carry an `external_id` (from the game's data) used as the stable upsert key. Skills also carry `external_skill_code` as a secondary unique key.
 
@@ -132,7 +132,7 @@ The flow used in this repo (e.g. the `feat/register-user` registration feature):
 Hard constraints for any AI agent in this repo. They override convenience.
 
 - **GR1 — Cite the rule you used.** Whenever a decision is driven by a Golden Rule or a `docs/specs` rule, you MUST state which rule (e.g. "per GR3", "per spec 03 R7"). No silent rule-based decisions.
-- **GR2 — `/docs` is the source of truth.** Everything under `docs/` (specs, backlog, glossary, ADRs) is authoritative. `docs/specs/` governs **business rules**; mockups and the design system govern **visual/interaction only**. On any conflict between mockup/code and a spec, the spec wins — surface the conflict, never silently follow the code.
+- **GR2 — `/docs` is the source of truth.** Everything under `docs/` (specs, backlog, glossary, ADRs) is authoritative. `docs/specs/` governs **business rules**; mockups and the design system govern **visual/interaction only**. On any conflict between mockup/code and a spec, the spec wins — surface the conflict, never silently follow the code. **All `docs/` content is written in English** (specs, backlog, code-review, ADRs) — translate any non-English doc before committing.
 - **GR3 — Keep specs in sync with code.** Whenever you edit anything under `/app` or `/db`, you MUST check whether any `docs/specs/*` rule became stale and update it (plus the spec README index) in the same change. A code change that contradicts a spec is not done until the spec is reconciled.
 - **GR4 — Review long planning sessions before concluding.** Any long planning/spec session ends with a short retrospective: review what was produced, capture what worked and what to improve, and persist durable learnings (memory + `docs/`) so the process improves session over session.
 
@@ -147,7 +147,7 @@ For any substantial feature or multi-step effort, follow this flow (it produced 
 4. **Every task references** the spec rule(s), the design-system component, and the Rails partial — by path.
 
 ### Planning / backlog
-5. **Large work → a backlog** of `docs/todo/NNN-slug.md` files, each with the mandatory structure: Objetivo, Fluxo de Uso, Referências (Mockup/DS/Spec), Escopo (FE/BE/persistência/validações/estados vazio·loading·sucesso·erro), Critérios de Aceitação, Estratégia de Testes (**TDD**), Boas Práticas, Modelo LLM + justificativa, Estratégia de Commit.
+5. **Large work → a backlog** of `docs/todo/NNN-slug.md` files, each with the mandatory structure: Execution order, Objective, Usage flow, References (Mockup/DS/Spec), Implementation scope (FE/BE/persistence/validations/empty·loading·success·error states), Acceptance criteria, Testing strategy (**TDD**), Best practices, Recommended LLM model + rationale, Commit strategy.
 6. **Order by dependency DAG**, mark parallel lanes; **one branch + one PR per task**, with approval between PRs.
 7. **Interview before locking the backlog.** Run a `grill-with-docs`-style interview: one question at a time, **verify the code before asking**, recommend an answer, capture resolved rules into `docs/specs/` inline.
 8. **Refine in batch + score + recheck JIT.** Three passes over all task files (clarity / consistency-DAG / technical quality), then a reviewer-agent scores each against the 9 rejection criteria (clear objective, complete scope, sufficient acceptance, correct deps, requires TDD, references DS, faithful to spec, incremental size, incrementally deliverable) and rewrites until all pass; re-read mockup + code just-in-time before implementing each task.

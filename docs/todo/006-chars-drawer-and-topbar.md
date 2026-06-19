@@ -1,41 +1,41 @@
 # 006 — Chars drawer + auth-aware topbar
 
-## Ordem de Execução
-Depende de: 004
-Executar antes de: 007. Paralelo a: 005.
+## Execution order
+Depends on: 004
+Run before: 007. Parallel with: 005.
 
-## Objetivo
-Listagem/troca de personagens (CharsDrawer) acionada pelo pill "Characters N" na topbar, e topbar ciente de autenticação (Log in vs Characters pill + Log out).
+## Objective
+Character listing/switching (CharsDrawer) triggered by the "Characters N" pill in the topbar, and an auth-aware topbar (Log in vs Characters pill + Log out).
 
-## Fluxo de Uso
-Logado vê "Characters N" na topbar → clica → drawer lista personagens (nome, raça, cap) → seleciona um → vai ao planner dele; ou cria novo (abre modal 005). Deslogado vê "Log in".
+## Usage flow
+Logged-in user sees "Characters N" in the topbar → clicks → drawer lists characters (name, race, cap) → selects one → goes to its planner; or creates a new one (opens modal 005). Logged-out sees "Log in".
 
-## Referências
+## References
 - Mockup: `index.html` (topbar "Log in"), `skills_editor.html` (topbar "Characters 3" + "Log out").
 - Design System: CharsDrawer, CharsIcon, TopBar, `_drawer`, `_chars_pill`, `_topbar`.
 - Specs: [05](../specs/05-character-lifecycle.md) (R9/R10).
-- Código: `app/views/shared/_topbar.html.erb`, `_drawer.html.erb`, `_chars_pill.html.erb`, `app/javascript/controllers/dialog_controller.js`.
+- Code: `app/views/shared/_topbar.html.erb`, `_drawer.html.erb`, `_chars_pill.html.erb`, `app/javascript/controllers/dialog_controller.js`.
 
-## Escopo de Implementação
-- **Frontend**: variante autenticada do `_topbar` (pill + Log out) vs deslogada (Log in); `shared/_chars_drawer` (lista + item selecionável + ação "New character"); `_chars_icon` se necessário.
-- **Backend**: drawer lê `Current.user.characters`; seleção navega a `character_path`.
-- **Estados**: vazio (sem personagens → CTA criar; rico em 015); loading; ativo destacado.
+## Implementation scope
+- **Frontend**: authenticated variant of `_topbar` (pill + Log out) vs logged-out (Log in); `shared/_chars_drawer` (list + selectable item + "New character" action); `_chars_icon` if needed.
+- **Backend**: drawer reads `Current.user.characters`; selection navigates to `character_path`.
+- **States**: empty (no characters → create CTA; rich in 015); loading; active highlighted.
 
-## Critérios de Aceitação
-- [ ] Topbar mostra estado correto por auth.
-- [ ] Pill mostra contagem real; drawer lista personagens do user.
-- [ ] Selecionar navega ao planner; "New character" abre modal 005.
-- [ ] Aderente a mockup + DS (CharsDrawer/TopBar).
-- [ ] `PARALLEL_WORKERS=1 bin/rails test` verde; console limpo.
+## Acceptance criteria
+- [ ] Topbar shows the correct state by auth.
+- [ ] Pill shows the real count; drawer lists the user's characters.
+- [ ] Selecting navigates to the planner; "New character" opens modal 005.
+- [ ] Faithful to mockup + DS (CharsDrawer/TopBar).
+- [ ] `PARALLEL_WORKERS=1 bin/rails test` green; console clean.
 
-## Estratégia de Testes (TDD)
-- Integração/system: topbar autenticada vs não; drawer lista só do user; seleção navega; contagem no pill.
+## Testing strategy (TDD)
+- Integration/system: authenticated vs logged-out topbar; drawer lists only the user's; selection navigates; count in the pill.
 
-## Boas Práticas
-Reuso `_drawer`/`_topbar`/`_chars_pill`, DS, a11y, I18n, DRY.
+## Best practices
+Reuse `_drawer`/`_topbar`/`_chars_pill`, DS, a11y, I18n, DRY.
 
-## Modelo LLM Recomendado
-Sonnet — view + Stimulus drawer sobre componentes existentes.
+## Recommended LLM model
+Sonnet — view + Stimulus drawer over existing components.
 
-## Estratégia de Commit
+## Commit strategy
 `feat: auth-aware topbar variants` · `feat: chars drawer partial` · `test: chars drawer + topbar states` · `feat: wire character selection navigation`.

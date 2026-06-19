@@ -1,39 +1,39 @@
 # 017 — Design system parity (+ design-sync)
 
-## Ordem de Execução
-Depende de: 007, 009, 010
-Executar antes de: — (penúltima, antes da auditoria final).
+## Execution order
+Depends on: 007, 009, 010
+Run before: — (second to last, before the final audit).
 
-## Objetivo
-Garantir que todos os componentes compostos criados (PlannerCard, ReadOnlySkillWindow, MasterySection, StatsSummary, SkillEditor, SeriesInfoPanel, SkillInfoPanel, CreateCharacter, CharsDrawer, toast) estejam: (a) na doc viva `/docs/design_system`, (b) sem duplicação/fork de estilo, (c) sincronizados com o DS publicado via `/design-sync`.
+## Objective
+Ensure all created composite components (PlannerCard, ReadOnlySkillWindow, MasterySection, StatsSummary, SkillEditor, SeriesInfoPanel, SkillInfoPanel, CreateCharacter, CharsDrawer, toast) are: (a) in the living docs at `/docs/design_system`, (b) without style duplication/fork, (c) synced to the published DS via `/design-sync`.
 
-## Fluxo de Uso
-Dev/designer abre `/docs/design_system` e vê todos os componentes reais renderizados; DS publicado (`89e0df02`) reflete o código.
+## Usage flow
+A dev/designer opens `/docs/design_system` and sees every component rendered live; the published DS (`89e0df02`) reflects the code.
 
-## Referências
-- DS publicado: `89e0df02` (SROLabDS, 19 componentes) — contratos `*.prompt.md`/`.d.ts`/`.html`.
-- Design System local: `app/views/docs/design_system.html.erb`, `app/views/shared/*`, `app/assets/tailwind/application.css`.
+## References
+- Published DS: `89e0df02` (SROLabDS, 19 components) — contracts `*.prompt.md`/`.d.ts`/`.html`.
+- Local Design System: `app/views/docs/design_system.html.erb`, `app/views/shared/*`, `app/assets/tailwind/application.css`.
 - Skill/tool: `/design-sync` (`DesignSync`).
 
-## Escopo de Implementação
-- **Frontend**: adicionar cada novo partial à `docs/design_system.html.erb` (render vivo + snippet via DocsController); auditar tokens/classes vs DS (sem cores hardcoded fora dos tokens); remover componentes duplicados.
-- **Sync**: rodar `/design-sync` para republicar o DS a partir do código; registrar notas de commit.
-- **Estados**: cada componente com suas variantes/estados na doc.
+## Implementation scope
+- **Frontend**: add each new partial to `docs/design_system.html.erb` (live render + snippet via DocsController); audit tokens/classes vs the DS (no hardcoded colors outside tokens); remove duplicated components.
+- **Sync**: run `/design-sync` to republish the DS from the code; record commit notes.
+- **States**: each component with its variants/states in the docs.
 
-## Critérios de Aceitação
-- [ ] Todos os novos componentes aparecem em `/docs/design_system` (render vivo).
-- [ ] Sem cores/medidas hardcoded fora dos tokens; sem partial duplicado.
-- [ ] `/design-sync` executado; DS publicado atualizado.
-- [ ] `PARALLEL_WORKERS=1 bin/rails test` verde; console limpo.
+## Acceptance criteria
+- [ ] All new components appear in `/docs/design_system` (live render).
+- [ ] No colors/sizes hardcoded outside tokens; no duplicated partial.
+- [ ] `/design-sync` run; published DS updated.
+- [ ] `PARALLEL_WORKERS=1 bin/rails test` green; console clean.
 
-## Estratégia de Testes (TDD)
-- Integração: `/docs/design_system` renderiza cada novo partial sem erro; smoke de que classes usadas existem no `@layer components`.
+## Testing strategy (TDD)
+- Integration: `/docs/design_system` renders each new partial without error; smoke that the classes used exist in `@layer components`.
 
-## Boas Práticas
-DS como fonte única, tokens-first, sem fork, doc viva (não diverge do app), DRY.
+## Best practices
+DS as the single source, tokens-first, no fork, living docs (do not diverge from the app), DRY.
 
-## Modelo LLM Recomendado
-Sonnet — auditoria/doc + execução de design-sync.
+## Recommended LLM model
+Sonnet — audit/docs + running design-sync.
 
-## Estratégia de Commit
+## Commit strategy
 `feat: add composite components to living design system` · `refactor: dedupe + tokenize styles` · `chore: design-sync republish`.

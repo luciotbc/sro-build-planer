@@ -1,43 +1,43 @@
 # 012 — Bulk skill actions (Max skills / Clear all / Undo)
 
-## Ordem de Execução
-Depende de: 010 (substrato de working-state/undo), 011
-Executar antes de: —.
+## Execution order
+Depends on: 010 (working-state/undo substrate), 011
+Run before: —.
 
-## Objetivo
-Ações em massa do editor, escopadas ao **mastery ativo** e ao **lado editado**: Max skills, Clear all, e Undo de 1 passo.
+## Objective
+The editor's bulk actions, scoped to the **active mastery** and the **edited side**: Max skills, Clear all, and single-step Undo.
 
-## Fluxo de Uso
-No editor: "Max skills" sobe todos os skills do mastery ao cap efetivo (respeitando pré-reqs); "Clear all" zera o lado editado só do mastery atual; "Undo" recupera o estado imediatamente anterior (ex: após Clear all acidental).
+## Usage flow
+In the editor: "Max skills" raises all the active mastery's skills to their effective cap (respecting prerequisites); "Clear all" zeroes the edited side of the active mastery only; "Undo" restores the immediately previous state (e.g. after an accidental Clear all).
 
-## Referências
+## References
 - Mockup: `skills_editor.html` (Max skills, Undo, Clear all).
-- Design System: SkillEditor, `_button` (incl. variante destrutiva).
-- Specs: [06](../specs/06-edit-flow-and-bulk-actions.md) (R3 escopo, R5 Max skills, R6 Clear all, R7 Undo), [04](../specs/04-skill-access-and-caps.md).
-- Código: `CharacterSkills::{Update,Clear}Service` (por-lado), resolver (002).
+- Design System: SkillEditor, `_button` (incl. destructive variant).
+- Specs: [06](../specs/06-edit-flow-and-bulk-actions.md) (R3 scope, R5 Max skills, R6 Clear all, R7 Undo), [04](../specs/04-skill-access-and-caps.md).
+- Code: `CharacterSkills::{Update,Clear}Service` (per-side), resolver (002).
 
-## Escopo de Implementação
-- **Frontend**: botões Max skills / Clear all (destrutivo) / Undo (habilitado só quando há estado anterior); todos escopados ao mastery ativo. Usa o **substrato de working-state/snapshot entregue em 010**.
-- **Backend**: Max skills → para cada skill do mastery, set ao `min(max_skill_level, alcançável pelo server cap)` respeitando pré-reqs; Clear all → zera skills + nível da mastery do lado editado, só nesse mastery; Undo → restaura o snapshot imediatamente anterior (1 passo, spec 06 R7).
-- **Clear all sem diálogo de confirmação**: a recuperação é feita exclusivamente pelo **Undo** (decisão: sem modal de confirmação no Clear all; Undo cobre o erro acidental — spec 06 R7).
-- **Validações/erros**: Undo indisponível quando não há estado anterior (botão desabilitado).
-- **Estados**: loading; sucesso; Undo desabilitado (sem snapshot).
+## Implementation scope
+- **Frontend**: Max skills / Clear all (destructive) / Undo (enabled only when a prior state exists) buttons; all scoped to the active mastery. Uses the **working-state/snapshot substrate delivered in 010**.
+- **Backend**: Max skills → for each of the mastery's skills, set to `min(max_skill_level, reachable via server cap)` respecting prerequisites; Clear all → zero the edited side's skills + that mastery's level, in this mastery only; Undo → restore the immediately previous snapshot (single step, spec 06 R7).
+- **Clear all without a confirm dialog**: recovery is exclusively via **Undo** (decision: no confirm modal on Clear all; Undo covers accidental clears — spec 06 R7).
+- **Validations/errors**: Undo unavailable when there is no prior state (button disabled).
+- **States**: loading; success; Undo disabled (no snapshot).
 
-## Critérios de Aceitação
-- [ ] Max skills sobe ao cap efetivo respeitando pré-reqs, só no mastery ativo/lado.
-- [ ] Clear all zera só o mastery ativo (outras intactas) no lado editado.
-- [ ] Undo restaura estado imediatamente anterior (1 passo); Clear all não tem modal (Undo cobre).
-- [ ] Outro lado nunca afetado.
-- [ ] `PARALLEL_WORKERS=1 bin/rails test` verde; console limpo.
+## Acceptance criteria
+- [ ] Max skills raises to the effective cap respecting prerequisites, in the active mastery/side only.
+- [ ] Clear all zeroes only the active mastery (others untouched) on the edited side.
+- [ ] Undo restores the immediately previous state (single step); Clear all has no modal (Undo covers).
+- [ ] The other side is never affected.
+- [ ] `PARALLEL_WORKERS=1 bin/rails test` green; console clean.
 
-## Estratégia de Testes (TDD)
-- System/integração: Max skills→caps; Clear all não afeta outra mastery nem outro lado; Undo após Clear all recupera; Undo desabilitado inicialmente.
+## Testing strategy (TDD)
+- System/integration: Max skills → caps; Clear all does not affect another mastery or the other side; Undo after Clear all recovers; Undo disabled initially.
 
-## Boas Práticas
-SRP, reuso de serviços, DS, a11y, I18n, idempotência onde aplicável.
+## Best practices
+SRP, reuse services, DS, a11y, I18n, idempotency where applicable.
 
-## Modelo LLM Recomendado
-Opus — integridade de cascata + estado de Undo.
+## Recommended LLM model
+Opus — cascade integrity + Undo state.
 
-## Estratégia de Commit
+## Commit strategy
 `feat: max skills action` · `feat: clear all (mastery-scoped)` · `feat: single-step undo` · `test: bulk actions scope + undo`.

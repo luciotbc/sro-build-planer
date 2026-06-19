@@ -1,41 +1,41 @@
 # 009 — Stats summary panel
 
-## Ordem de Execução
-Depende de: 003, 007
-Executar antes de: 017. Paralelo a: 008/010 (após deps).
+## Execution order
+Depends on: 003, 007
+Run before: 017. Parallel with: 008/010 (after deps).
 
-## Objetivo
-Painel SUMMARY do `index.html` (StatsSummary): SKILL POINTS, MASTERY TOTAL, REQUIRED LEVEL, cada um no formato `current + delta = planned`, ligado ao `Builds::SummaryService`.
+## Objective
+The SUMMARY panel from `index.html` (StatsSummary): SKILL POINTS, MASTERY TOTAL, REQUIRED LEVEL, each in the `current + delta = planned` format, bound to `Builds::SummaryService`.
 
-## Fluxo de Uso
-No planner, abaixo do skill window, o usuário vê os três totais agregados do build (current vs planejado).
+## Usage flow
+In the planner, below the skill window, the user sees the build's three aggregate totals (current vs planned).
 
-## Referências
-- Mockup: `index.html` (seção SUMMARY).
+## References
+- Mockup: `index.html` (SUMMARY section).
 - Design System: StatsSummary, Stat, `_stat_row`.
-- Specs: [02](../specs/02-sp-and-summary.md) (R3/R4/R5, formato `current+delta=planned`).
-- Código: `app/views/shared/_stat_row.html.erb`, `Builds::SummaryService`.
+- Specs: [02](../specs/02-sp-and-summary.md) (R3/R4/R5, `current+delta=planned` format).
+- Code: `app/views/shared/_stat_row.html.erb`, `Builds::SummaryService`.
 
-## Escopo de Implementação
-- **Frontend**: `shared/_stats_summary` reusando `_stat_row` (label, current, delta, planned) com `.tnum`; três linhas.
-- **Backend**: consome `Builds::SummaryService.call(character).data`.
-- **Estados**: build vazio → zeros; delta negativo formatado (sinal); loading.
+## Implementation scope
+- **Frontend**: `shared/_stats_summary` reusing `_stat_row` (label, current, delta, planned) with `.tnum`; three rows.
+- **Backend**: consumes `Builds::SummaryService.call(character).data`.
+- **States**: empty build → zeros; negative delta formatted (sign); loading.
 
-## Critérios de Aceitação
-- [ ] Três linhas com números do SummaryService (batendo spec 02).
-- [ ] Formato `current + delta = planned`, tabular (`.tnum`), delta negativo correto.
-- [ ] Atualiza ao mudar mastery/edições (Turbo).
-- [ ] Aderente a mockup + DS (StatsSummary/Stat).
-- [ ] `PARALLEL_WORKERS=1 bin/rails test` verde; console limpo.
+## Acceptance criteria
+- [ ] Three rows with the SummaryService numbers (matching spec 02).
+- [ ] `current + delta = planned` format, tabular (`.tnum`), correct negative delta.
+- [ ] Updates when mastery/edits change (Turbo).
+- [ ] Faithful to mockup + DS (StatsSummary/Stat).
+- [ ] `PARALLEL_WORKERS=1 bin/rails test` green; console clean.
 
-## Estratégia de Testes (TDD)
-- Integração: valores renderizados = SummaryService; vazio→zeros; delta negativo.
+## Testing strategy (TDD)
+- Integration: rendered values = SummaryService; empty → zeros; negative delta.
 
-## Boas Práticas
-Reuso `_stat_row`, DS, formatação localizada de números, DRY.
+## Best practices
+Reuse `_stat_row`, DS, localized number formatting, DRY.
 
-## Modelo LLM Recomendado
-Sonnet — binding + formatação sobre serviço pronto.
+## Recommended LLM model
+Sonnet — binding + formatting over a ready-made service.
 
-## Estratégia de Commit
+## Commit strategy
 `feat: stats summary partial` · `test: stats summary rendering` · `feat: bind summary service + tnum formatting`.
