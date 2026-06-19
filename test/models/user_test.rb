@@ -92,4 +92,23 @@ class UserTest < ActiveSupport::TestCase
 
     assert_nil User.find_by_token_for(:email_confirmation, token)
   end
+
+  test "has_many characters" do
+    user = create(:user)
+    race = create(:race)
+    create(:character, user:, race:)
+    create(:character, user:, race:)
+
+    assert_equal 2, user.characters.count
+  end
+
+  test "destroying user destroys associated characters" do
+    user = create(:user)
+    race = create(:race)
+    create(:character, user:, race:)
+
+    assert_difference "Character.count", -1 do
+      user.destroy!
+    end
+  end
 end
