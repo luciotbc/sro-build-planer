@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+#
+# pr-size — Reviewability gate for PRs (see docs/code-review/pr-sizing-and-stacking.md)
+#
+# Computes the diff size and Reviewability Score for the current branch against
+# a base ref and reports green / justify / split.
+#
+# Usage:
+#   bin/pr-size [base_ref]              # default base: origin/main, then main
+#
+# Env:
+#   REVIEWABILITY_RESPONSIBILITIES=N   # responsibilities count (default 1)
+#   REVIEWABILITY_BYPASS=1             # warn only, never fail (for justified PRs)
+#   PR_BODY="...text..."               # if it contains "Reviewability: justified", bypass
+#
+# Exit: 0 ok/warn, 1 when a hard cap is exceeded (and not bypassed).
+
+set -euo pipefail
+
+# Limits (keep in sync with docs/code-review/pr-sizing-and-stacking.md)
+LOC_TARGET=400
+LOC_CAP=600
+FILES_TARGET=15
+FILES_CAP=20
+SCORE_GREEN=800
+SCORE_SPLIT=1200
+
+base="${1:-}"
+if [ -z "$base" ]; then
+  if git rev-parse --verify --quiet origin/main >/dev/null; then
+    base="origin/main"
+  else
+    base="main"
+  fi
+fi
+
+if ! git rev-parse --verify --quiet "$base" >/dev/null; then
+  echo "pr-size: base ref '$base' not found" >&2
+  exit 2
+fi
+
+range="${base}...HEAD"
+stat="$(git diff --shortstat "$range" || true)"
+ins="$(printf '%s' "$stat" | grep -oE '[0-9]+ insertion' | grep -oE '[0-9]+' || true)"
+del="$(printf '%s' "$stat" | grep -oE '[0-9]+ deletion' | grep -oE '[0-9]+' || true)"
+ins="${ins:-0}"
+del="${del:-0}"
+files="$(git diff --name-only "$range" | sed '/^$/d' | wc -l | tr -d ' ')"
+resp="${REVIEWABILITY_RESPONSIBILITIES:-1}"
+loc=$((ins + del))
+score=$((loc + files * 20 + resp * 100))
+
+bypass=0
+if [ "${REVIEWABILITY_BYPASS:-0}" = "1" ]; then bypass=1; fi
+case "${PR_BODY:-}" in *"Reviewability: justified"*) bypass=1 ;; esac
+
+echo "Reviewability report (base: $base)"
+echo "  LOC delta        : $loc  (+$ins / -$del)   target<=$LOC_TARGET cap<=$LOC_CAP"
+echo "  Files changed    : $files                 target<=$FILES_TARGET cap<=$FILES_CAP"
+echo "  Responsibilities : $resp"
+echo "  Reviewability    : $score = $loc + $files*20 + $resp*100   green<=$SCORE_GREEN split>$SCORE_SPLIT"
+
+verdict="GREEN"
+hard=0
+if [ "$loc" -gt "$LOC_CAP" ]; then verdict="OVER (LOC > $LOC_CAP)"; hard=1; fi
+if [ "$files" -gt "$FILES_CAP" ]; then verdict="OVER (files > $FILES_CAP)"; hard=1; fi
+if [ "$score" -gt "$SCORE_SPLIT" ]; then verdict="OVER (score > $SCORE_SPLIT)"; hard=1; fi
+if [ "$hard" -eq 0 ] && { [ "$loc" -gt "$LOC_TARGET" ] || [ "$files" -gt "$FILES_TARGET" ] || [ "$score" -gt "$SCORE_GREEN" ]; }; then
+  verdict="JUSTIFY (above target, under cap)"
+fi
+
+echo "  Verdict          : $verdict"
+
+if [ "$hard" -eq 1 ]; then
+  if [ "$bypass" -eq 1 ]; then
+    echo "pr-size: over the cap but bypassed (justified). Split is still recommended." >&2
+    exit 0
+  fi
+  echo "pr-size: PR exceeds hard caps — split into stacked PRs (docs/code-review/pr-sizing-and-stacking.md)." >&2
+  echo "         To override for a justified PR: add 'Reviewability: justified' to the PR body or set REVIEWABILITY_BYPASS=1." >&2
+  exit 1
+fi
+
+exit 0

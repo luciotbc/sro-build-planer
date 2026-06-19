@@ -5,7 +5,7 @@ namespace :import do
 
     csv_path =
       args.csv_path ||
-        Rails.root.join("doc", "import", "SRO_Skills_Complete.csv").to_s
+        Rails.root.join("docs", "import", "SRO_Skills_Complete.csv").to_s
 
     importer = Sro::SkillsImporter.new(csv_path)
     success = importer.import!
@@ -17,13 +17,13 @@ namespace :import do
   task skills_xml: :environment do |t, args|
     require_relative "../../lib/sro/xml_skills_importer"
     ch_xml_path =
-      args.xml_path || Rails.root.join("doc", "import", "skill_ch.xml").to_s
+      args.xml_path || Rails.root.join("docs", "import", "skill_ch.xml").to_s
 
     importer = Sro::XmlSkillsImporter.new(ch_xml_path, :ch)
     ch_success = importer.import!
 
     eu_xml_path =
-      args.xml_path || Rails.root.join("doc", "import", "skill_eu.xml").to_s
+      args.xml_path || Rails.root.join("docs", "import", "skill_eu.xml").to_s
 
     importer = Sro::XmlSkillsImporter.new(eu_xml_path, :eu)
     eu_success = importer.import!

@@ -128,3 +128,17 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
+
+  reviewability:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check PR size (reviewability gate)
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: bin/pr-size "origin/${{ github.event.pull_request.base.ref }}"
