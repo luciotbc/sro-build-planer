@@ -1,5 +1,7 @@
 module CharacterSkills
   class ClearService
+    include PrerequisiteResolver
+
     VALID_FIELDS = %i[current target both].freeze
 
     def self.call(character, params) = new(character, params).call
@@ -7,6 +9,7 @@ module CharacterSkills
     def initialize(character, params)
       @character = character
       @params = params
+      @warnings = []
     end
 
     def call
@@ -27,12 +30,25 @@ module CharacterSkills
       end
 
       if field.in?(%i[current both])
-        blocking = find_blocking_dependents(cs.skill_group)
+        blocking = find_blocking_dependents(cs.skill_group, 0, :current)
         if blocking.any?
           return(
             ServiceResult.fail(
               errors: [
                 "Cannot clear current_skill_level: blocked by #{blocking.join(", ")}"
+              ]
+            )
+          )
+        end
+      end
+
+      if field.in?(%i[target both])
+        blocking = find_blocking_dependents(cs.skill_group, 0, :target)
+        if blocking.any?
+          return(
+            ServiceResult.fail(
+              errors: [
+                "Cannot clear target_skill_level: blocked by #{blocking.join(", ")}"
               ]
             )
           )
@@ -50,33 +66,6 @@ module CharacterSkills
       ServiceResult.fail(errors: e.record.errors.full_messages)
     rescue => e
       ServiceResult.fail(errors: [e.message])
-    end
-
-    private
-
-    def find_blocking_dependents(skill_group)
-      reqs =
-        SkillGroupRequirement.includes(:skill_group).where(
-          required_group: skill_group
-        )
-
-      return [] if reqs.empty?
-
-      cs_by_sg =
-        @character
-          .character_skills
-          .where(skill_group_id: reqs.map(&:skill_group_id))
-          .index_by(&:skill_group_id)
-
-      reqs.filter_map do |req|
-        dep_cs = cs_by_sg[req.skill_group_id]
-        next unless dep_cs
-        unless dep_cs.current_skill_level.to_i >= req.required_skill_level.to_i
-          next
-        end
-
-        req.skill_group.name
-      end
     end
   end
 end

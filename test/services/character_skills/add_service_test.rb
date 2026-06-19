@@ -419,4 +419,82 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
       )
     end
   end
+
+  # --------- target-side cascade (spec 03 R2) ----------------------------------
+
+  it "auto-adds prerequisite on target side when target_skill_level > 0" do
+    char = fresh_char
+    CharacterSkills::AddService.call(
+      char,
+      skill_group_id: @spear_sg.id,
+      current_skill_level: 0,
+      target_skill_level: 1
+    )
+
+    prereq = CharacterSkill.find_by(character: char, skill_group: @sword_sg)
+    assert_not_nil prereq, "sword_sg prereq must be auto-added"
+    assert_equal 1, prereq.target_skill_level
+    assert_equal 0,
+                 prereq.current_skill_level,
+                 "current side must not be touched"
+  end
+
+  it "does not resolve target prerequisites when target_skill_level is 0" do
+    char = fresh_char
+    assert_difference "CharacterSkill.count", 1 do
+      CharacterSkills::AddService.call(
+        char,
+        skill_group_id: @spear_sg.id,
+        current_skill_level: 0,
+        target_skill_level: 0
+      )
+    end
+  end
+
+  it "escalates target_mastery_level from target-side prereq's mastery_level_req" do
+    char = fresh_char
+    CharacterSkills::AddService.call(
+      char,
+      skill_group_id: @spear_sg.id,
+      current_skill_level: 0,
+      target_skill_level: 1
+    )
+
+    cm = CharacterMastery.find_by(character: char, mastery: @blade_mastery)
+    assert_not_nil cm
+    assert_equal 1,
+                 cm.target_mastery_level,
+                 "blade mastery_level_req for sword at level 1 is 1"
+    assert_equal 0,
+                 cm.current_mastery_level,
+                 "current mastery must not be touched"
+  end
+
+  it "cascades both sides independently" do
+    char = fresh_char
+    CharacterSkills::AddService.call(
+      char,
+      skill_group_id: @spear_sg.id,
+      current_skill_level: 1,
+      target_skill_level: 1
+    )
+
+    prereq = CharacterSkill.find_by(character: char, skill_group: @sword_sg)
+    assert_not_nil prereq
+    assert_equal 1, prereq.current_skill_level
+    assert_equal 1, prereq.target_skill_level
+  end
+
+  it "target cascade does not block when current_skill_level is 0" do
+    char = fresh_char
+    result =
+      CharacterSkills::AddService.call(
+        char,
+        skill_group_id: @spear_sg.id,
+        current_skill_level: 0,
+        target_skill_level: 1
+      )
+
+    assert result.success?
+  end
 end

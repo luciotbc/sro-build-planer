@@ -64,13 +64,14 @@ class CharacterSkills::PrerequisiteResolutionTest < ActiveSupport::TestCase
     assert CharacterSkill.exists?(character: char, skill_group: @sword_sg)
   end
 
-  it "sets created prerequisite to required_skill_level" do
+  it "sets created prerequisite to required_skill_level on the requested side only" do
     char = fresh_char
     add_skill(char, @spear_sg, 1)
 
     cs = CharacterSkill.find_by(character: char, skill_group: @sword_sg)
     assert_equal 1, cs.current_skill_level
-    assert_equal 1, cs.target_skill_level
+    # per spec 03 R3: created on side S only; other side stays at 0
+    assert_equal 0, cs.target_skill_level
   end
 
   # --------- branch: exists, level sufficient --- skip -----------------------

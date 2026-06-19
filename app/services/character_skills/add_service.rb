@@ -47,8 +47,14 @@ module CharacterSkills
 
       cs = nil
       ApplicationRecord.transaction do
-        resolve_prerequisites(sg, Set.new) if current_level > 0
-        ensure_mastery(sg, current_level, target_level)
+        if current_level > 0
+          resolve_prerequisites(sg, Set.new, :current)
+          update_mastery(sg, current_level, :current)
+        end
+        if target_level > 0
+          resolve_prerequisites(sg, Set.new, :target)
+          update_mastery(sg, target_level, :target)
+        end
         cs =
           CharacterSkill.create!(
             character: @character,
@@ -74,47 +80,6 @@ module CharacterSkills
         errors << "#{attr} must be <= #{sg.max_skill_level}"
       end
       errors
-    end
-
-    def add_prerequisite(skill_group, level)
-      ensure_mastery(skill_group, level, level)
-      CharacterSkill.create!(
-        character: @character,
-        skill_group: skill_group,
-        current_skill_level: level,
-        target_skill_level: level
-      )
-      @warnings << I18n.t("warnings.prerequisite_added", name: skill_group.name)
-    end
-
-    def ensure_mastery(skill_group, current_level, target_level)
-      mastery = skill_group.mastery
-      current_req =
-        skill_group.skill_at_level(current_level)&.mastery_level_req.to_i
-      target_req =
-        skill_group.skill_at_level(target_level)&.mastery_level_req.to_i
-
-      cm = CharacterMastery.find_by(character: @character, mastery:)
-
-      if cm.nil?
-        CharacterMastery.create!(
-          character: @character,
-          mastery:,
-          current_mastery_level: current_req,
-          target_mastery_level: target_req
-        )
-        @warnings << I18n.t(
-          "warnings.character_mastery_created",
-          name: mastery.name
-        )
-      elsif cm.current_mastery_level.to_i < current_req
-        cm.update!(current_mastery_level: current_req)
-        @warnings << I18n.t(
-          "warnings.character_mastery_level_updated",
-          name: mastery.name,
-          level: current_req
-        )
-      end
     end
   end
 end
