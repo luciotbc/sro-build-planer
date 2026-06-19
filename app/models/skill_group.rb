@@ -7,6 +7,17 @@ class SkillGroup < ApplicationRecord
 
   validates :external_group_code, presence: true, uniqueness: true
 
+  # Spec 04 R4: highest skill level whose mastery_level_req <= server_level_cap,
+  # bounded by max_skill_level.
+  def effective_cap(server_level_cap)
+    reachable =
+      skills
+        .where("mastery_level_req <= ?", server_level_cap)
+        .maximum(:skill_level)
+        .to_i
+    max_skill_level ? [reachable, max_skill_level].min : reachable
+  end
+
   def skill_at_level(level)
     if level < 0 || (max_skill_level && level > max_skill_level)
       raise ArgumentError,

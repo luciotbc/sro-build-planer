@@ -1,2 +1,51 @@
-<h1>Edit Character</h1>
-<%= render "form", character: @character %>
+<%
+  side_label = @side == :current ? "Current" : "Planned"
+%>
+
+<div class="flex items-center gap-3 mb-4">
+  <%= link_to "← Back", character_path(@character, mastery_id: @active_mastery&.id),
+        class: "btn-ghost text-sm" %>
+  <h1 class="text-sm font-bold text-text">
+    Edit <%= side_label %><% if @active_mastery %> — <%= @active_mastery.name %><% end %>
+  </h1>
+</div>
+
+<% if @active_mastery.nil? %>
+  <p class="text-sm text-text-dim">No mastery available. Add masteries first.</p>
+<% elsif @series_groups.empty? %>
+  <p class="text-sm text-text-dim">No skill series in this mastery.</p>
+<% else %>
+  <div class="flex flex-col gap-6">
+    <% @series_groups.each do |group| %>
+      <div class="rounded-panel border border-line p-4">
+        <h2 class="text-xs font-bold text-text-dim uppercase tracking-wider mb-3">
+          <%= group[:series].title %>
+        </h2>
+        <div class="flex flex-col gap-2">
+          <% group[:skills].each do |entry| %>
+            <div
+              class="fs-skill-row"
+              data-controller="stepper"
+              data-stepper-level-value="<%= entry[:level] %>"
+              data-stepper-max-value="<%= entry[:cap] %>"
+            >
+              <div class="fs-skill-meta">
+                <span class="fs-skill-name"><%= entry[:skill_group].name %></span>
+                <span class="fs-skill-level">
+                  <span class="fs-level-num" data-stepper-target="output"><%= entry[:level] %></span>
+                  <span class="text-text-mute"> / <%= entry[:cap] %></span>
+                </span>
+              </div>
+              <div class="fs-skill-controls">
+                <button type="button" class="fs-step-btn"
+                        data-action="stepper#decrement">−</button>
+                <button type="button" class="fs-step-btn primary"
+                        data-action="stepper#increment">+</button>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
