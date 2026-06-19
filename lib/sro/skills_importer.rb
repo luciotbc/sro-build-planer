@@ -109,7 +109,7 @@ module Sro
     end
 
     def default_csv_path
-      Rails.root.join("doc", "import", "SRO_Skills_Complete.csv").to_s
+      Rails.root.join("docs", "import", "SRO_Skills_Complete.csv").to_s
     end
 
     # ───────────────────────────────────────────────────────────────────────────────

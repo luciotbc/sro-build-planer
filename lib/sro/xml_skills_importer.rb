@@ -67,7 +67,7 @@ module Sro
     end
 
     def default_xml_path
-      Rails.root.join("doc", "import", "skill_ch_small.xml").to_s
+      Rails.root.join("docs", "import", "skill_ch_small.xml").to_s
     end
 
     # ───────────────────────────────────────────────────────────────────────────────

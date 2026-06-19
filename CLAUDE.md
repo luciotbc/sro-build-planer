@@ -32,12 +32,12 @@ bin/bundler-audit           # gem vulnerability audit
 bin/ci
 
 # Data import
-bin/rails import:skills                         # import from doc/import/SRO_Skills_Complete.csv (CSV)
+bin/rails import:skills                         # import from docs/import/SRO_Skills_Complete.csv (CSV)
 bin/rails import:skills[/path/to/other.csv]    # import from a specific CSV
-bin/rails import:skills_xml                    # import from doc/import/skill_ch.xml + skill_eu.xml (XML, preferred)
+bin/rails import:skills_xml                    # import from docs/import/skill_ch.xml + skill_eu.xml (XML, preferred)
 
 # Documentation
-bin/rails docs:erd          # regenerate doc/diagrams/db-erd.svg after schema changes
+bin/rails docs:erd          # regenerate docs/diagrams/db-erd.svg after schema changes
 ```
 
 ## Architecture
@@ -72,8 +72,8 @@ All static records carry an `external_id` (from the game's data) used as the sta
 
 Two importers, both idempotent (skip existing records):
 
-- **CSV** — `lib/sro/skills_importer.rb` (`SRO::SkillsImporter`): reads `doc/import/SRO_Skills_Complete.csv`. Run via `bin/rails import:skills`.
-- **XML** — `lib/sro/xml_skills_importer.rb` (`SRO::XmlSkillsImporter`): reads `doc/import/skill_ch.xml` and `skill_eu.xml` (raw game exports). Imports in dependency order: Masteries → SkillSeries → SkillGroups → Skills → SkillGroupRequirements → LevelData. Run via `bin/rails import:skills_xml`.
+- **CSV** — `lib/sro/skills_importer.rb` (`SRO::SkillsImporter`): reads `docs/import/SRO_Skills_Complete.csv`. Run via `bin/rails import:skills`.
+- **XML** — `lib/sro/xml_skills_importer.rb` (`SRO::XmlSkillsImporter`): reads `docs/import/skill_ch.xml` and `skill_eu.xml` (raw game exports). Imports in dependency order: Masteries → SkillSeries → SkillGroups → Skills → SkillGroupRequirements → LevelData. Run via `bin/rails import:skills_xml`.
 
 The XML importer is more complete — it populates `SkillSeries`, `SkillGroupRequirement`, and `LevelDatum` which the CSV importer does not.
 

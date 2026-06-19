@@ -5,12 +5,12 @@ Orginal files extrated from https://www.m3stat.com/SPCalc/
   - [skill_ch.xml](https://www.m3stat.com/data/skill_ch.xml)
   - [skill_eu.xml](https://www.m3stat.com/data/skill_eu.xml)
 
-Documents the XML format used by `doc/import/skill_ch_small.xml` and how each field maps to the database.
+Documents the XML format used by `docs/import/skill_ch_small.xml` and how each field maps to the database.
 
 ## Running the Importer
 
 ```bash
-bin/rails import:skills_xml                        # uses doc/import/skill_ch_small.xml
+bin/rails import:skills_xml                        # uses docs/import/skill_ch_small.xml
 ```
 
 The importer is idempotent — existing records are skipped, nothing is overwritten.

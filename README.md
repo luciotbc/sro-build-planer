@@ -22,7 +22,7 @@ Things you may want to cover:
 
 ### Database
 
-![Database Diagram](doc/diagrams/db-erd.svg)
+![Database Diagram](docs/diagrams/db-erd.svg)
 
 To regenerate the diagram after schema changes:
 
@@ -32,4 +32,4 @@ bin/rails docs:erd
 
 ### Design System
 
-The compiled design system is available at `public/design-system/index.html` and served statically at `/design-system/index.html`. Source files (HTML prototypes, CSS, JSX and Rails reference partials) live under `doc/design/`.
+The design system is a living, in-app reference served at `/docs/design_system` (`DocsController#design_system`, view `app/views/docs/design_system.html.erb`, development-only). Every component is a real `app/views/shared` partial styled by `@layer components` classes in `app/assets/tailwind/application.css`, so the docs cannot drift from production.
