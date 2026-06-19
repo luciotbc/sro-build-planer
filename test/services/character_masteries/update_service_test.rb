@@ -108,7 +108,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
 
   # --------- auto-update character level -----------------------------------
 
-  it "auto-updates character current_level when mastery exceeds it" do
+  it "updates character current_level via callback when mastery level changes" do
     result =
       CharacterMasteries::UpdateService.call(
         @char,
@@ -118,12 +118,9 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
 
     assert result.success?
     assert_equal 90, @char.reload.current_level
-    assert result.warnings.any? { |w|
-             w.include?("current_level") && w.include?("90")
-           }
   end
 
-  it "auto-updates character target_level when mastery exceeds it" do
+  it "updates character target_level via callback when mastery level changes" do
     result =
       CharacterMasteries::UpdateService.call(
         @char,
@@ -133,9 +130,6 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
 
     assert result.success?
     assert_equal 110, @char.reload.target_level
-    assert result.warnings.any? { |w|
-             w.include?("target_level") && w.include?("110")
-           }
   end
 
   it "recomputes character level to new mastery level even when it decreases" do

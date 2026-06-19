@@ -25,13 +25,6 @@ module CharacterMasteries
       new_target = @params.fetch(:target_mastery_level, cm.target_mastery_level)
 
       ApplicationRecord.transaction do
-        if @params.key?(:current_mastery_level)
-          sync_character_level(:current_level, new_current)
-        end
-        if @params.key?(:target_mastery_level)
-          sync_character_level(:target_level, new_target)
-        end
-
         if @params.key?(:current_mastery_level) &&
              new_current < (cm.current_mastery_level || 0)
           cascade_skills(:current_skill_level, :current_skill, new_current)
@@ -60,18 +53,6 @@ module CharacterMasteries
     end
 
     private
-
-    def sync_character_level(char_attr, new_mastery_level)
-      char_level = @character.public_send(char_attr) || 0
-      return unless new_mastery_level > char_level
-
-      @character.update!(char_attr => new_mastery_level)
-      @warnings << I18n.t(
-        "warnings.character_level_updated",
-        attr: char_attr,
-        value: new_mastery_level
-      )
-    end
 
     def cascade_skills(skill_level_attr, skill_method, new_mastery_level)
       char_skills_for_mastery.each do |cs|

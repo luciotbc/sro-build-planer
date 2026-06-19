@@ -34,17 +34,5 @@ module CharacterSkills
           end
         end
     end
-
-    def sync_character_level(attr, mastery_level)
-      char_level = @character.public_send(attr).to_i
-      return unless mastery_level > char_level
-
-      @character.update!(attr => mastery_level)
-      @warnings << I18n.t(
-        "warnings.character_level_updated",
-        attr: attr,
-        value: mastery_level
-      )
-    end
   end
 end

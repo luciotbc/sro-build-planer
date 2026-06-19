@@ -73,9 +73,7 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
 
   # --------- auto-update character levels ----------------------------------
 
-  it "raises character current_level when mastery level exceeds it" do
-    @char.update!(current_level: 10)
-
+  it "raises character current_level when mastery level is added (callback)" do
     result =
       CharacterMasteries::AddService.call(
         @char,
@@ -85,14 +83,9 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
 
     assert result.success?
     assert_equal 30, @char.reload.current_level
-    assert result.warnings.any? { |w|
-             w.include?("current_level") && w.include?("30")
-           }
   end
 
-  it "raises character target_level when mastery level exceeds it" do
-    @char.update!(target_level: 10)
-
+  it "raises character target_level when mastery level is added (callback)" do
     result =
       CharacterMasteries::AddService.call(
         @char,
@@ -102,14 +95,9 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
 
     assert result.success?
     assert_equal 50, @char.reload.target_level
-    assert result.warnings.any? { |w|
-             w.include?("target_level") && w.include?("50")
-           }
   end
 
-  it "emits two warnings when both levels are raised" do
-    @char.update!(current_level: 5, target_level: 5)
-
+  it "emits no character level warnings (level maintained by callback)" do
     result =
       CharacterMasteries::AddService.call(
         @char,
@@ -119,14 +107,12 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
       )
 
     assert result.success?
-    assert_equal 2, result.warnings.size
+    assert_empty result.warnings
     assert_equal 20, @char.reload.current_level
     assert_equal 40, @char.reload.target_level
   end
 
-  it "does not update character level when mastery level is equal" do
-    @char.update!(current_level: 20)
-
+  it "character level reflects mastery level even when equal" do
     result =
       CharacterMasteries::AddService.call(
         @char,
@@ -139,9 +125,7 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
     assert_equal 20, @char.reload.current_level
   end
 
-  it "recomputes character level to mastery level when mastery is added below prior level" do
-    @char.update!(current_level: 50)
-
+  it "recomputes character level to mastery level (per spec 01 R1: MAX of masteries)" do
     result =
       CharacterMasteries::AddService.call(
         @char,
@@ -151,13 +135,10 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
 
     assert result.success?
     assert_empty result.warnings
-    # per spec 01 R1: current_level = MAX(mastery levels) = 30
     assert_equal 30, @char.reload.current_level
   end
 
-  it "returns warnings in ServiceResult" do
-    @char.update!(current_level: 0)
-
+  it "returns warnings and errors arrays in ServiceResult" do
     result =
       CharacterMasteries::AddService.call(
         @char,
