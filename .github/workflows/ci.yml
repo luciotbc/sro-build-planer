@@ -141,4 +141,5 @@ jobs:
       - name: Check PR size (reviewability gate)
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
+          REVIEWABILITY_BYPASS: ${{ contains(github.event.pull_request.labels.*.name, 'integration-pr') && '1' || '0' }}
         run: bin/pr-size "origin/${{ github.event.pull_request.base.ref }}"
