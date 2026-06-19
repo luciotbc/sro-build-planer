@@ -11,8 +11,8 @@ module Characters
         Character.new(
           name: @params[:name],
           race_id: @params[:race_id],
-          current_level: @params.fetch(:current_level, 0),
-          target_level: @params.fetch(:target_level, 0)
+          user: @params[:user],
+          server_level_cap: @params.fetch(:server_level_cap, 110)
         )
 
       if character.save

@@ -318,23 +318,22 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
     assert_equal 1, char.reload.current_level
   end
 
-  it "adds warning when character level is auto-updated" do
+  it "character level is set correctly when mastery is auto-created" do
     char = fresh_char
-    result =
-      CharacterSkills::AddService.call(
-        char,
-        skill_group_id: @sword_sg.id,
-        current_skill_level: 1
-      )
+    CharacterSkills::AddService.call(
+      char,
+      skill_group_id: @sword_sg.id,
+      current_skill_level: 1
+    )
 
-    assert result.warnings.any? { |w| w.include?("character.current_level") }
+    # per spec 01 R1: current_level = MAX(mastery levels) = mastery_level_req
+    assert_equal 1, char.reload.current_level
   end
 
   # --------- warnings accumulation ----------------------------------------
 
   it "warnings accumulate across prerequisite and mastery auto-creation" do
-    char =
-      create(:character, race: @chinese_race, current_level: 0, target_level: 0)
+    char = create(:character, race: @chinese_race)
 
     result =
       CharacterSkills::AddService.call(
@@ -348,10 +347,9 @@ class CharacterSkills::AddServiceTest < ActiveSupport::TestCase
            "must warn about auto-added prerequisite"
     assert result.warnings.any? { |w| w.include?("created automatically") },
            "must warn about auto-created CharacterMastery"
-    assert result.warnings.any? { |w| w.include?("character.current_level") },
-           "must warn about character level auto-update"
-    assert result.warnings.size >= 4,
-           "expected at least 4 accumulated warnings, got #{result.warnings.size}"
+    # character level update is now handled silently by the CharacterMastery callback (spec 01 R1)
+    assert result.warnings.size >= 3,
+           "expected at least 3 accumulated warnings, got #{result.warnings.size}"
   end
 
   # --------- prerequisite resolution ---------------------------------------
