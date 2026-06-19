@@ -6,6 +6,7 @@
 
 ## Stack position
 <!-- Targets branch: ____   | Precedes: ____  | Follows: ____   (or "standalone") -->
+<!-- Integration PRs: add the `integration-pr` label, write "Reviewability: justified", and link every child PR. -->
 
 
 ## Size (reviewability)
@@ -15,6 +16,7 @@
 - Responsibilities: 1
 - Reviewability Score:
 <!-- If above the cap on purpose, write "Reviewability: justified" and explain why. -->
+<!-- Only integration PRs with reviewed child PRs should use that justification. -->
 
 ## Scope
 <!-- Bullet list of the changes. -->

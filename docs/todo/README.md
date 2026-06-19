@@ -1,12 +1,12 @@
 # Backlog — docs/todo
 
-> AI-agent-consumable backlog (cognitive-model style). Each `NNN-*.md` is one independently-shippable task (1 branch `feature/NNN-slug`, 1 PR). Read [docs/specs](../specs/README.md) for the business rules a task references. Mockups govern visual/interaction; **specs govern business rules**.
+> AI-agent-consumable backlog (cognitive-model style). Each `NNN-*.md` is one independently-shippable task. Small tasks use one PR; large tasks are split into stacked review PRs under `feature/NNN-slug/NN-slice`. Read [docs/specs](../specs/README.md) for the business rules a task references. Mockups govern visual/interaction; **specs govern business rules**.
 
 ## Definition of Done (every task)
-Tests green (`PARALLEL_WORKERS=1 bin/rails test`) · rubocop/format clean · browser-validated (Chrome) · mockup + DS conformance · no console errors · code review applies [the-rails-way](../code-review/the-rails-way.md) · PRs respect [pr-sizing-and-stacking](../code-review/pr-sizing-and-stacking.md) (≤400 LOC / ≤15 files / 1 responsibility; split into stacked sub-PRs if exceeded) · PR with evidence · **docs/specs/README + this README kept in sync if docs change**.
+Tests green (`PARALLEL_WORKERS=1 bin/rails test`) · rubocop/format clean · browser-validated (Chrome) · mockup + DS conformance · no console errors · code review applies [the-rails-way](../code-review/the-rails-way.md) · PRs respect [pr-sizing-and-stacking](../code-review/pr-sizing-and-stacking.md) (≤400 LOC / ≤15 files / 1 responsibility; split into stacked sub-PRs if exceeded; integration PRs require `integration-pr` + justification) · PR with evidence · **docs/specs/README + this README kept in sync if docs change**.
 
 ## Stacked-PR note
-A task = a feature integration branch `feature/NNN-slug`; deliver as ordered small sub-PRs `feature/NNN-slug/NN-fatia` (refactor → schema → service → UI → cleanup), each within the size limits. Tasks **001** and **010** are large → must be stacked.
+A task is delivered as ordered small PRs `feature/NNN-slug/NN-slice` (refactor → schema → service → UI → cleanup), each within the size limits. Default to stacked PRs retargeted into `main` as each slice merges. Use a feature integration branch `feature/NNN-slug` only when the whole feature must be tested together before `main`; the final integration PR must carry the `integration-pr` label, include `Reviewability: justified`, and link all reviewed child PRs. Tasks **001** and **010** are large → must be stacked.
 
 ## Task index
 
