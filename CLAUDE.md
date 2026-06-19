@@ -159,7 +159,8 @@ For any substantial feature or multi-step effort, follow this flow (it produced 
 
 ### Code review
 12. **Every code review applies The Rails Way checklist.** Any agent or skill performing a code review (manual, `/code-review`, PR-review subagents) MUST apply [docs/code-review/the-rails-way.md](docs/code-review/the-rails-way.md) **in addition** to its normal correctness/security pass, flagging each violation with the relevant section. It is a hard gate alongside the per-task Definition of Done.
+13. **Keep PRs small and reviewable (stacked PRs).** Before opening any PR, self-check against [docs/code-review/pr-sizing-and-stacking.md](docs/code-review/pr-sizing-and-stacking.md): one responsibility (one-sentence summary, refactor separate from behavior), ≤400 LOC (cap 600), ≤15 files (cap 20), Reviewability Score `LOC + files×20 + responsibilities×100` ≤ 800. If exceeded, split into ordered stacked sub-PRs (`feature/NNN-slug/NN-fatia` → integration branch `feature/NNN-slug` → main) **before** requesting review. PR body states the one-sentence summary, stack position, and `git diff --shortstat` size.
 
 ### Operational
-13. **Reading the SRO Labs mockups** (Cloudflare-gated `claude.ai/design`): use the **Claude-in-Chrome** MCP (real logged-in profile passes Cloudflare), not chrome-devtools (gets stuck in the turnstile). The rendered mockup is a cross-origin iframe → read via screenshots.
-14. **Signed commits** require the 1Password app open; its signing socket is blocked by the command sandbox — run the commit with the sandbox disabled when signing fails with "Could not connect to socket".
+14. **Reading the SRO Labs mockups** (Cloudflare-gated `claude.ai/design`): use the **Claude-in-Chrome** MCP (real logged-in profile passes Cloudflare), not chrome-devtools (gets stuck in the turnstile). The rendered mockup is a cross-origin iframe → read via screenshots.
+15. **Signed commits** require the 1Password app open; its signing socket is blocked by the command sandbox — run the commit with the sandbox disabled when signing fails with "Could not connect to socket".
