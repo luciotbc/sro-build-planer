@@ -6,6 +6,21 @@ class CharactersController < ApplicationController
   end
 
   def show
+    masteries =
+      @character.character_masteries.includes(:mastery).order("masteries.name")
+    @active_mastery = masteries.first&.mastery
+    @character_skills =
+      if @active_mastery
+        @character
+          .character_skills
+          .joins(:skill_group)
+          .where(skill_groups: { mastery_id: @active_mastery.id })
+          .includes(skill_group: [])
+          .order("skill_groups.name")
+      else
+        []
+      end
+    @summary = Builds::SummaryService.call(@character).data
   end
 
   def new
