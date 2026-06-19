@@ -157,6 +157,9 @@ For any substantial feature or multi-step effort, follow this flow (it produced 
 10. **Global stop**: all tasks merged + a final audit (target ≥95% mockup parity, 0 critical bugs, DS conformance); divergences become new `docs/todo/` tasks; loop until none relevant.
 11. **Keep the design system honest**: when you add a new composite partial, re-run `/design-sync` so the published DS does not diverge from the code.
 
+### Code review
+12. **Every code review applies The Rails Way checklist.** Any agent or skill performing a code review (manual, `/code-review`, PR-review subagents) MUST apply [docs/code-review/the-rails-way.md](docs/code-review/the-rails-way.md) **in addition** to its normal correctness/security pass, flagging each violation with the relevant section. It is a hard gate alongside the per-task Definition of Done.
+
 ### Operational
-12. **Reading the SRO Labs mockups** (Cloudflare-gated `claude.ai/design`): use the **Claude-in-Chrome** MCP (real logged-in profile passes Cloudflare), not chrome-devtools (gets stuck in the turnstile). The rendered mockup is a cross-origin iframe → read via screenshots.
-13. **Signed commits** require the 1Password app open; its signing socket is blocked by the command sandbox — run the commit with the sandbox disabled when signing fails with "Could not connect to socket".
+13. **Reading the SRO Labs mockups** (Cloudflare-gated `claude.ai/design`): use the **Claude-in-Chrome** MCP (real logged-in profile passes Cloudflare), not chrome-devtools (gets stuck in the turnstile). The rendered mockup is a cross-origin iframe → read via screenshots.
+14. **Signed commits** require the 1Password app open; its signing socket is blocked by the command sandbox — run the commit with the sandbox disabled when signing fails with "Could not connect to socket".
