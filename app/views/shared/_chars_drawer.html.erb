@@ -1,0 +1,51 @@
+<%#
+  shared/chars_drawer — right-side drawer listing the user's characters
+  -----------------------------------------------------------------------
+  locals:
+    characters: ActiveRecord::Relation or Array  required; character records
+  Usage:
+    render "shared/chars_drawer", characters: Current.user.characters.order(:name)
+%>
+<%
+  characters = local_assigns.fetch(:characters)
+  count = characters.size
+%>
+<div data-controller="dialog">
+  <button type="button" class="chars-pill" data-action="dialog#open">
+    <span class="lbl">Characters</span>
+    <span class="count"><%= count %></span>
+  </button>
+
+  <dialog
+    class="drawer"
+    data-dialog-target="dialog"
+    data-action="click->dialog#backdropClose"
+  >
+    <header class="flex items-center justify-between gap-3 border-b border-line pb-3">
+      <span class="text-sm font-bold text-text">My Characters</span>
+      <button type="button" class="icon-btn" data-action="dialog#close" aria-label="Close">×</button>
+    </header>
+
+    <div class="pt-4 flex flex-col gap-2">
+      <% if characters.empty? %>
+        <p class="text-sm text-text-dim">No characters yet. Create one to start planning your build.</p>
+      <% else %>
+        <% characters.each do |character| %>
+          <%= link_to character_path(character),
+                class: "flex items-center gap-3 rounded-field px-3 py-2 text-sm text-text hover:bg-surface-raised transition-colors" do %>
+            <div class="char-avatar text-xs"><%= character.race.name == "Chinese" ? "华" : "⚔" %></div>
+            <div>
+              <div class="font-semibold"><%= character.name %></div>
+              <div class="text-xs text-text-dim"><%= character.race.name %> · Cap <%= character.server_level_cap %></div>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <div class="mt-2 border-t border-line pt-3">
+        <%= link_to "＋ New Character", new_character_path,
+              class: "btn-ghost w-full text-center" %>
+      </div>
+    </div>
+  </dialog>
+</div>
