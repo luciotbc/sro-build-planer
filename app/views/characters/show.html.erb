@@ -1,0 +1,8 @@
+<h1><%= @character.name %></h1>
+
+<p>Race: <%= @character.race.name %></p>
+<p>Server cap: <%= @character.server_level_cap %></p>
+
+<%= link_to "Edit", edit_character_path(@character) %>
+<%= button_to "Delete", character_path(@character), method: :delete,
+              data: { turbo_confirm: "Delete this character and all its build data?" } %>

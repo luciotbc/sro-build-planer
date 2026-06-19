@@ -1,0 +1,57 @@
+class CharactersController < ApplicationController
+  before_action :set_character, only: %i[show edit update destroy]
+
+  def index
+    @characters = Current.user.characters.order(:name)
+  end
+
+  def show
+  end
+
+  def new
+    @character = Character.new
+  end
+
+  def edit
+  end
+
+  def create
+    result =
+      Characters::CreateService.call(character_params.merge(user: Current.user))
+    if result.success?
+      redirect_to result.data, notice: "Character created."
+    else
+      @character = Character.new(character_params)
+      @character.errors.add(:base, result.errors.join(", "))
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    result = Characters::UpdateService.call(@character, character_params)
+    if result.success?
+      redirect_to @character, notice: "Character updated."
+    else
+      @character.errors.add(:base, result.errors.join(", "))
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    Characters::DeleteService.call(@character)
+    redirect_to characters_path,
+                notice: "Character deleted.",
+                status: :see_other
+  end
+
+  private
+
+  def set_character
+    @character = Current.user.characters.find_by(id: params[:id]) or
+      head :not_found
+  end
+
+  def character_params
+    params.require(:character).permit(:name, :race_id, :server_level_cap)
+  end
+end
