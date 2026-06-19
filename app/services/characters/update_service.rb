@@ -12,14 +12,14 @@ module Characters
         @params.key?(:race_id) && @params[:race_id] != @character.race_id
 
       @character.assign_attributes(
-        @params.slice(:name, :race_id, :current_level, :target_level)
+        @params.slice(:name, :race_id, :server_level_cap)
       )
       unless @character.valid?
         return ServiceResult.fail(errors: @character.errors.full_messages)
       end
 
-      mastery_errors = mastery_compatibility_errors unless race_changing
-      return ServiceResult.fail(errors: mastery_errors) if mastery_errors&.any?
+      cap_errors = server_cap_compatibility_errors unless race_changing
+      return ServiceResult.fail(errors: cap_errors) if cap_errors&.any?
 
       persist!(race_changing)
       ServiceResult.ok(data: @character)
@@ -31,31 +31,24 @@ module Characters
 
     private
 
-    def mastery_compatibility_errors
-      unless @params.key?(:current_level) || @params.key?(:target_level)
-        return []
-      end
+    def server_cap_compatibility_errors
+      return [] unless @params.key?(:server_level_cap)
 
-      new_current = @params.fetch(:current_level, @character.current_level)
-      new_target = @params.fetch(:target_level, @character.target_level)
+      new_cap = @params[:server_level_cap].to_i
 
       incompatible =
         @character
           .character_masteries
           .includes(:mastery)
           .select do |cm|
-            exceeds?(cm.current_mastery_level, new_current) ||
-              exceeds?(cm.target_mastery_level, new_target)
+            (cm.current_mastery_level && cm.current_mastery_level > new_cap) ||
+              (cm.target_mastery_level && cm.target_mastery_level > new_cap)
           end
 
       return [] if incompatible.empty?
 
       names = incompatible.map { |cm| cm.mastery.name }.join(", ")
-      ["Cannot reduce level: incompatible masteries: #{names}"]
-    end
-
-    def exceeds?(mastery_level, char_level)
-      mastery_level && char_level && mastery_level > char_level
+      ["Cannot lower server level cap: masteries exceed new cap: #{names}"]
     end
 
     def persist!(race_changing)
@@ -65,9 +58,7 @@ module Characters
           @character.character_masteries.destroy_all
         end
 
-        @character.update!(
-          @params.slice(:name, :race_id, :current_level, :target_level)
-        )
+        @character.update!(@params.slice(:name, :race_id, :server_level_cap))
       end
     end
   end
