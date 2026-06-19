@@ -3,11 +3,15 @@
 one:
   name: MyString
   race: chinese
+  user: one
+  server_level_cap: 110
   current_level: 1
   target_level: 1
 
 two:
   name: MyString
   race: european
+  user: two
+  server_level_cap: 110
   current_level: 1
   target_level: 1

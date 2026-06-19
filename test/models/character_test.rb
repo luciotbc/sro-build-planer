@@ -1,137 +1,190 @@
 require "test_helper"
 
 class CharacterTest < ActiveSupport::TestCase
+  let(:user) { create(:user) }
   let(:race) { create(:race) }
 
-  it "valid with name and race" do
-    assert Character.new(name: "Test Character", race:).valid?
+  # ---------- basic validity --------------------------------------------------
+
+  it "valid with name, race, user, and server_level_cap" do
+    assert Character.new(
+             name: "Test Character",
+             race:,
+             user:,
+             server_level_cap: 110
+           ).valid?
   end
 
   it "invalid without name" do
-    character = Character.new(race:)
+    character = Character.new(race:, user:, server_level_cap: 110)
 
     assert_not character.valid?
     assert_includes character.errors[:name], "can't be blank"
   end
 
   it "invalid without race" do
-    character = Character.new(name: "Test Character")
+    character =
+      Character.new(name: "Test Character", user:, server_level_cap: 110)
 
     assert_not character.valid?
     assert_includes character.errors[:race], "must exist"
   end
 
-  it "belongs_to race association" do
-    character = create(:character, race:)
-
-    assert_equal race, character.race
-  end
-
-  it "has_many character_masteries" do
-    assert_respond_to create(:character, race:), :character_masteries
-  end
-
-  it "has_many character_skills" do
-    assert_respond_to create(:character, race:), :character_skills
-  end
-
-  it "MAX_LEVEL constant is 150" do
-    assert_equal 150, Character::MAX_LEVEL
-  end
-
-  it "valid with current_level and target_level within range" do
+  it "invalid without user" do
     character =
-      Character.new(
-        name: "Test",
-        race:,
-        current_level: 1,
-        target_level: Character::MAX_LEVEL
-      )
-
-    assert character.valid?
-  end
-
-  it "valid with nil current_level and target_level" do
-    character = Character.new(name: "Test", race:)
-
-    assert character.valid?
-  end
-
-  it "valid with current_level of 0" do
-    character = Character.new(name: "Test", race:, current_level: 0)
-
-    assert character.valid?
-  end
-
-  it "invalid with current_level below 0" do
-    character = Character.new(name: "Test", race:, current_level: -1)
+      Character.new(name: "Test Character", race:, server_level_cap: 110)
 
     assert_not character.valid?
-    assert_includes character.errors[:current_level],
-                    "must be greater than or equal to 0"
-  end
-
-  it "invalid with current_level above MAX_LEVEL" do
-    character =
-      Character.new(
-        name: "Test",
-        race:,
-        current_level: Character::MAX_LEVEL + 1
-      )
-
-    assert_not character.valid?
-    assert_includes character.errors[:current_level],
-                    "must be less than or equal to #{Character::MAX_LEVEL}"
-  end
-
-  it "valid with target_level of 0" do
-    character = Character.new(name: "Test", race:, target_level: 0)
-
-    assert character.valid?
-  end
-
-  it "invalid with target_level below 0" do
-    character = Character.new(name: "Test", race:, target_level: -1)
-
-    assert_not character.valid?
-    assert_includes character.errors[:target_level],
-                    "must be greater than or equal to 0"
-  end
-
-  it "invalid with target_level above MAX_LEVEL" do
-    character =
-      Character.new(name: "Test", race:, target_level: Character::MAX_LEVEL + 1)
-
-    assert_not character.valid?
-    assert_includes character.errors[:target_level],
-                    "must be less than or equal to #{Character::MAX_LEVEL}"
-  end
-
-  it "invalid with non-integer current_level" do
-    character = Character.new(name: "Test", race:, current_level: 1.5)
-
-    assert_not character.valid?
-    assert_includes character.errors[:current_level], "must be an integer"
+    assert_includes character.errors[:user], "must exist"
   end
 
   it "invalid with blank name" do
-    character = Character.new(name: "", race:)
+    character = Character.new(name: "", race:, user:, server_level_cap: 110)
 
     assert_not character.valid?
     assert_includes character.errors[:name], "can't be blank"
   end
 
   it "invalid with nonexistent race_id" do
-    character = Character.new(name: "Test", race_id: 0)
+    character =
+      Character.new(name: "Test", race_id: 0, user:, server_level_cap: 110)
 
     assert_not character.valid?
     assert_includes character.errors[:race], "must exist"
   end
 
-  it "target_level can be lower than current_level without error" do
-    character =
-      Character.new(name: "Test", race:, current_level: 80, target_level: 30)
+  # ---------- associations ----------------------------------------------------
 
-    assert character.valid?
+  it "belongs_to race association" do
+    character = create(:character, race:, user:)
+
+    assert_equal race, character.race
+  end
+
+  it "belongs_to user association" do
+    character = create(:character, race:, user:)
+
+    assert_equal user, character.user
+  end
+
+  it "has_many character_masteries" do
+    assert_respond_to create(:character, race:, user:), :character_masteries
+  end
+
+  it "has_many character_skills" do
+    assert_respond_to create(:character, race:, user:), :character_skills
+  end
+
+  # ---------- server_level_cap ------------------------------------------------
+
+  it "valid with server_level_cap of 90" do
+    assert Character.new(
+             name: "Test",
+             race:,
+             user:,
+             server_level_cap: 90
+           ).valid?
+  end
+
+  it "valid with server_level_cap of 130" do
+    assert Character.new(
+             name: "Test",
+             race:,
+             user:,
+             server_level_cap: 130
+           ).valid?
+  end
+
+  [90, 100, 110, 120, 130].each do |cap|
+    it "valid with server_level_cap #{cap}" do
+      assert Character.new(
+               name: "Test",
+               race:,
+               user:,
+               server_level_cap: cap
+             ).valid?
+    end
+  end
+
+  it "invalid with server_level_cap not in allowed set" do
+    character = Character.new(name: "Test", race:, user:, server_level_cap: 95)
+
+    assert_not character.valid?
+    assert character.errors[:server_level_cap].any?
+  end
+
+  it "invalid without server_level_cap" do
+    character = Character.new(name: "Test", race:, user:, server_level_cap: nil)
+
+    assert_not character.valid?
+    assert character.errors[:server_level_cap].any?
+  end
+
+  # ---------- MAX_LEVEL constant ----------------------------------------------
+
+  it "MAX_LEVEL constant is 150" do
+    assert_equal 150, Character::MAX_LEVEL
+  end
+
+  # ---------- level caches (current_level / target_level) --------------------
+
+  it "current_level and target_level default to nil on new character" do
+    character = create(:character, race:, user:)
+
+    assert_nil character.current_level
+    assert_nil character.target_level
+  end
+
+  it "recompute_levels! sets current_level from max of mastery current levels" do
+    character = create(:character, race:, user:)
+    mastery_a = create(:mastery, race:)
+    mastery_b = create(:mastery, race:)
+    create(
+      :character_mastery,
+      character:,
+      mastery: mastery_a,
+      current_mastery_level: 40,
+      target_mastery_level: 0
+    )
+    create(
+      :character_mastery,
+      character:,
+      mastery: mastery_b,
+      current_mastery_level: 60,
+      target_mastery_level: 0
+    )
+
+    assert_equal 60, character.reload.current_level
+  end
+
+  it "recompute_levels! sets target_level from max of mastery target levels" do
+    character = create(:character, race:, user:)
+    mastery = create(:mastery, race:)
+    create(
+      :character_mastery,
+      character:,
+      mastery:,
+      current_mastery_level: 0,
+      target_mastery_level: 80
+    )
+
+    assert_equal 80, character.reload.target_level
+  end
+
+  it "recompute_levels! sets levels to 0 when no masteries remain" do
+    character = create(:character, race:, user:)
+    mastery = create(:mastery, race:)
+    cm =
+      create(
+        :character_mastery,
+        character:,
+        mastery:,
+        current_mastery_level: 50,
+        target_mastery_level: 70
+      )
+    cm.destroy!
+
+    assert_equal 0, character.reload.current_level
+    assert_equal 0, character.reload.target_level
   end
 end

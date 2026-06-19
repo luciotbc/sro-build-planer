@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :character do
     sequence(:name) { |n| "Character #{n}" }
-    current_level { 0 }
-    target_level { 0 }
+    server_level_cap { 110 }
     association :race
+    association :user
   end
 end

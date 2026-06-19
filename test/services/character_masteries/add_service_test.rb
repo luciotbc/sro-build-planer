@@ -139,7 +139,7 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
     assert_equal 20, @char.reload.current_level
   end
 
-  it "does not update character level when mastery level is lower" do
+  it "recomputes character level to mastery level when mastery is added below prior level" do
     @char.update!(current_level: 50)
 
     result =
@@ -151,7 +151,8 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
 
     assert result.success?
     assert_empty result.warnings
-    assert_equal 50, @char.reload.current_level
+    # per spec 01 R1: current_level = MAX(mastery levels) = 30
+    assert_equal 30, @char.reload.current_level
   end
 
   it "returns warnings in ServiceResult" do
