@@ -46,3 +46,6 @@
 
 ### TODO ###
 *.todo
+
+### Codex (local agent config) ###
+.codex/config.toml
