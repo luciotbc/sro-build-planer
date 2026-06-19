@@ -146,7 +146,6 @@ module CharacterSkills
           "warnings.character_mastery_created",
           name: mastery.name
         )
-        sync_character_level(:current_level, current_req)
       elsif cm.current_mastery_level.to_i < current_req
         cm.update!(current_mastery_level: current_req)
         @warnings << I18n.t(
@@ -154,7 +153,6 @@ module CharacterSkills
           name: mastery.name,
           level: current_req
         )
-        sync_character_level(:current_level, current_req)
       end
     end
   end

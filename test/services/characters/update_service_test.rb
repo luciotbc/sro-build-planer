@@ -19,8 +19,7 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
         race: @chinese_race
       )
     @cold_sg = create(:skill_group, mastery: @blade_mastery)
-    @char =
-      create(:character, race: @chinese_race, current_level: 1, target_level: 1)
+    @char = create(:character, race: @chinese_race, server_level_cap: 110)
   end
 
   # --------- name -------------------------------------------------------------
@@ -76,90 +75,73 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal original_race_id, @char.reload.race_id
   end
 
-  # --------- level changes ----------------------------------------------------
+  it "preserves name and server_level_cap when race changes" do
+    original_name = @char.name
+    original_cap = @char.server_level_cap
 
-  it "updates current_level and target_level" do
-    result =
-      Characters::UpdateService.call(
-        @char,
-        current_level: 50,
-        target_level: 100
-      )
+    Characters::UpdateService.call(@char, race_id: @european_race.id)
+
+    @char.reload
+    assert_equal original_name, @char.name
+    assert_equal original_cap, @char.server_level_cap
+    assert_equal @european_race.id, @char.race_id
+  end
+
+  # --------- server_level_cap -------------------------------------------------
+
+  it "updates server_level_cap to a valid value" do
+    result = Characters::UpdateService.call(@char, server_level_cap: 100)
 
     assert result.success?
-    assert_equal 50, @char.reload.current_level
-    assert_equal 100, @char.reload.target_level
+    assert_equal 100, @char.reload.server_level_cap
   end
 
-  it "accepts level of 0" do
-    result = Characters::UpdateService.call(@char, current_level: 0)
-
-    assert result.success?
-    assert_equal 0, @char.reload.current_level
-  end
-
-  it "fails with current_level above MAX_LEVEL" do
-    result =
-      Characters::UpdateService.call(
-        @char,
-        current_level: Character::MAX_LEVEL + 1
-      )
+  it "fails with invalid server_level_cap" do
+    result = Characters::UpdateService.call(@char, server_level_cap: 95)
 
     assert_not result.success?
-    assert result.errors.any? { |e| e.include?("Current level") }
+    assert result.errors.any? { |e| e.include?("Server level cap") }
   end
 
-  it "fails with negative target_level" do
-    result = Characters::UpdateService.call(@char, target_level: -1)
-
-    assert_not result.success?
-    assert result.errors.any? { |e| e.include?("Target level") }
-  end
-
-  # --------- mastery compatibility ---------------------------------------------
-
-  it "fails when reducing current_level below existing current_mastery_level" do
-    @char.update!(current_level: 80)
+  it "fails when lowering server_level_cap below existing current_mastery_level" do
     CharacterMastery.create!(
       character: @char,
       mastery: @blade_mastery,
-      current_mastery_level: 60
+      current_mastery_level: 100
     )
 
-    result = Characters::UpdateService.call(@char, current_level: 50)
+    result = Characters::UpdateService.call(@char, server_level_cap: 90)
 
     assert_not result.success?
     assert result.errors.any? { |e| e.include?("Blade") }
   end
 
-  it "fails when reducing target_level below existing target_mastery_level" do
-    @char.update!(target_level: 100)
+  it "fails when lowering server_level_cap below existing target_mastery_level" do
     CharacterMastery.create!(
       character: @char,
       mastery: @spear_mastery,
-      target_mastery_level: 90
+      target_mastery_level: 100
     )
 
-    result = Characters::UpdateService.call(@char, target_level: 70)
+    result = Characters::UpdateService.call(@char, server_level_cap: 90)
 
     assert_not result.success?
     assert result.errors.any? { |e| e.include?("Spear") }
   end
 
-  it "lists all incompatible masteries in the error" do
-    @char.update!(current_level: 80)
+  it "lists all incompatible masteries when server_level_cap is lowered" do
     CharacterMastery.create!(
       character: @char,
       mastery: @blade_mastery,
-      current_mastery_level: 60
+      current_mastery_level: 100
     )
     CharacterMastery.create!(
       character: @char,
       mastery: @spear_mastery,
-      current_mastery_level: 70
+      current_mastery_level: 95
     )
 
-    result = Characters::UpdateService.call(@char, current_level: 50)
+    result = Characters::UpdateService.call(@char, server_level_cap: 90)
 
     assert_not result.success?
     error = result.errors.first
@@ -167,57 +149,47 @@ class Characters::UpdateServiceTest < ActiveSupport::TestCase
     assert_match "Spear", error
   end
 
-  it "succeeds when new level equals existing mastery level" do
-    @char.update!(current_level: 80)
+  it "succeeds when masteries are at or below new server_level_cap" do
     CharacterMastery.create!(
       character: @char,
       mastery: @blade_mastery,
-      current_mastery_level: 50
+      current_mastery_level: 90
     )
 
-    result = Characters::UpdateService.call(@char, current_level: 50)
+    result = Characters::UpdateService.call(@char, server_level_cap: 90)
 
     assert result.success?
+    assert_equal 90, @char.reload.server_level_cap
   end
 
-  it "preserves other character fields when race changes" do
-    original_name = @char.name
-    original_current_level = @char.current_level
-
-    Characters::UpdateService.call(@char, race_id: @european_race.id)
-
-    @char.reload
-    assert_equal original_name, @char.name
-    assert_equal original_current_level, @char.current_level
-    assert_equal @european_race.id, @char.race_id
-  end
-
-  it "skips mastery check when race is also changing" do
-    @char.update!(current_level: 80)
+  it "skips mastery cap check when race is also changing" do
     CharacterMastery.create!(
       character: @char,
       mastery: @blade_mastery,
-      current_mastery_level: 60
+      current_mastery_level: 100
     )
 
     result =
       Characters::UpdateService.call(
         @char,
         race_id: @european_race.id,
-        current_level: 50
+        server_level_cap: 90
       )
 
     assert result.success?
     assert_equal 0, @char.character_masteries.count
   end
 
+  # --------- general safeguards -----------------------------------------------
+
   it "does not save anything on failure" do
     original_name = @char.name
 
-    result = Characters::UpdateService.call(@char, name: "", current_level: 50)
+    result =
+      Characters::UpdateService.call(@char, name: "", server_level_cap: 90)
 
     assert_not result.success?
     assert_equal original_name, @char.reload.name
-    assert_not_equal 50, @char.current_level
+    assert_equal 110, @char.server_level_cap
   end
 end

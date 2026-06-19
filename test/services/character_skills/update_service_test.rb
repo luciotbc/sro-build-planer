@@ -371,8 +371,7 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
     assert_equal 5, @char.reload.current_level
   end
 
-  it "adds warning when character level is auto-updated" do
-    @char.update!(current_level: 0)
+  it "no character level warning emitted (level maintained by callback)" do
     cm = CharacterMastery.find_by(character: @char, mastery: @blade_mastery)
     cm.update!(current_mastery_level: 0)
 
@@ -383,6 +382,9 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
         current_skill_level: 2
       )
 
-    assert result.warnings.any? { |w| w.include?("character.current_level") }
+    assert_not result.warnings.any? { |w|
+                 w.include?("character.current_level")
+               }
+    assert_equal 5, @char.reload.current_level
   end
 end

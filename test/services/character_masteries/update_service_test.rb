@@ -108,7 +108,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
 
   # --------- auto-update character level -----------------------------------
 
-  it "auto-updates character current_level when mastery exceeds it" do
+  it "updates character current_level via callback when mastery level changes" do
     result =
       CharacterMasteries::UpdateService.call(
         @char,
@@ -118,12 +118,9 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
 
     assert result.success?
     assert_equal 90, @char.reload.current_level
-    assert result.warnings.any? { |w|
-             w.include?("current_level") && w.include?("90")
-           }
   end
 
-  it "auto-updates character target_level when mastery exceeds it" do
+  it "updates character target_level via callback when mastery level changes" do
     result =
       CharacterMasteries::UpdateService.call(
         @char,
@@ -133,12 +130,9 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
 
     assert result.success?
     assert_equal 110, @char.reload.target_level
-    assert result.warnings.any? { |w|
-             w.include?("target_level") && w.include?("110")
-           }
   end
 
-  it "does not auto-update character level when mastery level is within range" do
+  it "recomputes character level to new mastery level even when it decreases" do
     result =
       CharacterMasteries::UpdateService.call(
         @char,
@@ -147,11 +141,12 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
       )
 
     assert result.success?
-    assert_equal 80, @char.reload.current_level
+    # per spec 01 R1: current_level = MAX(mastery levels) = 50 after update
+    assert_equal 50, @char.reload.current_level
     assert_empty result.warnings
   end
 
-  it "does not auto-update when level param is not provided" do
+  it "does not change current_level when only target_mastery_level is updated" do
     result =
       CharacterMasteries::UpdateService.call(
         @char,
@@ -160,7 +155,8 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
       )
 
     assert result.success?
-    assert_equal 80, @char.reload.current_level
+    # current_level = MAX(current_mastery_levels) = 60 (set by callback during before)
+    assert_equal 60, @char.reload.current_level
   end
 
   # --------- current_skill_level cascade -----------------------------------
@@ -207,7 +203,7 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
     assert_empty result.warnings
   end
 
-  it "does not cascade when mastery level is not decreasing" do
+  it "does not cascade skills when mastery level is not decreasing" do
     @cs.update!(current_skill_level: 2)
 
     result =
@@ -219,7 +215,8 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
 
     assert result.success?
     assert_equal 2, @cs.reload.current_skill_level
-    assert_empty result.warnings
+    # no skill cascade warnings; a character level warning may appear since level rose above 60
+    assert result.warnings.none? { |w| w.include?("current_skill_level") }
   end
 
   it "does not cascade skills that belong to a different mastery" do
