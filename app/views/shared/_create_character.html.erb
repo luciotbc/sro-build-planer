@@ -1,0 +1,77 @@
+<%#
+  shared/create_character — "New Character" modal with race selector, cap picker, name input
+  -----------------------------------------------------------------------
+  locals:
+    trigger_label: String  optional; button text (default "New Character")
+  Usage:
+    render "shared/create_character"
+    render "shared/create_character", trigger_label: "＋ New Character"
+%>
+<%
+  trigger_label = local_assigns.fetch(:trigger_label, "New Character")
+  cap_labels = { 90 => "90 — Standard", 100 => "100 — Standard", 110 => "110 — Standard",
+                 120 => "120 — Standard", 130 => "130 — Standard" }
+%>
+
+<div data-controller="dialog">
+  <button type="button" class="btn-primary" data-action="dialog#open">
+    <%= trigger_label %>
+  </button>
+
+  <dialog
+    class="modal"
+    data-dialog-target="dialog"
+    data-action="click->dialog#backdropClose"
+  >
+    <header class="flex items-center justify-between gap-3 border-b border-line pb-3">
+      <span class="text-sm font-bold text-text">New Character</span>
+      <button type="button" class="icon-btn" data-action="dialog#close" aria-label="Close">×</button>
+    </header>
+
+    <%= form_with url: characters_path, class: "pt-4 flex flex-col gap-4" do |f| %>
+      <div>
+        <%= label_tag :character_name, "Name", class: "block text-xs font-bold text-text-dim mb-1" %>
+        <%= text_field_tag "character[name]", nil,
+              placeholder: "Enter character name",
+              class: "w-full rounded-field border border-line bg-surface px-3 py-2 text-sm text-text",
+              required: true,
+              autocomplete: "off" %>
+      </div>
+
+      <div>
+        <p class="text-xs font-bold text-text-dim mb-2">Race</p>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="cursor-pointer">
+            <input type="radio" name="character[race_id]"
+                   value="<%= Race.find_by(name: "Chinese")&.id %>"
+                   class="sr-only peer" required>
+            <div class="race-card peer-checked:ring-2 peer-checked:ring-brass">
+              <%= render "shared/chinese_glyph" %>
+            </div>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="character[race_id]"
+                   value="<%= Race.find_by(name: "European")&.id %>"
+                   class="sr-only peer" required>
+            <div class="race-card peer-checked:ring-2 peer-checked:ring-brass">
+              <%= render "shared/european_glyph" %>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <%= label_tag :character_server_level_cap, "Server Level Cap",
+              class: "block text-xs font-bold text-text-dim mb-1" %>
+        <%= select_tag "character[server_level_cap]",
+              options_for_select(
+                Character::SERVER_LEVEL_CAPS.map { |cap| ["#{cap}", cap] },
+                110
+              ),
+              class: "w-full rounded-field border border-line bg-surface px-3 py-2 text-sm text-text" %>
+      </div>
+
+      <button type="submit" class="btn-primary w-full">Start Build</button>
+    <% end %>
+  </dialog>
+</div>
