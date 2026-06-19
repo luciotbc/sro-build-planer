@@ -137,7 +137,6 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
 
     assert result.success?
     assert_empty result.warnings
-    # per spec 01 R1: current_level = MAX(mastery levels) = 30
     assert_equal 30, @char.reload.current_level
   end
 
