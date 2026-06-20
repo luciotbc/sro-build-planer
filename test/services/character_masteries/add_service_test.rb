@@ -126,6 +126,8 @@ class CharacterMasteries::AddServiceTest < ActiveSupport::TestCase
   end
 
   it "recomputes character level to mastery level (per spec 01 R1: MAX of masteries)" do
+    @char.update!(current_level: 50)
+
     result =
       CharacterMasteries::AddService.call(
         @char,
