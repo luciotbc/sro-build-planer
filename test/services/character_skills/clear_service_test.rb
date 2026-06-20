@@ -207,6 +207,67 @@ class CharacterSkills::ClearServiceTest < ActiveSupport::TestCase
     assert_equal 0, @cs.reload.current_skill_level
   end
 
+  # --------- blocking dependents on :target (spec 03 R6) ------------------
+
+  it "fails when clearing :target and target-side dependent requires higher level" do
+    CharacterSkill.create!(
+      character: @char,
+      skill_group: @spear_sg,
+      current_skill_level: 0,
+      target_skill_level: 1
+    )
+
+    result =
+      CharacterSkills::ClearService.call(
+        @char,
+        skill_group_id: @sword_sg.id,
+        field: :target
+      )
+
+    assert_not result.success?
+    assert result.errors.any? { |e|
+             e.include?("blocked by") && e.include?("Spear")
+           }
+  end
+
+  it "does not block clearing :target when only current-side has a blocking dependent" do
+    CharacterSkill.create!(
+      character: @char,
+      skill_group: @spear_sg,
+      current_skill_level: 1,
+      target_skill_level: 0
+    )
+
+    result =
+      CharacterSkills::ClearService.call(
+        @char,
+        skill_group_id: @sword_sg.id,
+        field: :target
+      )
+
+    assert result.success?
+    assert_equal 0, @cs.reload.target_skill_level
+  end
+
+  it "fails when clearing :both and target-side has a blocking dependent" do
+    CharacterSkill.create!(
+      character: @char,
+      skill_group: @spear_sg,
+      current_skill_level: 0,
+      target_skill_level: 1
+    )
+
+    result =
+      CharacterSkills::ClearService.call(
+        @char,
+        skill_group_id: @sword_sg.id,
+        field: :both
+      )
+
+    assert_not result.success?
+    assert result.errors.any? { |e| e.include?("blocked by") }
+  end
+
   # --------- return value --------------------------------------------------
 
   it "returns successful ServiceResult with the CharacterSkill" do

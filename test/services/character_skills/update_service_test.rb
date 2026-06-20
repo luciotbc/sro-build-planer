@@ -387,4 +387,110 @@ class CharacterSkills::UpdateServiceTest < ActiveSupport::TestCase
                }
     assert_equal 5, @char.reload.current_level
   end
+
+  # --------- target-side cascade (spec 03 R2) ---------------------------------
+
+  it "fails when decreasing target_skill_level below dependent's target-side requirement" do
+    CharacterSkill.create!(
+      character: @char,
+      skill_group: @spear_sg,
+      current_skill_level: 0,
+      target_skill_level: 1
+    )
+
+    result =
+      CharacterSkills::UpdateService.call(
+        @char,
+        skill_group_id: @sword_sg.id,
+        target_skill_level: 0
+      )
+
+    assert_not result.success?
+    assert result.errors.any? { |e|
+             e.include?("blocked by") && e.include?("Spear")
+           }
+  end
+
+  it "does not block target decrease when only current-side dependent requires higher level" do
+    CharacterSkill.create!(
+      character: @char,
+      skill_group: @spear_sg,
+      current_skill_level: 1,
+      target_skill_level: 0
+    )
+
+    result =
+      CharacterSkills::UpdateService.call(
+        @char,
+        skill_group_id: @sword_sg.id,
+        target_skill_level: 0
+      )
+
+    assert result.success?
+  end
+
+  it "does not block current decrease when only target-side dependent requires higher level" do
+    CharacterSkill.create!(
+      character: @char,
+      skill_group: @spear_sg,
+      current_skill_level: 0,
+      target_skill_level: 1
+    )
+
+    result =
+      CharacterSkills::UpdateService.call(
+        @char,
+        skill_group_id: @sword_sg.id,
+        current_skill_level: 0
+      )
+
+    assert result.success?
+  end
+
+  it "cascades prerequisite onto target side when target_skill_level increases" do
+    CharacterMastery.create!(
+      character: @char,
+      mastery: @spear_mastery,
+      current_mastery_level: 0,
+      target_mastery_level: 0
+    )
+    spear_cs =
+      CharacterSkill.create!(
+        character: @char,
+        skill_group: @spear_sg,
+        current_skill_level: 0,
+        target_skill_level: 0
+      )
+
+    result =
+      CharacterSkills::UpdateService.call(
+        @char,
+        skill_group_id: @spear_sg.id,
+        target_skill_level: 1
+      )
+
+    assert result.success?
+    sword_cs = CharacterSkill.find_by(character: @char, skill_group: @sword_sg)
+    assert_not_nil sword_cs, "sword prereq must be auto-added on target side"
+    assert_equal 1, sword_cs.target_skill_level
+    assert_equal 1,
+                 sword_cs.current_skill_level,
+                 "current is already 1 from @char before block setup"
+  end
+
+  it "escalates target_mastery_level when target_skill_level increases" do
+    cm = CharacterMastery.find_by(character: @char, mastery: @blade_mastery)
+    cm.update!(target_mastery_level: 0)
+
+    CharacterSkills::UpdateService.call(
+      @char,
+      skill_group_id: @sword_sg.id,
+      target_skill_level: 2
+    )
+
+    assert_equal 5, cm.reload.target_mastery_level
+    assert_equal 1,
+                 cm.reload.current_mastery_level,
+                 "current mastery must not be touched"
+  end
 end

@@ -49,7 +49,7 @@ module CharacterSkills
       return ServiceResult.fail(errors:) if errors.any?
 
       if new_current && new_current < cs.current_skill_level.to_i
-        blocking = find_blocking_dependents(sg, new_current)
+        blocking = find_blocking_dependents(sg, new_current, :current)
         if blocking.any?
           return(
             ServiceResult.fail(
@@ -61,10 +61,28 @@ module CharacterSkills
         end
       end
 
+      if new_target && new_target < cs.target_skill_level.to_i
+        blocking = find_blocking_dependents(sg, new_target, :target)
+        if blocking.any?
+          return(
+            ServiceResult.fail(
+              errors: [
+                "Cannot decrease target_skill_level: blocked by #{blocking.join(", ")}"
+              ]
+            )
+          )
+        end
+      end
+
       ApplicationRecord.transaction do
         if new_current && new_current > cs.current_skill_level.to_i
-          resolve_prerequisites(sg, Set.new)
-          update_mastery(sg, new_current)
+          resolve_prerequisites(sg, Set.new, :current)
+          update_mastery(sg, new_current, :current)
+        end
+
+        if new_target && new_target > cs.target_skill_level.to_i
+          resolve_prerequisites(sg, Set.new, :target)
+          update_mastery(sg, new_target, :target)
         end
 
         updates = {}
@@ -89,71 +107,6 @@ module CharacterSkills
         errors << "#{attr} must be <= #{sg.max_skill_level}"
       end
       errors
-    end
-
-    def find_blocking_dependents(skill_group, new_current_level)
-      reqs =
-        SkillGroupRequirement
-          .includes(:skill_group)
-          .where(required_group: skill_group)
-          .where("required_skill_level > ?", new_current_level)
-
-      return [] if reqs.empty?
-
-      cs_by_sg =
-        @character
-          .character_skills
-          .where(skill_group_id: reqs.map(&:skill_group_id))
-          .index_by(&:skill_group_id)
-
-      reqs.filter_map do |req|
-        dep_cs = cs_by_sg[req.skill_group_id]
-        next unless dep_cs
-        unless dep_cs.current_skill_level.to_i >= req.required_skill_level.to_i
-          next
-        end
-
-        req.skill_group.name
-      end
-    end
-
-    def add_prerequisite(skill_group, level)
-      update_mastery(skill_group, level)
-      CharacterSkill.create!(
-        character: @character,
-        skill_group: skill_group,
-        current_skill_level: level,
-        target_skill_level: level
-      )
-      @warnings << I18n.t("warnings.prerequisite_added", name: skill_group.name)
-    end
-
-    def update_mastery(skill_group, current_level)
-      mastery = skill_group.mastery
-      current_req =
-        skill_group.skill_at_level(current_level)&.mastery_level_req.to_i
-
-      cm = CharacterMastery.find_by(character: @character, mastery:)
-
-      if cm.nil?
-        CharacterMastery.create!(
-          character: @character,
-          mastery:,
-          current_mastery_level: current_req,
-          target_mastery_level: 0
-        )
-        @warnings << I18n.t(
-          "warnings.character_mastery_created",
-          name: mastery.name
-        )
-      elsif cm.current_mastery_level.to_i < current_req
-        cm.update!(current_mastery_level: current_req)
-        @warnings << I18n.t(
-          "warnings.character_mastery_level_updated",
-          name: mastery.name,
-          level: current_req
-        )
-      end
     end
   end
 end
