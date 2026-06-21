@@ -4,6 +4,7 @@ class MasteryTabsTest < ActionDispatch::IntegrationTest
   before do
     @user = create(:user)
     @race = races(:chinese)
+    # Force < Weapon alphabetically → Force is first group on initial render
     @blade =
       create(:mastery, race: @race, name: "Blade", mastery_type: "Weapon")
     @spear =
@@ -38,6 +39,8 @@ class MasteryTabsTest < ActionDispatch::IntegrationTest
     sign_in_as @user
   end
 
+  # — Rendering —
+
   it "renders mastery type tabs for the character's race" do
     get character_path(@char)
     assert_response :success
@@ -45,27 +48,14 @@ class MasteryTabsTest < ActionDispatch::IntegrationTest
     assert_match "Force", response.body
   end
 
-  it "renders mastery sub-tabs for each mastery" do
+  it "renders mastery sub-tabs for each mastery in the HTML" do
     get character_path(@char)
     assert_match "Blade", response.body
     assert_match "Spear", response.body
     assert_match "Cold Force", response.body
   end
 
-  it "highlights the active mastery sub-tab" do
-    get character_path(@char, mastery_id: @spear.id)
-    # active tab link points to the spear mastery
-    assert_select "a[href*='mastery_id=#{@spear.id}'].on, [data-active='true'][data-mastery-id='#{@spear.id}']"
-  end
-
-  it "switches active mastery via mastery_id param" do
-    get character_path(@char, mastery_id: @cold.id)
-    assert_response :success
-    # cold mastery name shown in mastery section
-    assert_match "Cold Force", response.body
-  end
-
-  it "skill window updates to selected mastery (Turbo Frame present)" do
+  it "skill window Turbo Frame is present" do
     get character_path(@char)
     assert_select "turbo-frame[id='skill-window']"
   end
@@ -73,5 +63,73 @@ class MasteryTabsTest < ActionDispatch::IntegrationTest
   it "sub-tab links target the skill-window Turbo Frame" do
     get character_path(@char)
     assert_select "a[data-turbo-frame='skill-window']"
+  end
+
+  # — Initial render invariants (spec 07) —
+
+  it "first group (Force) pill is active on initial render" do
+    get character_path(@char)
+    # Force < Weapon alphabetically — Force pill must have class `on`
+    assert_select "button[data-mastery-type='Force'].on"
+    assert_select "button[data-mastery-type='Weapon'].on", count: 0
+  end
+
+  it "first mastery of first group (Cold Force) sub-tab is active on initial render" do
+    get character_path(@char)
+    assert_select "a[data-mastery-id='#{@cold.id}'].on"
+    assert_select "a[data-mastery-id='#{@blade.id}'].on", count: 0
+    assert_select "a[data-mastery-id='#{@spear.id}'].on", count: 0
+  end
+
+  it "Force panel is visible, Weapon panel is hidden on initial render" do
+    get character_path(@char)
+    assert_select "div[data-mastery-type='Force']:not(.hidden)"
+    assert_select "div[data-mastery-type='Weapon'].hidden"
+  end
+
+  # — mastery_id param —
+
+  it "mastery_id param activates the correct sub-tab" do
+    get character_path(@char, mastery_id: @spear.id)
+    assert_select "a[data-mastery-id='#{@spear.id}'].on"
+    assert_select "a[data-mastery-id='#{@blade.id}'].on", count: 0
+  end
+
+  it "mastery_id param activates the correct group pill" do
+    get character_path(@char, mastery_id: @spear.id)
+    assert_select "button[data-mastery-type='Weapon'].on"
+    assert_select "button[data-mastery-type='Force'].on", count: 0
+  end
+
+  it "mastery_id param shows the correct group panel" do
+    get character_path(@char, mastery_id: @spear.id)
+    assert_select "div[data-mastery-type='Weapon']:not(.hidden)"
+    assert_select "div[data-mastery-type='Force'].hidden"
+  end
+
+  # — Stimulus controller wiring —
+
+  it "section uses mastery-tabs controller" do
+    get character_path(@char)
+    assert_select "[data-controller='mastery-tabs']"
+  end
+
+  it "type pills have mastery-tabs target and action" do
+    get character_path(@char)
+    assert_select "button[data-mastery-tabs-target='typeTab'][data-action='mastery-tabs#selectType']"
+  end
+
+  it "sub-tab links have mastery-tabs target and action" do
+    get character_path(@char)
+    assert_select "a[data-mastery-tabs-target='masteryTab'][data-action='mastery-tabs#selectMastery']"
+  end
+
+  # — Empty state (INV-2 edge case) —
+
+  it "shows empty state when character has no masteries" do
+    @char.character_masteries.destroy_all
+    get character_path(@char)
+    assert_response :success
+    assert_select "[data-controller='mastery-tabs']", count: 0
   end
 end
