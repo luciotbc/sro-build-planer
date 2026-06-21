@@ -45,6 +45,7 @@
         class="ro-subtabs <%= "hidden" unless i.zero? %>"
         data-mastery-type-panel="<%= type %>"
         data-tabs-target="panel"
+        data-controller="tabs"
       >
         <% (@grouped_masteries[type] || []).each do |mastery| %>
           <%
@@ -54,7 +55,9 @@
           <%= link_to mastery.name, href,
                 class: class_names("ro-subtab", "on" => is_active),
                 "data-turbo-frame": "skill-window",
-                "data-mastery-id": mastery.id %>
+                "data-mastery-id": mastery.id,
+                "data-tabs-target": "tab",
+                "data-action": "tabs#select" %>
         <% end %>
       </div>
     <% end %>
