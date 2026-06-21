@@ -25,9 +25,9 @@ From the planner, "Edit Current"/"Edit Planned" opens the editor on that side fo
 
 ## Acceptance criteria
 - [x] Editor opens on the correct side (current/planned) per the entry point. _(010/01)_
-- [ ] Working-state substrate (active-mastery snapshot) delivered and documented — enables single-step undo (consumed by 012). _(010/03 — Stimulus `skill-editor` controller)_
+- [x] Working-state substrate (active-mastery snapshot) delivered and documented — enables single-step undo (consumed by 012). _(010/03 — `skill_editor_controller.js` snapshot/restore)_
 - [x] ± respects the effective cap and applies cascade (prerequisites/mastery) on the correct side. _(010/02)_
-- [ ] Series collapse/expand; counters correct. _(010/03)_
+- [x] Series collapse/expand; counters correct. _(010/03 — collapsible_controller.js, X/Y counter)_
 - [x] Decrement blocked by a dependent → feedback (without corrupting state). _(010/02)_
 - [ ] Faithful to mockup + DS; current untouched when editing planned. _(browser validation pending)_
 - [x] `PARALLEL_WORKERS=1 bin/rails test` green; console clean. _(427 runs, 0 failures)_
