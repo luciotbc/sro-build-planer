@@ -1,0 +1,32 @@
+<%#
+  shared/stats_summary — three-row SUMMARY panel (spec 02 R3/R4/R5)
+  -----------------------------------------------------------------------
+  Shows SKILL POINTS, MASTERY TOTAL, REQUIRED LEVEL in current+delta=planned
+  format from Builds::SummaryService data.
+  locals:
+    summary: Hash  required; result of Builds::SummaryService.call(char).data
+             keys: :skill_points, :mastery_total, :required_level
+             each: { current:, delta:, planned: }
+  Usage:
+    render "shared/stats_summary", summary: @summary
+%>
+<%
+  summary = local_assigns.fetch(:summary)
+%>
+<div class="stat-merged">
+  <%= render "shared/stat_row",
+        label: "Skill points",
+        current: summary[:skill_points][:current],
+        delta:   summary[:skill_points][:delta],
+        planned: summary[:skill_points][:planned] %>
+  <%= render "shared/stat_row",
+        label: "Mastery total",
+        current: summary[:mastery_total][:current],
+        delta:   summary[:mastery_total][:delta],
+        planned: summary[:mastery_total][:planned] %>
+  <%= render "shared/stat_row",
+        label: "Required level",
+        current: summary[:required_level][:current],
+        delta:   summary[:required_level][:delta],
+        planned: summary[:required_level][:planned] %>
+</div>

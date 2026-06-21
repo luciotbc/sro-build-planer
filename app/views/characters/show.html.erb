@@ -5,23 +5,7 @@
       initial: @character.race.name == "Chinese" ? "华" : "⚔" %>
 
 <section class="mt-6">
-  <div class="stat-merged">
-    <%= render "shared/stat_row",
-          label: "Skill points",
-          current: @summary[:skill_points][:current],
-          delta: @summary[:skill_points][:delta],
-          planned: @summary[:skill_points][:planned] %>
-    <%= render "shared/stat_row",
-          label: "Mastery total",
-          current: @summary[:mastery_total][:current],
-          delta: @summary[:mastery_total][:delta],
-          planned: @summary[:mastery_total][:planned] %>
-    <%= render "shared/stat_row",
-          label: "Required level",
-          current: @summary[:required_level][:current],
-          delta: @summary[:required_level][:delta],
-          planned: @summary[:required_level][:planned] %>
-  </div>
+  <%= render "shared/stats_summary", summary: @summary %>
 </section>
 
 <% if @grouped_masteries.any? %>
