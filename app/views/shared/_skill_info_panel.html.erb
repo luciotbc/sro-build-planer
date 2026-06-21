@@ -1,0 +1,59 @@
+<%#
+  shared/skill_info_panel — inline dialog showing skill costs and prerequisites.
+  locals:
+    skill_group: SkillGroup required
+    level:       Integer    required; 0 means not yet learned
+    character:   Character  required
+%>
+<%
+  skill_group = local_assigns.fetch(:skill_group)
+  level       = local_assigns.fetch(:level)
+  character   = local_assigns.fetch(:character)
+  skill       = level > 0 ? skill_group.skill_at_level(level) : nil
+  prereqs     = skill_group.skill_group_requirements.includes(:required_group)
+%>
+<dialog
+  class="sheet"
+  data-dialog-target="dialog"
+  data-action="click->dialog#backdropClose"
+>
+  <header class="flex items-center justify-between gap-3 border-b border-line pb-3">
+    <span class="text-sm font-bold text-text"><%= skill_group.name %></span>
+    <button type="button" class="icon-btn" data-action="dialog#close" aria-label="Close">×</button>
+  </header>
+  <div class="pt-4 text-sm">
+    <% if skill %>
+      <dl class="grid grid-cols-2 gap-x-4 gap-y-1">
+        <dt class="text-text-dim">Level</dt>
+        <dd class="text-text"><%= level %> / <%= skill_group.max_skill_level || "?" %></dd>
+        <dt class="text-text-dim">SP cost</dt>
+        <dd class="text-text"><%= skill.sp_cost.present? ? skill.sp_cost : "—" %></dd>
+        <dt class="text-text-dim">MP cost</dt>
+        <dd class="text-text"><%= skill.mp_cost.present? ? skill.mp_cost : "—" %></dd>
+        <dt class="text-text-dim">Mastery req</dt>
+        <dd class="text-text"><%= skill.mastery_level_req || "—" %></dd>
+      </dl>
+      <% if prereqs.any? %>
+        <p class="mt-4 text-xs font-bold uppercase tracking-wider text-text-dim">Prerequisites</p>
+        <ul class="mt-1 space-y-1 text-text-dim">
+          <% prereqs.each do |req| %>
+            <li><%= req.required_group.name %> Lv <%= req.required_skill_level %></li>
+          <% end %>
+        </ul>
+      <% end %>
+      <% if skill_group.description.present? %>
+        <p class="mt-4 leading-relaxed text-text-dim"><%= skill_group.description %></p>
+      <% end %>
+    <% else %>
+      <p class="text-text-mute">Not yet learned. Max level: <%= skill_group.max_skill_level || "?" %>.</p>
+      <% if prereqs.any? %>
+        <p class="mt-4 text-xs font-bold uppercase tracking-wider text-text-dim">Prerequisites</p>
+        <ul class="mt-1 space-y-1 text-text-dim">
+          <% prereqs.each do |req| %>
+            <li><%= req.required_group.name %> Lv <%= req.required_skill_level %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
+  </div>
+</dialog>
