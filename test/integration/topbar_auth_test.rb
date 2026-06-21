@@ -12,10 +12,18 @@ class TopbarAuthTest < ActionDispatch::IntegrationTest
     assert_select "button", text: "Log out", count: 0
   end
 
-  test "authenticated topbar shows the logout button" do
+  test "authenticated user is redirected from home to characters index" do
     sign_in_as(@user)
 
     get root_url
+
+    assert_redirected_to characters_path
+  end
+
+  test "authenticated topbar shows the logout button" do
+    sign_in_as(@user)
+
+    get characters_url
 
     assert_response :success
     assert_select "button", text: "Log out"
