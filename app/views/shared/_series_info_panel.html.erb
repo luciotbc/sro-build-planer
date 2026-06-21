@@ -1,0 +1,32 @@
+<%#
+  shared/series_info_panel — inline dialog showing skills in a series.
+  locals:
+    series:    SkillSeries required
+    character: Character   required
+%>
+<%
+  series     = local_assigns.fetch(:series)
+  character  = local_assigns.fetch(:character)
+  groups     = series.skill_groups.order(:col_position)
+%>
+<dialog
+  class="sheet"
+  data-dialog-target="dialog"
+  data-action="click->dialog#backdropClose"
+>
+  <header class="flex items-center justify-between gap-3 border-b border-line pb-3">
+    <span class="text-sm font-bold text-text"><%= series.title %></span>
+    <button type="button" class="icon-btn" data-action="dialog#close" aria-label="Close">×</button>
+  </header>
+  <div class="pt-4 text-sm">
+    <p class="text-text-dim"><%= groups.count %> skills in this series</p>
+    <ul class="mt-3 space-y-1">
+      <% groups.each do |sg| %>
+        <li class="flex items-center justify-between text-text-dim">
+          <span><%= sg.name %></span>
+          <span class="text-text-mute">max Lv <%= sg.max_skill_level || "?" %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</dialog>

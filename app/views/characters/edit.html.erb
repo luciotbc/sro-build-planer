@@ -49,17 +49,25 @@
       %>
       <div class="rounded-panel border border-line"
            data-controller="collapsible">
-        <button type="button"
-                class="w-full flex items-center justify-between px-4 py-3"
-                data-action="collapsible#toggle">
-          <h2 class="text-xs font-bold text-text-dim uppercase tracking-wider">
-            <%= group[:series].title %>
-          </h2>
-          <div class="flex items-center gap-2 text-xs text-text-mute">
-            <span><%= allocated %>/<%= total %></span>
-            <span data-collapsible-target="chevron">▾</span>
+        <div class="flex items-center">
+          <button type="button"
+                  class="flex-1 flex items-center justify-between px-4 py-3"
+                  data-action="collapsible#toggle">
+            <h2 class="text-xs font-bold text-text-dim uppercase tracking-wider">
+              <%= group[:series].title %>
+            </h2>
+            <div class="flex items-center gap-2 text-xs text-text-mute">
+              <span><%= allocated %>/<%= total %></span>
+              <span data-collapsible-target="chevron">▾</span>
+            </div>
+          </button>
+          <div class="pr-3" data-controller="dialog">
+            <button type="button" class="icon-btn" data-action="dialog#open" aria-label="Series info">ℹ</button>
+            <%= render "shared/series_info_panel",
+                  series: group[:series],
+                  character: @character %>
           </div>
-        </button>
+        </div>
         <div class="flex flex-col gap-2 px-4 pb-4"
              data-collapsible-target="body">
           <% group[:skills].each do |entry| %>

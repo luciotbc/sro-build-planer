@@ -17,7 +17,7 @@
 <div
   id="skill-row-<%= skill_group.id %>"
   class="fs-skill-row"
-  data-controller="stepper"
+  data-controller="stepper dialog"
   data-stepper-level-value="<%= level %>"
   data-stepper-max-value="<%= cap %>"
   data-stepper-url-value="<%= character_character_skill_path(character, skill_group) %>"
@@ -35,5 +35,12 @@
             data-action="stepper#decrement">−</button>
     <button type="button" class="fs-step-btn primary"
             data-action="stepper#increment">+</button>
+    <button type="button" class="icon-btn"
+            data-action="dialog#open"
+            aria-label="Skill info">ℹ</button>
   </div>
+  <%= render "shared/skill_info_panel",
+        skill_group: skill_group,
+        level: level,
+        character: character %>
 </div>
