@@ -1,8 +1,67 @@
-<h1><%= @character.name %></h1>
+<%= render "shared/char_bar",
+      name: @character.name,
+      race: @character.race.name,
+      level: @character.server_level_cap,
+      initial: @character.race.name == "Chinese" ? "华" : "⚔" %>
 
-<p>Race: <%= @character.race.name %></p>
-<p>Server cap: <%= @character.server_level_cap %></p>
+<section class="mt-6">
+  <div class="stat-merged">
+    <%= render "shared/stat_row",
+          label: "Skill points",
+          current: @summary[:skill_points][:current],
+          delta: @summary[:skill_points][:delta],
+          planned: @summary[:skill_points][:planned] %>
+    <%= render "shared/stat_row",
+          label: "Mastery total",
+          current: @summary[:mastery_total][:current],
+          delta: @summary[:mastery_total][:delta],
+          planned: @summary[:mastery_total][:planned] %>
+    <%= render "shared/stat_row",
+          label: "Required level",
+          current: @summary[:required_level][:current],
+          delta: @summary[:required_level][:delta],
+          planned: @summary[:required_level][:planned] %>
+  </div>
+</section>
 
-<%= link_to "Edit", edit_character_path(@character) %>
-<%= button_to "Delete", character_path(@character), method: :delete,
-              data: { turbo_confirm: "Delete this character and all its build data?" } %>
+<section class="mt-6">
+  <% if @active_mastery %>
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-sm font-bold text-text"><%= @active_mastery.name %></h2>
+      <div class="flex gap-2">
+        <%= link_to "Edit Current",
+              edit_character_path(@character, side: :current),
+              class: "btn-ghost text-xs" %>
+        <%= link_to "Edit Planned",
+              edit_character_path(@character, side: :target),
+              class: "btn-ghost text-xs" %>
+      </div>
+    </div>
+
+    <% if @character_skills.empty? %>
+      <p class="text-sm text-text-dim">No skills in this mastery yet.</p>
+    <% else %>
+      <div class="flex flex-col gap-2">
+        <% @character_skills.each do |cs| %>
+          <div class="flex items-center justify-between rounded-field border border-line px-3 py-2">
+            <span class="text-sm text-text"><%= cs.skill_group.name %></span>
+            <span class="flex items-center gap-2 text-sm">
+              <span class="text-text-dim" data-skill-current="<%= cs.current_skill_level %>"><%= cs.current_skill_level %></span>
+              <span class="text-text-mute">→</span>
+              <span class="text-brass" data-skill-planned="<%= cs.target_skill_level %>"><%= cs.target_skill_level %></span>
+            </span>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-sm text-text-dim">No mastery added yet. Use the editor to build your character.</p>
+  <% end %>
+</section>
+
+<section class="mt-8 flex gap-3">
+  <%= button_to "Delete Character", character_path(@character),
+        method: :delete,
+        class: "btn-ghost text-sm",
+        data: { turbo_confirm: "Delete this character and all its build data? This cannot be undone." } %>
+</section>
