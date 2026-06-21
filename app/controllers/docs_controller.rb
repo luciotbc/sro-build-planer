@@ -15,9 +15,11 @@ class DocsController < ApplicationController
         <%= render "shared/button", label: "\u00d7", variant: :icon, attrs: { "aria-label": "Close" } %>
         <%= render "shared/chars_pill", count: 3 %>
       ERB
-      tabs: <<~ERB,
-        <%= render "shared/tabs", items: ["Weapon", "Force", "Recovery"] %>
-        <%= render "shared/tabs", items: ["Bicheon", "Heuksal", "Pacheon"], variant: :underline %>
+      mastery_nav: <<~ERB,
+        <%# Mastery navigation component (characters/show) %>
+        <%# Row 1: mastery type pills; Row 2: mastery sub-tabs per group %>
+        <%# Stimulus controller: mastery-tabs. State: in-memory per group. %>
+        <%# See docs/specs/07-mastery-navigation.md for full behavior spec. %>
       ERB
       badge: <<~ERB,
         <%= render "shared/badge", text: "Current" %>

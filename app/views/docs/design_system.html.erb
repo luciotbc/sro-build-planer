@@ -30,7 +30,7 @@
    ] %>
 
 <% toc = { color: "Color", type: "Type", radius: "Radius", logo: "Logo",
-           buttons: "Buttons", tabs: "Tabs", badges: "Badges", stats: "Stat rows",
+           buttons: "Buttons", mastery_nav: "Mastery navigation", badges: "Badges", stats: "Stat rows",
            identity: "Character bar", skillrow: "Skill row", overlays: "Overlays",
            hotwire: "Hotwire" } %>
 
@@ -138,16 +138,36 @@
   </section>
 
   <%# ── Tabs ────────────────────────────────────────────────────────────── %>
-  <section id="tabs" class="space-y-4 scroll-mt-24">
+  <section id="mastery_nav" class="space-y-4 scroll-mt-24">
     <div>
-      <h2 class="text-2xl font-bold text-text">Tabs</h2>
-      <p class="text-text-dim">Two variants from one partial, driven by the <code class="text-brass-hi">tabs</code> controller (click to switch).</p>
+      <h2 class="text-2xl font-bold text-text">Mastery navigation</h2>
+      <p class="text-text-dim">
+        Two-row control: <code class="text-brass-hi">ro-tabs</code> (mastery type pills) +
+        <code class="text-brass-hi">ro-subtabs</code> (masteries per group).
+        Driven by <code class="text-brass-hi">mastery-tabs</code> Stimulus controller.
+        Restores last-selected mastery per group on client. See
+        <code class="text-brass-hi">docs/specs/07-mastery-navigation.md</code> for full behavior.
+      </p>
     </div>
-    <div class="flex flex-col items-center gap-5 rounded-panel border border-line bg-card p-6">
-      <%= render "shared/tabs", items: [ "Weapon", "Force", "Recovery" ] %>
-      <%= render "shared/tabs", items: [ "Bicheon", "Heuksal", "Pacheon" ], variant: :underline %>
+    <div class="rounded-panel border border-line bg-card p-6 space-y-4">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[2px] text-brass mb-3">Row 1: Mastery type pills</p>
+        <div class="ro-tabs">
+          <button class="ro-tab on">Weapon</button>
+          <button class="ro-tab">Force</button>
+          <button class="ro-tab">Recovery</button>
+        </div>
+      </div>
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[2px] text-brass mb-3">Row 2: Mastery sub-tabs (per active group)</p>
+        <div class="ro-subtabs">
+          <a class="ro-subtab on">Bicheon</a>
+          <a class="ro-subtab">Heuksal</a>
+          <a class="ro-subtab">Pacheon</a>
+        </div>
+      </div>
     </div>
-    <%= render "docs/snippet", code: @snippets[:tabs] %>
+    <%= render "docs/snippet", code: @snippets[:mastery_nav] %>
   </section>
 
   <%# ── Badges ──────────────────────────────────────────────────────────── %>
