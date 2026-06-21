@@ -17,7 +17,7 @@ class CharactersController < ApplicationController
       if params[:mastery_id]
         all_masteries.find { |m| m.id.to_s == params[:mastery_id].to_s }
       end
-    @active_mastery ||= all_masteries.first
+    @active_mastery ||= @grouped_masteries[@mastery_types.first]&.first
 
     @character_skills =
       if @active_mastery

@@ -25,39 +25,35 @@
 </section>
 
 <% if @grouped_masteries.any? %>
-  <section class="mt-6" data-controller="tabs">
+  <section class="mt-6" data-controller="mastery-tabs">
     <%# Row 1 — mastery type pills (Weapon / Force / …) %>
     <div class="ro-tabs">
-      <% @mastery_types.each_with_index do |type, i| %>
+      <% @mastery_types.each do |type| %>
         <button
           type="button"
-          class="<%= class_names("ro-tab", "on" => i.zero?) %>"
-          data-tabs-target="tab"
-          data-action="tabs#select"
+          class="<%= class_names("ro-tab", "on" => type == @active_mastery&.mastery_type) %>"
+          data-mastery-tabs-target="typeTab"
+          data-action="mastery-tabs#selectType"
           data-mastery-type="<%= type %>"
         ><%= type %></button>
       <% end %>
     </div>
 
     <%# Row 2 — specific mastery sub-tabs (Blade / Spear / …) %>
-    <% @mastery_types.each_with_index do |type, i| %>
+    <% @mastery_types.each do |type| %>
       <div
-        class="ro-subtabs <%= "hidden" unless i.zero? %>"
-        data-mastery-type-panel="<%= type %>"
-        data-tabs-target="panel"
-        data-controller="tabs"
+        class="ro-subtabs <%= "hidden" unless type == @active_mastery&.mastery_type %>"
+        data-mastery-tabs-target="panel"
+        data-mastery-type="<%= type %>"
       >
         <% (@grouped_masteries[type] || []).each do |mastery| %>
-          <%
-            is_active = @active_mastery&.id == mastery.id
-            href = character_path(@character, mastery_id: mastery.id)
-          %>
-          <%= link_to mastery.name, href,
-                class: class_names("ro-subtab", "on" => is_active),
+          <%= link_to mastery.name,
+                character_path(@character, mastery_id: mastery.id),
+                class: class_names("ro-subtab", "on" => @active_mastery&.id == mastery.id),
                 "data-turbo-frame": "skill-window",
                 "data-mastery-id": mastery.id,
-                "data-tabs-target": "tab",
-                "data-action": "tabs#select" %>
+                "data-mastery-tabs-target": "masteryTab",
+                "data-action": "mastery-tabs#selectMastery" %>
         <% end %>
       </div>
     <% end %>
