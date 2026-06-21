@@ -25,9 +25,9 @@
 </section>
 
 <% if @grouped_masteries.any? %>
-  <section class="mt-6">
+  <section class="mt-6" data-controller="tabs">
     <%# Row 1 — mastery type pills (Weapon / Force / …) %>
-    <div class="ro-tabs" data-controller="tabs">
+    <div class="ro-tabs">
       <% @mastery_types.each_with_index do |type, i| %>
         <button
           type="button"
@@ -44,6 +44,7 @@
       <div
         class="ro-subtabs <%= "hidden" unless i.zero? %>"
         data-mastery-type-panel="<%= type %>"
+        data-tabs-target="panel"
       >
         <% (@grouped_masteries[type] || []).each do |mastery| %>
           <%
