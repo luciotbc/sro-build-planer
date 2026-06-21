@@ -26,7 +26,25 @@
 <% elsif @series_groups.empty? %>
   <p class="text-sm text-text-dim">No skill series in this mastery.</p>
 <% else %>
-  <div class="flex flex-col gap-6" data-controller="skill-editor">
+  <div data-controller="skill-editor">
+    <div class="flex items-center gap-2 mb-4">
+      <%= form_with url: max_skills_character_path(@character), data: { turbo: true } do |f| %>
+        <%= f.hidden_field :side, value: @side %>
+        <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
+        <%= f.button "Max skills", type: :submit, class: "btn-ghost text-xs",
+              data: { action: "submit->skill-editor#beforeBulk" } %>
+      <% end %>
+      <%= form_with url: clear_mastery_character_path(@character), data: { turbo: true } do |f| %>
+        <%= f.hidden_field :side, value: @side %>
+        <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
+        <%= f.button "Clear all", type: :submit, class: "btn-ghost text-xs text-red-500",
+              data: { action: "submit->skill-editor#beforeBulk" } %>
+      <% end %>
+      <button type="button" class="btn-ghost text-xs" disabled
+              data-skill-editor-target="undo"
+              data-action="click->skill-editor#restore">Undo</button>
+    </div>
+    <div class="flex flex-col gap-6">
     <% @series_groups.each do |group| %>
       <%
         allocated = group[:skills].count { |e| e[:level] > 0 }
@@ -58,5 +76,6 @@
         </div>
       </div>
     <% end %>
+    </div>
   </div>
 <% end %>

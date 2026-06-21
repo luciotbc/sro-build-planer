@@ -9,7 +9,20 @@ import { Controller } from "@hotwired/stimulus"
 //
 // Snapshot format: JSON object mapping "skill-row-<sg_id>" → levelValue.
 export default class extends Controller {
+  static targets = ["undo"]
   static values = { snapshot: String }
+
+  // Captures snapshot then lets the form submit naturally via Turbo (spec 06 R7).
+  beforeBulk() {
+    this.snapshot()
+  }
+
+  // Enable/disable undo button based on snapshot presence.
+  snapshotValueChanged() {
+    if (this.hasUndoTarget) {
+      this.undoTarget.disabled = !this.snapshotValue
+    }
+  }
 
   // Call before any bulk action (R4/R5/R6). Captures current level of
   // every stepper inside this editor into snapshotValue.

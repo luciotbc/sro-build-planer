@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   resources :characters do
     resources :character_skills, only: [:update], param: :skill_group_id
     resources :character_masteries, only: [:update], param: :mastery_id
+    member do
+      post :max_skills, to: "bulk_skill_actions#max_skills"
+      post :clear_mastery, to: "bulk_skill_actions#clear_mastery"
+    end
   end
   resource :session
   resources :passwords, param: :token

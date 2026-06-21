@@ -1,4 +1,6 @@
 class CharactersController < ApplicationController
+  include EditorSeriesBuilder
+
   before_action :set_character, only: %i[show edit update destroy]
 
   def index
@@ -55,7 +57,6 @@ class CharactersController < ApplicationController
         all_masteries.first
 
     if @active_mastery
-      skill_level_attr = :"#{@side}_skill_level"
       mastery_level_attr = :"#{@side}_mastery_level"
       @mastery_level =
         @character
@@ -64,29 +65,7 @@ class CharactersController < ApplicationController
           &.public_send(mastery_level_attr)
           .to_i
       @series_groups =
-        @active_mastery
-          .skill_series
-          .order(:row_position)
-          .map do |series|
-            skill_groups =
-              series
-                .skill_groups
-                .includes(:skills, :character_skills)
-                .order(:col_position)
-            character_skills_by_group =
-              @character
-                .character_skills
-                .where(skill_group: skill_groups)
-                .index_by(&:skill_group_id)
-            skills_with_data =
-              skill_groups.map do |sg|
-                cs = character_skills_by_group[sg.id]
-                level = cs&.public_send(skill_level_attr).to_i
-                cap = sg.effective_cap(@character.server_level_cap)
-                { skill_group: sg, level: level, cap: cap }
-              end
-            { series: series, skills: skills_with_data }
-          end
+        build_editor_series_groups(@character, @active_mastery, @side)
     else
       @series_groups = []
     end
