@@ -56,6 +56,13 @@ class CharactersController < ApplicationController
 
     if @active_mastery
       skill_level_attr = :"#{@side}_skill_level"
+      mastery_level_attr = :"#{@side}_mastery_level"
+      @mastery_level =
+        @character
+          .character_masteries
+          .find_by(mastery: @active_mastery)
+          &.public_send(mastery_level_attr)
+          .to_i
       @series_groups =
         @active_mastery
           .skill_series

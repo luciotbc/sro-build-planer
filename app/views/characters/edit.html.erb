@@ -10,8 +10,16 @@
   </h1>
 </div>
 
-<%# Turbo Stream error target — replaced by CharacterSkillsController on failure %>
+<%# Turbo Stream error target — replaced on failure by skill/mastery controllers %>
 <div id="skill-editor-error"></div>
+
+<% if @active_mastery %>
+  <%= render "shared/mastery_header",
+        character: @character,
+        mastery: @active_mastery,
+        mastery_level: @mastery_level,
+        side: @side %>
+<% end %>
 
 <% if @active_mastery.nil? %>
   <p class="text-sm text-text-dim">No mastery available. Add masteries first.</p>

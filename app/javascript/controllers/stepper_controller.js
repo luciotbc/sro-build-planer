@@ -16,7 +16,7 @@ export default class extends Controller {
     url: String,
     side: String,
   }
-  static targets = ["output"]
+  static targets = ["output", "range"]
 
   connect() {
     this.render()
@@ -38,8 +38,29 @@ export default class extends Controller {
     if (this.hasUrlValue) this.#persist(next)
   }
 
+  // Syncs stepper from a range <input> change (spec 06 R4 slider).
+  rangeInput(event) {
+    const next = Math.min(
+      this.maxValue,
+      Math.max(this.minValue, parseInt(event.target.value, 10))
+    )
+    if (next === this.levelValue) return
+    this.levelValue = next
+    this.render()
+    if (this.hasUrlValue) this.#persist(next)
+  }
+
+  // Sets level to max and persists — used by "Max mastery" button (spec 06 R4).
+  setMax() {
+    if (this.levelValue === this.maxValue) return
+    this.levelValue = this.maxValue
+    this.render()
+    if (this.hasUrlValue) this.#persist(this.maxValue)
+  }
+
   render() {
-    this.outputTarget.textContent = this.levelValue
+    if (this.hasOutputTarget) this.outputTarget.textContent = this.levelValue
+    if (this.hasRangeTarget) this.rangeTarget.value = this.levelValue
   }
 
   async #persist(level) {

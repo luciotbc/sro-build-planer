@@ -1,0 +1,19 @@
+<%= turbo_stream.replace "mastery-header" do %>
+  <%= render "shared/mastery_header",
+        character: @character,
+        mastery: @active_mastery,
+        mastery_level: @mastery_level,
+        side: @side %>
+<% end %>
+<% @series_groups.each do |group| %>
+  <% group[:skills].each do |entry| %>
+    <%= turbo_stream.replace "skill-row-#{entry[:skill_group].id}" do %>
+      <%= render "shared/editor_skill_row",
+            character: @character,
+            skill_group: entry[:skill_group],
+            level: entry[:level],
+            cap: entry[:cap],
+            side: @side %>
+    <% end %>
+  <% end %>
+<% end %>

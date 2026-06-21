@@ -1,0 +1,52 @@
+<%#
+  shared/mastery_header — mastery level control in the skill editor.
+  Reuses the stepper controller for ± and setMax (spec 06 R4).
+  locals:
+    character:     Character required
+    mastery:       Mastery   required
+    mastery_level: Integer   required; current or target mastery level
+    side:          Symbol    required; :current or :target
+%>
+<%
+  character     = local_assigns.fetch(:character)
+  mastery       = local_assigns.fetch(:mastery)
+  mastery_level = local_assigns.fetch(:mastery_level)
+  side          = local_assigns.fetch(:side)
+  cap           = character.server_level_cap
+%>
+<div
+  id="mastery-header"
+  class="rounded-panel border border-line px-4 py-3 flex flex-col gap-3"
+  data-controller="stepper"
+  data-stepper-level-value="<%= mastery_level %>"
+  data-stepper-max-value="<%= cap %>"
+  data-stepper-url-value="<%= character_character_mastery_path(character, mastery) %>"
+  data-stepper-side-value="<%= side %>"
+>
+  <div class="flex items-center justify-between">
+    <span class="text-xs font-bold text-text-dim uppercase tracking-wider">
+      <%= mastery.name %> Mastery
+    </span>
+    <span class="text-sm font-bold text-text tnum">
+      Lv <span data-stepper-target="output"><%= mastery_level %></span>
+      <span class="text-text-mute font-normal"> / <%= cap %></span>
+    </span>
+  </div>
+  <input
+    type="range"
+    min="0"
+    max="<%= cap %>"
+    value="<%= mastery_level %>"
+    class="w-full accent-brass"
+    data-stepper-target="range"
+    data-action="input->stepper#rangeInput"
+  >
+  <div class="flex items-center gap-2">
+    <button type="button" class="fs-step-btn"
+            data-action="stepper#decrement">−</button>
+    <button type="button" class="fs-step-btn primary"
+            data-action="stepper#increment">+</button>
+    <button type="button" class="btn-ghost text-xs ml-auto"
+            data-action="stepper#setMax">Max mastery</button>
+  </div>
+</div>
