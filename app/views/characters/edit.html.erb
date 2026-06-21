@@ -10,6 +10,9 @@
   </h1>
 </div>
 
+<%# Turbo Stream error target — replaced by CharacterSkillsController on failure %>
+<div id="skill-editor-error"></div>
+
 <% if @active_mastery.nil? %>
   <p class="text-sm text-text-dim">No mastery available. Add masteries first.</p>
 <% elsif @series_groups.empty? %>
@@ -23,26 +26,12 @@
         </h2>
         <div class="flex flex-col gap-2">
           <% group[:skills].each do |entry| %>
-            <div
-              class="fs-skill-row"
-              data-controller="stepper"
-              data-stepper-level-value="<%= entry[:level] %>"
-              data-stepper-max-value="<%= entry[:cap] %>"
-            >
-              <div class="fs-skill-meta">
-                <span class="fs-skill-name"><%= entry[:skill_group].name %></span>
-                <span class="fs-skill-level">
-                  <span class="fs-level-num" data-stepper-target="output"><%= entry[:level] %></span>
-                  <span class="text-text-mute"> / <%= entry[:cap] %></span>
-                </span>
-              </div>
-              <div class="fs-skill-controls">
-                <button type="button" class="fs-step-btn"
-                        data-action="stepper#decrement">−</button>
-                <button type="button" class="fs-step-btn primary"
-                        data-action="stepper#increment">+</button>
-              </div>
-            </div>
+            <%= render "shared/editor_skill_row",
+                  character: @character,
+                  skill_group: entry[:skill_group],
+                  level: entry[:level],
+                  cap: entry[:cap],
+                  side: @side %>
           <% end %>
         </div>
       </div>

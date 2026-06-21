@@ -1,0 +1,39 @@
+<%#
+  shared/editor_skill_row — stepper row wired to CharacterSkillsController (Turbo Stream).
+  locals:
+    character:   Character  required
+    skill_group: SkillGroup required
+    level:       Integer    required; current or target skill level for this side
+    cap:         Integer    required; effective_cap (spec 04 R4)
+    side:        Symbol     required; :current or :target
+%>
+<%
+  character   = local_assigns.fetch(:character)
+  skill_group = local_assigns.fetch(:skill_group)
+  level       = local_assigns.fetch(:level)
+  cap         = local_assigns.fetch(:cap)
+  side        = local_assigns.fetch(:side)
+%>
+<div
+  id="skill-row-<%= skill_group.id %>"
+  class="fs-skill-row"
+  data-controller="stepper"
+  data-stepper-level-value="<%= level %>"
+  data-stepper-max-value="<%= cap %>"
+  data-stepper-url-value="<%= character_character_skill_path(character, skill_group) %>"
+  data-stepper-side-value="<%= side %>"
+>
+  <div class="fs-skill-meta">
+    <span class="fs-skill-name"><%= skill_group.name %></span>
+    <span class="fs-skill-level">
+      <span class="fs-level-num" data-stepper-target="output"><%= level %></span>
+      <span class="text-text-mute"> / <%= cap %></span>
+    </span>
+  </div>
+  <div class="fs-skill-controls">
+    <button type="button" class="fs-step-btn"
+            data-action="stepper#decrement">−</button>
+    <button type="button" class="fs-step-btn primary"
+            data-action="stepper#increment">+</button>
+  </div>
+</div>
