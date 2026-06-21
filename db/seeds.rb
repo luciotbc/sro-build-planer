@@ -35,3 +35,11 @@ masteries.each do |_fixture_name, attrs|
       mastery.save!
     end
 end
+
+# Default user
+User.find_or_create_by!(email_address: "user@mail.com") do |user|
+  user.password = "Password1!"
+  user.password_confirmation = "Password1!"
+  user.email_confirmed_at = Time.current
+  user.email_opt_in = true
+end
