@@ -50,6 +50,7 @@ class BulkSkillActionsController < ApplicationController
               .find_by(mastery: @mastery)
               &.public_send(:"#{@side}_mastery_level")
               .to_i
+          @warnings = result.warnings
           @series_groups =
             build_editor_series_groups(@character, @mastery, @side)
           render "bulk_skill_actions/update"

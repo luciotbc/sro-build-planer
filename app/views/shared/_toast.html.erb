@@ -1,0 +1,13 @@
+<%# locals: message, variant (default: "info") %>
+<div
+  data-controller="toast"
+  data-toast-duration-value="4000"
+  class="toast toast--<%= local_assigns.fetch(:variant, "info") %>"
+  role="alert"
+  aria-atomic="true"
+>
+  <p class="toast-message"><%= message %></p>
+  <button type="button" class="toast-dismiss"
+          data-action="toast#dismiss"
+          aria-label="Dismiss">×</button>
+</div>

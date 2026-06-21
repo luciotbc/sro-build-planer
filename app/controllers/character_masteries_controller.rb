@@ -29,6 +29,7 @@ class CharacterMasteriesController < ApplicationController
           @active_mastery = cm.mastery
           @mastery_level = cm.public_send(level_key).to_i
           @side = side
+          @warnings = result.warnings
           @series_groups =
             build_editor_series_groups(@character, @active_mastery, side)
           render "character_masteries/update"
