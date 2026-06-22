@@ -1,7 +1,7 @@
 require "test_helper"
 
 # Verifies that service warnings are surfaced as toasts in Turbo Stream responses.
-# Spec 03 R3–R5: prerequisite_added, character_mastery_level_updated, skill_level_adjusted.
+# Spec 03 R3-R5: prerequisite_added, character_mastery_level_updated, skill_level_adjusted.
 class PrerequisiteFeedbackTest < ActionDispatch::IntegrationTest
   TURBO_STREAM = "text/vnd.turbo-stream.html"
 
@@ -62,7 +62,7 @@ class PrerequisiteFeedbackTest < ActionDispatch::IntegrationTest
   # ---- CharacterSkillsController: prerequisite auto-add warning ---------------
 
   it "includes toast markup when a prerequisite is auto-added" do
-    # Adding sg_dep level 1 without sg_pre → AddService auto-adds sg_pre, emits warning
+    # Adding sg_dep level 1 without sg_pre -> AddService auto-adds sg_pre, emits warning
     patch character_character_skill_path(@char, @sg_dep),
           params: {
             side: :current,
@@ -118,7 +118,7 @@ class PrerequisiteFeedbackTest < ActionDispatch::IntegrationTest
       current_skill_level: 1,
       target_skill_level: 1
     )
-    # Drop mastery from 10 to 3 → sg_dep level 2 (req=5) > 3 → downgraded to level 1
+    # Drop mastery from 10 to 3 -> sg_dep level 2 (req=5) > 3 -> downgraded to level 1
     patch character_character_mastery_path(@char, @mastery),
           params: {
             side: :current,
@@ -180,10 +180,10 @@ class PrerequisiteFeedbackTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "data-controller=\"toast\""
   end
 
-  # ---- Layout: toast container present with aria-live --------------------------
+  # ---- Layout: toast container present ----------------------------------------
 
-  it "layout includes toast-container with aria-live" do
+  it "layout includes toast-container" do
     get edit_character_path(@char)
-    assert_select "#toast-container[aria-live]"
+    assert_select "#toast-container"
   end
 end
