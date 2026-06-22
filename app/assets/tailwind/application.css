@@ -43,9 +43,12 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
+  html {
+    overflow-x: clip;
+  }
   body {
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow-x: clip;
     background: radial-gradient(1200px 800px at 50% -10%, #1a1d24 0%, var(--color-bg) 60%);
   }
   .tnum { font-variant-numeric: tabular-nums; }
@@ -230,9 +233,9 @@
     width: 100%;
     max-width: 100%;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     flex-wrap: nowrap;
+    mask-image: linear-gradient(to right, transparent 0, black 8px, black calc(100% - 24px), transparent 100%);
   }
   .ro-subtabs::-webkit-scrollbar {
     display: none;
