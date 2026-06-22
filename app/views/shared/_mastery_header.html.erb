@@ -39,7 +39,7 @@
     value="<%= mastery_level %>"
     class="w-full accent-brass"
     data-stepper-target="range"
-    data-action="input->stepper#rangeInput"
+    data-action="input->stepper#rangeInput change->stepper#rangeCommit"
   >
   <div class="flex items-center gap-2">
     <button type="button" class="fs-step-btn"
