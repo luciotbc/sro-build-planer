@@ -121,14 +121,14 @@ class SkillInfoPanelTest < ActionDispatch::IntegrationTest
 
   it "skill info panel shows sp_cost for the current skill level" do
     get_edit
-    # sg1 current_skill_level=2 → skill at level 2 has sp_cost=200
+    # sg1 current_skill_level=2 -> skill at level 2 has sp_cost=200
     assert_select "dialog", text: /200/
   end
 
   it "skill info panel shows mp_cost for the current skill level" do
     get_edit
-    # sg1 current_skill_level=2 → skill at level 2 has mp_cost=30
-    assert_select "dialog", text: /30/
+    # sg1 current_skill_level=2 -> skill at level 2 has mp_cost=30
+    assert_select "dialog", text: /\b30\b/
   end
 
   it "skill info panel shows mastery_level_req for the current skill level" do
@@ -148,7 +148,7 @@ class SkillInfoPanelTest < ActionDispatch::IntegrationTest
   # ---- skill at level 0: unlearned state --------------------------------------
 
   it "shows unlearned state when skill level is 0" do
-    # Create a third group with no allocated CS → level=0
+    # Create a third group with no allocated CS -> level=0
     sg_empty =
       create(
         :skill_group,
