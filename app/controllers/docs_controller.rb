@@ -57,11 +57,69 @@ class DocsController < ApplicationController
         <%# Lazy-load a modal's body inside a Turbo Frame %>
         <%= turbo_frame_tag "modal", src: edit_character_path(@character), loading: :lazy %>
       ERB
-      turbo_stream: <<~ERB
+      turbo_stream: <<~ERB,
         # After the server clamps a skill level, re-render just the stat rows:
         # app/views/characters/update.turbo_stream.erb
         <%= turbo_stream.replace "skill-points", partial: "shared/stat_row",
               locals: { label: "Skill points", current: @current, delta: @delta, planned: @planned } %>
+      ERB
+      toast: <<~ERB,
+        <%# Info / warning toast (auto-dismissed after 4 s via toast controller) %>
+        <%= render "shared/toast", message: "Prerequisite Guard added automatically." %>
+        <%# Error variant %>
+        <%= render "shared/toast", message: "Cannot remove: Slash depends on Guard.", variant: "error" %>
+      ERB
+      error_toast: <<~ERB,
+        <%# Inline error banner inside the skill editor %>
+        <%= render "shared/error_toast", message: "Cannot remove: a higher skill depends on this one." %>
+      ERB
+      empty_state: <<~ERB,
+        <%# No characters yet — with CTA link %>
+        <%= render "shared/empty_state",
+              title: "No characters yet",
+              description: "Create your first character to start planning your build.",
+              link_url: new_character_path,
+              link_label: "Create character" %>
+        <%# No skills in mastery — no link %>
+        <%= render "shared/empty_state",
+              title: "No skills in this mastery",
+              description: "Select a mastery with skills to start planning." %>
+      ERB
+      stats_summary: <<~ERB,
+        <%# Full summary panel from Builds::SummaryService %>
+        <%= render "shared/stats_summary", summary: {
+              skill_points: { current: "3,210,000", delta: "1,230,000", planned: "4,440,000" },
+              mastery_total: { current: 210, delta: 90, planned: 300 },
+              required_level: { current: 92, delta: 18, planned: 110 }
+            } %>
+      ERB
+      mastery_header: <<~ERB,
+        <%# Mastery level control: stepper + slider + Max button (spec 06 R4) %>
+        <%# Rendered in characters#edit for each active mastery, per side. %>
+        <%# Stimulus: stepper controller (same as skill rows). %>
+        <%# See app/views/shared/_mastery_header.html.erb for locals. %>
+        <%= render "shared/mastery_header",
+              character: @character,
+              mastery: @mastery,
+              mastery_level: 75,
+              side: :current %>
+      ERB
+      editor_skill_row: <<~ERB,
+        <%# Skill editor row: name, level, ±stepper, info panel trigger (spec 06). %>
+        <%# level=0 → unlearned; cap = effective_cap (spec 04 R4). %>
+        <%# Stimulus: stepper + dialog controllers. %>
+        <%# See app/views/shared/_editor_skill_row.html.erb for locals. %>
+        <%= render "shared/editor_skill_row",
+              character: @character,
+              skill_group: @skill_group,
+              level: 7,
+              cap: 10,
+              side: :current %>
+      ERB
+      chars_drawer: <<~ERB
+        <%# Right-side drawer listing user characters; trigger is chars-pill. %>
+        <%= render "shared/chars_drawer",
+              characters: Current.user.characters.order(:name) %>
       ERB
     }
   end

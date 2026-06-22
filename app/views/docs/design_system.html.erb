@@ -32,7 +32,9 @@
 <% toc = { color: "Color", type: "Type", radius: "Radius", logo: "Logo",
            buttons: "Buttons", mastery_nav: "Mastery navigation", badges: "Badges", stats: "Stat rows",
            identity: "Character bar", skillrow: "Skill row", overlays: "Overlays",
-           hotwire: "Hotwire" } %>
+           toast: "Toasts", empty_state: "Empty states", stats_summary: "Stats summary",
+           mastery_header: "Mastery header", editor_skill_row: "Editor skill row",
+           chars_drawer: "Characters drawer", hotwire: "Hotwire" } %>
 
 <div class="space-y-12">
   <%# ── Intro ───────────────────────────────────────────────────────────── %>
@@ -241,6 +243,165 @@
       <%= render "shared/sheet", title: "Filters", trigger_label: "Open sheet" %>
     </div>
     <%= render "docs/snippet", code: @snippets[:overlays] %>
+  </section>
+
+  <%# ── Toasts ──────────────────────────────────────────────────────────── %>
+  <section id="toast" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Toasts</h2>
+      <p class="text-text-dim">
+        Auto-dismissed after 4 s via the <code class="text-brass-hi">toast</code> Stimulus controller.
+        <code class="text-brass-hi">variant: "info"</code> (default) or <code class="text-brass-hi">"error"</code>.
+        Also: <code class="text-brass-hi">shared/error_toast</code> for inline editor banners.
+      </p>
+    </div>
+    <div class="flex flex-col gap-3 rounded-panel border border-line bg-card p-6">
+      <%= render "shared/toast", message: "Prerequisite Guard added automatically." %>
+      <%= render "shared/toast", message: "Cannot remove: Slash depends on Guard.", variant: "error" %>
+      <%= render "shared/error_toast", message: "Cannot remove: a higher skill depends on this one." %>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:toast] %>
+    <%= render "docs/snippet", code: @snippets[:error_toast] %>
+  </section>
+
+  <%# ── Empty states ────────────────────────────────────────────────────── %>
+  <section id="empty_state" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Empty states</h2>
+      <p class="text-text-dim">
+        Centered title + description with optional CTA link. Used on the characters index
+        (no characters) and mastery editor (no skills). Partial: <code class="text-brass-hi">shared/empty_state</code>.
+      </p>
+    </div>
+    <div class="rounded-panel border border-line bg-card">
+      <%= render "shared/empty_state",
+            title: "No characters yet",
+            description: "Create your first character to start planning your build.",
+            link_url: new_character_path,
+            link_label: "Create character" %>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:empty_state] %>
+  </section>
+
+  <%# ── Stats summary ───────────────────────────────────────────────────── %>
+  <section id="stats_summary" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Stats summary</h2>
+      <p class="text-text-dim">
+        Three-row panel (spec 02 R3–R5): skill points, mastery total, required level.
+        Wraps three <code class="text-brass-hi">shared/stat_row</code> in a <code class="text-brass-hi">stat-merged</code> card.
+        Data from <code class="text-brass-hi">Builds::SummaryService</code>.
+      </p>
+    </div>
+    <div class="flex justify-center rounded-panel border border-line bg-card p-6">
+      <%= render "shared/stats_summary", summary: {
+            skill_points:  { current: "3,210,000", delta: "1,230,000", planned: "4,440,000" },
+            mastery_total: { current: 210, delta: 90, planned: 300 },
+            required_level: { current: 92, delta: 18, planned: 110 }
+          } %>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:stats_summary] %>
+  </section>
+
+  <%# ── Mastery header ──────────────────────────────────────────────────── %>
+  <section id="mastery_header" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Mastery header</h2>
+      <p class="text-text-dim">
+        Mastery level control in the skill editor: slider + ± stepper + Max button (spec 06 R4).
+        Driven by the <code class="text-brass-hi">stepper</code> Stimulus controller.
+        Partial: <code class="text-brass-hi">shared/mastery_header</code>.
+      </p>
+    </div>
+    <div class="max-w-sm rounded-panel border border-line bg-card p-6">
+      <div
+        id="mastery-header"
+        class="rounded-panel border border-line px-4 py-3 flex flex-col gap-3"
+        data-controller="stepper"
+        data-stepper-level-value="75"
+        data-stepper-max-value="110"
+        data-stepper-url-value="#"
+        data-stepper-side-value="current"
+      >
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-text-dim uppercase tracking-wider">Blade Mastery</span>
+          <span class="text-sm font-bold text-text tnum">
+            Lv <span data-stepper-target="output">75</span>
+            <span class="text-text-mute font-normal"> / 110</span>
+          </span>
+        </div>
+        <input type="range" min="0" max="110" value="75" class="w-full accent-brass"
+               data-stepper-target="range" data-action="input->stepper#rangeInput">
+        <div class="flex items-center gap-2">
+          <button type="button" class="fs-step-btn" data-action="stepper#decrement">−</button>
+          <button type="button" class="fs-step-btn primary" data-action="stepper#increment">+</button>
+          <button type="button" class="btn-ghost text-xs ml-auto" data-action="stepper#setMax">Max mastery</button>
+        </div>
+      </div>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:mastery_header] %>
+  </section>
+
+  <%# ── Editor skill row ────────────────────────────────────────────────── %>
+  <section id="editor_skill_row" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Editor skill row</h2>
+      <p class="text-text-dim">
+        Stepper row wired to <code class="text-brass-hi">CharacterSkillsController</code> via Turbo Stream (spec 06).
+        Includes inline skill info panel trigger (<code class="text-brass-hi">ℹ</code> button → dialog).
+        <code class="text-brass-hi">level=0</code> means unlearned; cap = effective_cap (spec 04 R4).
+        Partial: <code class="text-brass-hi">shared/editor_skill_row</code>.
+      </p>
+    </div>
+    <div class="flex justify-center rounded-panel border border-line bg-card p-6">
+      <div class="skill-card">
+        <div class="fs-skill-row" data-controller="stepper" data-stepper-level-value="7" data-stepper-max-value="10" data-stepper-url-value="#">
+          <div class="fs-skill-meta">
+            <span class="fs-skill-name">Cyclone Strike</span>
+            <span class="fs-skill-level">
+              <span class="fs-level-num" data-stepper-target="output">7</span>
+              <span class="text-text-mute"> / 10</span>
+            </span>
+          </div>
+          <div class="fs-skill-controls">
+            <button type="button" class="fs-step-btn" data-action="stepper#decrement">−</button>
+            <button type="button" class="fs-step-btn primary" data-action="stepper#increment">+</button>
+            <button type="button" class="icon-btn" aria-label="Skill info">ℹ</button>
+          </div>
+        </div>
+        <div class="fs-skill-row" data-controller="stepper" data-stepper-level-value="0" data-stepper-max-value="10" data-stepper-url-value="#">
+          <div class="fs-skill-meta">
+            <span class="fs-skill-name">Thunder Palm</span>
+            <span class="fs-skill-level">
+              <span class="fs-level-num" data-stepper-target="output">0</span>
+              <span class="text-text-mute"> / 10</span>
+            </span>
+          </div>
+          <div class="fs-skill-controls">
+            <button type="button" class="fs-step-btn" data-action="stepper#decrement">−</button>
+            <button type="button" class="fs-step-btn primary" data-action="stepper#increment">+</button>
+            <button type="button" class="icon-btn" aria-label="Skill info">ℹ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:editor_skill_row] %>
+  </section>
+
+  <%# ── Characters drawer ───────────────────────────────────────────────── %>
+  <section id="chars_drawer" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Characters drawer</h2>
+      <p class="text-text-dim">
+        Right-side <code class="text-brass-hi">drawer</code> showing the user's characters. Trigger is the
+        <code class="text-brass-hi">chars-pill</code> button in the topbar.
+        Partial: <code class="text-brass-hi">shared/chars_drawer</code>.
+      </p>
+    </div>
+    <div class="flex items-center gap-3 rounded-panel border border-line bg-card p-6">
+      <%= render "shared/chars_drawer", characters: [] %>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:chars_drawer] %>
   </section>
 
   <%# ── Hotwire ─────────────────────────────────────────────────────────── %>
