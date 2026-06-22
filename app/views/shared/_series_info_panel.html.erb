@@ -7,7 +7,7 @@
 <%
   series     = local_assigns.fetch(:series)
   character  = local_assigns.fetch(:character)
-  groups     = series.skill_groups.order(:col_position)
+  groups     = series.skill_groups.order(:col_position).load
 %>
 <dialog
   class="sheet"
@@ -19,7 +19,7 @@
     <button type="button" class="icon-btn" data-action="dialog#close" aria-label="Close">×</button>
   </header>
   <div class="pt-4 text-sm">
-    <p class="text-text-dim"><%= groups.count %> skills in this series</p>
+    <p class="text-text-dim"><%= groups.size %> skills in this series</p>
     <ul class="mt-3 space-y-1">
       <% groups.each do |sg| %>
         <li class="flex items-center justify-between text-text-dim">
