@@ -1,15 +1,25 @@
-<h1>My Characters</h1>
+<h1 class="text-sm font-bold text-text mb-4">My Characters</h1>
 
 <% if @characters.empty? %>
-  <p>No characters yet.</p>
+  <%= render "shared/empty_state",
+        title: "No characters yet",
+        description: "Create your first character to start planning your Silkroad build.",
+        link_url: new_character_path,
+        link_label: "Create character" %>
 <% else %>
-  <ul>
+  <ul class="flex flex-col gap-2">
     <% @characters.each do |character| %>
       <li data-character-id="<%= character.id %>">
-        <%= link_to character.name, character_path(character) %>
+        <%= link_to character_path(character),
+              class: "flex items-center gap-3 rounded-field px-3 py-2 text-sm text-text hover:bg-surface-raised transition-colors" do %>
+          <div class="char-avatar text-xs"><%= character.race.name == "Chinese" ? "华" : "⚔" %></div>
+          <div>
+            <div class="font-semibold"><%= character.name %></div>
+            <div class="text-xs text-text-dim"><%= character.race.name %> · Cap <%= character.server_level_cap %></div>
+          </div>
+        <% end %>
       </li>
     <% end %>
   </ul>
+  <%= link_to "＋ New Character", new_character_path, class: "btn-ghost mt-4 block" %>
 <% end %>
-
-<%= link_to "New Character", new_character_path %>

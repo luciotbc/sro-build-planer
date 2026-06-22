@@ -1,0 +1,21 @@
+<%#
+  shared/empty_state — DS-styled empty state with optional CTA link.
+  locals:
+    title:       String  required
+    description: String  required
+    link_url:    String  optional; omit to render no CTA
+    link_label:  String  optional; default "Get started"
+%>
+<%
+  title       = local_assigns.fetch(:title)
+  description = local_assigns.fetch(:description)
+  link_url    = local_assigns[:link_url]
+  link_label  = local_assigns.fetch(:link_label, "Get started")
+%>
+<div class="flex flex-col items-center justify-center py-16 text-center gap-4" role="status">
+  <p class="text-sm font-bold text-text"><%= title %></p>
+  <p class="text-sm text-text-dim max-w-xs"><%= description %></p>
+  <% if link_url %>
+    <%= link_to link_label, link_url, class: "btn-primary" %>
+  <% end %>
+</div>
