@@ -2,8 +2,10 @@ import { Controller } from "@hotwired/stimulus"
 
 // A clamped numeric stepper. When url and side values are set, each ±
 // persists immediately via a Turbo Stream PATCH (per-step persistence,
-// spec 06 R8). Without url, it operates as a pure DOM stepper (used by
-// the design system docs).
+// spec 06 R8). The range slider, however, renders live during the drag
+// but persists only once on release (the `change` event) — a single PATCH
+// with the final level instead of one per intermediate value. Without url,
+// it operates as a pure DOM stepper (used by the design system docs).
 //
 // Single-step undo for bulk actions (spec 06 R7) is handled by the
 // skill-editor controller (010/03), which snapshots all stepper levelValues
@@ -16,14 +18,16 @@ export default class extends Controller {
     url: String,
     side: String,
   }
-  static targets = ["output"]
+  static targets = ["output", "range"]
+
+  #controller = null
 
   connect() {
     this.render()
   }
 
   increment() {
-    const next = Math.min(this.maxValue, this.levelValue + 1)
+    const next = this.#clamp(this.levelValue + 1)
     if (next === this.levelValue) return
     this.levelValue = next
     this.render()
@@ -31,30 +35,68 @@ export default class extends Controller {
   }
 
   decrement() {
-    const next = Math.max(this.minValue, this.levelValue - 1)
+    const next = this.#clamp(this.levelValue - 1)
     if (next === this.levelValue) return
     this.levelValue = next
     this.render()
     if (this.hasUrlValue) this.#persist(next)
   }
 
+  // Live visual sync while dragging the slider — no persistence (spec 06 R4
+  // slider). The PATCH fires once on release via rangeCommit.
+  rangeInput(event) {
+    const next = this.#clamp(parseInt(event.target.value, 10))
+    if (next === this.levelValue) return
+    this.levelValue = next
+    this.render()
+  }
+
+  // Persists the final slider value on release (the `change` event: mouse-up,
+  // blur, or keyboard arrow). One PATCH per drag, not per intermediate tick.
+  rangeCommit() {
+    if (this.hasUrlValue) this.#persist(this.levelValue)
+  }
+
+  // Sets level to max and persists — used by "Max mastery" button (spec 06 R4).
+  setMax() {
+    if (this.levelValue === this.maxValue) return
+    this.levelValue = this.maxValue
+    this.render()
+    if (this.hasUrlValue) this.#persist(this.maxValue)
+  }
+
   render() {
-    this.outputTarget.textContent = this.levelValue
+    if (this.hasOutputTarget) this.outputTarget.textContent = this.levelValue
+    if (this.hasRangeTarget) this.rangeTarget.value = this.levelValue
+  }
+
+  #clamp(level) {
+    return Math.min(this.maxValue, Math.max(this.minValue, level))
   }
 
   async #persist(level) {
+    // Cancel any still-in-flight PATCH so a superseded response can't clobber
+    // the UI out of order. Safe because the level is absolute, not a delta.
+    this.#controller?.abort()
+    this.#controller = new AbortController()
+
     const csrfToken =
       document.querySelector('meta[name="csrf-token"]')?.content ?? ""
-    const response = await fetch(this.urlValue, {
-      method: "PATCH",
-      headers: {
-        Accept: "text/vnd.turbo-stream.html",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "X-CSRF-Token": csrfToken,
-      },
-      body: new URLSearchParams({ side: this.sideValue, level }),
-    })
-    const html = await response.text()
-    Turbo.renderStreamMessage(html)
+    try {
+      const response = await fetch(this.urlValue, {
+        method: "PATCH",
+        headers: {
+          Accept: "text/vnd.turbo-stream.html",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRF-Token": csrfToken,
+        },
+        body: new URLSearchParams({ side: this.sideValue, level }),
+        signal: this.#controller.signal,
+      })
+      const html = await response.text()
+      Turbo.renderStreamMessage(html)
+    } catch (error) {
+      if (error.name !== "AbortError") throw error
+    }
   }
 }
