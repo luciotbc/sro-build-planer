@@ -8,13 +8,13 @@ Run before: 011, 012, 013, 014, 015, 016, 017.
 The skill editing screen (SkillEditor) from `skills_editor.html`, parameterized by **side** (current or planned): collapsible series (SkillSeries), skill rows (SkillRow) with ± steppers showing `level / cap`, and the mastery header. Editing respects the cascade rules.
 
 ## Usage flow
-From the planner, "Edit Current"/"Edit Planned" opens the editor on that side for the active mastery. The user expands a series, uses ± to adjust skills; cascade applies prerequisites/mastery; on save it persists; back to the planner.
+From the planner, "Edit Current"/"Edit Planned" opens the editor on that side for the active mastery. The user expands a series, uses ± to adjust skills; each click persists immediately via Turbo Stream (per-step persistence, spec 06 R8); cascade applies prerequisites/mastery on the correct side; back to the planner.
 
 ## References
 - Mockup: `skills_editor.html`.
 - Design System: SkillEditor, SkillRow, SeriesInfoPanel, `_skill_row`, `_button`, `_tabs`.
 - Specs: [06](../specs/06-edit-flow-and-bulk-actions.md) (R2/R3), [03](../specs/03-prerequisites-and-cascade.md), [04](../specs/04-skill-access-and-caps.md).
-- Code: `app/views/shared/_skill_row.html.erb`, `app/javascript/controllers/stepper_controller.js`, `CharacterSkills::{Add,Update,Clear}Service` (per-side after 002).
+- Code: `app/views/shared/_editor_skill_row.html.erb` (wired editor row, Turbo Stream), `app/views/shared/_skill_row.html.erb` (DS demo component — do not wire), `app/javascript/controllers/stepper_controller.js`, `app/controllers/character_skills_controller.rb`, `CharacterSkills::{Add,Update,Clear}Service`.
 
 ## Implementation scope
 - **Frontend**: `shared/_skill_editor` + `shared/_series_group` (collapsible, `X/Y` counter); `_skill_row` with ± (Stimulus stepper) showing `level / effective_cap`; side from the param; hold-+/− hint.
@@ -24,13 +24,13 @@ From the planner, "Edit Current"/"Edit Planned" opens the editor on that side fo
 - **States**: empty/0-allocated series; per-action loading; success; error.
 
 ## Acceptance criteria
-- [ ] Editor opens on the correct side (current/planned) per the entry point.
-- [ ] Working-state substrate (active-mastery snapshot) delivered and documented — enables single-step undo (consumed by 012).
-- [ ] ± respects the effective cap and applies cascade (prerequisites/mastery) on the correct side.
-- [ ] Series collapse/expand; counters correct.
-- [ ] Decrement blocked by a dependent → feedback (without corrupting state).
-- [ ] Faithful to mockup + DS; current untouched when editing planned.
-- [ ] `PARALLEL_WORKERS=1 bin/rails test` green; console clean.
+- [x] Editor opens on the correct side (current/planned) per the entry point. _(010/01)_
+- [ ] Working-state substrate (active-mastery snapshot) delivered and documented — enables single-step undo (consumed by 012). _(010/03 — Stimulus `skill-editor` controller)_
+- [x] ± respects the effective cap and applies cascade (prerequisites/mastery) on the correct side. _(010/02)_
+- [ ] Series collapse/expand; counters correct. _(010/03)_
+- [x] Decrement blocked by a dependent → feedback (without corrupting state). _(010/02)_
+- [ ] Faithful to mockup + DS; current untouched when editing planned. _(browser validation pending)_
+- [x] `PARALLEL_WORKERS=1 bin/rails test` green; console clean. _(427 runs, 0 failures)_
 
 ## Testing strategy (TDD)
 - System/integration: raising a planned skill → planned prerequisite appears; effective cap limits; current unchanged; blocked decrement shows an error; series collapse.
