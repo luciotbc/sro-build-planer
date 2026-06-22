@@ -537,7 +537,7 @@
   }
   .fs-step-btn:hover {
     background: var(--color-card);
-    border-color: #3a3f4b;
+    border-color: color-mix(in srgb, var(--color-line) 60%, var(--color-text-mute));
   }
   .fs-step-btn.primary {
     @apply bg-gradient-to-b from-brass-hi to-brass;
