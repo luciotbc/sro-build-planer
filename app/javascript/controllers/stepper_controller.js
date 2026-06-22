@@ -8,7 +8,7 @@ import { Controller } from "@hotwired/stimulus"
 // it operates as a pure DOM stepper (used by the design system docs).
 //
 // Single-step undo for bulk actions (spec 06 R7) is handled by the
-// skill-editor controller (010/03), which snapshots all stepper levelValues
+// skill-editor controller (task 018), which snapshots all stepper levelValues
 // before each bulk action and re-submits deltas on undo.
 export default class extends Controller {
   static values = {
