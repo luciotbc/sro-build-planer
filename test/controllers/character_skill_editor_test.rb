@@ -147,4 +147,36 @@ class CharacterSkillEditorTest < ActionDispatch::IntegrationTest
     get edit_character_path(@char, side: :current)
     assert_select "[data-stepper-max-value='2']"
   end
+
+  # ---- series collapse (010/03) -------------------------------------------
+
+  it "renders series panels with collapsible controller" do
+    get edit_character_path(@char, side: :current)
+    assert_select "[data-controller~='collapsible']"
+  end
+
+  it "renders editor wrapper with skill-editor controller" do
+    get edit_character_path(@char, side: :current)
+    assert_select "[data-controller~='skill-editor']"
+  end
+
+  it "shows allocated/total skill counter for side=current" do
+    # @cs1.current_skill_level=1 (allocated), @cs2.current_skill_level=0 (not)
+    # → 1 out of 2 skills allocated in series "Basic"
+    get edit_character_path(@char, side: :current)
+    assert_match "1/2", response.body
+  end
+
+  it "shows allocated/total skill counter for side=target" do
+    # @cs1.target_skill_level=2 (allocated), @cs2.target_skill_level=1 (allocated)
+    # → 2 out of 2 skills allocated in series "Basic"
+    get edit_character_path(@char, side: :target)
+    assert_match "2/2", response.body
+  end
+
+  it "skill rows have stepper url and side data attributes wired" do
+    get edit_character_path(@char, side: :current)
+    assert_select "[data-stepper-url-value]"
+    assert_select "[data-stepper-side-value='current']"
+  end
 end

@@ -18,13 +18,27 @@
 <% elsif @series_groups.empty? %>
   <p class="text-sm text-text-dim">No skill series in this mastery.</p>
 <% else %>
-  <div class="flex flex-col gap-6">
+  <div class="flex flex-col gap-6" data-controller="skill-editor">
     <% @series_groups.each do |group| %>
-      <div class="rounded-panel border border-line p-4">
-        <h2 class="text-xs font-bold text-text-dim uppercase tracking-wider mb-3">
-          <%= group[:series].title %>
-        </h2>
-        <div class="flex flex-col gap-2">
+      <%
+        allocated = group[:skills].count { |e| e[:level] > 0 }
+        total     = group[:skills].size
+      %>
+      <div class="rounded-panel border border-line"
+           data-controller="collapsible">
+        <button type="button"
+                class="w-full flex items-center justify-between px-4 py-3"
+                data-action="collapsible#toggle">
+          <h2 class="text-xs font-bold text-text-dim uppercase tracking-wider">
+            <%= group[:series].title %>
+          </h2>
+          <div class="flex items-center gap-2 text-xs text-text-mute">
+            <span><%= allocated %>/<%= total %></span>
+            <span data-collapsible-target="chevron">▾</span>
+          </div>
+        </button>
+        <div class="flex flex-col gap-2 px-4 pb-4"
+             data-collapsible-target="body">
           <% group[:skills].each do |entry| %>
             <%= render "shared/editor_skill_row",
                   character: @character,
