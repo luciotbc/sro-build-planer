@@ -101,6 +101,12 @@
     color: var(--color-blue);
   }
 
+  .toast--warning {
+    border-color: color-mix(in srgb, var(--color-amber) 30%, transparent);
+    background: color-mix(in srgb, var(--color-amber) 8%, var(--color-card));
+    color: var(--color-amber);
+  }
+
   .toast--error {
     border-color: color-mix(in srgb, var(--color-red) 30%, transparent);
     background: color-mix(in srgb, var(--color-red) 8%, var(--color-card));

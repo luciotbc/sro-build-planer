@@ -1,8 +1,8 @@
-<%# locals: message, variant (default: "info") %>
+<%# locals: message, variant (default: "warning") %>
 <div
   data-controller="toast"
   data-toast-duration-value="4000"
-  class="toast toast--<%= local_assigns.fetch(:variant, "info") %>"
+  class="toast toast--<%= local_assigns.fetch(:variant, "warning") %>"
   role="alert"
   aria-atomic="true"
 >
