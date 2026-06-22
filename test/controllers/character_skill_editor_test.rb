@@ -142,7 +142,7 @@ class CharacterSkillEditorTest < ActionDispatch::IntegrationTest
 
   it "computes effective cap respecting server_level_cap" do
     # sg1: max_skill_level=3; skills at levels 1 (req=1) and 2 (req=5)
-    # server_level_cap=110: both reachable → highest reachable = 2
+    # server_level_cap=110: both reachable -> highest reachable = 2
     # effective_cap = min(2, 3) = 2 (spec 04 R4)
     get edit_character_path(@char, side: :current)
     assert_select "[data-stepper-max-value='2']"
@@ -155,21 +155,16 @@ class CharacterSkillEditorTest < ActionDispatch::IntegrationTest
     assert_select "[data-controller~='collapsible']"
   end
 
-  it "renders editor wrapper with skill-editor controller" do
-    get edit_character_path(@char, side: :current)
-    assert_select "[data-controller~='skill-editor']"
-  end
-
   it "shows allocated/total skill counter for side=current" do
     # @cs1.current_skill_level=1 (allocated), @cs2.current_skill_level=0 (not)
-    # → 1 out of 2 skills allocated in series "Basic"
+    # -> 1 out of 2 skills allocated in series "Basic"
     get edit_character_path(@char, side: :current)
     assert_match "1/2", response.body
   end
 
   it "shows allocated/total skill counter for side=target" do
     # @cs1.target_skill_level=2 (allocated), @cs2.target_skill_level=1 (allocated)
-    # → 2 out of 2 skills allocated in series "Basic"
+    # -> 2 out of 2 skills allocated in series "Basic"
     get edit_character_path(@char, side: :target)
     assert_match "2/2", response.body
   end

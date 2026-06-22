@@ -13,20 +13,35 @@
 <%# Turbo Stream error target — replaced on failure by skill/mastery controllers %>
 <div id="skill-editor-error"></div>
 
-<% if @active_mastery %>
+<% if @active_mastery.nil? %>
+  <p class="text-sm text-text-dim">No mastery available. Add masteries first.</p>
+<% else %>
   <%= render "shared/mastery_header",
         character: @character,
         mastery: @active_mastery,
         mastery_level: @mastery_level,
         side: @side %>
-<% end %>
-
-<% if @active_mastery.nil? %>
-  <p class="text-sm text-text-dim">No mastery available. Add masteries first.</p>
-<% elsif @series_groups.empty? %>
-  <p class="text-sm text-text-dim">No skill series in this mastery.</p>
-<% else %>
-  <div class="flex flex-col gap-6" data-controller="skill-editor">
+  <% if @series_groups.empty? %>
+    <p class="text-sm text-text-dim">No skill series in this mastery.</p>
+  <% else %>
+    <div class="flex items-center gap-2 mb-4">
+      <%= form_with url: max_mastery_character_path(@character), data: { turbo: true } do |f| %>
+        <%= f.hidden_field :side, value: @side %>
+        <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
+        <%= f.button "Max mastery", type: :submit, class: "btn-ghost text-xs" %>
+      <% end %>
+      <%= form_with url: max_skills_character_path(@character), data: { turbo: true } do |f| %>
+        <%= f.hidden_field :side, value: @side %>
+        <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
+        <%= f.button "Max skills", type: :submit, class: "btn-ghost text-xs" %>
+      <% end %>
+      <%= form_with url: clear_mastery_character_path(@character), data: { turbo: true } do |f| %>
+        <%= f.hidden_field :side, value: @side %>
+        <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
+        <%= f.button "Clear all", type: :submit, class: "btn-ghost text-xs text-red-500" %>
+      <% end %>
+    </div>
+    <div class="flex flex-col gap-6">
     <% @series_groups.each do |group| %>
       <%
         allocated = group[:skills].count { |e| e[:level] > 0 }
@@ -58,5 +73,6 @@
         </div>
       </div>
     <% end %>
-  </div>
+    </div>
+  <% end %>
 <% end %>
