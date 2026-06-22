@@ -205,4 +205,59 @@ class BulkSkillActionsControllerTest < ActionDispatch::IntegrationTest
                { side: :bad, mastery_id: @mastery1.id }
     assert_response :unprocessable_entity
   end
+
+  # ---- max_mastery auth -------------------------------------------------------
+
+  it "redirects unauthenticated max_mastery to login" do
+    sign_out
+    turbo_post max_mastery_character_path(@char),
+               { side: :current, mastery_id: @mastery1.id }
+    assert_redirected_to new_session_path
+  end
+
+  it "returns 404 for another user's character on max_mastery" do
+    turbo_post max_mastery_character_path(@other_char),
+               { side: :current, mastery_id: @mastery1.id }
+    assert_response :not_found
+  end
+
+  # ---- max_mastery behavior ---------------------------------------------------
+
+  it "sets current_mastery_level to cap on :current side" do
+    turbo_post max_mastery_character_path(@char),
+               { side: :current, mastery_id: @mastery1.id }
+    assert_equal 110, @cm1.reload.current_mastery_level
+  end
+
+  it "does not touch target when maxing current side" do
+    turbo_post max_mastery_character_path(@char),
+               { side: :current, mastery_id: @mastery1.id }
+    assert_equal 50, @cm1.reload.target_mastery_level
+  end
+
+  it "sets target_mastery_level to cap on :target side" do
+    turbo_post max_mastery_character_path(@char),
+               { side: :target, mastery_id: @mastery1.id }
+    assert_equal 110, @cm1.reload.target_mastery_level
+  end
+
+  it "does not touch other mastery on max_mastery" do
+    turbo_post max_mastery_character_path(@char),
+               { side: :current, mastery_id: @mastery1.id }
+    assert_equal 50, @cm2.reload.current_mastery_level
+  end
+
+  it "returns turbo_stream with mastery-header on max_mastery success" do
+    turbo_post max_mastery_character_path(@char),
+               { side: :current, mastery_id: @mastery1.id }
+    assert_response :success
+    assert_equal TURBO_STREAM, response.media_type
+    assert_includes response.body, "mastery-header"
+  end
+
+  it "returns 422 for invalid side on max_mastery" do
+    turbo_post max_mastery_character_path(@char),
+               { side: :bad, mastery_id: @mastery1.id }
+    assert_response :unprocessable_entity
+  end
 end

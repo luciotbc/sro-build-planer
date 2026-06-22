@@ -24,6 +24,20 @@ class BulkSkillActionsController < ApplicationController
     turbo_respond(result)
   end
 
+  def max_mastery
+    character_mastery =
+      @character.character_masteries.find_by(mastery: @mastery)
+    return head :not_found unless character_mastery
+
+    result =
+      CharacterMasteries::MaxMasteryLevelService.call(
+        character_mastery,
+        side: @side,
+        cap: @character.server_level_cap
+      )
+    turbo_respond(result)
+  end
+
   private
 
   def turbo_respond(result)

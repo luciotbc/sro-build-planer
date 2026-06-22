@@ -28,6 +28,12 @@
 <% else %>
   <div data-controller="skill-editor">
     <div class="flex items-center gap-2 mb-4">
+      <%= form_with url: max_mastery_character_path(@character), data: { turbo: true } do |f| %>
+        <%= f.hidden_field :side, value: @side %>
+        <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
+        <%= f.button "Max mastery", type: :submit, class: "btn-ghost text-xs",
+              data: { action: "submit->skill-editor#beforeBulk" } %>
+      <% end %>
       <%= form_with url: max_skills_character_path(@character), data: { turbo: true } do |f| %>
         <%= f.hidden_field :side, value: @side %>
         <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
