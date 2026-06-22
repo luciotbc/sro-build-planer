@@ -1,4 +1,10 @@
-<div>
-  <h1 class="font-bold text-4xl">Home#index</h1>
-  <p>Find me in app/views/home/index.html.erb</p>
+<div class="flex flex-col items-center justify-center py-24 text-center gap-6">
+  <div class="flex flex-col gap-3">
+    <h1 class="text-3xl font-bold text-text">SRO Build Planner</h1>
+    <p class="text-sm text-text-dim max-w-xs mx-auto">Plan your Silkroad Online character — masteries, skills, and SP costs.</p>
+  </div>
+  <div class="flex gap-3">
+    <%= link_to "Log in", new_session_path, class: "btn-primary" %>
+    <%= link_to "Register", new_registration_path, class: "btn-ghost" %>
+  </div>
 </div>

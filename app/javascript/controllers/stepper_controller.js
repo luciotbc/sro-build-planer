@@ -72,6 +72,7 @@ export default class extends Controller {
     this.#controller?.abort()
     this.#controller = new AbortController()
 
+    this.element.setAttribute("aria-busy", "true")
     const csrfToken =
       document.querySelector('meta[name="csrf-token"]')?.content ?? ""
     try {
@@ -89,6 +90,8 @@ export default class extends Controller {
       Turbo.renderStreamMessage(html)
     } catch (error) {
       if (error.name !== "AbortError") throw error
+    } finally {
+      this.element.removeAttribute("aria-busy")
     }
   }
 }
