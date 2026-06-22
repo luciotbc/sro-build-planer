@@ -21,10 +21,10 @@ A dev/designer opens `/docs/design_system` and sees every component rendered liv
 - **States**: each component with its variants/states in the docs.
 
 ## Acceptance criteria
-- [ ] All new components appear in `/docs/design_system` (live render).
-- [ ] No colors/sizes hardcoded outside tokens; no duplicated partial.
-- [ ] `/design-sync` run; published DS updated.
-- [ ] `PARALLEL_WORKERS=1 bin/rails test` green; console clean.
+- [x] All new components appear in `/docs/design_system` (live render).
+- [x] No colors/sizes hardcoded outside tokens; no duplicated partial.
+- [ ] `/design-sync` run; published DS updated. _(deferred — requires interactive tool)_
+- [x] `PARALLEL_WORKERS=1 bin/rails test` green; console clean.
 
 ## Testing strategy (TDD)
 - Integration: `/docs/design_system` renders each new partial without error; smoke that the classes used exist in `@layer components`.
