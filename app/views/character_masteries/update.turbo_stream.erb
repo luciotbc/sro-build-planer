@@ -4,3 +4,8 @@
       mastery_level: @mastery_level,
       side: @side,
       series_groups: @series_groups %>
+<% @warnings.each do |warning| %>
+  <%= turbo_stream.append "toast-container" do %>
+    <%= render "shared/toast", message: warning, variant: "warning" %>
+  <% end %>
+<% end %>

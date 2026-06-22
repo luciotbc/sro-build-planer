@@ -25,18 +25,29 @@ class CharacterSkillsController < ApplicationController
           cs = @character.character_skills.find_by(skill_group_id: sg_id)
           level = cs&.public_send(:"#{side}_skill_level").to_i
           cap = sg.effective_cap(@character.server_level_cap)
-          render turbo_stream:
-                   turbo_stream.replace(
-                     "skill-row-#{sg_id}",
-                     partial: "shared/editor_skill_row",
-                     locals: {
-                       character: @character,
-                       skill_group: sg,
-                       level: level,
-                       cap: cap,
-                       side: side
-                     }
-                   )
+          streams = [
+            turbo_stream.replace(
+              "skill-row-#{sg_id}",
+              partial: "shared/editor_skill_row",
+              locals: {
+                character: @character,
+                skill_group: sg,
+                level: level,
+                cap: cap,
+                side: side
+              }
+            )
+          ]
+          result.warnings.each do |warning|
+            streams << turbo_stream.append(
+              "toast-container",
+              partial: "shared/toast",
+              locals: {
+                message: warning
+              }
+            )
+          end
+          render turbo_stream: streams
         else
           render turbo_stream:
                    turbo_stream.replace(
