@@ -38,6 +38,51 @@ class CharactersController < ApplicationController
   end
 
   def edit
+    @side = params[:side].presence&.to_sym
+    unless %i[current target].include?(@side)
+      if @side.nil?
+        @side = :current
+      else
+        return redirect_to @character
+      end
+    end
+
+    mastery_id = params[:mastery_id]
+    all_masteries =
+      @character.character_masteries.includes(:mastery).map(&:mastery)
+    @active_mastery =
+      (all_masteries.find { |m| m.id.to_s == mastery_id.to_s } if mastery_id) ||
+        all_masteries.first
+
+    if @active_mastery
+      skill_level_attr = :"#{@side}_skill_level"
+      @series_groups =
+        @active_mastery
+          .skill_series
+          .order(:row_position)
+          .map do |series|
+            skill_groups =
+              series
+                .skill_groups
+                .includes(:skills, :character_skills)
+                .order(:col_position)
+            character_skills_by_group =
+              @character
+                .character_skills
+                .where(skill_group: skill_groups)
+                .index_by(&:skill_group_id)
+            skills_with_data =
+              skill_groups.map do |sg|
+                cs = character_skills_by_group[sg.id]
+                level = cs&.public_send(skill_level_attr).to_i
+                cap = sg.effective_cap(@character.server_level_cap)
+                { skill_group: sg, level: level, cap: cap }
+              end
+            { series: series, skills: skills_with_data }
+          end
+    else
+      @series_groups = []
+    end
   end
 
   def create
