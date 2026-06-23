@@ -1,93 +1,97 @@
 <%
-  side_label = @side == :current ? "Current" : "Planned"
+  skills_heading     = @side == :current ? "Current skills" : "Future skills"
+  side_badge_text    = @side == :current ? "● ACTIVE" : "● PLANNING"
+  side_badge_variant = @side == :current ? :current : :planned
 %>
 
-<%# Mobile-first single column; centered on wider viewports so every box
-    shares one alignment edge (spec 07 / design-system parity). %>
-<div class="mx-auto w-full max-w-xl space-y-5">
-  <%# ── Header: back + which side is being edited ─────────────────────────── %>
-  <div class="flex items-center gap-3">
-    <%= link_to "← Back", character_path(@character, mastery_id: @active_mastery&.id),
-          class: "btn-ghost text-sm" %>
-    <h1 class="flex items-center gap-2 text-sm font-bold text-text">
-      <span>Editing</span>
-      <%= render "shared/badge",
-            text: side_label,
-            variant: (@side == :current ? :current : :planned) %>
-    </h1>
-  </div>
+<%# Mobile-first single column; capped at the char-bar width (520px) so every
+    box shares one alignment edge (spec 07 / design-system parity). %>
+<div class="mx-auto w-full max-w-[520px] space-y-4">
+  <%# ── Back to the planner (navigation affordance) ───────────────────────── %>
+  <%= link_to "← Back", character_path(@character, mastery_id: @active_mastery&.id),
+        class: "btn-ghost text-xs" %>
 
-  <%# ── Box: character identity ───────────────────────────────────────────── %>
+  <%# ── Box: character identity ──────────────────────────────────────────── %>
   <%= render "shared/char_bar",
         name: @character.name,
         race: @character.race.name,
         level: @character.server_level_cap,
         initial: @character.race.name == "Chinese" ? "华" : "⚔" %>
 
-  <%# Turbo Stream error target — replaced on failure by skill/mastery controllers %>
-  <div id="skill-editor-error"></div>
-
-<% if @active_mastery.nil? %>
-  <p class="text-sm text-text-dim">No mastery available. Add masteries first.</p>
-<% else %>
-  <%= render "shared/mastery_header",
-        character: @character,
-        mastery: @active_mastery,
-        mastery_level: @mastery_level,
-        side: @side %>
-  <% if @series_groups.empty? %>
-    <p class="text-sm text-text-dim">No skill series in this mastery.</p>
-  <% else %>
-    <div class="flex items-center gap-2 mb-4">
-      <%= form_with url: max_mastery_character_path(@character), data: { turbo: true } do |f| %>
-        <%= f.hidden_field :side, value: @side %>
-        <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
-        <%= f.button "Max mastery", type: :submit, class: "btn-ghost text-xs" %>
-      <% end %>
-      <%= form_with url: max_skills_character_path(@character), data: { turbo: true } do |f| %>
-        <%= f.hidden_field :side, value: @side %>
-        <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
-        <%= f.button "Max skills", type: :submit, class: "btn-ghost text-xs" %>
-      <% end %>
-      <%= form_with url: clear_mastery_character_path(@character), data: { turbo: true } do |f| %>
-        <%= f.hidden_field :side, value: @side %>
-        <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
-        <%= f.button "Clear all", type: :submit, class: "btn-ghost text-xs text-red-500" %>
-      <% end %>
+  <%# ── Box: skills (outer panel) ────────────────────────────────────────── %>
+  <section class="rounded-panel border border-line bg-card p-4 space-y-4">
+    <div class="flex items-center justify-between gap-3">
+      <h2 class="text-xs font-bold uppercase tracking-[2px] text-text-dim">
+        <%= skills_heading %>
+      </h2>
+      <%= render "shared/badge", text: side_badge_text, variant: side_badge_variant %>
     </div>
-    <div class="flex flex-col gap-6">
-    <% @series_groups.each do |group| %>
-      <%
-        allocated = group[:skills].count { |e| e[:level] > 0 }
-        total     = group[:skills].size
-      %>
-      <div class="rounded-panel border border-line"
-           data-controller="collapsible">
-        <button type="button"
-                class="w-full flex items-center justify-between px-4 py-3"
-                data-action="collapsible#toggle">
-          <h2 class="text-xs font-bold text-text-dim uppercase tracking-wider">
-            <%= group[:series].title %>
-          </h2>
-          <div class="flex items-center gap-2 text-xs text-text-mute">
-            <span><%= allocated %>/<%= total %></span>
-            <span data-collapsible-target="chevron">▾</span>
-          </div>
-        </button>
-        <div class="flex flex-col gap-2 px-4 pb-4"
-             data-collapsible-target="body">
-          <% group[:skills].each do |entry| %>
-            <%= render "shared/editor_skill_row",
-                  character: @character,
-                  skill_group: entry[:skill_group],
-                  level: entry[:level],
-                  cap: entry[:cap],
-                  side: @side %>
+
+    <%# Turbo Stream error target — replaced on failure by skill/mastery controllers %>
+    <div id="skill-editor-error"></div>
+
+    <% if @active_mastery.nil? %>
+      <p class="text-sm text-text-dim">No mastery available. Add masteries first.</p>
+    <% else %>
+      <%= render "shared/mastery_header",
+            character: @character,
+            mastery: @active_mastery,
+            mastery_level: @mastery_level,
+            side: @side %>
+      <% if @series_groups.empty? %>
+        <p class="text-sm text-text-dim">No skill series in this mastery.</p>
+      <% else %>
+        <div class="flex items-center gap-2">
+          <%= form_with url: max_mastery_character_path(@character), data: { turbo: true } do |f| %>
+            <%= f.hidden_field :side, value: @side %>
+            <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
+            <%= f.button "Max mastery", type: :submit, class: "btn-ghost text-xs" %>
+          <% end %>
+          <%= form_with url: max_skills_character_path(@character), data: { turbo: true } do |f| %>
+            <%= f.hidden_field :side, value: @side %>
+            <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
+            <%= f.button "Max skills", type: :submit, class: "btn-ghost text-xs" %>
+          <% end %>
+          <%= form_with url: clear_mastery_character_path(@character), data: { turbo: true } do |f| %>
+            <%= f.hidden_field :side, value: @side %>
+            <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
+            <%= f.button "Clear all", type: :submit, class: "btn-ghost text-xs text-red-500" %>
           <% end %>
         </div>
-      </div>
+        <div class="flex flex-col gap-3">
+          <% @series_groups.each do |group| %>
+            <%
+              allocated = group[:skills].count { |e| e[:level] > 0 }
+              total     = group[:skills].size
+            %>
+            <div class="rounded-panel border border-line"
+                 data-controller="collapsible">
+              <button type="button"
+                      class="w-full flex items-center justify-between px-4 py-3"
+                      data-action="collapsible#toggle">
+                <h3 class="text-xs font-bold text-text-dim uppercase tracking-wider">
+                  <%= group[:series].title %>
+                </h3>
+                <div class="flex items-center gap-2 text-xs text-text-mute">
+                  <span><%= allocated %>/<%= total %></span>
+                  <span data-collapsible-target="chevron">▾</span>
+                </div>
+              </button>
+              <div class="flex flex-col gap-2 px-4 pb-4"
+                   data-collapsible-target="body">
+                <% group[:skills].each do |entry| %>
+                  <%= render "shared/editor_skill_row",
+                        character: @character,
+                        skill_group: entry[:skill_group],
+                        level: entry[:level],
+                        cap: entry[:cap],
+                        side: @side %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
     <% end %>
-    </div>
-  <% end %>
-<% end %>
+  </section>
 </div>
