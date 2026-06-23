@@ -6,6 +6,8 @@
     race:    String          required; race label (e.g. "Chinese")
     level:   Integer/String  required; level cap value
     initial: String          required; avatar glyph (e.g. "华")
+    class:   String          optional; extra utility classes (e.g. responsive
+                             width overrides). Appended to the .char-bar element.
   Usage:
     render "shared/char_bar", name: "BuckTBC", race: "Chinese",
            level: 110, initial: "华"
@@ -15,8 +17,9 @@
   race    = local_assigns.fetch(:race)
   level   = local_assigns.fetch(:level)
   initial = local_assigns.fetch(:initial)
+  extra   = local_assigns[:class]
 %>
-<div class="char-bar">
+<div class="<%= class_names("char-bar", extra) %>">
   <div class="char-bar-id">
     <div class="char-avatar"><%= initial %></div>
     <div>
