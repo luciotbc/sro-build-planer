@@ -30,7 +30,9 @@
 >
   <div class="flex items-center justify-between gap-3">
     <div class="flex items-center gap-3 min-w-0">
-      <span class="fs-skill-icon shrink-0 !cursor-default" aria-hidden="true"></span>
+      <span class="fs-skill-icon shrink-0 !cursor-default" aria-hidden="true">
+        <%= game_icon_tag mastery.icon_path, alt: "" %>
+      </span>
       <span class="truncate text-base font-bold text-text">
         <%= mastery.name %>
         <span class="font-normal text-text-mute">· mastery</span>
