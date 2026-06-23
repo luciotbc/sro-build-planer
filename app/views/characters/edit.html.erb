@@ -2,16 +2,30 @@
   side_label = @side == :current ? "Current" : "Planned"
 %>
 
-<div class="flex items-center gap-3 mb-4">
-  <%= link_to "← Back", character_path(@character, mastery_id: @active_mastery&.id),
-        class: "btn-ghost text-sm" %>
-  <h1 class="text-sm font-bold text-text">
-    Edit <%= side_label %><% if @active_mastery %> — <%= @active_mastery.name %><% end %>
-  </h1>
-</div>
+<%# Mobile-first single column; centered on wider viewports so every box
+    shares one alignment edge (spec 07 / design-system parity). %>
+<div class="mx-auto w-full max-w-xl space-y-5">
+  <%# ── Header: back + which side is being edited ─────────────────────────── %>
+  <div class="flex items-center gap-3">
+    <%= link_to "← Back", character_path(@character, mastery_id: @active_mastery&.id),
+          class: "btn-ghost text-sm" %>
+    <h1 class="flex items-center gap-2 text-sm font-bold text-text">
+      <span>Editing</span>
+      <%= render "shared/badge",
+            text: side_label,
+            variant: (@side == :current ? :current : :planned) %>
+    </h1>
+  </div>
 
-<%# Turbo Stream error target — replaced on failure by skill/mastery controllers %>
-<div id="skill-editor-error"></div>
+  <%# ── Box: character identity ───────────────────────────────────────────── %>
+  <%= render "shared/char_bar",
+        name: @character.name,
+        race: @character.race.name,
+        level: @character.server_level_cap,
+        initial: @character.race.name == "Chinese" ? "华" : "⚔" %>
+
+  <%# Turbo Stream error target — replaced on failure by skill/mastery controllers %>
+  <div id="skill-editor-error"></div>
 
 <% if @active_mastery.nil? %>
   <p class="text-sm text-text-dim">No mastery available. Add masteries first.</p>
@@ -76,3 +90,4 @@
     </div>
   <% end %>
 <% end %>
+</div>
