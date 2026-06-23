@@ -1,4 +1,33 @@
 module EditorSeriesBuilder
+  def build_show_series_groups(character, mastery)
+    mastery
+      .skill_series
+      .order(:row_position)
+      .map do |series|
+        skill_groups =
+          series
+            .skill_groups
+            .includes(:skills, :character_skills)
+            .order(:col_position)
+        cs_by_group =
+          character
+            .character_skills
+            .where(skill_group: skill_groups)
+            .index_by(&:skill_group_id)
+        skills =
+          skill_groups.map do |sg|
+            cs = cs_by_group[sg.id]
+            {
+              skill_group: sg,
+              current_level: cs&.current_skill_level.to_i,
+              target_level: cs&.target_skill_level.to_i,
+              cap: sg.effective_cap(character.server_level_cap)
+            }
+          end
+        { series: series, skills: skills }
+      end
+  end
+
   def build_editor_series_groups(character, mastery, side)
     skill_level_attr = :"#{side}_skill_level"
     mastery
