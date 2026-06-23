@@ -23,6 +23,9 @@
   data-stepper-url-value="<%= character_character_skill_path(character, skill_group) %>"
   data-stepper-side-value="<%= side %>"
 >
+  <%# Decorative engraved icon frame. Game icon assets are not bundled, so the
+      frame renders empty; the skill-info trigger is task 014 (not built). %>
+  <span class="fs-skill-icon shrink-0 !cursor-default" aria-hidden="true"></span>
   <div class="fs-skill-meta">
     <span class="fs-skill-name"><%= skill_group.name %></span>
     <span class="fs-skill-level">
