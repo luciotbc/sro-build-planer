@@ -51,7 +51,13 @@ class CharactersController < ApplicationController
 
     mastery_id = params[:mastery_id]
     all_masteries =
-      @character.character_masteries.includes(:mastery).map(&:mastery)
+      @character
+        .character_masteries
+        .includes(:mastery)
+        .order("masteries.name")
+        .map(&:mastery)
+    @grouped_masteries = all_masteries.group_by(&:mastery_type)
+    @mastery_types = @grouped_masteries.keys.sort
     @active_mastery =
       (all_masteries.find { |m| m.id.to_s == mastery_id.to_s } if mastery_id) ||
         all_masteries.first

@@ -33,14 +33,52 @@
     <% if @active_mastery.nil? %>
       <p class="text-sm text-text-dim">No mastery available. Add masteries first.</p>
     <% else %>
-      <%= render "shared/mastery_header",
-            character: @character,
-            mastery: @active_mastery,
-            mastery_level: @mastery_level,
-            side: @side %>
-      <% if @series_groups.empty? %>
-        <p class="text-sm text-text-dim">No skill series in this mastery.</p>
-      <% else %>
+      <%# ── Mastery navigation: type pills + per-group sub-tabs (spec 07) ──── %>
+      <% if @grouped_masteries.any? %>
+        <div class="space-y-3" data-controller="mastery-tabs">
+          <%# Row 1 — mastery type pills (Weapon / Force / …) %>
+          <div class="ro-tabs max-w-none">
+            <% @mastery_types.each do |type| %>
+              <button
+                type="button"
+                class="<%= class_names("ro-tab", "on" => type == @active_mastery.mastery_type) %>"
+                data-mastery-tabs-target="typeTab"
+                data-action="mastery-tabs#selectType"
+                data-mastery-type="<%= type %>"
+              ><%= type %></button>
+            <% end %>
+          </div>
+
+          <%# Row 2 — specific mastery sub-tabs (Blade / Spear / …) %>
+          <% @mastery_types.each do |type| %>
+            <div
+              class="ro-subtabs max-w-none <%= "hidden" unless type == @active_mastery.mastery_type %>"
+              data-mastery-tabs-target="panel"
+              data-mastery-type="<%= type %>"
+            >
+              <% (@grouped_masteries[type] || []).each do |mastery| %>
+                <%= link_to mastery.name,
+                      edit_character_path(@character, side: @side, mastery_id: mastery.id),
+                      class: class_names("ro-subtab", "on" => @active_mastery.id == mastery.id),
+                      "data-turbo-frame": "skill-window",
+                      "data-mastery-id": mastery.id,
+                      "data-mastery-tabs-target": "masteryTab",
+                      "data-action": "mastery-tabs#selectMastery" %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <turbo-frame id="skill-window" class="block space-y-4">
+        <%= render "shared/mastery_header",
+              character: @character,
+              mastery: @active_mastery,
+              mastery_level: @mastery_level,
+              side: @side %>
+        <% if @series_groups.empty? %>
+          <p class="text-sm text-text-dim">No skill series in this mastery.</p>
+        <% else %>
         <div class="flex items-center gap-2">
           <%= form_with url: max_mastery_character_path(@character), data: { turbo: true } do |f| %>
             <%= f.hidden_field :side, value: @side %>
@@ -91,7 +129,8 @@
             </div>
           <% end %>
         </div>
-      <% end %>
+        <% end %>
+      </turbo-frame>
     <% end %>
   </section>
 </div>
