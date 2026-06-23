@@ -2,13 +2,16 @@
   shared/chars_drawer — right-side drawer listing the user's characters
   -----------------------------------------------------------------------
   locals:
-    characters: ActiveRecord::Relation or Array  required; character records
+    characters:           required; character records
+    active_character_id:  optional; id of the currently-viewed character (shows ACTIVE badge)
   Usage:
     render "shared/chars_drawer", characters: Current.user.characters.order(:name)
+    render "shared/chars_drawer", characters: ..., active_character_id: @character&.id
 %>
 <%
-  characters = local_assigns.fetch(:characters)
-  count = characters.size
+  characters          = local_assigns.fetch(:characters)
+  active_character_id = local_assigns[:active_character_id]
+  count               = characters.size
 %>
 <div data-controller="dialog">
   <button type="button" class="chars-pill" data-action="dialog#open">
@@ -31,19 +34,34 @@
         <p class="text-sm text-text-dim">No characters yet. Create one to start planning your build.</p>
       <% else %>
         <% characters.each do |character| %>
+          <% is_active = active_character_id && character.id == active_character_id %>
           <%= link_to character_path(character),
-                class: "flex items-center gap-3 rounded-field px-3 py-2 text-sm text-text hover:bg-white/5 transition-colors" do %>
-            <div class="char-avatar text-xs"><%= character.race.name == "Chinese" ? "华" : "⚔" %></div>
-            <div>
-              <div class="font-semibold"><%= character.name %></div>
-              <div class="text-xs text-text-dim"><%= character.race.name %> · Cap <%= character.server_level_cap %></div>
+                class: class_names(
+                  "flex items-center gap-3 rounded-control px-3 py-2 text-sm text-text transition-colors",
+                  "bg-white/[.06]" => is_active,
+                  "hover:bg-white/5" => !is_active
+                ),
+                "data-active-row": (true if is_active) do %>
+            <div class="char-avatar text-xs shrink-0">
+              <%= character.race.name == "Chinese" ? "华" : "⚔" %>
             </div>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold truncate"><%= character.name %></div>
+              <div class="text-xs text-text-dim">
+                <%= character.race.name %> · Lv <%= character.server_level_cap %>
+              </div>
+            </div>
+            <% if is_active %>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-brass shrink-0" data-active-badge>
+                ACTIVE
+              </span>
+            <% end %>
           <% end %>
         <% end %>
       <% end %>
 
       <div class="mt-2 border-t border-line pt-3">
-        <%= link_to "＋ New Character", new_character_path,
+        <%= link_to "+ New character", new_character_path,
               class: "btn-ghost w-full text-center" %>
       </div>
     </div>

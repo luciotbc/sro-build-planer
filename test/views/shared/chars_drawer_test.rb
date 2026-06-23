@@ -48,5 +48,28 @@ class CharsDrawerTest < ActionView::TestCase
       render partial: "shared/chars_drawer", locals: { characters: [] }
       assert_match /no character/i, rendered
     end
+
+    it "shows ACTIVE badge for the active character" do
+      render partial: "shared/chars_drawer",
+             locals: {
+               characters: @characters,
+               active_character_id: @char1.id
+             }
+      assert_select "[data-active-badge]", text: "ACTIVE"
+    end
+
+    it "does not show ACTIVE badge when no active_character_id given" do
+      render partial: "shared/chars_drawer", locals: { characters: @characters }
+      assert_select "[data-active-badge]", count: 0
+    end
+
+    it "highlights the active character row" do
+      render partial: "shared/chars_drawer",
+             locals: {
+               characters: @characters,
+               active_character_id: @char1.id
+             }
+      assert_select "a[data-active-row]"
+    end
   end
 end
