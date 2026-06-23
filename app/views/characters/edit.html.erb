@@ -128,7 +128,9 @@
                       data-action="collapsible#toggle"
                       aria-label="Toggle <%= group[:series].title %>">
                 <span class="flex min-w-0 items-center gap-3">
-                  <span class="series-badge" aria-hidden="true">✦</span>
+                  <span class="series-badge" aria-hidden="true">
+                    <%= game_icon_tag(group[:series].icon_path, alt: "") || "✦" %>
+                  </span>
                   <span class="truncate text-sm font-bold text-text">
                     <%= group[:series].title %>
                   </span>
