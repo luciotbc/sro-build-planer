@@ -1,50 +1,74 @@
 <%#
   shared/mastery_header — mastery level control in the skill editor.
-  Reuses the stepper controller for ± buttons (spec 06 R4).
+  Reuses the stepper controller for the slider + ± buttons (spec 06 R4/R9).
   locals:
-    character:     Character required
-    mastery:       Mastery   required
-    mastery_level: Integer   required; current or target mastery level
-    side:          Symbol    required; :current or :target
+    character:        Character required
+    mastery:          Mastery   required
+    mastery_level:    Integer   required; current or target mastery level
+    side:             Symbol    required; :current or :target
+    skills_allocated: Integer   optional; sum of skill levels in the mastery
+    skills_total:     Integer   optional; sum of skill caps in the mastery
 %>
 <%
-  character     = local_assigns.fetch(:character)
-  mastery       = local_assigns.fetch(:mastery)
-  mastery_level = local_assigns.fetch(:mastery_level)
-  side          = local_assigns.fetch(:side)
-  cap           = character.server_level_cap
+  character        = local_assigns.fetch(:character)
+  mastery          = local_assigns.fetch(:mastery)
+  mastery_level    = local_assigns.fetch(:mastery_level)
+  side             = local_assigns.fetch(:side)
+  skills_allocated = local_assigns[:skills_allocated]
+  skills_total     = local_assigns[:skills_total]
+  cap              = character.server_level_cap
+  fill_pct         = cap.positive? ? (mastery_level.to_f / cap * 100).round(2) : 0
 %>
 <div
   id="mastery-header"
-  class="rounded-panel border border-line px-4 py-3 flex flex-col gap-3"
+  class="rounded-control border border-line bg-card-hi p-4 flex flex-col gap-4"
   data-controller="stepper"
   data-stepper-level-value="<%= mastery_level %>"
   data-stepper-max-value="<%= cap %>"
   data-stepper-url-value="<%= character_character_mastery_path(character, mastery) %>"
   data-stepper-side-value="<%= side %>"
 >
-  <div class="flex items-center justify-between">
-    <span class="text-xs font-bold text-text-dim uppercase tracking-wider">
-      <%= mastery.name %> Mastery
-    </span>
-    <span class="text-sm font-bold text-text tnum">
-      Lv <span data-stepper-target="output"><%= mastery_level %></span>
-      <span class="text-text-mute font-normal"> / <%= cap %></span>
-    </span>
+  <div class="flex items-center justify-between gap-3">
+    <div class="flex items-center gap-3 min-w-0">
+      <span class="fs-skill-icon shrink-0 !cursor-default" aria-hidden="true"></span>
+      <span class="truncate text-base font-bold text-text">
+        <%= mastery.name %>
+        <span class="font-normal text-text-mute">· mastery</span>
+      </span>
+    </div>
+    <div class="flex items-center gap-5">
+      <div class="text-right">
+        <div class="text-[10px] font-bold uppercase tracking-wider text-text-dim">Mastery Lv</div>
+        <div class="text-sm font-bold tnum text-text">
+          <span data-stepper-target="output"><%= mastery_level %></span><span class="font-normal text-text-mute">/<%= cap %></span>
+        </div>
+      </div>
+      <% if skills_allocated && skills_total %>
+        <div class="text-right">
+          <div class="text-[10px] font-bold uppercase tracking-wider text-text-dim">Skills</div>
+          <div class="text-sm font-bold tnum text-text">
+            <%= skills_allocated %><span class="font-normal text-text-mute">/<%= skills_total %></span>
+          </div>
+        </div>
+      <% end %>
+    </div>
   </div>
-  <input
-    type="range"
-    min="0"
-    max="<%= cap %>"
-    value="<%= mastery_level %>"
-    class="w-full accent-brass"
-    data-stepper-target="range"
-    data-action="input->stepper#rangeInput change->stepper#rangeCommit"
-  >
-  <div class="flex items-center gap-2">
-    <button type="button" class="fs-step-btn"
-            data-action="stepper#decrement">−</button>
-    <button type="button" class="fs-step-btn primary"
-            data-action="stepper#increment">+</button>
+
+  <div class="flex items-center gap-3">
+    <button type="button" class="fs-step-btn !h-14 !w-16"
+            data-action="stepper#decrement" aria-label="Decrease mastery level">−</button>
+    <input
+      type="range"
+      min="0"
+      max="<%= cap %>"
+      value="<%= mastery_level %>"
+      class="mastery-range flex-1"
+      style="--fill: <%= fill_pct %>%"
+      data-stepper-target="range"
+      data-action="input->stepper#rangeInput change->stepper#rangeCommit"
+      aria-label="<%= mastery.name %> mastery level"
+    >
+    <button type="button" class="fs-step-btn !h-14 !w-16"
+            data-action="stepper#increment" aria-label="Increase mastery level">+</button>
   </div>
 </div>

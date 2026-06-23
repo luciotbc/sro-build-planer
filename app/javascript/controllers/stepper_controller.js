@@ -59,7 +59,13 @@ export default class extends Controller {
 
   render() {
     if (this.hasOutputTarget) this.outputTarget.textContent = this.levelValue
-    if (this.hasRangeTarget) this.rangeTarget.value = this.levelValue
+    if (this.hasRangeTarget) {
+      this.rangeTarget.value = this.levelValue
+      // Drive the brass fill of the styled range track (mastery level bar).
+      const span = this.maxValue - this.minValue
+      const pct = span > 0 ? ((this.levelValue - this.minValue) / span) * 100 : 0
+      this.rangeTarget.style.setProperty("--fill", `${pct}%`)
+    }
   }
 
   #clamp(level) {

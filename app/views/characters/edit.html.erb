@@ -70,12 +70,18 @@
         </div>
       <% end %>
 
+      <%
+        skills_allocated = @series_groups.sum { |g| g[:skills].sum { |e| e[:level] } }
+        skills_total     = @series_groups.sum { |g| g[:skills].sum { |e| e[:cap] } }
+      %>
       <turbo-frame id="skill-window" class="block space-y-4">
         <%= render "shared/mastery_header",
               character: @character,
               mastery: @active_mastery,
               mastery_level: @mastery_level,
-              side: @side %>
+              side: @side,
+              skills_allocated: skills_allocated,
+              skills_total: skills_total %>
         <% if @series_groups.empty? %>
           <p class="text-sm text-text-dim">No skill series in this mastery.</p>
         <% else %>

@@ -4,7 +4,9 @@
         character: character,
         mastery: active_mastery,
         mastery_level: mastery_level,
-        side: side %>
+        side: side,
+        skills_allocated: series_groups.sum { |g| g[:skills].sum { |e| e[:level] } },
+        skills_total: series_groups.sum { |g| g[:skills].sum { |e| e[:cap] } } %>
 <% end %>
 <% series_groups.each do |group| %>
   <% group[:skills].each do |entry| %>
