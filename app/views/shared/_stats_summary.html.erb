@@ -11,9 +11,10 @@
     render "shared/stats_summary", summary: @summary
 %>
 <%
-  summary = local_assigns.fetch(:summary)
+  summary    = local_assigns.fetch(:summary)
+  extra_class = local_assigns[:class]
 %>
-<div class="stat-merged">
+<div class="<%= class_names("stat-merged", extra_class) %>">
   <%= render "shared/stat_row",
         label: "Skill points",
         current: summary[:skill_points][:current],
