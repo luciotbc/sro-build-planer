@@ -27,21 +27,21 @@ cold_ice:
   name: Cold
   mastery_type: Force
   race: chinese
-  icon_path: skillmastery/china/mastery_gigong.png
+  icon_path: skillmastery/china/mastery_cold.png
 
 lightning:
   external_id: 274
   name: Lightning
   mastery_type: Force
   race: chinese
-  icon_path: skillmastery/china/mastery_gigong.png
+  icon_path: skillmastery/china/mastery_lightning.png
 
 fire:
   external_id: 275
   name: Fire
   mastery_type: Force
   race: chinese
-  icon_path: skillmastery/china/mastery_gigong.png
+  icon_path: skillmastery/china/mastery_fire.png
 
 bicheon_support:
   external_id: 276
