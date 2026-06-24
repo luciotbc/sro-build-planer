@@ -177,6 +177,19 @@ class CharacterSkillEditorTest < ActionDispatch::IntegrationTest
     assert_select "[data-stepper-side-value='current']"
   end
 
+  # ---- game-icon alt text (a11y) -------------------------------------------
+
+  it "uses the skill name as the row icon alt text" do
+    @sg1.update!(icon_path: "skill/china/bow_area_a.png")
+    get edit_character_path(@char, side: :current)
+    assert_select "#skill-row-#{@sg1.id} img[alt=?]", @sg1.name
+  end
+
+  it "uses the mastery name as the header icon alt text" do
+    get edit_character_path(@char, side: :current)
+    assert_select "#mastery-header img[alt=?]", @mastery.name
+  end
+
   # ---- all race masteries listed (spec 07) ---------------------------------
 
   it "lists race masteries the character does not own" do

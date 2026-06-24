@@ -26,8 +26,8 @@
   <%# Engraved icon frame showing the skill group's game icon. The skill-info
       trigger is task 014 (not built), so the frame stays non-interactive. When
       the asset is missing the helper returns nil and the frame renders empty. %>
-  <span class="fs-skill-icon shrink-0 !cursor-default" aria-hidden="true">
-    <%= game_icon_tag skill_group.icon_path, alt: "" %>
+  <span class="fs-skill-icon shrink-0 !cursor-default">
+    <%= game_icon_tag skill_group.icon_path, alt: skill_group.name %>
   </span>
   <div class="fs-skill-meta">
     <span class="fs-skill-name"><%= skill_group.name %></span>
