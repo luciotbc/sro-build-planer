@@ -1,91 +1,142 @@
-<%= render "shared/char_bar",
-      name: @character.name,
-      race: @character.race.name,
-      level: @character.server_level_cap,
-      initial: @character.race.name == "Chinese" ? "华" : "⚔" %>
+<%# GR2 conflict: mockup shows "Save character" in the footer — omitted
+    intentionally; the page is read-only and that flow is not yet implemented. %>
 
-<section class="mt-6">
-  <%= render "shared/stats_summary", summary: @summary %>
-</section>
+<%# Mobile-first single column, mirrors the edit page wrapper (spec 07). %>
+<div class="mx-auto w-full max-w-[520px] md:max-w-3xl space-y-4 md:space-y-5">
+  <%# ── Box: character identity ──────────────────────────────────────────── %>
+  <%= render "shared/char_bar",
+        name:    @character.name,
+        race:    @character.race.name,
+        level:   @character.server_level_cap,
+        initial: @character.race.name == "Chinese" ? "华" : "⚔",
+        class:   "md:max-w-none" %>
 
-<% if @grouped_masteries.any? %>
-  <section class="mt-6" data-controller="mastery-tabs">
-    <%# Row 1 — mastery type pills (Weapon / Force / …) %>
-    <div class="ro-tabs">
-      <% @mastery_types.each do |type| %>
-        <button
-          type="button"
-          class="<%= class_names("ro-tab", "on" => type == @active_mastery&.mastery_type) %>"
-          data-mastery-tabs-target="typeTab"
-          data-action="mastery-tabs#selectType"
-          data-mastery-type="<%= type %>"
-        ><%= type %></button>
-      <% end %>
+  <%# ── Box: skills ──────────────────────────────────────────────────────── %>
+  <section class="rounded-panel border border-line bg-card p-4 space-y-4">
+    <div class="flex items-center justify-between gap-3">
+      <h2 class="text-xs font-bold uppercase tracking-[2px] text-text-dim">Skills</h2>
+      <span class="text-xs">
+        <span class="text-text">Current</span>
+        <span class="text-text-mute mx-1">→</span>
+        <span class="font-semibold text-brass">Planned</span>
+      </span>
     </div>
 
-    <%# Row 2 — specific mastery sub-tabs (Blade / Spear / …) %>
-    <% @mastery_types.each do |type| %>
-      <div
-        class="ro-subtabs <%= "hidden" unless type == @active_mastery&.mastery_type %>"
-        data-mastery-tabs-target="panel"
-        data-mastery-type="<%= type %>"
-      >
-        <% (@grouped_masteries[type] || []).each do |mastery| %>
-          <%= link_to mastery.name,
-                character_path(@character, mastery_id: mastery.id),
-                class: class_names("ro-subtab", "on" => @active_mastery&.id == mastery.id),
-                "data-turbo-frame": "skill-window",
-                "data-mastery-id": mastery.id,
-                "data-mastery-tabs-target": "masteryTab",
-                "data-action": "mastery-tabs#selectMastery" %>
+    <%# Mastery navigation: type pills + per-group sub-tabs (mirrors edit, spec 07) %>
+    <% if @grouped_masteries.any? %>
+      <div class="space-y-3" data-controller="mastery-tabs">
+        <%# Row 1 — mastery type pills %>
+        <div class="ro-tabs max-w-none">
+          <% @mastery_types.each do |type| %>
+            <button
+              type="button"
+              class="<%= class_names("ro-tab", "on" => type == @active_mastery&.mastery_type) %>"
+              data-mastery-tabs-target="typeTab"
+              data-action="mastery-tabs#selectType"
+              data-mastery-type="<%= type %>"
+            ><%= type %></button>
+          <% end %>
+        </div>
+
+        <%# Row 2 — specific mastery sub-tabs %>
+        <% @mastery_types.each do |type| %>
+          <div
+            class="ro-subtabs max-w-none <%= "hidden" unless type == @active_mastery&.mastery_type %>"
+            data-mastery-tabs-target="panel"
+            data-mastery-type="<%= type %>"
+          >
+            <% (@grouped_masteries[type] || []).each do |mastery| %>
+              <%= link_to mastery.name,
+                    character_path(@character, mastery_id: mastery.id),
+                    class: class_names("ro-subtab", "on" => @active_mastery&.id == mastery.id),
+                    "data-turbo-frame":         "skill-window",
+                    "data-mastery-id":           mastery.id,
+                    "data-mastery-tabs-target": "masteryTab",
+                    "data-action":              "mastery-tabs#selectMastery" %>
+            <% end %>
+          </div>
         <% end %>
       </div>
     <% end %>
-  </section>
-<% end %>
 
-<turbo-frame id="skill-window">
-  <section class="mt-4">
-    <% if @active_mastery %>
-      <div class="flex items-center justify-between mb-3">
-        <h2 class="text-sm font-bold text-text"><%= @active_mastery.name %></h2>
-        <div class="flex gap-2">
+    <turbo-frame id="skill-window" class="block space-y-4">
+      <% if @active_mastery %>
+        <%# ── Read-only mastery header ──────────────────────────────────── %>
+        <div class="rounded-control border border-line bg-card-hi p-4 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3 min-w-0">
+            <span class="fs-skill-icon shrink-0 !cursor-default" aria-hidden="true">
+              <%= game_icon_tag @active_mastery.icon_path, alt: "" %>
+            </span>
+            <span class="truncate text-base font-bold text-text">
+              <%= @active_mastery.name %>
+            </span>
+          </div>
+          <div class="tnum text-sm shrink-0 flex items-center gap-1">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-text-dim mr-0.5">LV</span>
+            <span class="font-bold text-text"><%= @current_mastery_level %></span>
+            <span class="text-text-mute mx-0.5">→</span>
+            <span class="font-bold text-brass"><%= @target_mastery_level %></span>
+            <span class="text-text-mute">/<%= @character.server_level_cap %></span>
+          </div>
+        </div>
+
+        <%# ── Skill series grid (read-only) ─────────────────────────────── %>
+        <% if @series_groups.empty? %>
+          <p class="text-sm text-text-dim">No skill series in this mastery.</p>
+        <% else %>
+          <div class="flex flex-col gap-4">
+            <% @series_groups.each do |group| %>
+              <div class="flex items-start gap-3">
+                <span class="series-badge shrink-0 mt-1" aria-hidden="true">
+                  <%= game_icon_tag(group[:series].icon_path, alt: group[:series].title) || "✦" %>
+                </span>
+                <div class="flex flex-wrap gap-x-3 gap-y-2">
+                  <% group[:skills].each do |entry| %>
+                    <div class="flex flex-col items-center gap-1">
+                      <span class="fs-skill-icon !cursor-default" aria-hidden="true">
+                        <%= game_icon_tag entry[:skill_group].icon_path, alt: entry[:skill_group].name %>
+                      </span>
+                      <span class="tnum text-xs flex items-center gap-px">
+                        <span class="text-text-dim" data-skill-current="<%= entry[:current_level] %>"><%= entry[:current_level] %></span>
+                        <span class="text-text-mute mx-px">→</span>
+                        <span class="font-semibold text-brass" data-skill-planned="<%= entry[:target_level] %>"><%= entry[:target_level] %></span>
+                      </span>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
+        <%# ── Edit buttons ───────────────────────────────────────────────── %>
+        <div class="flex items-center gap-2">
           <%= link_to "Edit Current",
-                edit_character_path(@character, side: :current),
-                class: "btn-ghost text-xs" %>
+                edit_character_path(@character, side: :current, mastery_id: @active_mastery&.id),
+                class: "flex-1 btn-ghost" %>
+          <span class="text-text-mute" aria-hidden="true">→</span>
           <%= link_to "Edit Planned",
-                edit_character_path(@character, side: :target),
-                class: "btn-ghost text-xs" %>
+                edit_character_path(@character, side: :target, mastery_id: @active_mastery&.id),
+                class: "flex-1 btn-primary" %>
         </div>
-      </div>
-
-      <% if @character_skills.empty? %>
-        <p class="text-sm text-text-dim">No skills in this mastery yet.</p>
       <% else %>
-        <div class="flex flex-col gap-2">
-          <% @character_skills.each do |cs| %>
-            <div class="flex items-center justify-between rounded-field border border-line px-3 py-2">
-              <span class="text-sm text-text"><%= cs.skill_group.name %></span>
-              <span class="flex items-center gap-2 text-sm">
-                <span class="text-text-dim" data-skill-current="<%= cs.current_skill_level %>"><%= cs.current_skill_level %></span>
-                <span class="text-text-mute">→</span>
-                <span class="text-brass" data-skill-planned="<%= cs.target_skill_level %>"><%= cs.target_skill_level %></span>
-              </span>
-            </div>
-          <% end %>
-        </div>
+        <p class="text-sm text-text-dim">No mastery added yet. Use the editor to build your character.</p>
       <% end %>
-    <% else %>
-      <%# Defensive empty state: the planner lists all masteries of the race
-          (spec 07), so this only renders for a race with no masteries at all. %>
-      <p class="text-sm text-text-dim">No mastery available for this race.</p>
-    <% end %>
+    </turbo-frame>
   </section>
-</turbo-frame>
 
-<section class="mt-8 flex gap-3">
-  <%= button_to "Delete Character", character_path(@character),
-        method: :delete,
-        class: "btn-ghost text-sm",
-        data: { turbo_confirm: "Delete this character and all its build data? This cannot be undone." } %>
-</section>
+  <%# ── Box: summary (spec 02 R3/R4/R5) ─────────────────────────────────── %>
+  <section class="rounded-panel border border-line bg-card p-4 space-y-4">
+    <h2 class="text-xs font-bold uppercase tracking-[2px] text-text-dim">Summary</h2>
+    <%= render "shared/stats_summary", summary: @summary, class: "max-w-none" %>
+  </section>
+
+  <%# ── Footer ────────────────────────────────────────────────────────────── %>
+  <div class="flex items-center">
+    <%= button_to "Delete character",
+          character_path(@character),
+          method: :delete,
+          class: "btn-ghost text-sm !text-red",
+          data: { turbo_confirm: "Delete this character and all its build data? This cannot be undone." } %>
+  </div>
+</div>

@@ -27,7 +27,8 @@
     <% content_for :topbar_actions do %>
       <% if authenticated? %>
         <%= render "shared/chars_drawer",
-              characters: Current.user.characters.order(:name) %>
+              characters:           Current.user.characters.order(:name),
+              active_character_id:  @character&.id %>
         <%= button_to "Log out", session_path, method: :delete, class: "btn-ghost" %>
       <% else %>
         <%= render "sessions/auth_modals" %>

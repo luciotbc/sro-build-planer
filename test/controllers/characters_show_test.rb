@@ -7,10 +7,12 @@ class CharactersShowTest < ActionDispatch::IntegrationTest
     # masteries created here (the planner lists ALL race masteries, spec 07).
     @race = create(:race)
     @mastery = create(:mastery, race: @race, name: "Blade")
+    @series = create(:skill_series, mastery: @mastery, row_position: 1)
     @sg =
       create(
         :skill_group,
         mastery: @mastery,
+        skill_series: @series,
         name: "Blade Skills",
         max_skill_level: 3
       )

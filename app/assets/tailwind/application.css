@@ -596,7 +596,7 @@
   dialog::backdrop {
     background: rgba(0, 0, 0, 0.72);
   }
-  dialog .dialog-head {
+  dialog .overlay-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -606,7 +606,7 @@
     font-size: 15px;
     font-weight: 800;
   }
-  dialog .dialog-body {
+  dialog .overlay-body {
     padding: 18px;
   }
 

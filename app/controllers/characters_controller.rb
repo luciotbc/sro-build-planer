@@ -21,17 +21,17 @@ class CharactersController < ApplicationController
       end
     @active_mastery ||= @grouped_masteries[@mastery_types.first]&.first
 
-    @character_skills =
-      if @active_mastery
-        @character
-          .character_skills
-          .joins(:skill_group)
-          .where(skill_groups: { mastery_id: @active_mastery.id })
-          .includes(skill_group: [])
-          .order("skill_groups.name")
-      else
-        []
-      end
+    if @active_mastery
+      cm = @character.character_masteries.find_by(mastery: @active_mastery)
+      @current_mastery_level = cm&.current_mastery_level.to_i
+      @target_mastery_level = cm&.target_mastery_level.to_i
+      @series_groups = build_show_series_groups(@character, @active_mastery)
+    else
+      @current_mastery_level = 0
+      @target_mastery_level = 0
+      @series_groups = []
+    end
+
     @summary = Builds::SummaryService.call(@character).data
   end
 
