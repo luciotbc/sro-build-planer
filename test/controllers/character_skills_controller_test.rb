@@ -115,6 +115,23 @@ class CharacterSkillsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "skill-row-#{@sg1.id}"
   end
 
+  # ---- mastery header refresh (slider + skills count) -------------------------
+
+  it "replaces the mastery header on every successful skill edit" do
+    turbo_patch @char, @sg1, { side: :current, level: 2 }
+    assert_response :success
+    assert_includes response.body, 'target="mastery-header"'
+  end
+
+  it "reflects the raised mastery level in the header after a skill bump" do
+    # sg1 level 3 requires mastery level 10; @cm starts at 5 -> auto-bumped to 10
+    turbo_patch @char, @sg1, { side: :current, level: 3 }
+    assert_response :success
+    assert_equal 10, @cm.reload.current_mastery_level
+    assert_includes response.body, 'target="mastery-header"'
+    assert_includes response.body, 'data-stepper-level-value="10"'
+  end
+
   # ---- target side increment --------------------------------------------------
 
   it "increments target_skill_level on :target side" do

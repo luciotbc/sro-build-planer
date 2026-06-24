@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_19_123738) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_23_073839) do
   create_table "character_masteries", force: :cascade do |t|
     t.integer "character_id", null: false
     t.datetime "created_at", null: false
@@ -64,6 +64,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_19_123738) do
   create_table "masteries", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "external_id", null: false
+    t.string "icon_path"
     t.string "mastery_type", null: false
     t.string "name", null: false
     t.integer "race_id", null: false

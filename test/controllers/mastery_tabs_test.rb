@@ -3,7 +3,9 @@ require "test_helper"
 class MasteryTabsTest < ActionDispatch::IntegrationTest
   before do
     @user = create(:user)
-    @race = races(:chinese)
+    # Fresh race (no fixture masteries) so the nav reflects exactly the
+    # masteries created here (the editor/planner list ALL race masteries, spec 07).
+    @race = create(:race)
     # Force < Weapon alphabetically → Force is first group on initial render
     @blade =
       create(:mastery, race: @race, name: "Blade", mastery_type: "Weapon")
@@ -126,10 +128,21 @@ class MasteryTabsTest < ActionDispatch::IntegrationTest
 
   # — Empty state (INV-2 edge case) —
 
-  it "shows empty state when character has no masteries" do
-    @char.character_masteries.destroy_all
-    get character_path(@char)
+  it "shows empty state when the race has no masteries" do
+    # Nav lists all race masteries (spec 07), so the empty state requires a
+    # race with no masteries at all — not merely an unowned set.
+    empty_char = create(:character, user: @user, race: create(:race))
+    get character_path(empty_char)
     assert_response :success
     assert_select "[data-controller='mastery-tabs']", count: 0
+  end
+
+  # — Unowned masteries still listed (spec 07) —
+
+  it "lists masteries the character does not own" do
+    # @char owns blade/spear/cold; add an unowned one — it must still appear.
+    create(:mastery, race: @race, name: "Heuksal", mastery_type: "Weapon")
+    get character_path(@char)
+    assert_match "Heuksal", response.body
   end
 end

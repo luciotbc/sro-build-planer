@@ -13,3 +13,4 @@
 | Skill series | A row/group of related skill groups within a mastery (e.g. "Pierce series"). `SkillSeries`. | Skill group |
 | Skill group | One skill "slot" holding all level variants. `SkillGroup`. | Skill (single level) |
 | Required level | Summary row = class level current → target. Derived, not stored. | Server level cap |
+| `icon_path` | Game icon path relative to `app/assets/images`, on `Mastery`, `SkillGroup`, and `SkillSeries`. **Naming offset:** `Mastery#icon_path` → `skillmastery/<race>/…`, `SkillGroup#icon_path` → `skill/<race>/…`, `SkillSeries#icon_path` → `skillgroup/<race>/…` — the game's file prefix does not match our domain term. Populated by the XML importer from the node's `pict` attr (`.ddj`→`.png`). | The asset dir matching our term name (it does not) |

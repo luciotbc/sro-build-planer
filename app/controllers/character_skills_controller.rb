@@ -1,10 +1,13 @@
 class CharacterSkillsController < ApplicationController
+  include EditorSeriesBuilder
+
   before_action :set_character
 
   # PATCH /characters/:character_id/character_skills/:skill_group_id
   # Persists a single ± stepper change for one side (spec 06 R2/R3).
-  # Responds with Turbo Stream: replaces the skill row on success,
-  # replaces the error placeholder on failure.
+  # Responds with Turbo Stream: replaces the skill row + the mastery header
+  # on success (the header keeps the slider and the Skills counter in sync,
+  # including the auto-bumped mastery level), or the error placeholder on failure.
   #
   # Effective cap is enforced at the view layer (stepper max, spec 04 R4);
   # max_skill_level is enforced by UpdateService.
@@ -38,6 +41,7 @@ class CharacterSkillsController < ApplicationController
               }
             )
           ]
+          streams << mastery_header_stream(sg.mastery, side)
           result.warnings.each do |warning|
             streams << turbo_stream.append(
               "toast-container",
@@ -64,6 +68,33 @@ class CharacterSkillsController < ApplicationController
   end
 
   private
+
+  # Re-renders the mastery header so the slider, "Mastery Lv" and "Skills"
+  # counters stay consistent after a skill edit (a skill can auto-raise the
+  # mastery level via PrerequisiteResolver, and the allocated count changes
+  # on every step).
+  def mastery_header_stream(mastery, side)
+    mastery_level =
+      @character
+        .character_masteries
+        .find_by(mastery: mastery)
+        &.public_send(:"#{side}_mastery_level")
+        .to_i
+    series_groups = build_editor_series_groups(@character, mastery, side)
+    turbo_stream.replace(
+      "mastery-header",
+      partial: "shared/mastery_header",
+      locals: {
+        character: @character,
+        mastery: mastery,
+        mastery_level: mastery_level,
+        side: side,
+        skills_allocated:
+          series_groups.sum { |g| g[:skills].sum { |e| e[:level] } },
+        skills_total: series_groups.sum { |g| g[:skills].sum { |e| e[:cap] } }
+      }
+    )
+  end
 
   def resolve_update(cs, sg_id, side, new_level)
     level_key = :"#{side}_skill_level"

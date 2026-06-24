@@ -8,9 +8,9 @@ class CharactersController < ApplicationController
   end
 
   def show
-    character_masteries =
-      @character.character_masteries.includes(:mastery).order("masteries.name")
-    all_masteries = character_masteries.map(&:mastery)
+    # The navigation lists every mastery of the character's race (spec 07),
+    # ordered by id to mirror the in-game order, not only the owned ones.
+    all_masteries = @character.race.masteries.order(:id).to_a
 
     @grouped_masteries = all_masteries.group_by(&:mastery_type)
     @mastery_types = @grouped_masteries.keys.sort
@@ -50,11 +50,14 @@ class CharactersController < ApplicationController
     end
 
     mastery_id = params[:mastery_id]
-    all_masteries =
-      @character.character_masteries.includes(:mastery).map(&:mastery)
+    # Every mastery of the race, not only owned ones (spec 07); ordered by id
+    # to mirror the in-game order.
+    all_masteries = @character.race.masteries.order(:id).to_a
+    @grouped_masteries = all_masteries.group_by(&:mastery_type)
+    @mastery_types = @grouped_masteries.keys.sort
     @active_mastery =
       (all_masteries.find { |m| m.id.to_s == mastery_id.to_s } if mastery_id) ||
-        all_masteries.first
+        @grouped_masteries[@mastery_types.first]&.first
 
     if @active_mastery
       mastery_level_attr = :"#{@side}_mastery_level"

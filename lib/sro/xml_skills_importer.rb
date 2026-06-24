@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require "nokogiri"
 
 module Sro
@@ -83,6 +85,7 @@ module Sro
           external_id = tab["id"].to_i
           name = tab["name"]
           mastery_type = tab["stype"]
+          icon_path = normalize_icon_path(tab["pict"])
 
           record = Mastery.find_by(external_id: external_id)
           if record
@@ -95,7 +98,8 @@ module Sro
                 external_id: external_id,
                 name: name,
                 mastery_type: mastery_type,
-                race_id: @race.id
+                race_id: @race.id,
+                icon_path: icon_path
               )
             @mastery_cache[external_id] = record
             @stats[:masteries][:created] += 1

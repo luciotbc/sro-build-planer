@@ -3,7 +3,9 @@ require "test_helper"
 class CharacterSkillEditorTest < ActionDispatch::IntegrationTest
   before do
     @user = create(:user)
-    @race = races(:chinese)
+    # Fresh race (no fixture masteries) so the nav reflects exactly the
+    # masteries created here (the editor lists ALL race masteries, spec 07).
+    @race = create(:race)
     @mastery =
       create(:mastery, race: @race, name: "Blade", mastery_type: "Weapon")
     @series = create(:skill_series, mastery: @mastery, title: "Basic")
@@ -173,5 +175,37 @@ class CharacterSkillEditorTest < ActionDispatch::IntegrationTest
     get edit_character_path(@char, side: :current)
     assert_select "[data-stepper-url-value]"
     assert_select "[data-stepper-side-value='current']"
+  end
+
+  # ---- game-icon alt text (a11y) -------------------------------------------
+
+  it "uses the skill name as the row icon alt text" do
+    @sg1.update!(icon_path: "skill/china/bow_area_a.png")
+    get edit_character_path(@char, side: :current)
+    assert_select "#skill-row-#{@sg1.id} img[alt=?]", @sg1.name
+  end
+
+  it "uses the mastery name as the header icon alt text" do
+    get edit_character_path(@char, side: :current)
+    assert_select "#mastery-header img[alt=?]", @mastery.name
+  end
+
+  # ---- all race masteries listed (spec 07) ---------------------------------
+
+  it "lists race masteries the character does not own" do
+    create(:mastery, race: @race, name: "Spear", mastery_type: "Weapon")
+    get edit_character_path(@char, side: :current)
+    assert_select "a[data-mastery-tabs-target='masteryTab']", text: "Spear"
+  end
+
+  it "orders mastery sub-tabs by id (in-game order)" do
+    second =
+      create(:mastery, race: @race, name: "Spear", mastery_type: "Weapon")
+    get edit_character_path(@char, side: :current)
+    ids =
+      css_select("a[data-mastery-tabs-target='masteryTab']").map do |a|
+        a["data-mastery-id"].to_i
+      end
+    assert_equal [@mastery.id, second.id], ids
   end
 end

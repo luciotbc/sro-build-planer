@@ -29,8 +29,8 @@ From the planner, "Edit Current"/"Edit Planned" opens the editor on that side fo
 - [x] ± respects the effective cap and applies cascade (prerequisites/mastery) on the correct side. _(010/02)_
 - [x] Series collapse/expand; counters correct. _(010/03 — collapsible_controller.js, X/Y counter)_
 - [x] Decrement blocked by a dependent → feedback (without corrupting state). _(010/02)_
-- [ ] Faithful to mockup + DS; current untouched when editing planned. _(browser validation pending)_
-- [x] `PARALLEL_WORKERS=1 bin/rails test` green; console clean. _(427 runs, 0 failures)_
+- [x] Faithful to mockup + DS; current untouched when editing planned. _(mockup-parity pass: char-bar, Box Skills panel, mastery nav, mastery-level box, action buttons, series box + rows; reuses DS partials/classes; spec 07 nav now wired on the editor)_
+- [x] `PARALLEL_WORKERS=1 bin/rails test` green; console clean. _(500 runs, 0 failures)_
 
 ## Testing strategy (TDD)
 - System/integration: raising a planned skill → planned prerequisite appears; effective cap limits; current unchanged; blocked decrement shows an error; series collapse.

@@ -76,7 +76,9 @@
         </div>
       <% end %>
     <% else %>
-      <p class="text-sm text-text-dim">No mastery added yet. Use the editor to build your character.</p>
+      <%# Defensive empty state: the planner lists all masteries of the race
+          (spec 07), so this only renders for a race with no masteries at all. %>
+      <p class="text-sm text-text-dim">No mastery available for this race.</p>
     <% end %>
   </section>
 </turbo-frame>

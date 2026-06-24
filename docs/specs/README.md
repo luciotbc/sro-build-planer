@@ -17,7 +17,7 @@
 | [04-skill-access-and-caps.md](04-skill-access-and-caps.md) | Skill ceiling (max_skill_level), mastery requirement, group unlock, server-cap gating | draft |
 | [05-character-lifecycle.md](05-character-lifecycle.md) | Create, server-cap edit, race switch (wipe), hard delete, user ownership, auth-required | draft |
 | [06-edit-flow-and-bulk-actions.md](06-edit-flow-and-bulk-actions.md) | current/planned toggle, Edit Current/Planned, editor scope, Max mastery/skills, Clear all, Undo | draft |
-| [07-mastery-navigation.md](07-mastery-navigation.md) | Mastery group pills, mastery sub-tabs, content panel, state rules, invariants | draft |
+| [07-mastery-navigation.md](07-mastery-navigation.md) | Mastery group pills, mastery sub-tabs (all race masteries, by id), content panel, state rules, invariants | draft |
 | [glossary.md](glossary.md) | Canonical domain terms | draft |
 
 > **Authority:** mockups govern layout/visual/interaction only; **these specs govern business rules** (see [03](03-prerequisites-and-cascade.md) M1).
