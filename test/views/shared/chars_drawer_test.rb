@@ -19,7 +19,7 @@ class CharsDrawerTest < ActionView::TestCase
 
     it "renders 'characters' as the header title" do
       render partial: "shared/chars_drawer", locals: { characters: @characters }
-      assert_select ".overlay-head span", text: "characters"
+      assert_select ".overlay-head span", text: "Characters"
     end
 
     it "lists each character by name" do
