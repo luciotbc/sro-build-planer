@@ -14,11 +14,11 @@
     data-auth-target="login"
     data-action="click->auth#backdropClose"
   >
-    <header class="dialog-head">
+    <header class="overlay-head">
       <span id="login_modal_title">Sign in</span>
       <button type="button" class="icon-btn" data-action="auth#close" aria-label="Close">×</button>
     </header>
-    <div class="dialog-body">
+    <div class="overlay-body">
       <%= render "sessions/form" %>
       <p class="mt-5 text-sm text-text-dim">
         New here?
@@ -36,11 +36,11 @@
     data-auth-target="signup"
     data-action="click->auth#backdropClose"
   >
-    <header class="dialog-head">
+    <header class="overlay-head">
       <span id="signup_modal_title">Create account</span>
       <button type="button" class="icon-btn" data-action="auth#close" aria-label="Close">×</button>
     </header>
-    <div class="dialog-body">
+    <div class="overlay-body">
       <%= render "registrations/form" %>
       <p class="mt-5 text-sm text-text-dim">
         Already have an account?
@@ -59,11 +59,11 @@
       data-auth-target="confirm"
       data-action="click->auth#backdropClose"
     >
-      <header class="dialog-head">
+      <header class="overlay-head">
         <span id="confirm_modal_title">Check your email</span>
         <button type="button" class="icon-btn" data-action="auth#close" aria-label="Close">×</button>
       </header>
-      <div class="dialog-body">
+      <div class="overlay-body">
         <p class="text-sm leading-relaxed text-text-dim">
           We sent a confirmation link to
           <span class="font-semibold text-text"><%= registered_email %></span>.

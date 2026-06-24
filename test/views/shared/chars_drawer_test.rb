@@ -17,9 +17,9 @@ class CharsDrawerTest < ActionView::TestCase
       assert_select "dialog.drawer"
     end
 
-    it "renders 'Your characters' as the header title" do
+    it "renders 'characters' as the header title" do
       render partial: "shared/chars_drawer", locals: { characters: @characters }
-      assert_match /Your characters/i, rendered
+      assert_select ".overlay-head span", text: "characters"
     end
 
     it "lists each character by name" do
