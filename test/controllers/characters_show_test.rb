@@ -3,7 +3,9 @@ require "test_helper"
 class CharactersShowTest < ActionDispatch::IntegrationTest
   before do
     @user = create(:user)
-    @race = races(:chinese)
+    # Fresh race (no fixture masteries) so the nav reflects exactly the
+    # masteries created here (the planner lists ALL race masteries, spec 07).
+    @race = create(:race)
     @mastery = create(:mastery, race: @race, name: "Blade")
     @sg =
       create(
@@ -44,7 +46,7 @@ class CharactersShowTest < ActionDispatch::IntegrationTest
 
   it "renders the character bar with the race" do
     get character_path(@char)
-    assert_select ".char-bar-race", text: /Chinese/i
+    assert_select ".char-bar-race", text: /#{Regexp.escape(@race.name)}/i
   end
 
   it "renders the character bar with the server level cap" do
@@ -82,11 +84,18 @@ class CharactersShowTest < ActionDispatch::IntegrationTest
     assert_select "form[action=?]", character_path(@char)
   end
 
-  it "shows empty state when character has no masteries" do
-    @char.character_masteries.destroy_all
-    @char.character_skills.destroy_all
-    get character_path(@char)
+  it "shows empty state when the race has no masteries" do
+    # Nav lists all race masteries (spec 07), so the empty state requires a
+    # race with no masteries at all — not merely an unowned set.
+    empty_char = create(:character, user: @user, race: create(:race))
+    get character_path(empty_char)
     assert_response :success
     assert_match /no mastery/i, response.body
+  end
+
+  it "lists race masteries the character does not own" do
+    create(:mastery, race: @race, name: "Spear", mastery_type: "Weapon")
+    get character_path(@char)
+    assert_match "Spear", response.body
   end
 end

@@ -23,15 +23,26 @@ The mastery navigation is a two-row control composed of:
 
 ---
 
+## Mastery set (what is listed)
+
+The navigation lists **every mastery of the character's race**, not only the
+ones the character already owns — both on `characters/show` and on the editor.
+Masteries are ordered by `id` (mirrors the in-game order) before grouping.
+Selecting/editing an unowned mastery creates the `CharacterMastery`/`CharacterSkill`
+on demand (see spec 06 + `PrerequisiteResolver`).
+
+> Server-side: `@character.race.masteries.order(:id)` in `CharactersController#show`
+> and `#edit`.
+
 ## Initial Render
 
 **Given** a character page is loaded (full page load or reload):
 
-- **When** the character has masteries:
+- **When** the character's race has masteries (the normal case):
   - The first mastery group (alphabetically) is active.
-  - The first mastery of that group is active.
+  - The first mastery of that group (lowest `id`) is active.
   - The content panel displays that mastery's content.
-- **When** the character has no masteries:
+- **When** the character's race has no masteries (defensive edge case):
   - No group pills, no sub-tabs, no content panel.
   - Empty state message is shown.
 

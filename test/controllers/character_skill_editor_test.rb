@@ -3,7 +3,9 @@ require "test_helper"
 class CharacterSkillEditorTest < ActionDispatch::IntegrationTest
   before do
     @user = create(:user)
-    @race = races(:chinese)
+    # Fresh race (no fixture masteries) so the nav reflects exactly the
+    # masteries created here (the editor lists ALL race masteries, spec 07).
+    @race = create(:race)
     @mastery =
       create(:mastery, race: @race, name: "Blade", mastery_type: "Weapon")
     @series = create(:skill_series, mastery: @mastery, title: "Basic")
@@ -173,5 +175,24 @@ class CharacterSkillEditorTest < ActionDispatch::IntegrationTest
     get edit_character_path(@char, side: :current)
     assert_select "[data-stepper-url-value]"
     assert_select "[data-stepper-side-value='current']"
+  end
+
+  # ---- all race masteries listed (spec 07) ---------------------------------
+
+  it "lists race masteries the character does not own" do
+    create(:mastery, race: @race, name: "Spear", mastery_type: "Weapon")
+    get edit_character_path(@char, side: :current)
+    assert_select "a[data-mastery-tabs-target='masteryTab']", text: "Spear"
+  end
+
+  it "orders mastery sub-tabs by id (in-game order)" do
+    second =
+      create(:mastery, race: @race, name: "Spear", mastery_type: "Weapon")
+    get edit_character_path(@char, side: :current)
+    ids =
+      css_select("a[data-mastery-tabs-target='masteryTab']").map do |a|
+        a["data-mastery-id"].to_i
+      end
+    assert_equal [@mastery.id, second.id], ids
   end
 end

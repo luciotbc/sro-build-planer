@@ -32,8 +32,10 @@
     <%# Turbo Stream error target — replaced on failure by skill/mastery controllers %>
     <div id="skill-editor-error"></div>
 
+    <%# Defensive empty state: the editor lists all masteries of the race
+        (spec 07), so this only renders for a race with no masteries at all. %>
     <% if @active_mastery.nil? %>
-      <p class="text-sm text-text-dim">No mastery available. Add masteries first.</p>
+      <p class="text-sm text-text-dim">No mastery available for this race.</p>
     <% else %>
       <%# ── Mastery navigation: type pills + per-group sub-tabs (spec 07) ──── %>
       <% if @grouped_masteries.any? %>
