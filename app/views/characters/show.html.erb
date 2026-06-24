@@ -88,13 +88,13 @@
             <% @series_groups.each do |group| %>
               <div class="flex items-start gap-3">
                 <span class="series-badge shrink-0 mt-1" aria-hidden="true">
-                  <%= game_icon_tag(group[:series].icon_path, alt: "") || "✦" %>
+                  <%= game_icon_tag(group[:series].icon_path, alt: group[:series].title) || "✦" %>
                 </span>
                 <div class="flex flex-wrap gap-x-3 gap-y-2">
                   <% group[:skills].each do |entry| %>
                     <div class="flex flex-col items-center gap-1">
                       <span class="fs-skill-icon !cursor-default" aria-hidden="true">
-                        <%= game_icon_tag entry[:skill_group].icon_path, alt: "" %>
+                        <%= game_icon_tag entry[:skill_group].icon_path, alt: entry[:skill_group].name %>
                       </span>
                       <span class="tnum text-xs flex items-center gap-px">
                         <span class="text-text-dim" data-skill-current="<%= entry[:current_level] %>"><%= entry[:current_level] %></span>
