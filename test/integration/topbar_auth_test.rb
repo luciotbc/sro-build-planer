@@ -16,6 +16,7 @@ class TopbarAuthTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
 
     get root_url
+    follow_redirect! while response.redirect?
 
     assert_response :success
     assert_select "button", text: "Log out"
