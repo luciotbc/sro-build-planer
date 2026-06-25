@@ -1,4 +1,7 @@
-<div>
-  <h1 class="font-bold text-4xl">Home#index</h1>
-  <p>Find me in app/views/home/index.html.erb</p>
-</div>
+<% if authenticated? && Current.user.characters.none? %>
+  <div class="flex flex-col items-center justify-center gap-4 py-24 text-center">
+    <p class="text-sm font-semibold text-text">No characters yet</p>
+    <p class="text-xs text-text-mute max-w-xs">Create your first character to start planning your build.</p>
+    <%= render "shared/create_character", trigger_label: "+ New character" %>
+  </div>
+<% end %>

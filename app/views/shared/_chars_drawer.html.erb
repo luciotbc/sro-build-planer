@@ -61,8 +61,9 @@
       <% end %>
 
       <div class="mt-2 border-t border-line pt-3">
-        <%= link_to "+ New character", new_character_path,
-              class: "btn-ghost w-full text-center" %>
+        <%= render "shared/create_character",
+              trigger_label: "+ New character",
+              trigger_class: "btn-ghost w-full" %>
       </div>
     </div>
   </dialog>
