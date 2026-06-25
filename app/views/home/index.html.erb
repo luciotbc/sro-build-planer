@@ -1,7 +1,3 @@
 <% if authenticated? && Current.user.characters.none? %>
-  <div class="flex flex-col items-center justify-center gap-4 py-24 text-center">
-    <p class="text-sm font-semibold text-text">No characters yet</p>
-    <p class="text-xs text-text-mute max-w-xs">Create your first character to start planning your build.</p>
-    <%= render "shared/create_character", trigger_label: "+ New character" %>
-  </div>
+  <%= render "shared/create_character", auto_open: true %>
 <% end %>

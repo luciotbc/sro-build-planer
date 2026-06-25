@@ -2,31 +2,39 @@
   shared/create_character — "New Character" modal with race selector, cap picker, name input
   -----------------------------------------------------------------------
   locals:
-    trigger_label: String  optional; button text (default "New Character")
-    trigger_class: String  optional; CSS classes for the trigger button (default "btn-primary")
+    trigger_label: String   optional; button text (default "New Character")
+    trigger_class: String   optional; CSS classes for the trigger button (default "btn-primary")
+    auto_open:     Boolean  optional; auto-opens on page load with no close affordances (default false)
   Usage:
     render "shared/create_character"
     render "shared/create_character", trigger_label: "+ New character", trigger_class: "btn-ghost w-full"
+    render "shared/create_character", auto_open: true
 %>
 <%
+  auto_open     = local_assigns.fetch(:auto_open, false)
   trigger_label = local_assigns.fetch(:trigger_label, "New Character")
   trigger_class = local_assigns.fetch(:trigger_class, "btn-primary")
-  cap_labels = { 90 => "CLASSIC", 100 => "LEGACY", 110 => "STANDARD", 120 => "HIGH", 130 => "EXTREME" }
+  cap_labels    = { 90 => "CLASSIC", 100 => "LEGACY", 110 => "STANDARD", 120 => "HIGH", 130 => "EXTREME" }
 %>
 
 <div data-controller="dialog">
-  <button type="button" class="<%= trigger_class %>" data-action="dialog#open">
-    <%= trigger_label %>
-  </button>
+  <% unless auto_open %>
+    <button type="button" class="<%= trigger_class %>" data-action="dialog#open">
+      <%= trigger_label %>
+    </button>
+  <% end %>
 
   <dialog
     class="modal"
     data-dialog-target="dialog"
-    data-action="click->dialog#backdropClose"
+    <%= 'data-action="click->dialog#backdropClose"' unless auto_open %>
+    <%= 'id="new-character-dialog"' if auto_open %>
   >
     <header class="overlay-head">
       <span>New character</span>
-      <button type="button" class="icon-btn" data-action="dialog#close" aria-label="Close">×</button>
+      <% unless auto_open %>
+        <button type="button" class="icon-btn" data-action="dialog#close" aria-label="Close">×</button>
+      <% end %>
     </header>
 
     <div class="overlay-body flex flex-col gap-5">
@@ -82,3 +90,19 @@
     </div>
   </dialog>
 </div>
+
+<% if auto_open %>
+  <script>
+    (function () {
+      function openNewCharacterDialog() {
+        var d = document.getElementById("new-character-dialog");
+        if (d) d.showModal();
+      }
+      if (document.readyState === "loading") {
+        document.addEventListener("turbo:load", openNewCharacterDialog, { once: true });
+      } else {
+        openNewCharacterDialog();
+      }
+    })();
+  </script>
+<% end %>
