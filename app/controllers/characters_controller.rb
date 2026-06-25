@@ -4,7 +4,7 @@ class CharactersController < ApplicationController
   before_action :set_character, only: %i[show edit update destroy]
 
   def index
-    @characters = Current.user.characters.order(:name)
+    redirect_to root_path
   end
 
   def show

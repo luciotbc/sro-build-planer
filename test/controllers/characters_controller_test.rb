@@ -31,12 +31,10 @@ class CharactersControllerTest < ActionDispatch::IntegrationTest
 
   # ---- index ----------------------------------------------------------------
 
-  it "lists only the current user's characters" do
+  it "redirects GET /characters to root" do
     sign_in_as @user
     get characters_path
-    assert_response :success
-    assert_select "[data-character-id='#{@char.id}']"
-    assert_select "[data-character-id='#{@other_char.id}']", false
+    assert_redirected_to root_path
   end
 
   # ---- create ---------------------------------------------------------------
