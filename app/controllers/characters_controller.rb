@@ -36,7 +36,7 @@ class CharactersController < ApplicationController
   end
 
   def new
-    @character = Character.new
+    redirect_to root_path
   end
 
   def edit
@@ -80,9 +80,7 @@ class CharactersController < ApplicationController
     if result.success?
       redirect_to result.data, notice: "Character created."
     else
-      @character = Character.new(character_params)
-      @character.errors.add(:base, result.errors.join(", "))
-      render :new, status: :unprocessable_entity
+      redirect_to root_path, alert: result.errors.join(", ")
     end
   end
 
