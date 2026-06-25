@@ -695,10 +695,34 @@
     color: var(--color-text);
   }
 
-  .race-glyph .race-glyph-state {
+  .race-glyph .race-glyph-state-choose,
+  .race-glyph .race-glyph-state-selected {
     font-size: 0.6875rem;
     font-weight: 600;
+    line-height: 1;
+  }
+
+  .race-glyph .race-glyph-state-choose {
     color: var(--color-text-mute);
+  }
+
+  .race-glyph .race-glyph-state-selected {
+    display: none;
+    color: var(--color-brass);
+  }
+
+  label:has(input[type="radio"]:checked) .race-glyph {
+    outline: 2px solid var(--color-brass);
+    outline-offset: -1px;
+    border-color: transparent;
+  }
+
+  label:has(input[type="radio"]:checked) .race-glyph-state-choose {
+    display: none;
+  }
+
+  label:has(input[type="radio"]:checked) .race-glyph-state-selected {
+    display: inline;
   }
 
   /* ── Level cap pill button (New Character modal) ──────────────────── */
@@ -729,5 +753,15 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--color-text-mute);
+  }
+
+  label:has(input[type="radio"]:checked) .cap-btn {
+    background: var(--color-brass);
+    border-color: var(--color-brass-dk);
+  }
+
+  label:has(input[type="radio"]:checked) .cap-btn .cap-num,
+  label:has(input[type="radio"]:checked) .cap-btn .cap-label {
+    color: var(--color-bg);
   }
 }
