@@ -16,13 +16,15 @@ class TopbarAuthTest < ActionDispatch::IntegrationTest
 
   it "shows Characters pill with count when authenticated" do
     sign_in_as @user
-    get characters_path
+    get root_path
+    follow_redirect! while response.redirect?
     assert_select ".chars-pill .count", text: "2"
   end
 
   it "shows Log out when authenticated" do
     sign_in_as @user
-    get characters_path
+    get root_path
+    follow_redirect! while response.redirect?
     assert_select "form[action=?]", session_path
   end
 end

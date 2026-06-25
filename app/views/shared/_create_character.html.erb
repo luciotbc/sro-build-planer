@@ -2,76 +2,107 @@
   shared/create_character — "New Character" modal with race selector, cap picker, name input
   -----------------------------------------------------------------------
   locals:
-    trigger_label: String  optional; button text (default "New Character")
+    trigger_label: String   optional; button text (default "New Character")
+    trigger_class: String   optional; CSS classes for the trigger button (default "btn-primary")
+    auto_open:     Boolean  optional; auto-opens on page load with no close affordances (default false)
   Usage:
     render "shared/create_character"
-    render "shared/create_character", trigger_label: "＋ New Character"
+    render "shared/create_character", trigger_label: "+ New character", trigger_class: "btn-ghost w-full"
+    render "shared/create_character", auto_open: true
 %>
 <%
+  auto_open     = local_assigns.fetch(:auto_open, false)
   trigger_label = local_assigns.fetch(:trigger_label, "New Character")
-  cap_labels = { 90 => "90 — Standard", 100 => "100 — Standard", 110 => "110 — Standard",
-                 120 => "120 — Standard", 130 => "130 — Standard" }
+  trigger_class = local_assigns.fetch(:trigger_class, "btn-primary")
+  cap_labels    = { 90 => "CLASSIC", 100 => "LEGACY", 110 => "STANDARD", 120 => "HIGH", 130 => "EXTREME" }
 %>
 
 <div data-controller="dialog">
-  <button type="button" class="btn-primary" data-action="dialog#open">
-    <%= trigger_label %>
-  </button>
+  <% unless auto_open %>
+    <button type="button" class="<%= trigger_class %>" data-action="dialog#open">
+      <%= trigger_label %>
+    </button>
+  <% end %>
 
   <dialog
     class="modal"
     data-dialog-target="dialog"
-    data-action="click->dialog#backdropClose"
+    <% unless auto_open %>data-action="click->dialog#backdropClose"<% end %>
+    <% if auto_open %>id="new-character-dialog"<% end %>
   >
-    <header class="flex items-center justify-between gap-3 border-b border-line pb-3">
-      <span class="text-sm font-bold text-text">New Character</span>
-      <button type="button" class="icon-btn" data-action="dialog#close" aria-label="Close">×</button>
+    <header class="overlay-head">
+      <span>New character</span>
+      <% unless auto_open %>
+        <button type="button" class="icon-btn" data-action="dialog#close" aria-label="Close">×</button>
+      <% end %>
     </header>
 
-    <%= form_with url: characters_path, class: "pt-4 flex flex-col gap-4" do |f| %>
-      <div>
-        <%= label_tag :character_name, "Name", class: "block text-xs font-bold text-text-dim mb-1" %>
-        <%= text_field_tag "character[name]", nil,
-              placeholder: "Enter character name",
-              class: "w-full rounded-field border border-line bg-surface px-3 py-2 text-sm text-text",
-              required: true,
-              autocomplete: "off" %>
-      </div>
-
-      <div>
-        <p class="text-xs font-bold text-text-dim mb-2">Race</p>
-        <div class="grid grid-cols-2 gap-3">
-          <label class="cursor-pointer">
-            <input type="radio" name="character[race_id]"
-                   value="<%= Race.find_by(name: "Chinese")&.id %>"
-                   class="sr-only peer" required>
-            <div class="race-card peer-checked:ring-2 peer-checked:ring-brass">
-              <%= render "shared/chinese_glyph" %>
-            </div>
-          </label>
-          <label class="cursor-pointer">
-            <input type="radio" name="character[race_id]"
-                   value="<%= Race.find_by(name: "European")&.id %>"
-                   class="sr-only peer" required>
-            <div class="race-card peer-checked:ring-2 peer-checked:ring-brass">
-              <%= render "shared/european_glyph" %>
-            </div>
-          </label>
+    <div class="overlay-body flex flex-col gap-5">
+      <%= form_with url: characters_path, class: "flex flex-col gap-5" do |f| %>
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-text-mute mb-2">Character Name</p>
+          <%= text_field_tag "character[name]", nil,
+                placeholder: "Enter character name",
+                class: "w-full rounded-field border border-line bg-card px-3 py-2 text-sm text-text outline-none focus:ring-1 focus:ring-brass",
+                required: true,
+                autocomplete: "off" %>
         </div>
-      </div>
 
-      <div>
-        <%= label_tag :character_server_level_cap, "Server Level Cap",
-              class: "block text-xs font-bold text-text-dim mb-1" %>
-        <%= select_tag "character[server_level_cap]",
-              options_for_select(
-                Character::SERVER_LEVEL_CAPS.map { |cap| ["#{cap}", cap] },
-                110
-              ),
-              class: "w-full rounded-field border border-line bg-surface px-3 py-2 text-sm text-text" %>
-      </div>
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-text-mute mb-2">Char Type</p>
+          <div class="grid grid-cols-2 gap-3">
+            <% [["Chinese", "华", Race.find_by(name: "Chinese")&.id], ["European", "⚔", Race.find_by(name: "European")&.id]].each do |race_name, glyph, race_id| %>
+              <label class="cursor-pointer">
+                <input type="radio" name="character[race_id]"
+                       value="<%= race_id %>"
+                       class="sr-only" required>
+                <div class="race-glyph">
+                  <span class="race-glyph-char"><%= glyph %></span>
+                  <span class="race-glyph-label"><%= race_name %></span>
+                  <span class="race-glyph-state-choose">Choose</span>
+                  <span class="race-glyph-state-selected">Selected</span>
+                </div>
+              </label>
+            <% end %>
+          </div>
+        </div>
 
-      <button type="submit" class="btn-primary w-full">Start Build</button>
-    <% end %>
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-text-mute mb-2">Server Level Cap</p>
+          <div class="flex gap-2">
+            <% Character::SERVER_LEVEL_CAPS.each do |cap| %>
+              <label class="flex-1 cursor-pointer">
+                <input type="radio" name="character[server_level_cap]"
+                       value="<%= cap %>"
+                       class="sr-only"
+                       <%= "checked" if cap == 110 %>>
+                <div class="cap-btn">
+                  <span class="cap-num"><%= cap %></span>
+                  <span class="cap-label"><%= cap_labels[cap] %></span>
+                </div>
+              </label>
+            <% end %>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary w-full">Start Build</button>
+      <% end %>
+    </div>
   </dialog>
 </div>
+
+<% if auto_open %>
+  <script>
+    (function () {
+      function openNewCharacterDialog() {
+        var d = document.getElementById("new-character-dialog");
+        if (d) d.showModal();
+      }
+      if (document.readyState === "loading") {
+        document.addEventListener("turbo:load", openNewCharacterDialog, { once: true });
+      } else {
+        openNewCharacterDialog();
+      }
+    })();
+  </script>
+<% end %>

@@ -31,12 +31,10 @@ class CharactersControllerTest < ActionDispatch::IntegrationTest
 
   # ---- index ----------------------------------------------------------------
 
-  it "lists only the current user's characters" do
+  it "redirects GET /characters to root" do
     sign_in_as @user
     get characters_path
-    assert_response :success
-    assert_select "[data-character-id='#{@char.id}']"
-    assert_select "[data-character-id='#{@other_char.id}']", false
+    assert_redirected_to root_path
   end
 
   # ---- create ---------------------------------------------------------------
@@ -56,7 +54,7 @@ class CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to character_path(Character.last)
   end
 
-  it "does not create and re-renders form on invalid params" do
+  it "does not create and redirects to root on invalid params" do
     sign_in_as @user
     assert_no_difference "Character.count" do
       post characters_path,
@@ -67,7 +65,7 @@ class CharactersControllerTest < ActionDispatch::IntegrationTest
              }
            }
     end
-    assert_response :unprocessable_entity
+    assert_redirected_to root_path
   end
 
   # ---- show -----------------------------------------------------------------

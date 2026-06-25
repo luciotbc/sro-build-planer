@@ -48,26 +48,26 @@ class CreateCharacterTest < ActionView::TestCase
       assert_select "input[name='character[name]']"
     end
 
-    it "renders both race options (Chinese + European)" do
+    it "renders both race radio inputs" do
       render partial: "shared/create_character"
-      assert_select "[data-race='chinese']"
-      assert_select "[data-race='european']"
+      assert_select "input[type='radio'][name='character[race_id]']", count: 2
     end
 
-    it "renders the server_level_cap selector" do
+    it "renders level cap as radio buttons" do
       render partial: "shared/create_character"
-      assert_select "select[name='character[server_level_cap]']"
+      assert_select "input[type='radio'][name='character[server_level_cap]']",
+                    count: 5
     end
 
     it "defaults the cap selector to 110" do
       render partial: "shared/create_character"
-      assert_select "option[value='110'][selected]"
+      assert_select "input[type='radio'][name='character[server_level_cap]'][value='110'][checked]"
     end
 
-    it "renders all five cap options" do
+    it "renders all five cap radio inputs" do
       render partial: "shared/create_character"
       [90, 100, 110, 120, 130].each do |cap|
-        assert_select "option[value='#{cap}']"
+        assert_select "input[type='radio'][name='character[server_level_cap]'][value='#{cap}']"
       end
     end
 

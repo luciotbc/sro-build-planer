@@ -669,4 +669,99 @@
       transform: translateY(0);
     }
   }
+
+  /* ── Race glyph card (New Character modal) ────────────────────────── */
+  .race-glyph {
+    border-radius: var(--radius-panel);
+    border: 1px solid var(--color-line);
+    background: var(--color-card-hi);
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .race-glyph .race-glyph-char {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .race-glyph .race-glyph-label {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .race-glyph .race-glyph-state-choose,
+  .race-glyph .race-glyph-state-selected {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .race-glyph .race-glyph-state-choose {
+    color: var(--color-text-mute);
+  }
+
+  .race-glyph .race-glyph-state-selected {
+    display: none;
+    color: var(--color-brass);
+  }
+
+  label:has(input[type="radio"]:checked) .race-glyph {
+    outline: 2px solid var(--color-brass);
+    outline-offset: -1px;
+    border-color: transparent;
+  }
+
+  label:has(input[type="radio"]:checked) .race-glyph-state-choose {
+    display: none;
+  }
+
+  label:has(input[type="radio"]:checked) .race-glyph-state-selected {
+    display: inline;
+  }
+
+  /* ── Level cap pill button (New Character modal) ──────────────────── */
+  .cap-btn {
+    flex: 1;
+    border-radius: var(--radius-field);
+    border: 1px solid var(--color-line);
+    background: var(--color-card-hi);
+    padding: 8px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
+  }
+
+  .cap-btn .cap-num {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--color-text);
+    line-height: 1;
+  }
+
+  .cap-btn .cap-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-mute);
+  }
+
+  label:has(input[type="radio"]:checked) .cap-btn {
+    background: var(--color-brass);
+    border-color: var(--color-brass-dk);
+  }
+
+  label:has(input[type="radio"]:checked) .cap-btn .cap-num,
+  label:has(input[type="radio"]:checked) .cap-btn .cap-label {
+    color: var(--color-bg);
+  }
 }
