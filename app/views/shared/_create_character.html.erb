@@ -27,8 +27,8 @@
   <dialog
     class="modal"
     data-dialog-target="dialog"
-    <%= 'data-action="click->dialog#backdropClose"' unless auto_open %>
-    <%= 'id="new-character-dialog"' if auto_open %>
+    <% unless auto_open %>data-action="click->dialog#backdropClose"<% end %>
+    <% if auto_open %>id="new-character-dialog"<% end %>
   >
     <header class="overlay-head">
       <span>New character</span>
