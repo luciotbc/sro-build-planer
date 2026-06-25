@@ -39,9 +39,9 @@ class CharsDrawerTest < ActionView::TestCase
       assert_select ".chars-pill .count", text: "2"
     end
 
-    it "renders a 'New Character' link" do
+    it "renders a '+ New character' modal trigger button" do
       render partial: "shared/chars_drawer", locals: { characters: @characters }
-      assert_select "a[href=?]", new_character_path
+      assert_select "button[data-action='dialog#open']", text: /New character/
     end
 
     it "shows an empty state message when no characters" do
