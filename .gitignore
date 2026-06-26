@@ -49,3 +49,7 @@
 
 ### Codex (local agent config) ###
 .codex/config.toml
+
+# Ignore key files for decrypting credentials and more.
+/config/credentials/*.key
+
