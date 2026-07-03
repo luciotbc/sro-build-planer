@@ -23,7 +23,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body data-controller="auth">
     <% content_for :topbar_actions do %>
       <% if authenticated? %>
         <%= render "shared/chars_drawer",

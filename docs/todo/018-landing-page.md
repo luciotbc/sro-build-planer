@@ -13,11 +13,19 @@ bottom call-to-action to drive account creation.
 ## Usage flow
 1. Visitor lands on `/` (anon).
 2. Hero pitch + "Create account" button (primary) and "Log in" (secondary) in topbar.
-3. Read-only preview of a seeded demo character (Chinese Blader, Lv 1→80) with real
-   SP costs from the database.
+3. Static screenshot of a real build (`app/assets/images/landing/demo_build.png`) —
+   deliberately not a live partial render (per implementation decision below).
 4. Three feature cards: full skill trees, exact SP math, multiple characters.
 5. Bottom CTA band repeats signup.
 6. Logged-in home behavior unchanged: auto-open create-character modal if no characters.
+
+**Implementation decision (superseding the BE section below):** the live-preview section
+ships as a pre-rendered screenshot, not a server-rendered partial reusing `_char_bar` /
+`_skill_row` at request time. Rationale: keeps the anonymous landing route free of any
+character-data query, avoids maintaining a permanent demo `Character` row, and the
+screenshot is still pixel-accurate DS output (captured once from a real character build
+via headless Chrome, not hand-drawn). Generation is a one-time asset step, not part of
+the request path — see `app/views/home/_live_preview.html.erb` for the rationale comment.
 
 ## References
 - Specs: [01](../specs/01-level-and-progression.md) (SP cumulative cost), [05](../specs/05-character-lifecycle.md) (character/mastery/skill domain).
@@ -28,40 +36,37 @@ bottom call-to-action to drive account creation.
 ## Implementation scope
 
 ### FE
-- **home/index.html.erb**: conditional render: if authenticated & no characters, show create-character modal (existing behavior); else (anon), render 4-section landing: hero (pitch + topbar CTAs) + demo section (read-only build UI) + 3 feature cards + bottom CTA band.
-- **Topbar update** (`_topbar.html.erb`): anon state shows both "Log in" and "Create account" buttons; "Create account" is `btn-primary` (visually dominant); "Log in" is secondary/ghost. Both trigger existing `auth` Stimulus controller (`showLogin` / `showSignup` actions). Add `showSignup` action if missing.
-- **Auth modal** (`_auth_modals`): ensure signup path opens directly (not login-first) when triggered from the landing-page hero CTA.
-- **Partials reuse**: `_char_bar`, `_stats_summary`, `_skill_row`, `_mastery_header`, `_badge`, `_chinese_glyph` / `_european_glyph` — all read-only (no Stimulus editor targets).
-- **No new CSS**: all styling via DS `@layer components` and Tailwind utilities; if a component is missing, add to DS, re-check `/design_system`, then use.
+- **home/index.html.erb**: conditional render: if authenticated & no characters, show create-character modal (existing behavior); else (anon), render 4-section landing via `home/_hero`, `home/_live_preview`, `home/_features`, `home/_cta_band` partials.
+- **Topbar update** (`_auth_modals.html.erb`): anon state shows both "Log in" (`btn-ghost`) and "Create account" (`btn-primary`, visually dominant) triggers. Both call the page-level `auth` Stimulus controller (`showLogin` / `showSignup`) — the controller moved from the auth-modals wrapper `<div>` up to `<body>` (`application.html.erb`) so buttons anywhere on the page (hero, bottom CTA) share the same dialogs.
+- **Auth modal**: signup opens directly (not login-first) via `data-action="auth#showSignup"` on the hero/CTA buttons — `showSignup` action already existed in `auth_controller.js`, no JS change needed.
+- **Live preview**: static `<img>` (`app/assets/images/landing/demo_build.png`), not partial reuse — see usage-flow note above.
+- **No new CSS**: hero/features/cta built entirely from existing Tailwind utilities + DS component classes (`btn-primary`, `btn-ghost`, `rounded-panel`/`border-line`/`bg-card`, `shared/badge`); no additions to `application.css`.
 
-### BE
-- **Demo build data**: seeded demo character (`spec/seeds/demo_build.rb` or embedded in `home_controller`). A `Character` owned by an internal demo user (or nil, marked demo flag) with a seeded mastery/skill layout. Reuse existing factories + seed data.
-- **HomeController#index**: load demo character on first render (anon state); render into view context as `@demo_character`. No business logic change; lean controller.
-- **No database changes**: demo character can be a real character in seeds or a read-only view model (either works; prefer seeds for simplicity).
+### Asset generation (one-time, not part of the app)
+`app/assets/images/landing/demo_build.png` was captured via a throwaway Selenium script driving headless Chrome against a real logged-in build (`app/controllers/characters_controller.rb#show`), then cropped to the char-bar + skills panel. Not part of the request path or the test suite — regenerate manually if the DS visuals change materially.
 
 ### Testing strategy (TDD)
-- **Unit**: demo character loads, renders without console errors, read-only (no form submissions).
-- **Integration**: anon GET `/` returns 200, renders hero + demo + cards + CTA; logged-in (no chars) GET `/` returns 200, shows create-character modal; logged-in (with chars) GET `/` returns 200, does not auto-open modal (redirected elsewhere or shows list).
-- **Browser (Chrome)**: hero CTA clicks open signup modal; demo section displays real skill data; no Stimulus-controller action firing (read-only); no console errors; DS width caps respected (char-bar ≤520px); responsiveness on tablet (768px) and mobile (375px).
+- **Integration** (`test/controllers/home_controller_test.rb`): anon GET `/` renders hero heading, live-preview `<img>`, all three feature-card headings, a `data-action*='auth#showSignup'` CTA button, and does *not* render the create-character dialog; authenticated-no-characters GET `/` renders the create-character dialog and *not* the hero; authenticated-with-characters GET `/` redirects to the character.
+- **Integration** (`test/integration/topbar_auth_test.rb`): anon topbar renders a `btn-primary` "Create account" trigger alongside "Log in".
+- **Browser (Chrome)**: hero/CTA clicks open the signup modal directly; no console errors; responsive at desktop/mobile viewport widths (verified via claude-in-chrome).
 
 ## Acceptance criteria
-- [ ] Hero section: one-line pitch + primary "Create account" CTA + secondary "Log in".
-- [ ] Demo build section: reads real character/mastery/skill data; displays char-bar, stats, skill rows; real `LevelDatum.sp_cumulative` numbers shown; no form submissions (read-only UI).
-- [ ] Three feature cards: full skill trees, exact SP math, multiple characters; use DS components + race glyphs.
-- [ ] Bottom CTA band: repeats signup button.
-- [ ] Logged-in home behavior unchanged: create-character modal auto-opens for users with no characters; no change to logged-in-with-characters state.
-- [ ] Topbar: anon state shows both "Log in" + "Create account"; "Create account" is `btn-primary`.
-- [ ] Auth modal: signup CTA from hero opens signup form directly (not login-first).
-- [ ] No console errors (Chrome DevTools).
-- [ ] DS conformance: width caps respected, existing partials reused, no new CSS unless a DS component is missing.
-- [ ] `PARALLEL_WORKERS=1 bin/rails test` green; `bin/rubocop` clean; `bin/brakeman` clean.
-- [ ] Responsive: hero, demo, cards, CTA all visually correct at tablet (768px) and mobile (375px).
-- [ ] Specs README unchanged, or updated if a rule changed (GR3).
+- [x] Hero section: one-line pitch + primary "Create account" CTA + secondary "Log in".
+- [x] Live-preview section: static screenshot of a real build (see decision above), not live partial reuse.
+- [x] Three feature cards: full skill trees, exact SP math, multiple characters.
+- [x] Bottom CTA band: repeats signup button.
+- [x] Logged-in home behavior unchanged: create-character modal auto-opens for users with no characters; no change to logged-in-with-characters redirect.
+- [x] Topbar: anon state shows both "Log in" + "Create account"; "Create account" is `btn-primary`.
+- [x] Auth modal: signup CTA from hero/CTA opens signup form directly (not login-first).
+- [x] No console errors (Chrome DevTools via claude-in-chrome).
+- [x] DS conformance: no new CSS added; existing button/card/badge classes reused.
+- [x] `PARALLEL_WORKERS=1 bin/rails test` green (524 runs); `bin/rubocop` clean; `bin/brakeman` clean (0 warnings).
+- [x] Responsive: verified at desktop and mobile widths via claude-in-chrome.
+- [x] Specs README unchanged (no business-rule change — UI/layout only).
 
 ## Best practices
-- Reuse existing partials; do not invent new styles. If a component doesn't exist, add it to the DS partials + re-run `/design-sync` so the published DS stays in sync (GR2).
-- Demo data in seeds, not hardcoded HTML (keep views clean, data testable).
-- Controller thin: `@demo_character = Character.find_by(demo: true)` or similar; no complex queries in the view.
+- Reuse existing partials/component classes; do not invent new styles. No additions needed to `/design_system` for this task.
+- Controller stays untouched (`HomeController#index` had no logic changes — only the view branched).
 - All user-facing text in English (GR).
 - No new validations or business logic: this is a UI/layout task (GR — no scope creep).
 

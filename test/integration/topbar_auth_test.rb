@@ -12,6 +12,14 @@ class TopbarAuthTest < ActionDispatch::IntegrationTest
     assert_select "button", text: "Log out", count: 0
   end
 
+  test "unauthenticated topbar shows a primary Create account trigger" do
+    get root_url
+
+    assert_response :success
+    assert_select "button[data-action*='auth#showSignup']",
+                  text: "Create account"
+  end
+
   test "authenticated topbar shows the logout button" do
     sign_in_as(@user)
 

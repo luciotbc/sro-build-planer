@@ -1,3 +1,8 @@
 <% if authenticated? && Current.user.characters.none? %>
   <%= render "shared/create_character", auto_open: true %>
+<% else %>
+  <%= render "home/hero" %>
+  <%= render "home/live_preview" %>
+  <%= render "home/features" %>
+  <%= render "home/cta_band" %>
 <% end %>
