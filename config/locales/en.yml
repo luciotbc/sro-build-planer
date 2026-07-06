@@ -1,34 +1,51 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
+# English locale — default and only locale for now.
 #
-# To use the locales, use `I18n.t`:
+# Conventions (see docs/specs):
+# - Controllers use lazy lookup (t(".key") => "<controller>.<action>.<key>");
+#   keys shared across actions live at the controller root (e.g. passwords.invalid_token).
+# - Cross-cutting flash text lives under `flash.`.
+# - Service-layer error strings live under `errors.`.
+# - Mailer subjects follow Action Mailer's default_i18n_subject scope
+#   (`<mailer_underscored>.<action>.subject`).
 #
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
+# YAML interprets true/false/on/off/yes/no as booleans — quote them if needed as strings.
 
 en:
-  hello: "Hello world"
+  flash:
+    rate_limited: "Try again later."
+  sessions:
+    create:
+      invalid_credentials: "Try another email address or password."
+  passwords:
+    invalid_token: "Password reset link is invalid or has expired."
+    create:
+      instructions_sent: "Password reset instructions sent (if user with that email address exists)."
+    update:
+      reset: "Password has been reset."
+      mismatch: "Passwords did not match."
+  email_confirmations:
+    show:
+      confirmed: "Email confirmed. Welcome to SRO Labs!"
+      invalid_token: "That confirmation link is invalid or has expired."
+    resend:
+      sent: "If your account still needs confirmation, we've sent a new link."
+  characters:
+    create:
+      created: "Character created."
+    update:
+      updated: "Character updated."
+    destroy:
+      deleted: "Character deleted."
+  passwords_mailer:
+    reset:
+      subject: "Reset your password"
+  users_mailer:
+    email_confirmation:
+      subject: "Confirm your email"
+  errors:
+    skill_level:
+      below_zero: "%{attr} must be >= 0"
+      above_max: "%{attr} must be <= %{max}"
   warnings:
     character_level_updated: "character.%{attr} updated to %{value}"
     character_mastery_created: "CharacterMastery '%{name}' created automatically"

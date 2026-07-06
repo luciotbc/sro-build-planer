@@ -27,11 +27,11 @@ class CharacterMastery < ApplicationRecord
     return unless cap
 
     if current_mastery_level && current_mastery_level > cap
-      errors.add(:current_mastery_level, "must be less than or equal to #{cap}")
+      errors.add(:current_mastery_level, :less_than_or_equal_to, count: cap)
     end
 
     if target_mastery_level && target_mastery_level > cap
-      errors.add(:target_mastery_level, "must be less than or equal to #{cap}")
+      errors.add(:target_mastery_level, :less_than_or_equal_to, count: cap)
     end
   end
 

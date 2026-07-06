@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
              within: 3.minutes,
              only: :create,
              with: -> do
-               redirect_to new_session_path, alert: "Try again later."
+               redirect_to new_session_path, alert: t("flash.rate_limited")
              end
 
   def new
@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
       start_new_session_for user, remember: params[:remember_me] == "1"
       redirect_to after_authentication_url
     else
-      alert = "Try another email address or password."
+      alert = t(".invalid_credentials")
       respond_to do |format|
         format.turbo_stream do
           render turbo_stream:

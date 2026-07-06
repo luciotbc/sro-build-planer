@@ -5,6 +5,6 @@ class UsersMailer < ApplicationMailer
       email_confirmation_url(
         token: user.generate_token_for(:email_confirmation)
       )
-    mail subject: "Confirm your email", to: user.email_address
+    mail to: user.email_address
   end
 end
