@@ -1,11 +1,14 @@
 <%#
-  sessions/auth_modals — topbar "Log in" trigger plus the sign-in, sign-up and
-  "check your email" dialogs, all owned by one `auth` Stimulus controller so it
-  can switch between them and auto-open the confirmation dialog after sign-up.
+  sessions/auth_modals — topbar "Log in" / "Create account" triggers plus the
+  sign-in, sign-up and "check your email" dialogs. All descendants of the
+  page-level `auth` Stimulus controller (declared on <body>) so any button on
+  the page — including the landing-page hero and bottom CTA — can open these
+  dialogs via data-action="auth#showSignup" / "auth#showLogin".
 %>
 <% registered_email = flash[:registered_email] %>
-<div data-controller="auth">
-  <button type="button" class="btn-primary" data-action="auth#showLogin">Log in</button>
+<div>
+  <button type="button" class="btn-ghost" data-action="auth#showLogin">Log in</button>
+  <button type="button" class="btn-primary" data-action="auth#showSignup">Create account</button>
 
   <%# ---- Sign in ---- %>
   <dialog
