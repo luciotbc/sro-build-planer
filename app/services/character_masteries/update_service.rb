@@ -27,12 +27,12 @@ module CharacterMasteries
       ApplicationRecord.transaction do
         if @params.key?(:current_mastery_level) &&
              new_current < (cm.current_mastery_level || 0)
-          cascade_skills(:current_skill_level, :current_skill, new_current)
+          cascade_skills(:current, new_current)
         end
 
         if @params.key?(:target_mastery_level) &&
              new_target < (cm.target_mastery_level || 0)
-          cascade_skills(:target_skill_level, :target_skill, new_target)
+          cascade_skills(:target, new_target)
         end
 
         updates = {}
@@ -54,9 +54,10 @@ module CharacterMasteries
 
     private
 
-    def cascade_skills(skill_level_attr, skill_method, new_mastery_level)
+    def cascade_skills(side, new_mastery_level)
+      skill_level_attr = :"#{side}_skill_level"
       char_skills_for_mastery.each do |cs|
-        skill = cs.public_send(skill_method)
+        skill = cs.public_send(:"#{side}_skill")
         next if skill.nil?
         next unless skill.mastery_level_req > new_mastery_level
 
@@ -70,9 +71,8 @@ module CharacterMasteries
 
         cs.update!(skill_level_attr => new_skill_level)
         @warnings << I18n.t(
-          "warnings.skill_level_adjusted",
+          "warnings.skill_level_adjusted.#{side}",
           name: cs.skill_group.name,
-          attr: skill_level_attr,
           level: new_skill_level
         )
       end

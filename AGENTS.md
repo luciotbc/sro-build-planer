@@ -123,7 +123,7 @@ The flow used in this repo (e.g. the `feat/register-user` registration feature):
 4. **Feature-then-harden ordering** — land the happy path first, then close gaps in follow-up commits (e.g. single-use tokens, rate-limiting, abuse/enumeration guards). Security hardening is incremental and visible in the commit log.
 5. **Business logic in services** — anything beyond trivial CRUD goes in an `app/services/` domain service returning a `ServiceResult`; controllers stay thin.
 6. **Migrations + `db/schema.rb` committed together.**
-7. **English-only** — all user-facing text (warnings, errors, messages) in English.
+7. **English-only** — all user-facing text (warnings, errors, messages) in English (`en` is the source locale; see docs/specs/08). **Game jargon is never translated in any locale** — Mastery, Skill, SP, Build, Level Cap, etc. stay in English; the canonical do-not-translate list is docs/specs/game-jargon.md (spec 08 R14).
 8. **Pre-commit gate** — `stree write` + `bin/rubocop` run automatically; fix violations before the commit lands.
 9. **Open the PR** with a summary, a per-area change list, and the test command used.
 

@@ -173,7 +173,13 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
 
     assert result.success?
     assert_equal 1, @cs.reload.current_skill_level
-    assert result.warnings.any? { |w| w.include?("current_skill_level") }
+    expected =
+      I18n.t(
+        "warnings.skill_level_adjusted.current",
+        name: @cs.skill_group.name,
+        level: 1
+      )
+    assert_includes result.warnings, expected
   end
 
   it "sets current_skill_level to 0 when no skill fits the new mastery" do
@@ -264,7 +270,13 @@ class CharacterMasteries::UpdateServiceTest < ActiveSupport::TestCase
 
     assert result.success?
     assert_equal 1, @cs.reload.target_skill_level
-    assert result.warnings.any? { |w| w.include?("target_skill_level") }
+    expected =
+      I18n.t(
+        "warnings.skill_level_adjusted.target",
+        name: @cs.skill_group.name,
+        level: 1
+      )
+    assert_includes result.warnings, expected
   end
 
   it "sets target_skill_level to 0 when no skill fits the new target mastery" do

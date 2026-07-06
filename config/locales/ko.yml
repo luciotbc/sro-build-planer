@@ -198,10 +198,14 @@ ko:
   warnings:
     character_level_updated: character.%{attr}이(가) %{value}(으)로 변경되었습니다
     character_mastery_created: CharacterMastery '%{name}'이(가) 자동으로 생성되었습니다
-    character_mastery_level_updated: CharacterMastery '%{name}'의 current_mastery_level이
-      %{level}(으)로 변경되었습니다
+    character_mastery_level_updated:
+      current: Mastery '%{name}'의 현재 level이 %{level}(으)로 변경되었습니다
+      target: Mastery '%{name}'의 목표 level이 %{level}(으)로 변경되었습니다
     level_datum_missing: Level %{level}의 LevelDatum이 없습니다. SP 비용은 0으로 처리됩니다
     prerequisite_added: 선행 조건 '%{name}'이(가) 자동으로 추가되었습니다
-    prerequisite_level_updated: 선행 조건 '%{name}'의 current_skill_level이 %{level}(으)로
-      변경되었습니다
-    skill_level_adjusted: Skill '%{name}'의 %{attr}이(가) %{level}(으)로 조정되었습니다
+    prerequisite_level_updated:
+      current: 선행 조건 '%{name}'의 현재 level이 %{level}(으)로 변경되었습니다
+      target: 선행 조건 '%{name}'의 목표 level이 %{level}(으)로 변경되었습니다
+    skill_level_adjusted:
+      current: Skill '%{name}'의 현재 level이 %{level}(으)로 조정되었습니다
+      target: Skill '%{name}'의 목표 level이 %{level}(으)로 조정되었습니다

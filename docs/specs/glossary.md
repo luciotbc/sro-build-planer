@@ -1,6 +1,6 @@
 # Glossary — canonical domain terms
 
-> Use these exact terms in code, UI copy, specs, and task files. If a new term appears, add it here.
+> Use these exact terms in code, UI copy, specs, and task files. If a new term appears, add it here. Game-jargon terms additionally must stay in English in every locale — see [game-jargon.md](game-jargon.md) ([08](08-i18n-conventions.md) R14).
 
 | Term | Definition | Not to be confused with |
 |---|---|---|

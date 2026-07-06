@@ -205,11 +205,15 @@ en:
   warnings:
     character_level_updated: character.%{attr} updated to %{value}
     character_mastery_created: CharacterMastery '%{name}' created automatically
-    character_mastery_level_updated: CharacterMastery '%{name}' current_mastery_level
-      updated to %{level}
+    character_mastery_level_updated:
+      current: current level of mastery '%{name}' updated to %{level}
+      target: target level of mastery '%{name}' updated to %{level}
     level_datum_missing: LevelDatum missing for level %{level}; SP cost treated as
       0
     prerequisite_added: prerequisite '%{name}' added automatically
-    prerequisite_level_updated: prerequisite '%{name}' current_skill_level updated
-      to %{level}
-    skill_level_adjusted: skill '%{name}' %{attr} adjusted to %{level}
+    prerequisite_level_updated:
+      current: current level of prerequisite '%{name}' updated to %{level}
+      target: target level of prerequisite '%{name}' updated to %{level}
+    skill_level_adjusted:
+      current: current level of skill '%{name}' adjusted to %{level}
+      target: target level of skill '%{name}' adjusted to %{level}
