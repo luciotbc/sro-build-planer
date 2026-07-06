@@ -193,9 +193,14 @@ zh-CN:
   warnings:
     character_level_updated: character.%{attr} 已更新为 %{value}
     character_mastery_created: 已自动创建 CharacterMastery '%{name}'
-    character_mastery_level_updated: CharacterMastery '%{name}' 的 current_mastery_level
-      已更新为 %{level}
+    character_mastery_level_updated:
+      current: 精通 '%{name}' 的当前等级已更新为 %{level}
+      target: 精通 '%{name}' 的目标等级已更新为 %{level}
     level_datum_missing: 缺少 Level %{level} 的 LevelDatum；SP 消耗按 0 处理
     prerequisite_added: 已自动添加前置 '%{name}'
-    prerequisite_level_updated: 前置 '%{name}' 的 current_skill_level 已更新为 %{level}
-    skill_level_adjusted: Skill '%{name}' 的 %{attr} 已调整为 %{level}
+    prerequisite_level_updated:
+      current: 前置 '%{name}' 的当前等级已更新为 %{level}
+      target: 前置 '%{name}' 的目标等级已更新为 %{level}
+    skill_level_adjusted:
+      current: 技能 '%{name}' 的当前等级已调整为 %{level}
+      target: 技能 '%{name}' 的目标等级已调整为 %{level}

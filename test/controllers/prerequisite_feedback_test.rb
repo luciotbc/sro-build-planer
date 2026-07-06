@@ -156,9 +156,8 @@ class PrerequisiteFeedbackTest < ActionDispatch::IntegrationTest
     expected =
       CGI.escapeHTML(
         I18n.t(
-          "warnings.skill_level_adjusted",
+          "warnings.skill_level_adjusted.current",
           name: @sg_dep.name,
-          attr: :current_skill_level,
           level: 1
         )
       )

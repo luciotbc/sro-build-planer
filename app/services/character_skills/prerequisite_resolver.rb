@@ -28,7 +28,7 @@ module CharacterSkills
           elsif existing.public_send(skill_level_attr).to_i < required_level
             existing.update!(skill_level_attr => required_level)
             @warnings << I18n.t(
-              "warnings.prerequisite_level_updated",
+              "warnings.prerequisite_level_updated.#{side}",
               name: required_group.name,
               level: required_level
             )
@@ -71,7 +71,7 @@ module CharacterSkills
       elsif cm.public_send(mastery_level_attr).to_i < req
         cm.update!(mastery_level_attr => req)
         @warnings << I18n.t(
-          "warnings.character_mastery_level_updated",
+          "warnings.character_mastery_level_updated.#{side}",
           name: mastery.name,
           level: req
         )

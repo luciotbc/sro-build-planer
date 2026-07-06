@@ -206,10 +206,14 @@ tr:
   warnings:
     character_level_updated: character.%{attr} %{value} olarak güncellendi
     character_mastery_created: CharacterMastery '%{name}' otomatik olarak oluşturuldu
-    character_mastery_level_updated: CharacterMastery '%{name}' current_mastery_level
-      %{level} olarak güncellendi
+    character_mastery_level_updated:
+      current: "'%{name}' ustalığının mevcut seviyesi %{level} olarak güncellendi"
+      target: "'%{name}' ustalığının hedef seviyesi %{level} olarak güncellendi"
     level_datum_missing: Level %{level} için LevelDatum eksik; SP maliyeti 0 sayıldı
     prerequisite_added: ön koşul '%{name}' otomatik olarak eklendi
-    prerequisite_level_updated: ön koşul '%{name}' current_skill_level %{level} olarak
-      güncellendi
-    skill_level_adjusted: skill '%{name}' %{attr} %{level} olarak ayarlandı
+    prerequisite_level_updated:
+      current: "'%{name}' ön koşulunun mevcut seviyesi %{level} olarak güncellendi"
+      target: "'%{name}' ön koşulunun hedef seviyesi %{level} olarak güncellendi"
+    skill_level_adjusted:
+      current: "'%{name}' skill'inin mevcut seviyesi %{level} olarak ayarlandı"
+      target: "'%{name}' skill'inin hedef seviyesi %{level} olarak ayarlandı"
