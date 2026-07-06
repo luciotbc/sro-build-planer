@@ -14,11 +14,11 @@
   <%# ── Box: skills ──────────────────────────────────────────────────────── %>
   <section class="rounded-panel border border-line bg-card p-4 space-y-4">
     <div class="flex items-center justify-between gap-3">
-      <h2 class="text-xs font-bold uppercase tracking-[2px] text-text-dim">Skills</h2>
+      <h2 class="text-xs font-bold uppercase tracking-[2px] text-text-dim"><%= t(".skills") %></h2>
       <span class="text-xs">
-        <span class="text-text">Current</span>
+        <span class="text-text"><%= t(".current") %></span>
         <span class="text-text-mute mx-1">→</span>
-        <span class="font-semibold text-brass">Planned</span>
+        <span class="font-semibold text-brass"><%= t(".planned") %></span>
       </span>
     </div>
 
@@ -72,7 +72,7 @@
             </span>
           </div>
           <div class="tnum text-sm shrink-0 flex items-center gap-1">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-text-dim mr-0.5">LV</span>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-text-dim mr-0.5"><%= t(".lv") %></span>
             <span class="font-bold text-text"><%= @current_mastery_level %></span>
             <span class="text-text-mute mx-0.5">→</span>
             <span class="font-bold text-brass"><%= @target_mastery_level %></span>
@@ -82,7 +82,7 @@
 
         <%# ── Skill series grid (read-only) ─────────────────────────────── %>
         <% if @series_groups.empty? %>
-          <p class="text-sm text-text-dim">No skill series in this mastery.</p>
+          <p class="text-sm text-text-dim"><%= t(".no_series") %></p>
         <% else %>
           <div class="flex flex-col gap-4">
             <% @series_groups.each do |group| %>
@@ -111,32 +111,32 @@
 
         <%# ── Edit buttons ───────────────────────────────────────────────── %>
         <div class="flex items-center gap-2">
-          <%= link_to "Edit Current",
+          <%= link_to t(".edit_current"),
                 edit_character_path(@character, side: :current, mastery_id: @active_mastery&.id),
                 class: "flex-1 btn-ghost" %>
           <span class="text-text-mute" aria-hidden="true">→</span>
-          <%= link_to "Edit Planned",
+          <%= link_to t(".edit_planned"),
                 edit_character_path(@character, side: :target, mastery_id: @active_mastery&.id),
                 class: "flex-1 btn-primary" %>
         </div>
       <% else %>
-        <p class="text-sm text-text-dim">No mastery added yet. Use the editor to build your character.</p>
+        <p class="text-sm text-text-dim"><%= t(".no_mastery") %></p>
       <% end %>
     </turbo-frame>
   </section>
 
   <%# ── Box: summary (spec 02 R3/R4/R5) ─────────────────────────────────── %>
   <section class="rounded-panel border border-line bg-card p-4 space-y-4">
-    <h2 class="text-xs font-bold uppercase tracking-[2px] text-text-dim">Summary</h2>
+    <h2 class="text-xs font-bold uppercase tracking-[2px] text-text-dim"><%= t(".summary") %></h2>
     <%= render "shared/stats_summary", summary: @summary, class: "max-w-none" %>
   </section>
 
   <%# ── Footer ────────────────────────────────────────────────────────────── %>
   <div class="flex items-center">
-    <%= button_to "Delete character",
+    <%= button_to t(".delete"),
           character_path(@character),
           method: :delete,
           class: "btn-ghost text-sm !text-red",
-          data: { turbo_confirm: "Delete this character and all its build data? This cannot be undone." } %>
+          data: { turbo_confirm: t(".delete_confirm") } %>
   </div>
 </div>

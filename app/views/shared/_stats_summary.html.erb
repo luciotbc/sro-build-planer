@@ -16,17 +16,17 @@
 %>
 <div class="<%= class_names("stat-merged", extra_class) %>">
   <%= render "shared/stat_row",
-        label: "Skill points",
+        label: t(".skill_points"),
         current: summary[:skill_points][:current],
         delta:   summary[:skill_points][:delta],
         planned: summary[:skill_points][:planned] %>
   <%= render "shared/stat_row",
-        label: "Mastery total",
+        label: t(".mastery_total"),
         current: summary[:mastery_total][:current],
         delta:   summary[:mastery_total][:delta],
         planned: summary[:mastery_total][:planned] %>
   <%= render "shared/stat_row",
-        label: "Required level",
+        label: t(".required_level"),
         current: summary[:required_level][:current],
         delta:   summary[:required_level][:delta],
         planned: summary[:required_level][:planned] %>

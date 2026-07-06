@@ -1,12 +1,11 @@
-<h1 style="font-family: sans-serif; font-size: 20px; color: #15181f;">Confirm your email</h1>
+<h1 style="font-family: sans-serif; font-size: 20px; color: #15181f;"><%= t(".heading") %></h1>
 
 <p style="font-family: sans-serif; font-size: 14px; color: #15181f;">
-  Welcome to SRO Labs! Confirm your email address to verify your account and
-  start saving builds.
+  <%= t(".welcome") %>
 </p>
 
 <p style="margin: 24px 0;">
-  <%= link_to "Confirm my email",
+  <%= link_to t(".button"),
               @confirmation_url,
               style:
                 "display: inline-block; padding: 10px 18px; border-radius: 10px; " \
@@ -15,11 +14,10 @@
 </p>
 
 <p style="font-family: sans-serif; font-size: 12px; color: #5c6270;">
-  If the button doesn't work, paste this link into your browser:<br>
+  <%= t(".fallback") %><br>
   <%= @confirmation_url %>
 </p>
 
 <p style="font-family: sans-serif; font-size: 12px; color: #5c6270;">
-  This link expires in 24 hours. If you didn't create an account, you can
-  ignore this email.
+  <%= t(".expiry") %>
 </p>
