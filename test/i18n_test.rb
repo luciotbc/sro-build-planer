@@ -88,8 +88,81 @@ describe "i18n backend keys" do
     home.live_preview.image_alt
   ].freeze
 
+  CHARACTER_VIEW_KEYS = %w[
+    app.name
+    characters.show.skills
+    characters.show.current
+    characters.show.planned
+    characters.show.lv
+    characters.show.no_series
+    characters.show.no_mastery
+    characters.show.edit_current
+    characters.show.edit_planned
+    characters.show.summary
+    characters.show.delete
+    characters.show.delete_confirm
+    characters.edit.back
+    characters.edit.current_skills
+    characters.edit.future_skills
+    characters.edit.active_badge
+    characters.edit.planning_badge
+    characters.edit.no_mastery_for_race
+    characters.edit.no_series
+    characters.edit.max_mastery
+    characters.edit.max_skills
+    characters.edit.clear_all
+    characters.edit.toggle_series
+    shared.close
+    shared.log_out
+    shared.create_character.trigger
+    shared.create_character.title
+    shared.create_character.name_label
+    shared.create_character.name_placeholder
+    shared.create_character.race_label
+    shared.create_character.choose
+    shared.create_character.selected
+    shared.create_character.cap_label
+    shared.create_character.cap_90
+    shared.create_character.cap_100
+    shared.create_character.cap_110
+    shared.create_character.cap_120
+    shared.create_character.cap_130
+    shared.create_character.submit
+    shared.chars_drawer.trigger
+    shared.chars_drawer.title
+    shared.chars_drawer.empty
+    shared.chars_drawer.active
+    shared.chars_drawer.lv
+    shared.chars_drawer.new_character
+    shared.mastery_header.mastery_suffix
+    shared.mastery_header.mastery_lv
+    shared.mastery_header.skills
+    shared.mastery_header.decrease
+    shared.mastery_header.increase
+    shared.mastery_header.range_label
+    shared.stats_summary.skill_points
+    shared.stats_summary.mastery_total
+    shared.stats_summary.required_level
+    shared.char_bar.level_cap
+    shared.toast.dismiss
+    passwords_mailer.reset.intro_html
+    passwords_mailer.reset.link_text
+    passwords_mailer.reset.expiry
+    users_mailer.email_confirmation.heading
+    users_mailer.email_confirmation.welcome
+    users_mailer.email_confirmation.button
+    users_mailer.email_confirmation.fallback
+    users_mailer.email_confirmation.expiry
+  ].freeze
+
   it "defines every extracted key" do
     EXTRACTED_KEYS.each do |key|
+      assert I18n.exists?(key), "missing i18n key: #{key}"
+    end
+  end
+
+  it "defines every character, shared, and mailer view key" do
+    CHARACTER_VIEW_KEYS.each do |key|
       assert I18n.exists?(key), "missing i18n key: #{key}"
     end
   end

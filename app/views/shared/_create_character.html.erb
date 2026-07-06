@@ -12,10 +12,9 @@
 %>
 <%
   auto_open     = local_assigns.fetch(:auto_open, false)
-  trigger_label = local_assigns.fetch(:trigger_label, "New Character")
+  trigger_label = local_assigns.fetch(:trigger_label, t(".trigger"))
   trigger_class = local_assigns.fetch(:trigger_class, "btn-primary")
-  cap_labels    = { 90 => "CLASSIC", 100 => "LEGACY", 110 => "STANDARD", 120 => "HIGH", 130 => "EXTREME" }
-%>
+  %>
 
 <div data-controller="dialog">
   <% unless auto_open %>
@@ -31,25 +30,25 @@
     <% if auto_open %>id="new-character-dialog"<% end %>
   >
     <header class="overlay-head">
-      <span>New character</span>
+      <span><%= t(".title") %></span>
       <% unless auto_open %>
-        <button type="button" class="icon-btn" data-action="dialog#close" aria-label="Close">×</button>
+        <button type="button" class="icon-btn" data-action="dialog#close" aria-label="<%= t("shared.close") %>">×</button>
       <% end %>
     </header>
 
     <div class="overlay-body flex flex-col gap-5">
       <%= form_with url: characters_path, class: "flex flex-col gap-5" do |f| %>
         <div>
-          <p class="text-[10px] font-bold uppercase tracking-widest text-text-mute mb-2">Character Name</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-text-mute mb-2"><%= t(".name_label") %></p>
           <%= text_field_tag "character[name]", nil,
-                placeholder: "Enter character name",
+                placeholder: t(".name_placeholder"),
                 class: "w-full rounded-field border border-line bg-card px-3 py-2 text-sm text-text outline-none focus:ring-1 focus:ring-brass",
                 required: true,
                 autocomplete: "off" %>
         </div>
 
         <div>
-          <p class="text-[10px] font-bold uppercase tracking-widest text-text-mute mb-2">Char Type</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-text-mute mb-2"><%= t(".race_label") %></p>
           <div class="grid grid-cols-2 gap-3">
             <% [["Chinese", "华", Race.find_by(name: "Chinese")&.id], ["European", "⚔", Race.find_by(name: "European")&.id]].each do |race_name, glyph, race_id| %>
               <label class="cursor-pointer">
@@ -59,8 +58,8 @@
                 <div class="race-glyph">
                   <span class="race-glyph-char"><%= glyph %></span>
                   <span class="race-glyph-label"><%= race_name %></span>
-                  <span class="race-glyph-state-choose">Choose</span>
-                  <span class="race-glyph-state-selected">Selected</span>
+                  <span class="race-glyph-state-choose"><%= t(".choose") %></span>
+                  <span class="race-glyph-state-selected"><%= t(".selected") %></span>
                 </div>
               </label>
             <% end %>
@@ -68,7 +67,7 @@
         </div>
 
         <div>
-          <p class="text-[10px] font-bold uppercase tracking-widest text-text-mute mb-2">Server Level Cap</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-text-mute mb-2"><%= t(".cap_label") %></p>
           <div class="flex gap-2">
             <% Character::SERVER_LEVEL_CAPS.each do |cap| %>
               <label class="flex-1 cursor-pointer">
@@ -78,14 +77,14 @@
                        <%= "checked" if cap == 110 %>>
                 <div class="cap-btn">
                   <span class="cap-num"><%= cap %></span>
-                  <span class="cap-label"><%= cap_labels[cap] %></span>
+                  <span class="cap-label"><%= t(".cap_#{cap}") %></span>
                 </div>
               </label>
             <% end %>
           </div>
         </div>
 
-        <button type="submit" class="btn-primary w-full">Start Build</button>
+        <button type="submit" class="btn-primary w-full"><%= t(".submit") %></button>
       <% end %>
     </div>
   </dialog>

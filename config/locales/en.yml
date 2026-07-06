@@ -1,135 +1,215 @@
-# English locale — default and only locale for now.
-#
-# Conventions (see docs/specs):
-# - Controllers use lazy lookup (t(".key") => "<controller>.<action>.<key>");
-#   keys shared across actions live at the controller root (e.g. passwords.invalid_token).
-# - Cross-cutting flash text lives under `flash.`.
-# - Service-layer error strings live under `errors.`.
-# - Mailer subjects follow Action Mailer's default_i18n_subject scope
-#   (`<mailer_underscored>.<action>.subject`).
-#
-# YAML interprets true/false/on/off/yes/no as booleans — quote them if needed as strings.
-
+---
 en:
-  flash:
-    rate_limited: "Try again later."
+  app:
+    name: SRO Lab
   auth:
-    email_placeholder: "you@example.com"
+    email_placeholder: you@example.com
     password_placeholder: "••••••••"
-  sessions:
-    create:
-      invalid_credentials: "Try another email address or password."
-    new:
-      title: "Sign in"
-    form:
-      email_label: "Email"
-      password_label: "Password"
-      remember_me: "Keep me signed in"
-      submit: "Sign in"
-      forgot_password: "Forgot password?"
-    auth_modals:
-      log_in: "Log in"
-      create_account: "Create account"
-      sign_in_title: "Sign in"
-      signup_title: "Create account"
-      close: "Close"
-      new_here: "New here?"
-      create_an_account: "Create an account"
-      already_have_account: "Already have an account?"
-      sign_in: "Sign in"
-      confirm_title: "Check your email"
-      confirmation_sent_html: "We sent a confirmation link to %{email}. Click the link to verify your account and start saving builds."
-      got_it: "Got it"
-      resend: "Didn't get it? Resend email"
-  registrations:
-    new:
-      title: "Create account"
-      heading: "Create your account"
-      already_have_account: "Already have an account?"
-      sign_in: "Sign in"
-    form:
-      email_label: "Email"
-      password_label: "Password"
-      password_hint: "At least 8 characters, including one uppercase letter and one number."
-      password_confirmation_label: "Confirm password"
-      terms_html: "I accept the %{terms} and %{privacy}."
-      terms_of_use: "terms of use"
-      privacy_policy: "privacy policy"
-      email_opt_in: "Email me updates about SRO Labs."
-      email_opt_in_hint: "We send these very rarely — only the occasional big release."
-      submit: "Create account"
-  passwords:
-    invalid_token: "Password reset link is invalid or has expired."
-    create:
-      instructions_sent: "Password reset instructions sent (if user with that email address exists)."
-    update:
-      reset: "Password has been reset."
-      mismatch: "Passwords did not match."
-    new:
-      heading: "Forgot your password?"
-      email_placeholder: "Enter your email address"
-      submit: "Email reset instructions"
-    edit:
-      heading: "Update your password"
-      password_placeholder: "Enter new password"
-      password_confirmation_placeholder: "Repeat new password"
-      submit: "Save"
-  home:
-    hero:
-      kicker: "Skill planner for Silkroad Online"
-      title_line1: "Plan your build."
-      title_line2: "Master every skill."
-      subtitle: "Exact skill point costs from the real game database. Plan your mastery tree from level 1 to cap, and save multiple characters — all in one place."
-      cta: "Create free account"
-      see_it_in_action: "See it in action"
-    features:
-      kicker: "Features"
-      title: "Everything you need to plan"
-      subtitle: "Built around the actual game data. No spreadsheets, no guesswork."
-      full_trees_title: "Full skill trees"
-      full_trees_body: "Every mastery, series, and skill in the game — Chinese and European. Plan your entire build in a single session."
-      sp_math_title: "Exact SP math"
-      sp_math_body: "Cumulative skill point costs pulled from the actual game database. Know exactly how much SP you need, level by level."
-      multi_chars_title: "Multiple characters"
-      multi_chars_body: "Build and compare as many characters as you need. Save Chinese and European builds side by side across every level cap."
-    cta_band:
-      title_html: "Ready to %{highlight}?"
-      highlight: "start planning"
-      subtitle: "Free to use. Sign up to save your builds across devices."
-      cta: "Create free account"
-    live_preview:
-      badge: "Live preview"
-      title: "Your build, calculated precisely"
-      subtitle: "See a real build in progress — skill points, masteries, and series laid out at a glance."
-      image_alt: "Preview of a saved Silkroad Online build showing a mastery leveled from 62 to 125 and its skill series"
-  email_confirmations:
-    show:
-      confirmed: "Email confirmed. Welcome to SRO Labs!"
-      invalid_token: "That confirmation link is invalid or has expired."
-    resend:
-      sent: "If your account still needs confirmation, we've sent a new link."
   characters:
     create:
-      created: "Character created."
-    update:
-      updated: "Character updated."
+      created: Character created.
     destroy:
-      deleted: "Character deleted."
-  passwords_mailer:
-    reset:
-      subject: "Reset your password"
-  users_mailer:
-    email_confirmation:
-      subject: "Confirm your email"
+      deleted: Character deleted.
+    edit:
+      active_badge: "● ACTIVE"
+      back: "← Back"
+      clear_all: Clear all
+      current_skills: Current skills
+      future_skills: Future skills
+      max_mastery: Max mastery
+      max_skills: Max skills
+      no_mastery_for_race: No mastery available for this race.
+      no_series: No skill series in this mastery.
+      planning_badge: "● PLANNING"
+      toggle_series: Toggle %{title}
+    show:
+      current: Current
+      delete: Delete character
+      delete_confirm: Delete this character and all its build data? This cannot be
+        undone.
+      edit_current: Edit Current
+      edit_planned: Edit Planned
+      lv: LV
+      no_mastery: No mastery added yet. Use the editor to build your character.
+      no_series: No skill series in this mastery.
+      planned: Planned
+      skills: Skills
+      summary: Summary
+    update:
+      updated: Character updated.
+  email_confirmations:
+    resend:
+      sent: If your account still needs confirmation, we've sent a new link.
+    show:
+      confirmed: Email confirmed. Welcome to SRO Labs!
+      invalid_token: That confirmation link is invalid or has expired.
   errors:
     skill_level:
-      below_zero: "%{attr} must be >= 0"
       above_max: "%{attr} must be <= %{max}"
+      below_zero: "%{attr} must be >= 0"
+  flash:
+    rate_limited: Try again later.
+  home:
+    cta_band:
+      cta: Create free account
+      highlight: start planning
+      subtitle: Free to use. Sign up to save your builds across devices.
+      title_html: Ready to %{highlight}?
+    features:
+      full_trees_body: Every mastery, series, and skill in the game — Chinese and
+        European. Plan your entire build in a single session.
+      full_trees_title: Full skill trees
+      kicker: Features
+      multi_chars_body: Build and compare as many characters as you need. Save Chinese
+        and European builds side by side across every level cap.
+      multi_chars_title: Multiple characters
+      sp_math_body: Cumulative skill point costs pulled from the actual game database.
+        Know exactly how much SP you need, level by level.
+      sp_math_title: Exact SP math
+      subtitle: Built around the actual game data. No spreadsheets, no guesswork.
+      title: Everything you need to plan
+    hero:
+      cta: Create free account
+      kicker: Skill planner for Silkroad Online
+      see_it_in_action: See it in action
+      subtitle: Exact skill point costs from the real game database. Plan your mastery
+        tree from level 1 to cap, and save multiple characters — all in one place.
+      title_line1: Plan your build.
+      title_line2: Master every skill.
+    live_preview:
+      badge: Live preview
+      image_alt: Preview of a saved Silkroad Online build showing a mastery leveled
+        from 62 to 125 and its skill series
+      subtitle: See a real build in progress — skill points, masteries, and series
+        laid out at a glance.
+      title: Your build, calculated precisely
+  passwords:
+    create:
+      instructions_sent: Password reset instructions sent (if user with that email
+        address exists).
+    edit:
+      heading: Update your password
+      password_confirmation_placeholder: Repeat new password
+      password_placeholder: Enter new password
+      submit: Save
+    invalid_token: Password reset link is invalid or has expired.
+    new:
+      email_placeholder: Enter your email address
+      heading: Forgot your password?
+      submit: Email reset instructions
+    update:
+      mismatch: Passwords did not match.
+      reset: Password has been reset.
+  passwords_mailer:
+    reset:
+      expiry: This link will expire in %{time}.
+      intro_html: You can reset your password on %{link}. This link will expire in
+        %{time}.
+      intro_text: You can reset your password on
+      link_text: this password reset page
+      subject: Reset your password
+  registrations:
+    form:
+      email_label: Email
+      email_opt_in: Email me updates about SRO Labs.
+      email_opt_in_hint: We send these very rarely — only the occasional big release.
+      password_confirmation_label: Confirm password
+      password_hint: At least 8 characters, including one uppercase letter and one
+        number.
+      password_label: Password
+      privacy_policy: privacy policy
+      submit: Create account
+      terms_html: I accept the %{terms} and %{privacy}.
+      terms_of_use: terms of use
+    new:
+      already_have_account: Already have an account?
+      heading: Create your account
+      sign_in: Sign in
+      title: Create account
+  sessions:
+    auth_modals:
+      already_have_account: Already have an account?
+      close: Close
+      confirm_title: Check your email
+      confirmation_sent_html: We sent a confirmation link to %{email}. Click the link
+        to verify your account and start saving builds.
+      create_account: Create account
+      create_an_account: Create an account
+      got_it: Got it
+      log_in: Log in
+      new_here: New here?
+      resend: Didn't get it? Resend email
+      sign_in: Sign in
+      sign_in_title: Sign in
+      signup_title: Create account
+    create:
+      invalid_credentials: Try another email address or password.
+    form:
+      email_label: Email
+      forgot_password: Forgot password?
+      password_label: Password
+      remember_me: Keep me signed in
+      submit: Sign in
+    new:
+      title: Sign in
+  shared:
+    char_bar:
+      level_cap: Level Cap
+    chars_drawer:
+      active: ACTIVE
+      empty: No characters yet. Create one to start planning your build.
+      lv: Lv
+      new_character: "+ New character"
+      title: Characters
+      trigger: Characters
+    close: Close
+    create_character:
+      cap_100: LEGACY
+      cap_110: STANDARD
+      cap_120: HIGH
+      cap_130: EXTREME
+      cap_90: CLASSIC
+      cap_label: Server Level Cap
+      choose: Choose
+      name_label: Character Name
+      name_placeholder: Enter character name
+      race_label: Char Type
+      selected: Selected
+      submit: Start Build
+      title: New character
+      trigger: New Character
+    log_out: Log out
+    mastery_header:
+      decrease: Decrease mastery level
+      increase: Increase mastery level
+      mastery_lv: Mastery Lv
+      mastery_suffix: "· mastery"
+      range_label: "%{name} mastery level"
+      skills: Skills
+    stats_summary:
+      mastery_total: Mastery total
+      required_level: Required level
+      skill_points: Skill points
+    toast:
+      dismiss: Dismiss
+  users_mailer:
+    email_confirmation:
+      button: Confirm my email
+      expiry: This link expires in 24 hours. If you didn't create an account, you
+        can ignore this email.
+      fallback: 'If the button doesn''t work, paste this link into your browser:'
+      heading: Confirm your email
+      subject: Confirm your email
+      welcome: Welcome to SRO Labs! Confirm your email address to verify your account
+        and start saving builds.
   warnings:
-    character_level_updated: "character.%{attr} updated to %{value}"
-    character_mastery_created: "CharacterMastery '%{name}' created automatically"
-    character_mastery_level_updated: "CharacterMastery '%{name}' current_mastery_level updated to %{level}"
-    prerequisite_added: "prerequisite '%{name}' added automatically"
-    prerequisite_level_updated: "prerequisite '%{name}' current_skill_level updated to %{level}"
-    skill_level_adjusted: "skill '%{name}' %{attr} adjusted to %{level}"
-    level_datum_missing: "LevelDatum missing for level %{level}; SP cost treated as 0"
+    character_level_updated: character.%{attr} updated to %{value}
+    character_mastery_created: CharacterMastery '%{name}' created automatically
+    character_mastery_level_updated: CharacterMastery '%{name}' current_mastery_level
+      updated to %{level}
+    level_datum_missing: LevelDatum missing for level %{level}; SP cost treated as
+      0
+    prerequisite_added: prerequisite '%{name}' added automatically
+    prerequisite_level_updated: prerequisite '%{name}' current_skill_level updated
+      to %{level}
+    skill_level_adjusted: skill '%{name}' %{attr} adjusted to %{level}

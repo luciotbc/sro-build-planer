@@ -1,6 +1,6 @@
 <%
-  skills_heading     = @side == :current ? "Current skills" : "Future skills"
-  side_badge_text    = @side == :current ? "● ACTIVE" : "● PLANNING"
+  skills_heading     = @side == :current ? t(".current_skills") : t(".future_skills")
+  side_badge_text    = @side == :current ? t(".active_badge") : t(".planning_badge")
   side_badge_variant = @side == :current ? :current : :planned
 %>
 
@@ -9,7 +9,7 @@
     box shares one alignment edge (spec 07 / design-system parity). %>
 <div class="mx-auto w-full max-w-[520px] md:max-w-3xl space-y-4 md:space-y-5">
   <%# ── Back to the planner (navigation affordance) ───────────────────────── %>
-  <%= link_to "← Back", character_path(@character, mastery_id: @active_mastery&.id),
+  <%= link_to t(".back"), character_path(@character, mastery_id: @active_mastery&.id),
         class: "btn-ghost text-xs" %>
 
   <%# ── Box: character identity ──────────────────────────────────────────── %>
@@ -35,7 +35,7 @@
     <%# Defensive empty state: the editor lists all masteries of the race
         (spec 07), so this only renders for a race with no masteries at all. %>
     <% if @active_mastery.nil? %>
-      <p class="text-sm text-text-dim">No mastery available for this race.</p>
+      <p class="text-sm text-text-dim"><%= t(".no_mastery_for_race") %></p>
     <% else %>
       <%# ── Mastery navigation: type pills + per-group sub-tabs (spec 07) ──── %>
       <% if @grouped_masteries.any? %>
@@ -87,7 +87,7 @@
               skills_allocated: skills_allocated,
               skills_total: skills_total %>
         <% if @series_groups.empty? %>
-          <p class="text-sm text-text-dim">No skill series in this mastery.</p>
+          <p class="text-sm text-text-dim"><%= t(".no_series") %></p>
         <% else %>
         <%# Bulk actions (spec 06 R4/R5/R6). Undo (R7) is task 012 / not built;
             the hold-to-max hint is omitted until that interaction exists. %>
@@ -104,17 +104,17 @@
           <%= form_with url: max_mastery_character_path(@character), data: { turbo: true }, html: { class: "contents" } do |f| %>
             <%= f.hidden_field :side, value: @side %>
             <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
-            <%= f.button "Max mastery", type: :submit, class: action_btn %>
+            <%= f.button t(".max_mastery"), type: :submit, class: action_btn %>
           <% end %>
           <%= form_with url: max_skills_character_path(@character), data: { turbo: true }, html: { class: "contents" } do |f| %>
             <%= f.hidden_field :side, value: @side %>
             <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
-            <%= f.button "Max skills", type: :submit, class: action_btn %>
+            <%= f.button t(".max_skills"), type: :submit, class: action_btn %>
           <% end %>
           <%= form_with url: clear_mastery_character_path(@character), data: { turbo: true }, html: { class: "contents" } do |f| %>
             <%= f.hidden_field :side, value: @side %>
             <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
-            <%= f.button "Clear all", type: :submit, class: "#{action_btn} !text-red" %>
+            <%= f.button t(".clear_all"), type: :submit, class: "#{action_btn} !text-red" %>
           <% end %>
         </div>
         <div class="flex flex-col gap-3">
@@ -128,7 +128,7 @@
               <button type="button"
                       class="w-full flex items-center justify-between gap-3 px-4 py-3"
                       data-action="collapsible#toggle"
-                      aria-label="Toggle <%= group[:series].title %>">
+                      aria-label="<%= t(".toggle_series", title: group[:series].title) %>">
                 <span class="flex min-w-0 items-center gap-3">
                   <span class="series-badge" aria-hidden="true">
                     <%= game_icon_tag(group[:series].icon_path, alt: "") || "✦" %>

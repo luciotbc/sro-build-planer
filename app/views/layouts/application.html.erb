@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "SRO Lab" %></title>
+    <title><%= content_for(:title) || t("app.name") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="App">
@@ -29,7 +29,7 @@
         <%= render "shared/chars_drawer",
               characters:           Current.user.characters.order(:name),
               active_character_id:  @character&.id %>
-        <%= button_to "Log out", session_path, method: :delete, class: "btn-ghost" %>
+        <%= button_to t("shared.log_out"), session_path, method: :delete, class: "btn-ghost" %>
       <% else %>
         <%= render "sessions/auth_modals" %>
       <% end %>

@@ -15,7 +15,7 @@
 %>
 <div data-controller="dialog">
   <button type="button" class="chars-pill" data-action="dialog#open">
-    <span class="lbl">Characters</span>
+    <span class="lbl"><%= t(".trigger") %></span>
     <span class="count"><%= count %></span>
   </button>
 
@@ -25,13 +25,13 @@
     data-action="click->dialog#backdropClose"
   >
     <header class="overlay-head">
-      <span>Characters</span>
-      <button type="button" class="icon-btn" data-action="dialog#close" aria-label="Close">×</button>
+      <span><%= t(".title") %></span>
+      <button type="button" class="icon-btn" data-action="dialog#close" aria-label="<%= t("shared.close") %>">×</button>
     </header>
 
     <div class="pt-4 flex flex-col gap-2">
       <% if characters.empty? %>
-        <p class="text-sm text-text-dim">No characters yet. Create one to start planning your build.</p>
+        <p class="text-sm text-text-dim"><%= t(".empty") %></p>
       <% else %>
         <% characters.each do |character| %>
           <% is_active = active_character_id && character.id == active_character_id %>
@@ -48,12 +48,12 @@
             <div class="flex-1 min-w-0">
               <div class="font-semibold truncate"><%= character.name %></div>
               <div class="text-xs text-text-dim">
-                <%= character.race.name %> · Lv <%= character.server_level_cap %>
+                <%= character.race.name %> · <%= t(".lv") %> <%= character.server_level_cap %>
               </div>
             </div>
             <% if is_active %>
               <span class="text-[11px] font-bold uppercase tracking-wider text-brass shrink-0" data-active-badge>
-                ACTIVE
+                <%= t(".active") %>
               </span>
             <% end %>
           <% end %>
@@ -62,7 +62,7 @@
 
       <div class="mt-2 border-t border-line pt-3">
         <%= render "shared/create_character",
-              trigger_label: "+ New character",
+              trigger_label: t(".new_character"),
               trigger_class: "btn-ghost w-full" %>
       </div>
     </div>
