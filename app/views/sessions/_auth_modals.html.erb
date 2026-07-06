@@ -4,6 +4,10 @@
   page-level `auth` Stimulus controller (declared on <body>) so any button on
   the page — including the landing-page hero and bottom CTA — can open these
   dialogs via data-action="auth#showSignup" / "auth#showLogin".
+
+  The sign-in and sign-up dialogs are intentionally NOT dismissable by
+  clicking the backdrop — only the × close button (or an explicit action)
+  closes them. The "check your email" dialog keeps backdrop dismissal.
 %>
 <% registered_email = flash[:registered_email] %>
 <div>
@@ -15,7 +19,6 @@
     class="modal"
     aria-labelledby="login_modal_title"
     data-auth-target="login"
-    data-action="click->auth#backdropClose"
   >
     <header class="overlay-head">
       <span id="login_modal_title"><%= t(".sign_in_title") %></span>
@@ -37,7 +40,6 @@
     class="modal"
     aria-labelledby="signup_modal_title"
     data-auth-target="signup"
-    data-action="click->auth#backdropClose"
   >
     <header class="overlay-head">
       <span id="signup_modal_title"><%= t(".signup_title") %></span>

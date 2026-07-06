@@ -24,6 +24,8 @@ export default class extends Controller {
     this.#dialogs().forEach((dialog) => dialog.close())
   }
 
+  // Used only by the "check your email" dialog; the sign-in and sign-up
+  // dialogs deliberately omit this action so backdrop clicks never dismiss them.
   backdropClose(event) {
     if (event.target === event.currentTarget) {
       event.currentTarget.close()
