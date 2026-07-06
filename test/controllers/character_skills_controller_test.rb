@@ -164,6 +164,37 @@ class CharacterSkillsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, cs2.current_skill_level
   end
 
+  it "streams the auto-bumped prerequisite row so the UI stays in sync" do
+    # sg3 requires sg1 at level 2; cs1 sits at 1, so bumping sg3 cascades
+    # cs1 to 2 — the response must replace sg1's row with the new level.
+    sg3 =
+      create(
+        :skill_group,
+        mastery: @mastery,
+        skill_series: @series,
+        name: "Heavy Cut",
+        max_skill_level: 5
+      )
+    create(:skill, skill_group: sg3, skill_level: 1, mastery_level_req: 1)
+    create(
+      :skill_group_requirement,
+      skill_group: sg3,
+      required_group: @sg1,
+      required_skill_level: 2
+    )
+
+    turbo_patch @char, sg3, { side: :current, level: 1 }
+    assert_response :success
+    assert_equal 2, @cs1.reload.current_skill_level
+    assert_includes response.body, "skill-row-#{@sg1.id}"
+    row =
+      response.body[
+        %r{<turbo-stream[^>]*target="skill-row-#{@sg1.id}".*?</turbo-stream>}m
+      ]
+    assert_not_nil row
+    assert_includes row, 'data-stepper-level-value="2"'
+  end
+
   # ---- decrement blocked by dependent -----------------------------------------
 
   it "returns 422 when decrement is blocked by a dependent" do
