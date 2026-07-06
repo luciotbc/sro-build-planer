@@ -19,6 +19,7 @@
 | R11 | `config/locales/en.yml` is kept normalized (`bundle exec i18n-tasks normalize`); false-positive "unused" keys (implicit subjects, multiline `I18n.t` calls) are listed in `config/i18n-tasks.yml` `ignore_unused` with a comment. |
 | R12 | The request locale is detected from the browser's `Accept-Language` header only (no IP/geo/cookies, no locale in URLs) by `LocaleDetection` (`app/controllers/concerns/locale_detection.rb`, `around_action` on `ApplicationController`): tags sorted by `q`, exact case-insensitive match first (`pt-BR` → `pt-BR`), then language-only match (`pt` → `pt-BR`, `en-US` → `en`, `zh-Hans` → `zh-CN`), else `en`. `I18n.with_locale` scopes it to the request. |
 | R13 | Missing translations in non-`en` locales fall back to `en` (`config.i18n.fallbacks = [:en]`) — never raise for a key that exists in `en`. |
+| R14 | **Game jargon stays in English in every locale.** Terms listed in [game-jargon.md](game-jargon.md) (Mastery, Skill, SP, Build, Level Cap, …) are never translated — inflect the sentence around the English term (pt-BR "level da mastery", not "nível da maestria"). When translating reveals a new jargon term, add it to [game-jargon.md](game-jargon.md) in the same change. |
 
 ## Out of scope
 

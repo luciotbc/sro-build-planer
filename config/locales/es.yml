@@ -209,14 +209,14 @@ es:
     character_level_updated: character.%{attr} actualizado a %{value}
     character_mastery_created: CharacterMastery '%{name}' creada automáticamente
     character_mastery_level_updated:
-      current: nivel actual de la maestría '%{name}' actualizado a %{level}
-      target: nivel objetivo de la maestría '%{name}' actualizado a %{level}
+      current: level actual de la mastery '%{name}' actualizado a %{level}
+      target: level objetivo de la mastery '%{name}' actualizado a %{level}
     level_datum_missing: Falta LevelDatum para el nivel %{level}; el coste de SP se
       trata como 0
     prerequisite_added: prerrequisito '%{name}' añadido automáticamente
     prerequisite_level_updated:
-      current: nivel actual del prerrequisito '%{name}' actualizado a %{level}
-      target: nivel objetivo del prerrequisito '%{name}' actualizado a %{level}
+      current: level actual del prerrequisito '%{name}' actualizado a %{level}
+      target: level objetivo del prerrequisito '%{name}' actualizado a %{level}
     skill_level_adjusted:
-      current: nivel actual de la skill '%{name}' ajustado a %{level}
-      target: nivel objetivo de la skill '%{name}' ajustado a %{level}
+      current: level actual de la skill '%{name}' ajustado a %{level}
+      target: level objetivo de la skill '%{name}' ajustado a %{level}
