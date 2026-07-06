@@ -20,6 +20,20 @@ class TopbarAuthTest < ActionDispatch::IntegrationTest
                   text: "Create account"
   end
 
+  test "login and signup modals are not dismissable via backdrop click" do
+    get root_url
+
+    assert_response :success
+    assert_select "dialog[data-auth-target='login']"
+    assert_select "dialog[data-auth-target='signup']"
+    assert_select "dialog[data-auth-target='login'][data-action*='backdropClose']",
+                  count: 0
+    assert_select "dialog[data-auth-target='signup'][data-action*='backdropClose']",
+                  count: 0
+    assert_select "dialog[data-auth-target='login'] button[data-action='auth#close']"
+    assert_select "dialog[data-auth-target='signup'] button[data-action='auth#close']"
+  end
+
   test "authenticated topbar shows the logout button" do
     sign_in_as(@user)
 
