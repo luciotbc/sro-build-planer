@@ -1,4 +1,31 @@
 require "test_helper"
+require "i18n/tasks"
+
+describe "i18n health" do
+  let(:i18n) { I18n::Tasks::BaseTask.new }
+
+  it "has no missing keys" do
+    missing = i18n.missing_keys
+    assert_empty missing,
+                 "Missing #{missing.leaves.count} i18n keys. " \
+                   "Run `bundle exec i18n-tasks missing` for details."
+  end
+
+  it "has no unused keys" do
+    unused = i18n.unused_keys
+    assert_empty unused,
+                 "#{unused.leaves.count} unused i18n keys. " \
+                   "Run `bundle exec i18n-tasks unused` for details " \
+                   "(false positives go in config/i18n-tasks.yml ignore_unused)."
+  end
+
+  it "is normalized" do
+    non_normalized = i18n.non_normalized_paths
+    assert_empty non_normalized,
+                 "Locale files need normalization. " \
+                   "Run `bundle exec i18n-tasks normalize`."
+  end
+end
 
 describe "i18n backend keys" do
   EXTRACTED_KEYS = %w[
@@ -146,6 +173,7 @@ describe "i18n backend keys" do
     shared.char_bar.level_cap
     shared.toast.dismiss
     passwords_mailer.reset.intro_html
+    passwords_mailer.reset.intro_text
     passwords_mailer.reset.link_text
     passwords_mailer.reset.expiry
     users_mailer.email_confirmation.heading

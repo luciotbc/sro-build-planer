@@ -1,0 +1,18 @@
+# i18n-tasks configuration — https://github.com/glebm/i18n-tasks
+# Enforced by test/i18n_test.rb ("no missing or unused keys").
+base_locale: en
+data:
+  read:
+    - config/locales/%{locale}.yml
+search:
+  paths:
+    - app/
+    - lib/
+
+ignore_unused:
+  # Action Mailer resolves subjects implicitly via default_i18n_subject.
+  - "passwords_mailer.reset.subject"
+  - "users_mailer.email_confirmation.subject"
+  # Referenced via a multiline I18n.t call the static scanner cannot see
+  # (app/services/character_masteries/update_service.rb).
+  - "warnings.character_level_updated"
