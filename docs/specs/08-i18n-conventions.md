@@ -6,7 +6,7 @@
 
 | # | Rule |
 |---|---|
-| R1 | English (`en`) is the default and only locale for now. Test fixtures/factories stay English; tests may assert literal English text. |
+| R1 | English (`en`) is the default locale. Available locales: `en`, `pt-BR`, `es`, `tr`, `ko`, `zh-CN` (`config.i18n.available_locales`). Test fixtures/factories stay English; tests may assert literal English text (tests run under `en` unless they set an `Accept-Language` header). |
 | R2 | Views and controllers use **lazy lookup**: `t(".key")` resolves via view path (`characters/show` → `characters.show.key`) or controller/action (`CharactersController#create` → `characters.create.key`). |
 | R3 | Keys shared across a controller's actions live at the controller root (e.g. `passwords.invalid_token`). |
 | R4 | Shared partials resolve lazily under `shared.*` (e.g. `shared/_char_bar` → `shared.char_bar.*`). Truly global strings: `shared.close`, `shared.log_out`, `app.name`. |
@@ -17,6 +17,8 @@
 | R9 | Model validation messages prefer built-in ActiveModel keys (e.g. `errors.add(:attr, :less_than_or_equal_to, count: cap)`) over custom strings. |
 | R10 | `config.i18n.raise_on_missing_translations = true` in development and test — a missing key is a test failure, not a silent fallback. |
 | R11 | `config/locales/en.yml` is kept normalized (`bundle exec i18n-tasks normalize`); false-positive "unused" keys (implicit subjects, multiline `I18n.t` calls) are listed in `config/i18n-tasks.yml` `ignore_unused` with a comment. |
+| R12 | The request locale is detected from the browser's `Accept-Language` header only (no IP/geo/cookies, no locale in URLs) by `LocaleDetection` (`app/controllers/concerns/locale_detection.rb`, `around_action` on `ApplicationController`): tags sorted by `q`, exact case-insensitive match first (`pt-BR` → `pt-BR`), then language-only match (`pt` → `pt-BR`, `en-US` → `en`, `zh-Hans` → `zh-CN`), else `en`. `I18n.with_locale` scopes it to the request. |
+| R13 | Missing translations in non-`en` locales fall back to `en` (`config.i18n.fallbacks = [:en]`) — never raise for a key that exists in `en`. |
 
 ## Out of scope
 

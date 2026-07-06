@@ -1,6 +1,6 @@
 require "test_helper"
 
-describe "locale detection from Accept-Language" do
+class LocaleDetectionTest < ActionDispatch::IntegrationTest
   def cta_in(locale)
     I18n.t("home.cta_band.cta", locale:)
   end
