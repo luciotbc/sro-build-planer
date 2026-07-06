@@ -1,0 +1,218 @@
+---
+es:
+  app:
+    name: SRO Lab
+  auth:
+    email_placeholder: tu@ejemplo.com
+    password_placeholder: "••••••••"
+  characters:
+    create:
+      created: Personaje creado.
+    destroy:
+      deleted: Personaje eliminado.
+    edit:
+      active_badge: "● ACTIVO"
+      back: "← Volver"
+      clear_all: Limpiar todo
+      current_skills: Skills actuales
+      future_skills: Skills futuras
+      max_mastery: Mastery al máximo
+      max_skills: Skills al máximo
+      no_mastery_for_race: No hay masteries disponibles para esta raza.
+      no_series: No hay series de skills en esta mastery.
+      planning_badge: "● PLANIFICANDO"
+      toggle_series: Mostrar u ocultar %{title}
+    show:
+      current: Actual
+      delete: Eliminar personaje
+      delete_confirm: "¿Eliminar este personaje y todos los datos de su build? Esto
+        no se puede deshacer."
+      edit_current: Editar actual
+      edit_planned: Editar planificado
+      lv: LV
+      no_mastery: Todavía no has añadido ninguna mastery. Usa el editor para armar
+        tu personaje.
+      no_series: No hay series de skills en esta mastery.
+      planned: Planificado
+      skills: Skills
+      summary: Resumen
+    update:
+      updated: Personaje actualizado.
+  email_confirmations:
+    resend:
+      sent: Si tu cuenta todavía necesita confirmación, te hemos enviado un enlace
+        nuevo.
+    show:
+      confirmed: Email confirmado. ¡Bienvenido a SRO Labs!
+      invalid_token: Ese enlace de confirmación no es válido o ha expirado.
+  errors:
+    skill_level:
+      above_max: "%{attr} debe ser <= %{max}"
+      below_zero: "%{attr} debe ser >= 0"
+  flash:
+    rate_limited: Inténtalo de nuevo más tarde.
+  home:
+    cta_band:
+      cta: Crear cuenta gratis
+      highlight: empezar a planificar
+      subtitle: Gratis. Regístrate para guardar tus builds en todos tus dispositivos.
+      title_html: "¿Listo para %{highlight}?"
+    features:
+      full_trees_body: Todas las masteries, series y skills del juego — chinas y europeas.
+        Planifica tu build completa en una sola sesión.
+      full_trees_title: Skill trees completos
+      kicker: Funciones
+      multi_chars_body: Crea y compara tantos personajes como quieras. Guarda builds
+        chinas y europeas lado a lado en cualquier level cap.
+      multi_chars_title: Varios personajes
+      sp_math_body: Costes de skill points acumulados sacados de la base de datos
+        real del juego. Sabe exactamente cuánto SP necesitas, nivel a nivel.
+      sp_math_title: Cálculo exacto de SP
+      subtitle: Basado en los datos reales del juego. Sin hojas de cálculo, sin adivinar.
+      title: Todo lo que necesitas para planificar
+    hero:
+      cta: Crear cuenta gratis
+      kicker: Planificador de skills para Silkroad Online
+      see_it_in_action: Míralo en acción
+      subtitle: Costes exactos de skill points sacados de la base de datos real del
+        juego. Planifica tu árbol de masteries del nivel 1 al cap y guarda varios
+        personajes — todo en un solo lugar.
+      title_line1: Planifica tu build.
+      title_line2: Domina cada skill.
+    live_preview:
+      badge: Vista previa en vivo
+      image_alt: Vista previa de una build guardada de Silkroad Online mostrando una
+        mastery subida del 62 al 125 y sus series de skills
+      subtitle: Mira una build real en progreso — skill points, masteries y series
+        de un vistazo.
+      title: Tu build, calculada con precisión
+  passwords:
+    create:
+      instructions_sent: Instrucciones para restablecer la contraseña enviadas (si
+        existe un usuario con ese email).
+    edit:
+      heading: Actualiza tu contraseña
+      password_confirmation_placeholder: Repite la nueva contraseña
+      password_placeholder: Introduce la nueva contraseña
+      submit: Guardar
+    invalid_token: El enlace para restablecer la contraseña no es válido o ha expirado.
+    new:
+      email_placeholder: Introduce tu email
+      heading: "¿Olvidaste tu contraseña?"
+      submit: Enviar instrucciones por email
+    update:
+      mismatch: Las contraseñas no coinciden.
+      reset: La contraseña se ha restablecido.
+  passwords_mailer:
+    reset:
+      expiry: Este enlace expirará en %{time}.
+      intro_html: Puedes restablecer tu contraseña en %{link}. Este enlace expirará
+        en %{time}.
+      intro_text: Puedes restablecer tu contraseña en
+      link_text: esta página de restablecimiento de contraseña
+      subject: Restablece tu contraseña
+  registrations:
+    form:
+      email_label: Email
+      email_opt_in: Envíame novedades de SRO Labs por email.
+      email_opt_in_hint: Los enviamos muy de vez en cuando — solo algún lanzamiento
+        grande.
+      password_confirmation_label: Confirmar contraseña
+      password_hint: Al menos 8 caracteres, incluyendo una mayúscula y un número.
+      password_label: Contraseña
+      privacy_policy: política de privacidad
+      submit: Crear cuenta
+      terms_html: Acepto los %{terms} y la %{privacy}.
+      terms_of_use: términos de uso
+    new:
+      already_have_account: "¿Ya tienes una cuenta?"
+      heading: Crea tu cuenta
+      sign_in: Iniciar sesión
+      title: Crear cuenta
+  sessions:
+    auth_modals:
+      already_have_account: "¿Ya tienes una cuenta?"
+      close: Cerrar
+      confirm_title: Revisa tu email
+      confirmation_sent_html: Te hemos enviado un enlace de confirmación a %{email}.
+        Haz clic en el enlace para verificar tu cuenta y empezar a guardar builds.
+      create_account: Crear cuenta
+      create_an_account: Crea una cuenta
+      got_it: Entendido
+      log_in: Iniciar sesión
+      new_here: "¿Nuevo por aquí?"
+      resend: "¿No te llegó? Reenviar email"
+      sign_in: Iniciar sesión
+      sign_in_title: Iniciar sesión
+      signup_title: Crear cuenta
+    create:
+      invalid_credentials: Prueba con otro email o contraseña.
+    form:
+      email_label: Email
+      forgot_password: "¿Olvidaste tu contraseña?"
+      password_label: Contraseña
+      remember_me: Mantener sesión iniciada
+      submit: Iniciar sesión
+    new:
+      title: Iniciar sesión
+  shared:
+    char_bar:
+      level_cap: Level Cap
+    chars_drawer:
+      active: ACTIVO
+      empty: Todavía no hay personajes. Crea uno para empezar a planificar tu build.
+      lv: Lv
+      new_character: "+ Nuevo personaje"
+      title: Personajes
+      trigger: Personajes
+    close: Cerrar
+    create_character:
+      cap_100: LEGACY
+      cap_110: STANDARD
+      cap_120: HIGH
+      cap_130: EXTREME
+      cap_90: CLASSIC
+      cap_label: Level Cap del servidor
+      choose: Elegir
+      name_label: Nombre del personaje
+      name_placeholder: Introduce el nombre del personaje
+      race_label: Tipo de personaje
+      selected: Seleccionado
+      submit: Empezar build
+      title: Nuevo personaje
+      trigger: Nuevo personaje
+    log_out: Cerrar sesión
+    mastery_header:
+      decrease: Bajar nivel de mastery
+      increase: Subir nivel de mastery
+      mastery_lv: Mastery Lv
+      mastery_suffix: "· mastery"
+      range_label: Nivel de mastery de %{name}
+      skills: Skills
+    stats_summary:
+      mastery_total: Total de mastery
+      required_level: Nivel requerido
+      skill_points: Skill points
+    toast:
+      dismiss: Cerrar
+  users_mailer:
+    email_confirmation:
+      button: Confirmar mi email
+      expiry: Este enlace expira en 24 horas. Si no creaste una cuenta, puedes ignorar
+        este email.
+      fallback: 'Si el botón no funciona, pega este enlace en tu navegador:'
+      heading: Confirma tu email
+      subject: Confirma tu email
+      welcome: "¡Bienvenido a SRO Labs! Confirma tu dirección de email para verificar
+        tu cuenta y empezar a guardar builds."
+  warnings:
+    character_level_updated: character.%{attr} actualizado a %{value}
+    character_mastery_created: CharacterMastery '%{name}' creada automáticamente
+    character_mastery_level_updated: current_mastery_level de CharacterMastery '%{name}'
+      actualizado a %{level}
+    level_datum_missing: Falta LevelDatum para el nivel %{level}; el coste de SP se
+      trata como 0
+    prerequisite_added: prerrequisito '%{name}' añadido automáticamente
+    prerequisite_level_updated: current_skill_level del prerrequisito '%{name}' actualizado
+      a %{level}
+    skill_level_adjusted: "%{attr} de la skill '%{name}' ajustado a %{level}"
