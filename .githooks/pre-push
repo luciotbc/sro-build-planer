@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Blocks the push when locale files are inconsistent.
+# Runs exactly the same validation as CI: bin/i18n-check
+set -e
+
+echo "pre-push: validating translations (bin/i18n-check)..."
+bin/i18n-check

@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Locale consistency gate — read-only, never edits locale files.
+# Same command runs in CI (.github/workflows/ci.yml + bin/ci) and in the
+# pre-push git hook. Reproduce locally with: bin/i18n-check
+#
+# Fails when, against the en.yml source of truth, any locale has:
+#   - missing keys (used in code, or present in en but absent elsewhere)
+#   - unused keys
+#   - inconsistent interpolation variables (%{name}, %{count}, ...)
+#   - non-normalized or invalid YAML locale files
+
+set -u
+
+run() {
+  echo "==> bundle exec i18n-tasks $*"
+  bundle exec i18n-tasks "$@"
+}
+
+if run missing &&
+    run unused &&
+    run check-consistent-interpolations &&
+    run check-normalized; then
+  echo "i18n-check: locale files are consistent."
+else
+  cat >&2 <<'MSG'
+
+i18n-check FAILED: translation files are inconsistent (details above).
+
+config/locales/en.yml is the source of truth — every other locale
+(pt-BR, es, tr, ko, zh-CN) must mirror its structure exactly.
+Fix the reported keys by hand (do not auto-fill translations),
+then re-run:
+
+  bin/i18n-check
+MSG
+  exit 1
+fi
