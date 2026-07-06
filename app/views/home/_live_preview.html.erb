@@ -7,15 +7,15 @@
 %>
 <section id="live-preview" class="py-14 md:py-20">
   <div class="mx-auto mb-8 max-w-2xl text-center">
-    <%= render "shared/badge", text: "Live preview", variant: :planned %>
-    <h2 class="mt-4 text-2xl font-extrabold text-text md:text-3xl">Your build, calculated precisely</h2>
+    <%= render "shared/badge", text: t(".badge"), variant: :planned %>
+    <h2 class="mt-4 text-2xl font-extrabold text-text md:text-3xl"><%= t(".title") %></h2>
     <p class="mt-3 text-text-dim">
-      See a real build in progress — skill points, masteries, and series laid out at a glance.
+      <%= t(".subtitle") %>
     </p>
   </div>
   <div class="mx-auto max-w-[640px] rounded-panel border border-line bg-card p-2 md:p-3">
     <%= image_tag "landing/demo_build.png",
-          alt: "Preview of a saved Silkroad Online build showing a mastery leveled from 62 to 125 and its skill series",
+          alt: t(".image_alt"),
           class: "w-full h-auto rounded-tab" %>
   </div>
 </section>

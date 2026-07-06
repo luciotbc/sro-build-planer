@@ -7,8 +7,8 @@
 %>
 <% registered_email = flash[:registered_email] %>
 <div>
-  <button type="button" class="btn-ghost" data-action="auth#showLogin">Log in</button>
-  <button type="button" class="btn-primary" data-action="auth#showSignup">Create account</button>
+  <button type="button" class="btn-ghost" data-action="auth#showLogin"><%= t(".log_in") %></button>
+  <button type="button" class="btn-primary" data-action="auth#showSignup"><%= t(".create_account") %></button>
 
   <%# ---- Sign in ---- %>
   <dialog
@@ -18,15 +18,15 @@
     data-action="click->auth#backdropClose"
   >
     <header class="overlay-head">
-      <span id="login_modal_title">Sign in</span>
-      <button type="button" class="icon-btn" data-action="auth#close" aria-label="Close">×</button>
+      <span id="login_modal_title"><%= t(".sign_in_title") %></span>
+      <button type="button" class="icon-btn" data-action="auth#close" aria-label="<%= t(".close") %>">×</button>
     </header>
     <div class="overlay-body">
       <%= render "sessions/form" %>
       <p class="mt-5 text-sm text-text-dim">
-        New here?
+        <%= t(".new_here") %>
         <button type="button" class="text-brass underline hover:text-brass-hi" data-action="auth#showSignup">
-          Create an account
+          <%= t(".create_an_account") %>
         </button>
       </p>
     </div>
@@ -40,15 +40,15 @@
     data-action="click->auth#backdropClose"
   >
     <header class="overlay-head">
-      <span id="signup_modal_title">Create account</span>
-      <button type="button" class="icon-btn" data-action="auth#close" aria-label="Close">×</button>
+      <span id="signup_modal_title"><%= t(".signup_title") %></span>
+      <button type="button" class="icon-btn" data-action="auth#close" aria-label="<%= t(".close") %>">×</button>
     </header>
     <div class="overlay-body">
       <%= render "registrations/form" %>
       <p class="mt-5 text-sm text-text-dim">
-        Already have an account?
+        <%= t(".already_have_account") %>
         <button type="button" class="text-brass underline hover:text-brass-hi" data-action="auth#showLogin">
-          Sign in
+          <%= t(".sign_in") %>
         </button>
       </p>
     </div>
@@ -63,18 +63,19 @@
       data-action="click->auth#backdropClose"
     >
       <header class="overlay-head">
-        <span id="confirm_modal_title">Check your email</span>
-        <button type="button" class="icon-btn" data-action="auth#close" aria-label="Close">×</button>
+        <span id="confirm_modal_title"><%= t(".confirm_title") %></span>
+        <button type="button" class="icon-btn" data-action="auth#close" aria-label="<%= t(".close") %>">×</button>
       </header>
       <div class="overlay-body">
         <p class="text-sm leading-relaxed text-text-dim">
-          We sent a confirmation link to
-          <span class="font-semibold text-text"><%= registered_email %></span>.
-          Click the link to verify your account and start saving builds.
+          <%= t(
+            ".confirmation_sent_html",
+            email: tag.span(registered_email, class: "font-semibold text-text")
+          ) %>
         </p>
         <div class="mt-5 flex items-center justify-between gap-4">
-          <button type="button" class="btn-primary" data-action="auth#showLogin">Got it</button>
-          <%= button_to "Didn't get it? Resend email",
+          <button type="button" class="btn-primary" data-action="auth#showLogin"><%= t(".got_it") %></button>
+          <%= button_to t(".resend"),
                         resend_email_confirmation_path,
                         params: {
                           email_address: registered_email

@@ -78,7 +78,7 @@ describe "i18n backend keys" do
     home.features.sp_math_body
     home.features.multi_chars_title
     home.features.multi_chars_body
-    home.cta_band.title
+    home.cta_band.title_html
     home.cta_band.highlight
     home.cta_band.subtitle
     home.cta_band.cta
