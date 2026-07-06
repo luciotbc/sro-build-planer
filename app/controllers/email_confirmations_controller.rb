@@ -3,16 +3,15 @@ class EmailConfirmationsController < ApplicationController
   rate_limit to: 5,
              within: 3.minutes,
              only: :resend,
-             with: -> { redirect_to root_path, alert: "Try again later." }
+             with: -> { redirect_to root_path, alert: t("flash.rate_limited") }
 
   def show
     if user = User.find_by_token_for(:email_confirmation, params[:token])
       user.confirm_email! unless user.email_confirmed?
       start_new_session_for user
-      redirect_to root_path, notice: "Email confirmed. Welcome to SRO Labs!"
+      redirect_to root_path, notice: t(".confirmed")
     else
-      redirect_to root_path,
-                  alert: "That confirmation link is invalid or has expired."
+      redirect_to root_path, alert: t(".invalid_token")
     end
   end
 
@@ -25,8 +24,7 @@ class EmailConfirmationsController < ApplicationController
     redirect_to root_path,
                 flash: {
                   registered_email: params[:email_address],
-                  notice:
-                    "If your account still needs confirmation, we've sent a new link."
+                  notice: t(".sent")
                 }
   end
 end

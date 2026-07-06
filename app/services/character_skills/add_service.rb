@@ -75,9 +75,13 @@ module CharacterSkills
 
     def validate_level(attr, value, sg)
       errors = []
-      errors << "#{attr} must be >= 0" if value < 0
+      errors << I18n.t("errors.skill_level.below_zero", attr:) if value < 0
       if sg.max_skill_level && value > sg.max_skill_level
-        errors << "#{attr} must be <= #{sg.max_skill_level}"
+        errors << I18n.t(
+          "errors.skill_level.above_max",
+          attr:,
+          max: sg.max_skill_level
+        )
       end
       errors
     end

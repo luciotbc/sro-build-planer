@@ -4,7 +4,7 @@ class RegistrationsController < ApplicationController
              within: 3.minutes,
              only: :create,
              with: -> do
-               redirect_to new_registration_path, alert: "Try again later."
+               redirect_to new_registration_path, alert: t("flash.rate_limited")
              end
 
   def new

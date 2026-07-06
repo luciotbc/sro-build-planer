@@ -78,7 +78,7 @@ class CharactersController < ApplicationController
     result =
       Characters::CreateService.call(character_params.merge(user: Current.user))
     if result.success?
-      redirect_to result.data, notice: "Character created."
+      redirect_to result.data, notice: t(".created")
     else
       redirect_to root_path, alert: result.errors.join(", ")
     end
@@ -87,7 +87,7 @@ class CharactersController < ApplicationController
   def update
     result = Characters::UpdateService.call(@character, character_params)
     if result.success?
-      redirect_to @character, notice: "Character updated."
+      redirect_to @character, notice: t(".updated")
     else
       @character.errors.add(:base, result.errors.join(", "))
       render :edit, status: :unprocessable_entity
@@ -96,9 +96,7 @@ class CharactersController < ApplicationController
 
   def destroy
     Characters::DeleteService.call(@character)
-    redirect_to characters_path,
-                notice: "Character deleted.",
-                status: :see_other
+    redirect_to characters_path, notice: t(".deleted"), status: :see_other
   end
 
   private
