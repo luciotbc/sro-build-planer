@@ -13,9 +13,51 @@
 en:
   flash:
     rate_limited: "Try again later."
+  auth:
+    email_placeholder: "you@example.com"
+    password_placeholder: "••••••••"
   sessions:
     create:
       invalid_credentials: "Try another email address or password."
+    new:
+      title: "Sign in"
+    form:
+      email_label: "Email"
+      password_label: "Password"
+      remember_me: "Keep me signed in"
+      submit: "Sign in"
+      forgot_password: "Forgot password?"
+    auth_modals:
+      log_in: "Log in"
+      create_account: "Create account"
+      sign_in_title: "Sign in"
+      signup_title: "Create account"
+      close: "Close"
+      new_here: "New here?"
+      create_an_account: "Create an account"
+      already_have_account: "Already have an account?"
+      sign_in: "Sign in"
+      confirm_title: "Check your email"
+      confirmation_sent_html: "We sent a confirmation link to %{email}. Click the link to verify your account and start saving builds."
+      got_it: "Got it"
+      resend: "Didn't get it? Resend email"
+  registrations:
+    new:
+      title: "Create account"
+      heading: "Create your account"
+      already_have_account: "Already have an account?"
+      sign_in: "Sign in"
+    form:
+      email_label: "Email"
+      password_label: "Password"
+      password_hint: "At least 8 characters, including one uppercase letter and one number."
+      password_confirmation_label: "Confirm password"
+      terms_html: "I accept the %{terms} and %{privacy}."
+      terms_of_use: "terms of use"
+      privacy_policy: "privacy policy"
+      email_opt_in: "Email me updates about SRO Labs."
+      email_opt_in_hint: "We send these very rarely — only the occasional big release."
+      submit: "Create account"
   passwords:
     invalid_token: "Password reset link is invalid or has expired."
     create:
@@ -23,6 +65,43 @@ en:
     update:
       reset: "Password has been reset."
       mismatch: "Passwords did not match."
+    new:
+      heading: "Forgot your password?"
+      email_placeholder: "Enter your email address"
+      submit: "Email reset instructions"
+    edit:
+      heading: "Update your password"
+      password_placeholder: "Enter new password"
+      password_confirmation_placeholder: "Repeat new password"
+      submit: "Save"
+  home:
+    hero:
+      kicker: "Skill planner for Silkroad Online"
+      title_line1: "Plan your build."
+      title_line2: "Master every skill."
+      subtitle: "Exact skill point costs from the real game database. Plan your mastery tree from level 1 to cap, and save multiple characters — all in one place."
+      cta: "Create free account"
+      see_it_in_action: "See it in action"
+    features:
+      kicker: "Features"
+      title: "Everything you need to plan"
+      subtitle: "Built around the actual game data. No spreadsheets, no guesswork."
+      full_trees_title: "Full skill trees"
+      full_trees_body: "Every mastery, series, and skill in the game — Chinese and European. Plan your entire build in a single session."
+      sp_math_title: "Exact SP math"
+      sp_math_body: "Cumulative skill point costs pulled from the actual game database. Know exactly how much SP you need, level by level."
+      multi_chars_title: "Multiple characters"
+      multi_chars_body: "Build and compare as many characters as you need. Save Chinese and European builds side by side across every level cap."
+    cta_band:
+      title_html: "Ready to %{highlight}?"
+      highlight: "start planning"
+      subtitle: "Free to use. Sign up to save your builds across devices."
+      cta: "Create free account"
+    live_preview:
+      badge: "Live preview"
+      title: "Your build, calculated precisely"
+      subtitle: "See a real build in progress — skill points, masteries, and series laid out at a glance."
+      image_alt: "Preview of a saved Silkroad Online build showing a mastery leveled from 62 to 125 and its skill series"
   email_confirmations:
     show:
       confirmed: "Email confirmed. Welcome to SRO Labs!"

@@ -1,31 +1,18 @@
 <%# home/features — three feature cards (task 018) %>
 <section class="py-14 md:py-20">
   <div class="mx-auto mb-10 max-w-2xl text-center">
-    <p class="mb-3 text-xs font-bold uppercase tracking-[3px] text-brass">Features</p>
-    <h2 class="text-2xl font-extrabold text-text md:text-3xl">Everything you need to plan</h2>
-    <p class="mt-3 text-text-dim">Built around the actual game data. No spreadsheets, no guesswork.</p>
+    <p class="mb-3 text-xs font-bold uppercase tracking-[3px] text-brass"><%= t(".kicker") %></p>
+    <h2 class="text-2xl font-extrabold text-text md:text-3xl"><%= t(".title") %></h2>
+    <p class="mt-3 text-text-dim"><%= t(".subtitle") %></p>
   </div>
   <div class="grid gap-4 md:grid-cols-3">
-    <div class="rounded-panel border border-line bg-card p-5">
-      <h3 class="mb-2 text-base font-bold text-text">Full skill trees</h3>
-      <p class="text-sm leading-relaxed text-text-dim">
-        Every mastery, series, and skill in the game — Chinese and European.
-        Plan your entire build in a single session.
-      </p>
-    </div>
-    <div class="rounded-panel border border-line bg-card p-5">
-      <h3 class="mb-2 text-base font-bold text-text">Exact SP math</h3>
-      <p class="text-sm leading-relaxed text-text-dim">
-        Cumulative skill point costs pulled from the actual game database.
-        Know exactly how much SP you need, level by level.
-      </p>
-    </div>
-    <div class="rounded-panel border border-line bg-card p-5">
-      <h3 class="mb-2 text-base font-bold text-text">Multiple characters</h3>
-      <p class="text-sm leading-relaxed text-text-dim">
-        Build and compare as many characters as you need. Save Chinese and
-        European builds side by side across every level cap.
-      </p>
-    </div>
+    <% %w[full_trees sp_math multi_chars].each do |card| %>
+      <div class="rounded-panel border border-line bg-card p-5">
+        <h3 class="mb-2 text-base font-bold text-text"><%= t(".#{card}_title") %></h3>
+        <p class="text-sm leading-relaxed text-text-dim">
+          <%= t(".#{card}_body") %>
+        </p>
+      </div>
+    <% end %>
   </div>
 </section>

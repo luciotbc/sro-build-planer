@@ -27,40 +27,40 @@
   <%= form_with url: registration_path do |form| %>
     <div class="mb-4">
       <%= form.label :email_address,
-                     "Email",
+                     t(".email_label"),
                      class: "mb-1.5 block text-sm font-medium text-text-dim" %>
       <%= form.email_field :email_address,
                            required: true,
                            autofocus: true,
                            autocomplete: "username",
-                           placeholder: "you@example.com",
+                           placeholder: t("auth.email_placeholder"),
                            value: params[:email_address],
                            class: field_classes %>
     </div>
 
     <div class="mb-4">
       <%= form.label :password,
-                     "Password",
+                     t(".password_label"),
                      class: "mb-1.5 block text-sm font-medium text-text-dim" %>
       <%= form.password_field :password,
                               required: true,
                               autocomplete: "new-password",
-                              placeholder: "••••••••",
+                              placeholder: t("auth.password_placeholder"),
                               maxlength: 72,
                               class: field_classes %>
       <p class="mt-1.5 text-xs text-text-mute">
-        At least 8 characters, including one uppercase letter and one number.
+        <%= t(".password_hint") %>
       </p>
     </div>
 
     <div class="mb-4">
       <%= form.label :password_confirmation,
-                     "Confirm password",
+                     t(".password_confirmation_label"),
                      class: "mb-1.5 block text-sm font-medium text-text-dim" %>
       <%= form.password_field :password_confirmation,
                               required: true,
                               autocomplete: "new-password",
-                              placeholder: "••••••••",
+                              placeholder: t("auth.password_placeholder"),
                               maxlength: 72,
                               class: field_classes %>
     </div>
@@ -71,10 +71,21 @@
                          "1",
                          "0" %>
       <span>
-        I accept the
-        <%= link_to "terms of use", "#", class: "text-brass underline hover:text-brass-hi" %>
-        and
-        <%= link_to "privacy policy", "#", class: "text-brass underline hover:text-brass-hi" %>.
+        <%= t(
+          ".terms_html",
+          terms:
+            link_to(
+              t(".terms_of_use"),
+              "#",
+              class: "text-brass underline hover:text-brass-hi"
+            ),
+          privacy:
+            link_to(
+              t(".privacy_policy"),
+              "#",
+              class: "text-brass underline hover:text-brass-hi"
+            )
+        ) %>
       </span>
     </label>
 
@@ -84,11 +95,11 @@
                          "1",
                          "0" %>
       <span>
-        Email me updates about SRO Labs.
-        <span class="text-text-mute">We send these very rarely — only the occasional big release.</span>
+        <%= t(".email_opt_in") %>
+        <span class="text-text-mute"><%= t(".email_opt_in_hint") %></span>
       </span>
     </label>
 
-    <%= form.submit "Create account", class: "btn-primary w-full" %>
+    <%= form.submit t(".submit"), class: "btn-primary w-full" %>
   <% end %>
 </div>

@@ -20,25 +20,25 @@
   <%= form_with url: session_path do |form| %>
     <div class="mb-4">
       <%= form.label :email_address,
-                     "Email",
+                     t(".email_label"),
                      class: "mb-1.5 block text-sm font-medium text-text-dim" %>
       <%= form.email_field :email_address,
                            required: true,
                            autofocus: true,
                            autocomplete: "username",
-                           placeholder: "you@example.com",
+                           placeholder: t("auth.email_placeholder"),
                            value: params[:email_address],
                            class: field_classes %>
     </div>
 
     <div class="mb-4">
       <%= form.label :password,
-                     "Password",
+                     t(".password_label"),
                      class: "mb-1.5 block text-sm font-medium text-text-dim" %>
       <%= form.password_field :password,
                               required: true,
                               autocomplete: "current-password",
-                              placeholder: "••••••••",
+                              placeholder: t("auth.password_placeholder"),
                               maxlength: 72,
                               class: field_classes %>
     </div>
@@ -48,12 +48,12 @@
                          { checked: true, class: "h-4 w-4 accent-brass" },
                          "1",
                          "0" %>
-      Keep me signed in
+      <%= t(".remember_me") %>
     </label>
 
     <div class="flex items-center justify-between gap-4">
-      <%= form.submit "Sign in", class: "btn-primary" %>
-      <%= link_to "Forgot password?",
+      <%= form.submit t(".submit"), class: "btn-primary" %>
+      <%= link_to t(".forgot_password"),
                   new_password_path,
                   class: "text-sm text-text-dim underline hover:text-text" %>
     </div>
