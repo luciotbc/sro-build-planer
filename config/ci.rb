@@ -5,6 +5,8 @@ CI.run do
 
   step "Style: Ruby", "bin/rubocop"
 
+  step "I18n: locale consistency", "bin/i18n-check"
+
   step "Security: Gem audit", "bin/bundler-audit"
   step "Security: Importmap vulnerability audit", "bin/importmap audit"
   step "Security: Brakeman code analysis",

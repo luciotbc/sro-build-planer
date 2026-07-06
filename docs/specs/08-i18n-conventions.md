@@ -1,6 +1,6 @@
 # 08 — i18n Conventions
 
-> **How agents use this:** every user-facing string in `/app` MUST live in `config/locales/en.yml` — never hardcode text in views, controllers, services, mailers, or model validations. Follow the key conventions below when adding text. `test/i18n_test.rb` enforces no-missing / no-unused / normalized keys via `i18n-tasks`.
+> **How agents use this:** every user-facing string in `/app` MUST live in `config/locales/en.yml` — never hardcode text in views, controllers, services, mailers, or model validations. Follow the key conventions below when adding text. `test/i18n_test.rb` enforces no-missing / no-unused / normalized keys via `i18n-tasks`; `bin/i18n-check` (read-only: missing, unused, consistent interpolations, normalized) is the shared gate run by CI (`lint` job + `bin/ci`) and the `pre-push` git hook — it never edits locale files, fixes are manual against the `en.yml` source of truth.
 
 ## Rules
 
