@@ -1,0 +1,215 @@
+---
+tr:
+  app:
+    name: SRO Lab
+  auth:
+    email_placeholder: sen@ornek.com
+    password_placeholder: "••••••••"
+  characters:
+    create:
+      created: Karakter oluşturuldu.
+    destroy:
+      deleted: Karakter silindi.
+    edit:
+      active_badge: "● AKTİF"
+      back: "← Geri"
+      clear_all: Hepsini temizle
+      current_skills: Mevcut skill'ler
+      future_skills: Gelecek skill'ler
+      max_mastery: Mastery'yi maksla
+      max_skills: Skill'leri maksla
+      no_mastery_for_race: Bu ırk için mastery yok.
+      no_series: Bu mastery'de skill serisi yok.
+      planning_badge: "● PLANLAMA"
+      toggle_series: "%{title} aç/kapat"
+    show:
+      current: Mevcut
+      delete: Karakteri sil
+      delete_confirm: Bu karakter ve tüm build verileri silinsin mi? Bu işlem geri
+        alınamaz.
+      edit_current: Mevcudu düzenle
+      edit_planned: Planlananı düzenle
+      lv: LV
+      no_mastery: Henüz mastery eklenmedi. Karakterini oluşturmak için editörü kullan.
+      no_series: Bu mastery'de skill serisi yok.
+      planned: Planlanan
+      skills: Skill'ler
+      summary: Özet
+    update:
+      updated: Karakter güncellendi.
+  email_confirmations:
+    resend:
+      sent: Hesabının hâlâ onaya ihtiyacı varsa yeni bir bağlantı gönderdik.
+    show:
+      confirmed: E-posta onaylandı. SRO Labs'e hoş geldin!
+      invalid_token: Bu onay bağlantısı geçersiz veya süresi dolmuş.
+  errors:
+    skill_level:
+      above_max: "%{attr} <= %{max} olmalı"
+      below_zero: "%{attr} >= 0 olmalı"
+  flash:
+    rate_limited: Daha sonra tekrar dene.
+  home:
+    cta_band:
+      cta: Ücretsiz hesap oluştur
+      highlight: planlamaya başlamaya
+      subtitle: Kullanımı ücretsiz. Build'lerini tüm cihazlarında saklamak için kaydol.
+      title_html: "%{highlight} hazır mısın?"
+    features:
+      full_trees_body: Oyundaki tüm mastery'ler, seriler ve skill'ler — Çinli ve Avrupalı.
+        Tüm build'ini tek oturumda planla.
+      full_trees_title: Eksiksiz skill tree'ler
+      kicker: Özellikler
+      multi_chars_body: İstediğin kadar karakter oluştur ve karşılaştır. Çinli ve
+        Avrupalı build'leri her level cap'te yan yana kaydet.
+      multi_chars_title: Birden fazla karakter
+      sp_math_body: Gerçek oyun veritabanından alınan kümülatif skill point maliyetleri.
+        Ne kadar SP gerektiğini level level tam olarak bil.
+      sp_math_title: Tam SP hesabı
+      subtitle: Gerçek oyun verileri üzerine kurulu. Tablo yok, tahmin yok.
+      title: Planlamak için gereken her şey
+    hero:
+      cta: Ücretsiz hesap oluştur
+      kicker: Silkroad Online için skill planlayıcı
+      see_it_in_action: Nasıl çalıştığını gör
+      subtitle: Gerçek oyun veritabanından tam skill point maliyetleri. Mastery ağacını
+        level 1'den cap'e kadar planla ve birden fazla karakter kaydet — hepsi tek
+        yerde.
+      title_line1: Build'ini planla.
+      title_line2: Her skill'de ustalaş.
+    live_preview:
+      badge: Canlı önizleme
+      image_alt: 62'den 125'e yükseltilmiş bir mastery'yi ve skill serilerini gösteren
+        kayıtlı bir Silkroad Online build önizlemesi
+      subtitle: Devam eden gerçek bir build'i gör — skill point'ler, mastery'ler ve
+        seriler tek bakışta.
+      title: Build'in, tam hesaplanmış
+  passwords:
+    create:
+      instructions_sent: Parola sıfırlama talimatları gönderildi (bu e-postaya sahip
+        bir kullanıcı varsa).
+    edit:
+      heading: Parolanı güncelle
+      password_confirmation_placeholder: Yeni parolayı tekrar gir
+      password_placeholder: Yeni parolayı gir
+      submit: Kaydet
+    invalid_token: Parola sıfırlama bağlantısı geçersiz veya süresi dolmuş.
+    new:
+      email_placeholder: E-posta adresini gir
+      heading: Parolanı mı unuttun?
+      submit: Sıfırlama talimatlarını gönder
+    update:
+      mismatch: Parolalar eşleşmedi.
+      reset: Parola sıfırlandı.
+  passwords_mailer:
+    reset:
+      expiry: Bu bağlantının süresi %{time} içinde dolacak.
+      intro_html: Parolanı %{link} üzerinden sıfırlayabilirsin. Bu bağlantının süresi
+        %{time} içinde dolacak.
+      intro_text: Parolanı şuradan sıfırlayabilirsin
+      link_text: bu parola sıfırlama sayfası
+      subject: Parolanı sıfırla
+  registrations:
+    form:
+      email_label: E-posta
+      email_opt_in: SRO Labs haberlerini e-postayla gönder.
+      email_opt_in_hint: Bunları çok nadir gönderiyoruz — sadece arada bir büyük sürüm
+        çıkınca.
+      password_confirmation_label: Parolayı onayla
+      password_hint: En az 8 karakter; bir büyük harf ve bir rakam içermeli.
+      password_label: Parola
+      privacy_policy: gizlilik politikasını
+      submit: Hesap oluştur
+      terms_html: "%{terms} ve %{privacy} kabul ediyorum."
+      terms_of_use: kullanım şartlarını
+    new:
+      already_have_account: Zaten hesabın var mı?
+      heading: Hesabını oluştur
+      sign_in: Giriş yap
+      title: Hesap oluştur
+  sessions:
+    auth_modals:
+      already_have_account: Zaten hesabın var mı?
+      close: Kapat
+      confirm_title: E-postanı kontrol et
+      confirmation_sent_html: "%{email} adresine bir onay bağlantısı gönderdik. Hesabını
+        doğrulamak ve build kaydetmeye başlamak için bağlantıya tıkla."
+      create_account: Hesap oluştur
+      create_an_account: Hesap oluştur
+      got_it: Anladım
+      log_in: Giriş yap
+      new_here: Yeni misin?
+      resend: Gelmedi mi? E-postayı yeniden gönder
+      sign_in: Giriş yap
+      sign_in_title: Giriş yap
+      signup_title: Hesap oluştur
+    create:
+      invalid_credentials: Başka bir e-posta adresi veya parola dene.
+    form:
+      email_label: E-posta
+      forgot_password: Parolanı mı unuttun?
+      password_label: Parola
+      remember_me: Oturumum açık kalsın
+      submit: Giriş yap
+    new:
+      title: Giriş yap
+  shared:
+    char_bar:
+      level_cap: Level Cap
+    chars_drawer:
+      active: AKTİF
+      empty: Henüz karakter yok. Build'ini planlamaya başlamak için bir tane oluştur.
+      lv: Lv
+      new_character: "+ Yeni karakter"
+      title: Karakterler
+      trigger: Karakterler
+    close: Kapat
+    create_character:
+      cap_100: LEGACY
+      cap_110: STANDARD
+      cap_120: HIGH
+      cap_130: EXTREME
+      cap_90: CLASSIC
+      cap_label: Sunucu Level Cap'i
+      choose: Seç
+      name_label: Karakter adı
+      name_placeholder: Karakter adını gir
+      race_label: Karakter tipi
+      selected: Seçildi
+      submit: Build'e başla
+      title: Yeni karakter
+      trigger: Yeni karakter
+    log_out: Çıkış yap
+    mastery_header:
+      decrease: Mastery level'ını düşür
+      increase: Mastery level'ını yükselt
+      mastery_lv: Mastery Lv
+      mastery_suffix: "· mastery"
+      range_label: "%{name} mastery level'ı"
+      skills: Skill'ler
+    stats_summary:
+      mastery_total: Toplam mastery
+      required_level: Gereken level
+      skill_points: Skill point
+    toast:
+      dismiss: Kapat
+  users_mailer:
+    email_confirmation:
+      button: E-postamı onayla
+      expiry: Bu bağlantının süresi 24 saat içinde dolar. Hesap oluşturmadıysan bu
+        e-postayı yok sayabilirsin.
+      fallback: 'Buton çalışmazsa bu bağlantıyı tarayıcına yapıştır:'
+      heading: E-postanı onayla
+      subject: E-postanı onayla
+      welcome: SRO Labs'e hoş geldin! Hesabını doğrulamak ve build kaydetmeye başlamak
+        için e-posta adresini onayla.
+  warnings:
+    character_level_updated: character.%{attr} %{value} olarak güncellendi
+    character_mastery_created: CharacterMastery '%{name}' otomatik olarak oluşturuldu
+    character_mastery_level_updated: CharacterMastery '%{name}' current_mastery_level
+      %{level} olarak güncellendi
+    level_datum_missing: Level %{level} için LevelDatum eksik; SP maliyeti 0 sayıldı
+    prerequisite_added: ön koşul '%{name}' otomatik olarak eklendi
+    prerequisite_level_updated: ön koşul '%{name}' current_skill_level %{level} olarak
+      güncellendi
+    skill_level_adjusted: skill '%{name}' %{attr} %{level} olarak ayarlandı
