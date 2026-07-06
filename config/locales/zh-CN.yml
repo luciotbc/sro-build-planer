@@ -1,0 +1,201 @@
+---
+zh-CN:
+  app:
+    name: SRO Lab
+  auth:
+    email_placeholder: you@example.com
+    password_placeholder: "••••••••"
+  characters:
+    create:
+      created: 角色已创建。
+    destroy:
+      deleted: 角色已删除。
+    edit:
+      active_badge: "● 当前"
+      back: "← 返回"
+      clear_all: 全部清空
+      current_skills: 当前 Skill
+      future_skills: 目标 Skill
+      max_mastery: Mastery 拉满
+      max_skills: Skill 拉满
+      no_mastery_for_race: 该种族没有可用的 Mastery。
+      no_series: 这个 Mastery 下没有 Skill 系列。
+      planning_badge: "● 规划中"
+      toggle_series: 展开/收起 %{title}
+    show:
+      current: 当前
+      delete: 删除角色
+      delete_confirm: 确定删除该角色及其全部 Build 数据吗？此操作无法撤销。
+      edit_current: 编辑当前
+      edit_planned: 编辑规划
+      lv: LV
+      no_mastery: 还没有添加任何 Mastery。用编辑器开始打造你的角色吧。
+      no_series: 这个 Mastery 下没有 Skill 系列。
+      planned: 规划
+      skills: Skill
+      summary: 汇总
+    update:
+      updated: 角色已更新。
+  email_confirmations:
+    resend:
+      sent: 如果你的账号仍需验证，我们已发送新的链接。
+    show:
+      confirmed: 邮箱验证成功。欢迎来到 SRO Labs！
+      invalid_token: 该验证链接无效或已过期。
+  errors:
+    skill_level:
+      above_max: "%{attr} 必须 <= %{max}"
+      below_zero: "%{attr} 必须 >= 0"
+  flash:
+    rate_limited: 请稍后再试。
+  home:
+    cta_band:
+      cta: 免费注册
+      highlight: 开始规划
+      subtitle: 完全免费。注册后可在所有设备上保存你的 Build。
+      title_html: 准备好%{highlight}了吗？
+    features:
+      full_trees_body: 游戏中全部 Mastery、系列和 Skill——中国系与欧洲系一应俱全。一次就能规划完整 Build。
+      full_trees_title: 完整 Skill Tree
+      kicker: 功能
+      multi_chars_body: 想建多少角色就建多少，随意对比。中国系和欧洲系 Build 可在任意 Level 上限下并排保存。
+      multi_chars_title: 多角色
+      sp_math_body: Skill Point 累计消耗直接取自游戏真实数据库。每一级需要多少 SP，一清二楚。
+      sp_math_title: 精确 SP 计算
+      subtitle: 基于游戏真实数据。不用表格，不用瞎猜。
+      title: 规划所需，应有尽有
+    hero:
+      cta: 免费注册
+      kicker: Silkroad Online Skill 规划器
+      see_it_in_action: 看看实际效果
+      subtitle: Skill Point 消耗精确取自游戏真实数据库。从 Level 1 规划到满级上限，多个角色一站式保存。
+      title_line1: 规划你的 Build。
+      title_line2: 精通每个 Skill。
+    live_preview:
+      badge: 实时预览
+      image_alt: 一个已保存的 Silkroad Online Build 预览，展示从 62 级练到 125 级的 Mastery 及其 Skill
+        系列
+      subtitle: 看一个真实的 Build 进度——Skill Point、Mastery 和系列一目了然。
+      title: 你的 Build，精确计算
+  passwords:
+    create:
+      instructions_sent: 重置密码的说明已发送（如果该邮箱对应的用户存在）。
+    edit:
+      heading: 更新密码
+      password_confirmation_placeholder: 再次输入新密码
+      password_placeholder: 输入新密码
+      submit: 保存
+    invalid_token: 密码重置链接无效或已过期。
+    new:
+      email_placeholder: 输入你的邮箱地址
+      heading: 忘记密码了？
+      submit: 发送重置邮件
+    update:
+      mismatch: 两次输入的密码不一致。
+      reset: 密码已重置。
+  passwords_mailer:
+    reset:
+      expiry: 该链接将在 %{time} 后失效。
+      intro_html: 你可以在%{link}重置密码。该链接将在 %{time} 后失效。
+      intro_text: 你可以在此重置密码
+      link_text: 密码重置页面
+      subject: 重置你的密码
+  registrations:
+    form:
+      email_label: 邮箱
+      email_opt_in: 通过邮件接收 SRO Labs 的更新。
+      email_opt_in_hint: 我们很少发邮件——只有重大更新时才会发。
+      password_confirmation_label: 确认密码
+      password_hint: 至少 8 个字符，包含一个大写字母和一个数字。
+      password_label: 密码
+      privacy_policy: 隐私政策
+      submit: 创建账号
+      terms_html: 我接受%{terms}和%{privacy}。
+      terms_of_use: 使用条款
+    new:
+      already_have_account: 已经有账号？
+      heading: 创建你的账号
+      sign_in: 登录
+      title: 创建账号
+  sessions:
+    auth_modals:
+      already_have_account: 已经有账号？
+      close: 关闭
+      confirm_title: 查收邮件
+      confirmation_sent_html: 我们已向 %{email} 发送验证链接。点击链接验证账号，开始保存 Build。
+      create_account: 创建账号
+      create_an_account: 创建一个账号
+      got_it: 知道了
+      log_in: 登录
+      new_here: 新来的？
+      resend: 没收到？重新发送
+      sign_in: 登录
+      sign_in_title: 登录
+      signup_title: 创建账号
+    create:
+      invalid_credentials: 请换一个邮箱或密码试试。
+    form:
+      email_label: 邮箱
+      forgot_password: 忘记密码？
+      password_label: 密码
+      remember_me: 保持登录
+      submit: 登录
+    new:
+      title: 登录
+  shared:
+    char_bar:
+      level_cap: Level 上限
+    chars_drawer:
+      active: 当前
+      empty: 还没有角色。创建一个，开始规划你的 Build。
+      lv: Lv
+      new_character: "+ 新建角色"
+      title: 角色
+      trigger: 角色
+    close: 关闭
+    create_character:
+      cap_100: LEGACY
+      cap_110: STANDARD
+      cap_120: HIGH
+      cap_130: EXTREME
+      cap_90: CLASSIC
+      cap_label: 服务器 Level 上限
+      choose: 选择
+      name_label: 角色名称
+      name_placeholder: 输入角色名称
+      race_label: 角色类型
+      selected: 已选择
+      submit: 开始 Build
+      title: 新建角色
+      trigger: 新建角色
+    log_out: 退出登录
+    mastery_header:
+      decrease: 降低 Mastery 等级
+      increase: 提升 Mastery 等级
+      mastery_lv: Mastery Lv
+      mastery_suffix: "· Mastery"
+      range_label: "%{name} Mastery 等级"
+      skills: Skill
+    stats_summary:
+      mastery_total: Mastery 总计
+      required_level: 所需 Level
+      skill_points: Skill Point
+    toast:
+      dismiss: 关闭
+  users_mailer:
+    email_confirmation:
+      button: 验证我的邮箱
+      expiry: 该链接 24 小时后失效。如果你没有注册过账号，忽略这封邮件即可。
+      fallback: 如果按钮无法使用，请将此链接粘贴到浏览器：
+      heading: 验证你的邮箱
+      subject: 验证你的邮箱
+      welcome: 欢迎来到 SRO Labs！验证邮箱地址以确认账号，开始保存 Build。
+  warnings:
+    character_level_updated: character.%{attr} 已更新为 %{value}
+    character_mastery_created: 已自动创建 CharacterMastery '%{name}'
+    character_mastery_level_updated: CharacterMastery '%{name}' 的 current_mastery_level
+      已更新为 %{level}
+    level_datum_missing: 缺少 Level %{level} 的 LevelDatum；SP 消耗按 0 处理
+    prerequisite_added: 已自动添加前置 '%{name}'
+    prerequisite_level_updated: 前置 '%{name}' 的 current_skill_level 已更新为 %{level}
+    skill_level_adjusted: Skill '%{name}' 的 %{attr} 已调整为 %{level}
