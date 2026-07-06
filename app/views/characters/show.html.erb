@@ -111,13 +111,17 @@
 
         <%# ── Edit buttons ───────────────────────────────────────────────── %>
         <div class="flex items-center gap-2">
+          <%# Full-page navigation to the editor: break out of the skill-window
+              frame so the edit page replaces the whole document. %>
           <%= link_to t(".edit_current"),
                 edit_character_path(@character, side: :current, mastery_id: @active_mastery&.id),
-                class: "flex-1 btn-ghost" %>
+                class: "flex-1 btn-ghost",
+                data: { turbo_frame: "_top" } %>
           <span class="text-text-mute" aria-hidden="true">→</span>
           <%= link_to t(".edit_planned"),
                 edit_character_path(@character, side: :target, mastery_id: @active_mastery&.id),
-                class: "flex-1 btn-primary" %>
+                class: "flex-1 btn-primary",
+                data: { turbo_frame: "_top" } %>
         </div>
       <% else %>
         <p class="text-sm text-text-dim"><%= t(".no_mastery") %></p>
