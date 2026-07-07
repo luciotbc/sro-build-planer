@@ -15,6 +15,12 @@
     <%= render "shared/edit_character", character: @character %>
   </div>
 
+  <%# ── Box: summary (spec 02 R3/R4/R5) ─────────────────────────────────── %>
+  <section class="rounded-panel border border-line bg-card p-4 space-y-4">
+    <h2 class="text-xs font-bold uppercase tracking-[2px] text-text-dim"><%= t(".summary") %></h2>
+    <%= render "shared/stats_summary", summary: @summary, class: "max-w-none" %>
+  </section>
+
   <%# ── Box: skills (shared with the public build page, task 021) ────────── %>
   <%= render "characters/skills_panel",
         character:             @character,
@@ -26,12 +32,6 @@
         series_groups:         @series_groups,
         tab_url:               ->(m) { character_path(@character, mastery_id: m.id) },
         editable:              true %>
-
-  <%# ── Box: summary (spec 02 R3/R4/R5) ─────────────────────────────────── %>
-  <section class="rounded-panel border border-line bg-card p-4 space-y-4">
-    <h2 class="text-xs font-bold uppercase tracking-[2px] text-text-dim"><%= t(".summary") %></h2>
-    <%= render "shared/stats_summary", summary: @summary, class: "max-w-none" %>
-  </section>
 
   <%# ── Footer ────────────────────────────────────────────────────────────── %>
   <div class="flex items-center">
