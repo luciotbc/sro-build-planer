@@ -542,26 +542,22 @@
   }
 
   /* Series header badge — small brass-ringed glyph marking a skill series. */
+  /* Bare series icon, no frame — matches the in-game look. The brass glyph
+     color remains for the "✦" fallback when no icon asset exists. */
   .series-badge {
-    width: 34px;
-    height: 34px;
-    border-radius: var(--radius-pill);
+    width: 44px;
+    height: 44px;
     flex-shrink: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
     color: var(--color-brass-hi);
-    background: color-mix(in srgb, var(--color-brass) 12%, transparent);
-    box-shadow: 0 0 0 1px
-      color-mix(in srgb, var(--color-brass) 40%, transparent) inset;
     overflow: hidden;
   }
   .series-badge img {
     width: 100%;
     height: 100%;
-    border-radius: inherit;
-    object-fit: cover;
     display: block;
   }
 
