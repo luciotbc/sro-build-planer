@@ -33,16 +33,17 @@
       <button type="button" class="icon-btn" data-action="dialog#close" aria-label="<%= t(".close") %>">×</button>
     </header>
 
-    <% if skill_series.icon_path.present? %>
-      <div class="pt-4">
-        <span class="fs-skill-icon !cursor-default">
-          <%= game_icon_tag skill_series.icon_path, alt: skill_series.title %>
-        </span>
-      </div>
-    <% end %>
+    <div class="overlay-body">
+      <% if skill_series.icon_path.present? %>
+        <div>
+          <span class="fs-skill-icon !cursor-default">
+            <%= game_icon_tag skill_series.icon_path, alt: skill_series.title %>
+          </span>
+        </div>
+      <% end %>
 
-    <% if groups.any? %>
-      <div class="mt-4">
+      <% if groups.any? %>
+        <div class="<%= "mt-4" if skill_series.icon_path.present? %>">
         <h3 class="text-xs font-bold uppercase tracking-[2px] text-text-dim"><%= t(".contained_skills") %></h3>
         <div class="mt-2 divide-y divide-line border-y border-line">
           <% groups.each do |group| %>
@@ -61,7 +62,8 @@
             </div>
           <% end %>
         </div>
-      </div>
-    <% end %>
+        </div>
+      <% end %>
+    </div>
   </dialog>
 </div>

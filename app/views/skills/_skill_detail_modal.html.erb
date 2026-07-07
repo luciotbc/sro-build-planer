@@ -59,18 +59,19 @@
       <button type="button" class="icon-btn" data-action="dialog#close" aria-label="<%= t(".close") %>">×</button>
     </header>
 
-    <div class="flex items-center gap-4 pt-4">
-      <span class="fs-skill-icon !cursor-default shrink-0">
-        <%= game_icon_tag group.icon_path, alt: group.name %>
-      </span>
-      <span class="text-sm text-text-dim">
-        <%= t(".level") %>
-        <span class="tnum font-semibold text-brass"><%= skill.skill_level %></span>
-        <% if group.max_skill_level %>
-          <span class="text-text-mute">/ <%= group.max_skill_level %></span>
-        <% end %>
-      </span>
-    </div>
+    <div class="overlay-body">
+      <div class="flex items-center gap-4">
+        <span class="fs-skill-icon !cursor-default shrink-0">
+          <%= game_icon_tag group.icon_path, alt: group.name %>
+        </span>
+        <span class="text-sm text-text-dim">
+          <%= t(".level") %>
+          <span class="tnum font-semibold text-brass"><%= skill.skill_level %></span>
+          <% if group.max_skill_level %>
+            <span class="text-text-mute">/ <%= group.max_skill_level %></span>
+          <% end %>
+        </span>
+      </div>
 
     <% if detail_rows.any? %>
       <div class="mt-4 divide-y divide-line border-y border-line">
@@ -111,8 +112,9 @@
       </div>
     <% end %>
 
-    <% if group.description.present? %>
-      <p class="mt-4 text-sm leading-relaxed text-text-dim"><%= group.description %></p>
-    <% end %>
+      <% if group.description.present? %>
+        <p class="mt-4 text-sm leading-relaxed text-text-dim"><%= group.description %></p>
+      <% end %>
+    </div>
   </dialog>
 </div>
