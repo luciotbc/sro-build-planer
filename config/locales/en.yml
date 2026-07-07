@@ -155,6 +155,7 @@ en:
       title: Sign in
   shared:
     char_bar:
+      edit: Edit character
       level_cap: Level Cap
     chars_drawer:
       active: ACTIVE
@@ -179,6 +180,17 @@ en:
       submit: Start Build
       title: New character
       trigger: New Character
+    edit_character:
+      cap_100: LEGACY
+      cap_110: STANDARD
+      cap_120: HIGH
+      cap_130: EXTREME
+      cap_90: CLASSIC
+      cap_label: Server Level Cap
+      name_label: Character Name
+      name_placeholder: Enter character name
+      submit: Save
+      title: Edit character
     log_out: Log out
     mastery_header:
       decrease: Decrease mastery level

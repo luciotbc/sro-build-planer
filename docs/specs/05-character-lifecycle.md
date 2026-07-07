@@ -9,9 +9,9 @@
 ## Class level fields are caches, not inputs
 - **R2 —** `current_level` / `target_level` are **derived caches** ([01](01-level-and-progression.md) R1) and must **not** be user-editable. The current `Characters::UpdateService` accepts them as params — that is a gap to remove; they are recomputed from masteries.
 
-## Server level cap edit
-- **R3 —** `server_level_cap` is **editable** after creation.
-- **R4 —** lowering `server_level_cap` below any existing mastery level (current **or** target, any mastery) is **rejected with an error** (consistent with the existing level-reduce guard). No silent clamp — the player must lower the masteries first.
+## Name & server level cap edit
+- **R3 —** `server_level_cap` is **editable** after creation. `name` is also editable. Both are edited via the "Edit character" modal on the planner (hover pencil on the char bar — `shared/edit_character`, task 020). Race is **not** editable from this modal (see R5/R6).
+- **R4 —** lowering `server_level_cap` below any existing mastery level (current **or** target, any mastery) is **rejected with an error** (consistent with the existing level-reduce guard). No silent clamp — the player must lower the masteries first. The error surfaces as a flash toast on redirect back to the planner.
 
 ## Race switch
 - **R5 —** changing `race` **wipes all of the character's masteries and skills** (masteries are race-specific, so the build becomes invalid). Both sides (current + planned) are cleared.

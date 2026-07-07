@@ -156,6 +156,7 @@ tr:
       title: Giriş yap
   shared:
     char_bar:
+      edit: Karakteri düzenle
       level_cap: Level Cap
     chars_drawer:
       active: AKTİF
@@ -180,6 +181,17 @@ tr:
       submit: Build'e başla
       title: Yeni karakter
       trigger: Yeni karakter
+    edit_character:
+      cap_100: LEGACY
+      cap_110: STANDARD
+      cap_120: HIGH
+      cap_130: EXTREME
+      cap_90: CLASSIC
+      cap_label: Sunucu Level Cap'i
+      name_label: Karakter adı
+      name_placeholder: Karakter adını gir
+      submit: Kaydet
+      title: Karakteri düzenle
     log_out: Çıkış yap
     mastery_header:
       decrease: Mastery level'ını düşür

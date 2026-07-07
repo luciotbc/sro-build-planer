@@ -15,7 +15,7 @@
 | [02-sp-and-summary.md](02-sp-and-summary.md) | SKILL POINTS (mastery SP + skill SP), MASTERY TOTAL, REQUIRED LEVEL formulas | draft |
 | [03-prerequisites-and-cascade.md](03-prerequisites-and-cascade.md) | Prereq auto-add, mastery escalation, class-level sync, skill-decrease blocking vs mastery-decrease auto-downgrade, current/planned independence, specs-over-mockup | draft |
 | [04-skill-access-and-caps.md](04-skill-access-and-caps.md) | Skill ceiling (max_skill_level), mastery requirement, group unlock, server-cap gating | draft |
-| [05-character-lifecycle.md](05-character-lifecycle.md) | Create, server-cap edit, race switch (wipe), hard delete, user ownership, auth-required | draft |
+| [05-character-lifecycle.md](05-character-lifecycle.md) | Create, name/server-cap edit, race switch (wipe), hard delete, user ownership, auth-required | draft |
 | [06-edit-flow-and-bulk-actions.md](06-edit-flow-and-bulk-actions.md) | current/planned toggle, Edit Current/Planned, editor scope, Max mastery/skills, Clear all, Undo | draft |
 | [07-mastery-navigation.md](07-mastery-navigation.md) | Mastery group pills, mastery sub-tabs (all race masteries, by id), content panel, state rules, invariants | draft |
 | [08-i18n-conventions.md](08-i18n-conventions.md) | Locale key conventions, lazy lookup, `_html` keys, i18n-tasks enforcement, `Accept-Language` locale detection, fallbacks, out-of-scope areas | draft |

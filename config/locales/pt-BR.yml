@@ -155,6 +155,7 @@ pt-BR:
       title: Entrar
   shared:
     char_bar:
+      edit: Editar personagem
       level_cap: Level Cap
     chars_drawer:
       active: ATIVO
@@ -179,6 +180,17 @@ pt-BR:
       submit: Começar Build
       title: Novo personagem
       trigger: Novo personagem
+    edit_character:
+      cap_100: LEGACY
+      cap_110: STANDARD
+      cap_120: HIGH
+      cap_130: EXTREME
+      cap_90: CLASSIC
+      cap_label: Level Cap do servidor
+      name_label: Nome do personagem
+      name_placeholder: Digite o nome do personagem
+      submit: Salvar
+      title: Editar personagem
     log_out: Sair
     mastery_header:
       decrease: Diminuir level da mastery

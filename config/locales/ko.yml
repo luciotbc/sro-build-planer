@@ -150,6 +150,7 @@ ko:
       title: 로그인
   shared:
     char_bar:
+      edit: 캐릭터 편집
       level_cap: Level Cap
     chars_drawer:
       active: 활성
@@ -174,6 +175,17 @@ ko:
       submit: Build 시작
       title: 새 캐릭터
       trigger: 새 캐릭터
+    edit_character:
+      cap_100: LEGACY
+      cap_110: STANDARD
+      cap_120: HIGH
+      cap_130: EXTREME
+      cap_90: CLASSIC
+      cap_label: 서버 Level Cap
+      name_label: 캐릭터 이름
+      name_placeholder: 캐릭터 이름 입력
+      submit: 저장
+      title: 캐릭터 편집
     log_out: 로그아웃
     mastery_header:
       decrease: Mastery Level 낮추기
