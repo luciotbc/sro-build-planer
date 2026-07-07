@@ -32,6 +32,7 @@ A task is delivered as ordered small PRs `feature/NNN-slug/NN-slice` (refactor �
 | 017 | [design-system-parity](017-design-system-parity.md) | 007,009,010 | Sonnet |
 | 018 | [landing-page](018-landing-page.md) | 004 | Sonnet |
 | 019 | [single-step-undo](019-single-step-undo.md) | 012 | Haiku |
+| 020 | [edit-character-modal](020-edit-character-modal.md) | 005,007 | Sonnet |
 
 ## Dependency DAG / parallel lanes
 - Foundation (serial): 000 → 001 → 002 → 003.
@@ -40,5 +41,6 @@ A task is delivered as ordered small PRs `feature/NNN-slug/NN-slice` (refactor �
 - After 002+007+008: **010** → **011** → **012**; **013 ∥ 014** (after 010).
 - Final polish (∥): **015 ∥ 016 ∥ 017** (after 007+010; 017 also needs 009).
 - **018** (landing page) ships independently after 004, can run in parallel with 005-006 or as final polish after 017.
+- **020** (edit-character modal) independent after 005+007; can run any time.
 
 Each lane = a separate branch/session. One PR per task, approve, then next.

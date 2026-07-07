@@ -91,21 +91,33 @@ class CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Renamed Hero", @char.reload.name
   end
 
-  it "renders error on service failure (server_level_cap below mastery)" do
+  it "redirects with alert on service failure (server_level_cap below mastery)" do
     mastery = create(:mastery, race: @race)
     create(
       :character_mastery,
       character: @char,
       mastery:,
-      current_mastery_level: 90,
-      target_mastery_level: 90
+      current_mastery_level: 100,
+      target_mastery_level: 100
     )
     sign_in_as @user
-    patch character_path(@char), params: { character: { server_level_cap: 80 } }
-    # 80 is not a valid cap (must be 90/100/110/120/130), but even 90 would
-    # be rejected if masteries exceed it. Use cap = 90 to test the service guard.
-    # (The validation error or service error both render :unprocessable_entity)
-    assert_response :unprocessable_entity
+    original_cap = @char.server_level_cap
+    patch character_path(@char), params: { character: { server_level_cap: 90 } }
+    assert_redirected_to character_path(@char)
+    assert flash[:alert].present?
+    assert_equal original_cap, @char.reload.server_level_cap
+  end
+
+  it "updates server_level_cap and redirects" do
+    sign_in_as @user
+    patch character_path(@char),
+          params: {
+            character: {
+              server_level_cap: 120
+            }
+          }
+    assert_redirected_to character_path(@char)
+    assert_equal 120, @char.reload.server_level_cap
   end
 
   it "returns 404 when updating another user's character" do
