@@ -241,6 +241,27 @@
       <%= render "shared/sheet", title: "Filters", trigger_label: "Open sheet" %>
     </div>
     <%= render "docs/snippet", code: @snippets[:overlays] %>
+
+    <%# ── Skill / series detail modals (task 014) — live data demo ────── %>
+    <div>
+      <h3 class="text-lg font-bold text-text">Skill &amp; series detail modals</h3>
+      <p class="text-text-dim">Read-only detail dialogs rendered from real records — run <code class="text-brass-hi">bin/rails import:skills_xml</code> to populate them.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3 rounded-panel border border-line bg-card p-6">
+      <% demo_skill = Skill.joins(:skill_group).order(:skill_group_id, :skill_level).first %>
+      <% demo_series = SkillSeries.joins(:skill_groups).first %>
+      <% if demo_skill %>
+        <%= render "skills/skill_detail_modal", skill: demo_skill,
+              trigger_label: "Open skill detail" %>
+      <% end %>
+      <% if demo_series %>
+        <%= render "skills/skill_series_detail_modal", skill_series: demo_series,
+              trigger_label: "Open series detail" %>
+      <% end %>
+      <% unless demo_skill || demo_series %>
+        <p class="text-sm text-text-mute">No skill data imported yet.</p>
+      <% end %>
+    </div>
   </section>
 
   <%# ── Hotwire ─────────────────────────────────────────────────────────── %>
