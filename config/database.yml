@@ -25,16 +25,17 @@ test:
 production:
   primary:
     <<: *default
-    url: <%= ENV['DATABASE_URL'] %>
+    database: /app/storage/production.sqlite3
   cache:
     <<: *default
-    url: <%= ENV['PRODUCTION_CACHE_URL'] %>
+    database: /app/storage/production_cache.sqlite3
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
-    url: <%= ENV['PRODUCTION_QUEUE_URL'] %>
+    database: /app/storage/production_queue.sqlite3
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    url: <%= ENV['PRODUCTION_CABLE_URL'] %>
+    database: /app/storage/production_cable.sqlite3
     migrations_paths: db/cable_migrate
+
