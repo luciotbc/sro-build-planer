@@ -14,9 +14,9 @@ class CreateCharacterTest < ActionView::TestCase
       assert_select "[data-race='chinese']"
     end
 
-    it "contains the Chinese glyph" do
+    it "contains the Chinese race icon" do
       render partial: "shared/chinese_glyph"
-      assert_match "华", rendered
+      assert_select "img[src*='china']"
     end
   end
 
@@ -26,9 +26,9 @@ class CreateCharacterTest < ActionView::TestCase
       assert_select "[data-race='european']"
     end
 
-    it "contains the European glyph" do
+    it "contains the European race icon" do
       render partial: "shared/european_glyph"
-      assert_match "⚔", rendered
+      assert_select "img[src*='europe']"
     end
   end
 
