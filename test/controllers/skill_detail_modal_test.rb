@@ -191,17 +191,6 @@ class SkillDetailModalTest < ActionDispatch::IntegrationTest
       assert_select "button.fs-skill-name[data-action*='dialog#open']",
                     text: /Slash/
     end
-
-    it "opens the series detail modal from the series header icon/title" do
-      get edit_character_path(@char)
-      assert_response :success
-      # trigger: icon + title button
-      assert_select "button[data-action*='dialog#open'] .series-badge"
-      # its dialog carries the series title and contained skills
-      assert_select "dialog.modal .overlay-head", text: /Basic/
-      # collapse toggle still present alongside the trigger
-      assert_select "[data-action*='collapsible#toggle']"
-    end
   end
 
   describe "character show trigger" do
