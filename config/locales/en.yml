@@ -22,6 +22,7 @@ en:
       no_series: No skill series in this mastery.
       planning_badge: "● PLANNING"
       toggle_series: Toggle %{title}
+      undo: Undo
     show:
       current: Current
       delete: Delete character

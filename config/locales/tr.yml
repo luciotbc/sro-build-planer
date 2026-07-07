@@ -22,6 +22,7 @@ tr:
       no_series: Bu mastery'de skill serisi yok.
       planning_badge: "● PLANLAMA"
       toggle_series: "%{title} aç/kapat"
+      undo: Geri al
     show:
       current: Mevcut
       delete: Karakteri sil

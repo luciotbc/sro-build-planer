@@ -22,6 +22,7 @@ zh-CN:
       no_series: 这个 Mastery 下没有 Skill 系列。
       planning_badge: "● 规划中"
       toggle_series: 展开/收起 %{title}
+      undo: 撤销
     show:
       current: 当前
       delete: 删除角色

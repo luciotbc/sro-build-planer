@@ -31,6 +31,7 @@ A task is delivered as ordered small PRs `feature/NNN-slug/NN-slice` (refactor �
 | 016 | [responsive-mobile](016-responsive-mobile.md) | 007,010 | Sonnet |
 | 017 | [design-system-parity](017-design-system-parity.md) | 007,009,010 | Sonnet |
 | 018 | [landing-page](018-landing-page.md) | 004 | Sonnet |
+| 019 | [single-step-undo](019-single-step-undo.md) | 012 | Haiku |
 
 ## Dependency DAG / parallel lanes
 - Foundation (serial): 000 → 001 → 002 → 003.

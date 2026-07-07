@@ -22,6 +22,7 @@ es:
       no_series: No hay series de skills en esta mastery.
       planning_badge: "● PLANIFICANDO"
       toggle_series: Mostrar u ocultar %{title}
+      undo: Deshacer
     show:
       current: Actual
       delete: Eliminar personaje
