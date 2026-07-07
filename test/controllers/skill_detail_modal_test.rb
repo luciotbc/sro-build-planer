@@ -95,6 +95,27 @@ class SkillDetailModalTest < ActionDispatch::IntegrationTest
       assert_includes html, "A focused thrust dealing physical damage."
     end
 
+    it "renders a footer close button" do
+      html =
+        ApplicationController.render(
+          partial: "skills/skill_detail_modal",
+          locals: {
+            skill: @skill1
+          }
+        )
+
+      assert_match /btn-primary[^>]*data-action="dialog#close"/, html
+
+      series_html =
+        ApplicationController.render(
+          partial: "skills/skill_series_detail_modal",
+          locals: {
+            skill_series: @series
+          }
+        )
+      assert_match /btn-primary[^>]*data-action="dialog#close"/, series_html
+    end
+
     it "lists prerequisite skill groups in a table" do
       html =
         ApplicationController.render(
@@ -162,6 +183,13 @@ class SkillDetailModalTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_select "dialog.modal .overlay-head", text: /Slash/
       assert_select "[data-action*='dialog#open']"
+    end
+
+    it "opens the modal from the skill name as well as the icon" do
+      get edit_character_path(@char)
+      assert_response :success
+      assert_select "button.fs-skill-name[data-action*='dialog#open']",
+                    text: /Slash/
     end
   end
 
