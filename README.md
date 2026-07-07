@@ -20,7 +20,8 @@ Things you may want to cover:
 2. Install dependencies using `bundle install`
 3. Install oxipng: `brew install oxipng`
 4. Enable git hooks: `git config core.hooksPath .githooks`
-5. Run the application using `bin/dev`
+5. Setup your development environment `bin/setup`
+6. Run the application using `bin/dev`
 
 ### Database
 
