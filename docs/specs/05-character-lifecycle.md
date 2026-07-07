@@ -25,6 +25,12 @@
 - **R9 — characters belong to a user.** `Character belongs_to :user`; **every** character/mastery/skill action is scoped to the authenticated user. _Gap: schema has no `characters.user_id` yet — migration + association is a foundational backlog item (alongside the `server_level_cap` column)._
 - **R10 — auth required (MVP).** Creating, saving, and listing characters require login. There is **no guest/ephemeral planning** in the MVP (deferred to a future task). The `index.html` "Log in" state therefore shows the landing/Hero (no real build) for logged-out visitors; the planner is for authenticated users only.
 
+## Build sharing (public read-only link)
+- **R11 — permanent share token.** Every character carries a `share_token` (UUIDv4), auto-generated on create and unique. It is **not** regenerable or revocable, and it survives edits/renames.
+- **R12 — public read-only page.** `GET /shared/:share_token` renders the build (identity bar, skills view, summary) **without authentication**, always reflecting the live build state (no snapshot). The page has **no edit affordances** and its mastery navigation stays on the shared route; an unknown token returns **404**. Mutating character routes remain owner-scoped per R9/R10.
+- **R13 — share entry point.** The owner's planner (`characters#show`) exposes a share control that copies the public URL to the clipboard. The shared page also shows its own URL for re-sharing.
+- **R14 — link previews.** The shared page carries OG meta tags: title = character name, image = race crest, description = one line per chosen mastery (`<Mastery> <current> → <target>`).
+
 ## Schema gaps (foundational backlog)
 - Add `characters.user_id` (+ `belongs_to :user`, `User has_many :characters`).
 - Add `characters.server_level_cap` (enum-like integer: 90/100/110/120/130).

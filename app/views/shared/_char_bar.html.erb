@@ -12,15 +12,18 @@
                               the name that opens a dialog (data-action
                               "dialog#open" — the caller must wrap this partial
                               and the target dialog in one dialog controller).
+    share_url: String         optional; when present, renders a share icon-btn
+                              that copies the public build URL (task 021).
   Usage:
     render "shared/char_bar", name: "BuckTBC", race: "Chinese", level: 110
 %>
 <%
-  name     = local_assigns.fetch(:name)
-  race     = local_assigns.fetch(:race)
-  level    = local_assigns.fetch(:level)
-  extra    = local_assigns[:class]
-  editable = local_assigns.fetch(:editable, false)
+  name      = local_assigns.fetch(:name)
+  race      = local_assigns.fetch(:race)
+  level     = local_assigns.fetch(:level)
+  extra     = local_assigns[:class]
+  editable  = local_assigns.fetch(:editable, false)
+  share_url = local_assigns[:share_url]
 %>
 <div class="<%= class_names("char-bar", extra) %>">
   <div class="char-bar-id">
@@ -37,8 +40,24 @@
       <div class="char-bar-race"><%= race %></div>
     </div>
   </div>
-  <div class="char-bar-level">
-    <span class="char-bar-level-label whitespace-nowrap"><%= t(".level_cap") %></span>
-    <span class="char-bar-level-val"><%= level %></span>
+  <div class="ml-auto flex items-center gap-3">
+    <div class="char-bar-level">
+      <span class="char-bar-level-label whitespace-nowrap"><%= t(".level_cap") %></span>
+      <span class="char-bar-level-val"><%= level %></span>
+    </div>
+    <% if share_url %>
+      <button
+        type="button"
+        class="icon-btn shrink-0"
+        data-controller="clipboard"
+        data-clipboard-text-value="<%= share_url %>"
+        data-action="clipboard#copy"
+        aria-label="<%= t(".share") %>"
+        title="<%= t(".share") %>"
+      >
+        <span data-clipboard-target="icon" aria-hidden="true">⧉</span>
+        <span data-clipboard-target="check" class="hidden text-brass" aria-hidden="true">✓</span>
+      </button>
+    <% end %>
   </div>
 </div>

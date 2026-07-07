@@ -28,10 +28,12 @@ en:
       toggle_series: Toggle %{title}
       undo: Undo
     show:
-      current: Current
       delete: Delete character
       delete_confirm: Delete this character and all its build data? This cannot be
         undone.
+      summary: Summary
+    skills_panel:
+      current: Current
       edit_current: Edit Current
       edit_planned: Edit Planned
       lv: LV
@@ -39,7 +41,6 @@ en:
       no_series: No skill series in this mastery.
       planned: Planned
       skills: Skills
-      summary: Summary
     update:
       updated: Character updated.
   email_confirmations:
@@ -164,6 +165,7 @@ en:
     char_bar:
       edit: Edit character
       level_cap: Level Cap
+      share: Share build link
     chars_drawer:
       active: ACTIVE
       empty: No characters yet. Create one to start planning your build.
@@ -212,6 +214,11 @@ en:
       skill_points: Skill points
     toast:
       dismiss: Dismiss
+  shared_builds:
+    show:
+      copy: Copy link
+      share_link: Share link
+      summary: Summary
   skills:
     skill_detail_modal:
       close: Close

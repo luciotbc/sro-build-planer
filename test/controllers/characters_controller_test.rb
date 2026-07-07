@@ -82,6 +82,13 @@ class CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  it "shows a share button with the public build URL on show" do
+    sign_in_as @user
+    get character_path(@char)
+    assert_select "[data-controller=clipboard][data-clipboard-text-value=?]",
+                  shared_build_url(@char.share_token)
+  end
+
   # ---- update ---------------------------------------------------------------
 
   it "updates character name and redirects" do

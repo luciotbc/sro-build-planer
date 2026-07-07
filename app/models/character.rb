@@ -8,7 +8,11 @@ class Character < ApplicationRecord
   has_many :masteries, through: :character_masteries
   has_many :character_skills, dependent: :destroy, inverse_of: :character
 
+  # Permanent public token for the read-only shared-build page (task 021).
+  before_create { self.share_token ||= SecureRandom.uuid }
+
   validates :name, presence: true
+  validates :share_token, uniqueness: true, allow_nil: true
   validates :server_level_cap, inclusion: { in: SERVER_LEVEL_CAPS }
   validates :current_level,
             numericality: {

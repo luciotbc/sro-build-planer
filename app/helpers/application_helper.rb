@@ -10,9 +10,13 @@ module ApplicationHelper
     image_tag(icon_path, **options)
   end
 
-  # Renders the race crest icon (china.png / europe.png) for a race name.
+  # Crest icon asset filename for a race name (china.png / europe.png).
+  def race_icon_file(race_name)
+    race_name == "Chinese" ? "china.png" : "europe.png"
+  end
+
+  # Renders the race crest icon for a race name.
   def race_icon_tag(race_name, **options)
-    icon = race_name == "Chinese" ? "china.png" : "europe.png"
-    image_tag(icon, alt: race_name, **options)
+    image_tag(race_icon_file(race_name), alt: race_name, **options)
   end
 end

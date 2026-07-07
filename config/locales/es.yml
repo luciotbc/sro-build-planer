@@ -28,10 +28,12 @@ es:
       toggle_series: Mostrar u ocultar %{title}
       undo: Deshacer
     show:
-      current: Actual
       delete: Eliminar personaje
       delete_confirm: "¿Eliminar este personaje y todos los datos de su build? Esto
         no se puede deshacer."
+      summary: Resumen
+    skills_panel:
+      current: Actual
       edit_current: Editar actual
       edit_planned: Editar planificado
       lv: LV
@@ -40,7 +42,6 @@ es:
       no_series: No hay series de skills en esta mastery.
       planned: Planificado
       skills: Skills
-      summary: Resumen
     update:
       updated: Personaje actualizado.
   email_confirmations:
@@ -167,6 +168,7 @@ es:
     char_bar:
       edit: Editar personaje
       level_cap: Level Cap
+      share: Compartir link de la build
     chars_drawer:
       active: ACTIVO
       empty: Todavía no hay personajes. Crea uno para empezar a planificar tu build.
@@ -215,6 +217,11 @@ es:
       skill_points: Skill points
     toast:
       dismiss: Cerrar
+  shared_builds:
+    show:
+      copy: Copiar link
+      share_link: Link para compartir
+      summary: Resumen
   skills:
     skill_detail_modal:
       close: Cerrar

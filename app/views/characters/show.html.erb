@@ -6,146 +6,26 @@
   <%# ── Box: character identity + edit modal (task 020, spec 05 R3/R4) ───── %>
   <div data-controller="dialog">
     <%= render "shared/char_bar",
-          name:     @character.name,
-          race:     @character.race.name,
-          level:    @character.server_level_cap,
-          editable: true,
-          class:    "md:max-w-none" %>
+          name:      @character.name,
+          race:      @character.race.name,
+          level:     @character.server_level_cap,
+          editable:  true,
+          share_url: shared_build_url(@character.share_token),
+          class:     "md:max-w-none" %>
     <%= render "shared/edit_character", character: @character %>
   </div>
 
-  <%# ── Box: skills ──────────────────────────────────────────────────────── %>
-  <section class="rounded-panel border border-line bg-card p-4 space-y-4">
-    <div class="flex items-center justify-between gap-3">
-      <h2 class="text-xs font-bold uppercase tracking-[2px] text-text-dim"><%= t(".skills") %></h2>
-      <span class="text-xs">
-        <span class="text-text"><%= t(".current") %></span>
-        <span class="text-text-mute mx-1">→</span>
-        <span class="font-semibold text-brass"><%= t(".planned") %></span>
-      </span>
-    </div>
-
-    <%# Mastery navigation: type pills + per-group sub-tabs (mirrors edit, spec 07) %>
-    <% if @grouped_masteries.any? %>
-      <div class="space-y-3" data-controller="mastery-tabs">
-        <%# Row 1 — mastery type pills %>
-        <div class="ro-tabs max-w-none">
-          <% @mastery_types.each do |type| %>
-            <button
-              type="button"
-              class="<%= class_names("ro-tab", "on" => type == @active_mastery&.mastery_type) %>"
-              data-mastery-tabs-target="typeTab"
-              data-action="mastery-tabs#selectType"
-              data-mastery-type="<%= type %>"
-            ><%= type %></button>
-          <% end %>
-        </div>
-
-        <%# Row 2 — specific mastery sub-tabs %>
-        <% @mastery_types.each do |type| %>
-          <div
-            class="ro-subtabs max-w-none <%= "hidden" unless type == @active_mastery&.mastery_type %>"
-            data-mastery-tabs-target="panel"
-            data-mastery-type="<%= type %>"
-          >
-            <% (@grouped_masteries[type] || []).each do |mastery| %>
-              <%= link_to mastery.name,
-                    character_path(@character, mastery_id: mastery.id),
-                    class: class_names("ro-subtab", "on" => @active_mastery&.id == mastery.id),
-                    "data-turbo-frame":         "skill-window",
-                    "data-mastery-id":           mastery.id,
-                    "data-mastery-tabs-target": "masteryTab",
-                    "data-action":              "mastery-tabs#selectMastery" %>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
-
-    <turbo-frame id="skill-window" class="block space-y-4">
-      <% if @active_mastery %>
-        <%# ── Read-only mastery header ──────────────────────────────────── %>
-        <div class="rounded-control border border-line bg-card-hi p-4 flex items-center justify-between gap-3">
-          <div class="flex items-center gap-3 min-w-0">
-            <span class="mastery-icon shrink-0" aria-hidden="true">
-              <%= game_icon_tag @active_mastery.icon_path, alt: "" %>
-            </span>
-            <span class="truncate text-base font-bold text-text">
-              <%= @active_mastery.name %>
-            </span>
-          </div>
-          <div class="tnum text-sm shrink-0 flex items-center gap-1">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-text-dim mr-0.5"><%= t(".lv") %></span>
-            <span class="font-bold text-text"><%= @current_mastery_level %></span>
-            <span class="text-text-mute mx-0.5">→</span>
-            <span class="font-bold text-brass"><%= @target_mastery_level %></span>
-            <span class="text-text-mute">/<%= @character.server_level_cap %></span>
-          </div>
-        </div>
-
-        <%# ── Skill series grid (read-only) ─────────────────────────────── %>
-        <% if @series_groups.empty? %>
-          <p class="text-sm text-text-dim"><%= t(".no_series") %></p>
-        <% else %>
-          <div class="flex flex-col gap-4">
-            <% @series_groups.each do |group| %>
-              <div class="flex items-start gap-3">
-                <span class="series-badge shrink-0 mt-1" aria-hidden="true">
-                  <%= game_icon_tag(group[:series].icon_path, alt: group[:series].title) || "✦" %>
-                </span>
-                <div class="flex flex-wrap gap-x-3 gap-y-2">
-                  <% group[:skills].each do |entry| %>
-                    <div class="flex flex-col items-center gap-1">
-                      <%# Icon opens the read-only skill detail modal (task 014),
-                          showing the current-level variant (level 1 fallback). %>
-                      <% skill = entry[:skill_group].skill_at_level(entry[:current_level]) ||
-                           entry[:skill_group].skills.order(:skill_level).first %>
-                      <% if skill %>
-                        <% trigger = capture do %>
-                          <button type="button" class="fs-skill-icon"
-                                  data-action="dialog#open"
-                                  aria-label="<%= entry[:skill_group].name %>">
-                            <%= game_icon_tag entry[:skill_group].icon_path, alt: entry[:skill_group].name %>
-                          </button>
-                        <% end %>
-                        <%= render "skills/skill_detail_modal", skill: skill, trigger: trigger %>
-                      <% else %>
-                        <span class="fs-skill-icon !cursor-default" aria-hidden="true">
-                          <%= game_icon_tag entry[:skill_group].icon_path, alt: entry[:skill_group].name %>
-                        </span>
-                      <% end %>
-                      <span class="tnum text-xs flex items-center gap-px">
-                        <span class="text-text-dim" data-skill-current="<%= entry[:current_level] %>"><%= entry[:current_level] %></span>
-                        <span class="text-text-mute mx-px">→</span>
-                        <span class="font-semibold text-brass" data-skill-planned="<%= entry[:target_level] %>"><%= entry[:target_level] %></span>
-                      </span>
-                    </div>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-
-        <%# ── Edit buttons ───────────────────────────────────────────────── %>
-        <div class="flex items-center gap-2">
-          <%# Full-page navigation to the editor: break out of the skill-window
-              frame so the edit page replaces the whole document. %>
-          <%= link_to t(".edit_current"),
-                edit_character_path(@character, side: :current, mastery_id: @active_mastery&.id),
-                class: "flex-1 btn-ghost",
-                data: { turbo_frame: "_top" } %>
-          <span class="text-text-mute" aria-hidden="true">→</span>
-          <%= link_to t(".edit_planned"),
-                edit_character_path(@character, side: :target, mastery_id: @active_mastery&.id),
-                class: "flex-1 btn-primary",
-                data: { turbo_frame: "_top" } %>
-        </div>
-      <% else %>
-        <p class="text-sm text-text-dim"><%= t(".no_mastery") %></p>
-      <% end %>
-    </turbo-frame>
-  </section>
+  <%# ── Box: skills (shared with the public build page, task 021) ────────── %>
+  <%= render "characters/skills_panel",
+        character:             @character,
+        grouped_masteries:     @grouped_masteries,
+        mastery_types:         @mastery_types,
+        active_mastery:        @active_mastery,
+        current_mastery_level: @current_mastery_level,
+        target_mastery_level:  @target_mastery_level,
+        series_groups:         @series_groups,
+        tab_url:               ->(m) { character_path(@character, mastery_id: m.id) },
+        editable:              true %>
 
   <%# ── Box: summary (spec 02 R3/R4/R5) ─────────────────────────────────── %>
   <section class="rounded-panel border border-line bg-card p-4 space-y-4">

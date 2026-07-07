@@ -28,9 +28,11 @@ zh-CN:
       toggle_series: 展开/收起 %{title}
       undo: 撤销
     show:
-      current: 当前
       delete: 删除角色
       delete_confirm: 确定删除该角色及其全部 Build 数据吗？此操作无法撤销。
+      summary: 汇总
+    skills_panel:
+      current: 当前
       edit_current: 编辑当前
       edit_planned: 编辑规划
       lv: LV
@@ -38,7 +40,6 @@ zh-CN:
       no_series: 这个 Mastery 下没有 Skill 系列。
       planned: 规划
       skills: Skill
-      summary: 汇总
     update:
       updated: 角色已更新。
   email_confirmations:
@@ -153,6 +154,7 @@ zh-CN:
     char_bar:
       edit: 编辑角色
       level_cap: Level 上限
+      share: 分享 Build 链接
     chars_drawer:
       active: 当前
       empty: 还没有角色。创建一个，开始规划你的 Build。
@@ -201,6 +203,11 @@ zh-CN:
       skill_points: Skill Point
     toast:
       dismiss: 关闭
+  shared_builds:
+    show:
+      copy: 复制链接
+      share_link: 分享链接
+      summary: 汇总
   skills:
     skill_detail_modal:
       close: 关闭

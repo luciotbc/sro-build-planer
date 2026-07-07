@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_23_073839) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_07_085528) do
   create_table "character_masteries", force: :cascade do |t|
     t.integer "character_id", null: false
     t.datetime "created_at", null: false
@@ -45,10 +45,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_23_073839) do
     t.string "name"
     t.integer "race_id", null: false
     t.integer "server_level_cap", default: 110, null: false
+    t.string "share_token", null: false
     t.integer "target_level"
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["race_id"], name: "index_characters_on_race_id"
+    t.index ["share_token"],
+            name: "index_characters_on_share_token",
+            unique: true
     t.index ["user_id"], name: "index_characters_on_user_id"
   end
 
