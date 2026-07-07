@@ -3,9 +3,9 @@ require "test_helper"
 class SharedBuildsControllerTest < ActionDispatch::IntegrationTest
   before do
     @user = create(:user)
-    @race = create(:race, :chinese)
+    @race = create(:race, name: "Chinese")
     @char = create(:character, user: @user, race: @race, name: "Blade Lord")
-    @mastery = create(:mastery, :blade, race: @race)
+    @mastery = create(:mastery, race: @race, name: "Blade")
     create(
       :character_mastery,
       character: @char,
