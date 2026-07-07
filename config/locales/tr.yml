@@ -1,5 +1,9 @@
 ---
 tr:
+  activerecord:
+    attributes:
+      character:
+        name: İsim
   app:
     name: SRO Lab
   auth:

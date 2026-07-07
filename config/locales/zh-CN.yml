@@ -1,5 +1,9 @@
 ---
 zh-CN:
+  activerecord:
+    attributes:
+      character:
+        name: 名称
   app:
     name: SRO Lab
   auth:

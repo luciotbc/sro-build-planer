@@ -1,5 +1,9 @@
 ---
 en:
+  activerecord:
+    attributes:
+      character:
+        name: Name
   app:
     name: SRO Lab
   auth:

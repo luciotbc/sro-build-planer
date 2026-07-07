@@ -16,3 +16,6 @@ ignore_unused:
   # Referenced via a multiline I18n.t call the static scanner cannot see
   # (app/services/character_masteries/update_service.rb).
   - "warnings.character_level_updated"
+  # Resolved implicitly by ActiveModel::Errors via
+  # activerecord.attributes.<model>.<attr> — not a literal t() call.
+  - "activerecord.attributes.character.name"

@@ -1,5 +1,9 @@
 ---
 ko:
+  activerecord:
+    attributes:
+      character:
+        name: 이름
   app:
     name: SRO Lab
   auth:

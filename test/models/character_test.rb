@@ -22,6 +22,17 @@ class CharacterTest < ActiveSupport::TestCase
     assert_includes character.errors[:name], "can't be blank"
   end
 
+  it "localizes the name-blank error message per locale (rails-i18n)" do
+    character = Character.new(race:, user:, server_level_cap: 110)
+    character.valid?
+
+    I18n.with_locale(:"pt-BR") do
+      character.valid?
+      assert_equal "Nome não pode ficar em branco",
+                   character.errors.full_messages_for(:name).first
+    end
+  end
+
   it "invalid without race" do
     character =
       Character.new(name: "Test Character", user:, server_level_cap: 110)

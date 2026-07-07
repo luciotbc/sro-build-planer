@@ -1,5 +1,9 @@
 ---
 pt-BR:
+  activerecord:
+    attributes:
+      character:
+        name: Nome
   app:
     name: SRO Lab
   auth:
