@@ -187,6 +187,24 @@ ko:
       skill_points: Skill Point
     toast:
       dismiss: 닫기
+  skills:
+    skill_detail_modal:
+      close: 닫기
+      details: 상세 정보
+      level: Level
+      lv: Lv %{level}
+      max_level: 최대 Level
+      na: 없음
+      required_mastery: 필요 Mastery
+      required_skill: Skill
+      required_skills: 필요 Skills
+      sp_cost_next: SP 비용 (다음 level)
+    skill_series_detail_modal:
+      close: 닫기
+      contained_skills: 이 시리즈의 Skills
+      details: 상세 정보
+      levels:
+        other: "%{count} levels"
   users_mailer:
     email_confirmation:
       button: 이메일 인증하기

@@ -192,6 +192,25 @@ pt-BR:
       skill_points: Skill Points
     toast:
       dismiss: Dispensar
+  skills:
+    skill_detail_modal:
+      close: Fechar
+      details: Detalhes
+      level: Level
+      lv: Lv %{level}
+      max_level: Level máx.
+      na: N/D
+      required_mastery: Mastery necessária
+      required_skill: Skill
+      required_skills: Skills necessárias
+      sp_cost_next: Custo de SP (próximo level)
+    skill_series_detail_modal:
+      close: Fechar
+      contained_skills: Skills desta série
+      details: Detalhes
+      levels:
+        one: 1 level
+        other: "%{count} levels"
   users_mailer:
     email_confirmation:
       button: Confirmar meu email

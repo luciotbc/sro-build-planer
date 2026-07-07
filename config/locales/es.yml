@@ -195,6 +195,25 @@ es:
       skill_points: Skill points
     toast:
       dismiss: Cerrar
+  skills:
+    skill_detail_modal:
+      close: Cerrar
+      details: Detalles
+      level: Level
+      lv: Lv %{level}
+      max_level: Level máx.
+      na: N/D
+      required_mastery: Mastery requerida
+      required_skill: Skill
+      required_skills: Skills requeridas
+      sp_cost_next: Coste de SP (próximo level)
+    skill_series_detail_modal:
+      close: Cerrar
+      contained_skills: Skills de esta serie
+      details: Detalles
+      levels:
+        one: 1 level
+        other: "%{count} levels"
   users_mailer:
     email_confirmation:
       button: Confirmar mi email
