@@ -412,6 +412,16 @@
     color: var(--color-brass-hi);
     line-height: 1.1;
   }
+  /* Hover-revealed edit pencil (task 020): appears when the identity block
+     (avatar + name) is hovered, or when the button itself has focus. */
+  .char-bar-edit {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .char-bar-id:hover .char-bar-edit,
+  .char-bar-edit:focus-visible {
+    opacity: 1;
+  }
   .char-bar-race {
     font-size: 13px;
     font-weight: 700;

@@ -3,12 +3,16 @@
 
 <%# Mobile-first single column, mirrors the edit page wrapper (spec 07). %>
 <div class="mx-auto w-full max-w-[520px] md:max-w-3xl space-y-4 md:space-y-5">
-  <%# ── Box: character identity ──────────────────────────────────────────── %>
-  <%= render "shared/char_bar",
-        name:    @character.name,
-        race:    @character.race.name,
-        level:   @character.server_level_cap,
-        class:   "md:max-w-none" %>
+  <%# ── Box: character identity + edit modal (task 020, spec 05 R3/R4) ───── %>
+  <div data-controller="dialog">
+    <%= render "shared/char_bar",
+          name:     @character.name,
+          race:     @character.race.name,
+          level:    @character.server_level_cap,
+          editable: true,
+          class:    "md:max-w-none" %>
+    <%= render "shared/edit_character", character: @character %>
+  </div>
 
   <%# ── Box: skills ──────────────────────────────────────────────────────── %>
   <section class="rounded-panel border border-line bg-card p-4 space-y-4">

@@ -2,26 +2,38 @@
   shared/char_bar — character identity bar: crest avatar, name, race, level cap
   -----------------------------------------------------------------------
   locals:
-    name:    String          required; character name (rendered in brass)
-    race:    String          required; race label (e.g. "Chinese"); also picks
-                             the crest icon (china.png / europe.png)
-    level:   Integer/String  required; level cap value
-    class:   String          optional; extra utility classes (e.g. responsive
-                             width overrides). Appended to the .char-bar element.
+    name:     String          required; character name (rendered in brass)
+    race:     String          required; race label (e.g. "Chinese"); also picks
+                              the crest icon (china.png / europe.png)
+    level:    Integer/String  required; level cap value
+    class:    String          optional; extra utility classes (e.g. responsive
+                              width overrides). Appended to the .char-bar element.
+    editable: Boolean         optional; renders a hover-revealed pencil next to
+                              the name that opens a dialog (data-action
+                              "dialog#open" — the caller must wrap this partial
+                              and the target dialog in one dialog controller).
   Usage:
     render "shared/char_bar", name: "BuckTBC", race: "Chinese", level: 110
 %>
 <%
-  name  = local_assigns.fetch(:name)
-  race  = local_assigns.fetch(:race)
-  level = local_assigns.fetch(:level)
-  extra = local_assigns[:class]
+  name     = local_assigns.fetch(:name)
+  race     = local_assigns.fetch(:race)
+  level    = local_assigns.fetch(:level)
+  extra    = local_assigns[:class]
+  editable = local_assigns.fetch(:editable, false)
 %>
 <div class="<%= class_names("char-bar", extra) %>">
   <div class="char-bar-id">
     <div class="char-avatar"><%= race_icon_tag(race) %></div>
     <div>
-      <div class="char-bar-name"><%= name %></div>
+      <div class="flex items-center gap-2">
+        <div class="char-bar-name"><%= name %></div>
+        <% if editable %>
+          <button type="button" class="icon-btn char-bar-edit"
+                  data-action="dialog#open"
+                  aria-label="<%= t(".edit") %>">✎</button>
+        <% end %>
+      </div>
       <div class="char-bar-race"><%= race %></div>
     </div>
   </div>

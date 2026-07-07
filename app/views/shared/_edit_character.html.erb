@@ -1,0 +1,57 @@
+<%#
+  shared/edit_character — "Edit character" modal: name input + cap picker.
+  Same layout as shared/create_character minus the race selector (race switch
+  is destructive — spec 05 R5 — and lives outside this modal). No trigger
+  button here: the caller supplies one inside the same dialog controller
+  scope (e.g. the char-bar hover pencil).
+  -----------------------------------------------------------------------
+  locals:
+    character: Character  required; provides current name/cap and the PATCH URL
+  Usage (inside a data-controller="dialog" element with an open trigger):
+    render "shared/edit_character", character: @character
+%>
+<% character = local_assigns.fetch(:character) %>
+
+<dialog
+  class="modal"
+  data-dialog-target="dialog"
+  data-action="click->dialog#backdropClose"
+>
+  <header class="overlay-head">
+    <span><%= t(".title") %></span>
+    <button type="button" class="icon-btn" data-action="dialog#close" aria-label="<%= t("shared.close") %>">×</button>
+  </header>
+
+  <div class="overlay-body flex flex-col gap-5">
+    <%= form_with url: character_path(character), method: :patch, class: "flex flex-col gap-5" do |f| %>
+      <div>
+        <p class="text-[10px] font-bold uppercase tracking-widest text-text-mute mb-2"><%= t(".name_label") %></p>
+        <%= text_field_tag "character[name]", character.name,
+              placeholder: t(".name_placeholder"),
+              class: "w-full rounded-field border border-line bg-card px-3 py-2 text-sm text-text outline-none focus:ring-1 focus:ring-brass",
+              required: true,
+              autocomplete: "off" %>
+      </div>
+
+      <div>
+        <p class="text-[10px] font-bold uppercase tracking-widest text-text-mute mb-2"><%= t(".cap_label") %></p>
+        <div class="flex gap-2">
+          <% Character::SERVER_LEVEL_CAPS.each do |cap| %>
+            <label class="flex-1 cursor-pointer">
+              <input type="radio" name="character[server_level_cap]"
+                     value="<%= cap %>"
+                     class="sr-only"
+                     <% if cap == character.server_level_cap %>checked<% end %>>
+              <div class="cap-btn">
+                <span class="cap-num"><%= cap %></span>
+                <span class="cap-label"><%= t(".cap_#{cap}") %></span>
+              </div>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary w-full"><%= t(".submit") %></button>
+    <% end %>
+  </div>
+</dialog>
