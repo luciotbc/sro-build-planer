@@ -484,6 +484,17 @@
     font-weight: 600;
     color: var(--color-text);
   }
+  /* Modal-trigger title (task 014): highlight when hovering the title
+     itself or anywhere on its row. Scoped to <button> so rows without
+     skill data (plain <span> title) stay inert. */
+  button.fs-skill-name {
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+  .fs-skill-row:hover button.fs-skill-name,
+  button.fs-skill-name:hover {
+    color: var(--color-brass-hi);
+  }
   .fs-skill-level {
     display: flex;
     align-items: center;

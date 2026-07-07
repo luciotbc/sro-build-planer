@@ -1,0 +1,76 @@
+<%#
+  skills/skill_series_detail_modal — read-only detail dialog for a SkillSeries
+  -----------------------------------------------------------------------
+  Same centered-modal pattern as skills/skill_detail_modal. SkillSeries has
+  no description column, so the body is icon + contained skill groups.
+  locals:
+    skill_series: SkillSeries required
+    trigger:      String optional; pre-captured HTML for the open trigger.
+    trigger_label: String optional; default t(".details")
+%>
+<%
+  skill_series  = local_assigns.fetch(:skill_series)
+  trigger       = local_assigns[:trigger]
+  trigger_label = local_assigns.fetch(:trigger_label, t(".details"))
+
+  groups = skill_series.skill_groups.order(:col_position)
+%>
+<div class="contents" data-controller="dialog">
+  <% if trigger %>
+    <%= trigger %>
+  <% else %>
+    <button type="button" class="btn-ghost" data-action="dialog#open">
+      <%= trigger_label %>
+    </button>
+  <% end %>
+  <dialog
+    class="modal max-w-[440px]"
+    data-dialog-target="dialog"
+    data-action="click->dialog#backdropClose"
+  >
+    <header class="overlay-head">
+      <span><%= skill_series.title %></span>
+      <button type="button" class="icon-btn" data-action="dialog#close" aria-label="<%= t(".close") %>">×</button>
+    </header>
+
+    <div class="overlay-body">
+      <% if skill_series.icon_path.present? %>
+        <div>
+          <span class="fs-skill-icon !cursor-default">
+            <%= game_icon_tag skill_series.icon_path, alt: skill_series.title %>
+          </span>
+        </div>
+      <% end %>
+
+      <% if groups.any? %>
+        <div class="<%= "mt-4" if skill_series.icon_path.present? %>">
+        <h3 class="text-xs font-bold uppercase tracking-[2px] text-text-dim"><%= t(".contained_skills") %></h3>
+        <div class="mt-2 divide-y divide-line border-y border-line">
+          <% groups.each do |group| %>
+            <div class="flex items-center justify-between gap-4 py-2 text-sm">
+              <span class="flex min-w-0 items-center gap-3">
+                <span class="fs-skill-icon !h-8 !w-8 !cursor-default shrink-0">
+                  <%= game_icon_tag group.icon_path, alt: group.name %>
+                </span>
+                <span class="truncate text-text"><%= group.name %></span>
+              </span>
+              <% if group.max_skill_level %>
+                <span class="tnum shrink-0 font-semibold text-text">
+                  <%= t(".levels", count: group.max_skill_level) %>
+                </span>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+        </div>
+      <% end %>
+
+      <%= render "shared/button",
+            label: t(".close"),
+            attrs: {
+              class: "mt-4 w-full",
+              "data-action": "dialog#close"
+            } %>
+    </div>
+  </dialog>
+</div>

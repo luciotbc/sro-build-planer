@@ -192,6 +192,25 @@ en:
       skill_points: Skill points
     toast:
       dismiss: Dismiss
+  skills:
+    skill_detail_modal:
+      close: Close
+      details: Details
+      level: Level
+      lv: Lv %{level}
+      max_level: Max level
+      na: N/A
+      required_mastery: Required Mastery
+      required_skill: Skill
+      required_skills: Required Skills
+      sp_cost_next: SP cost (next level)
+    skill_series_detail_modal:
+      close: Close
+      contained_skills: Skills in this series
+      details: Details
+      levels:
+        one: 1 level
+        other: "%{count} levels"
   users_mailer:
     email_confirmation:
       button: Confirm my email

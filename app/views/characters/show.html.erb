@@ -93,9 +93,24 @@
                 <div class="flex flex-wrap gap-x-3 gap-y-2">
                   <% group[:skills].each do |entry| %>
                     <div class="flex flex-col items-center gap-1">
-                      <span class="fs-skill-icon !cursor-default" aria-hidden="true">
-                        <%= game_icon_tag entry[:skill_group].icon_path, alt: entry[:skill_group].name %>
-                      </span>
+                      <%# Icon opens the read-only skill detail modal (task 014),
+                          showing the current-level variant (level 1 fallback). %>
+                      <% skill = entry[:skill_group].skill_at_level(entry[:current_level]) ||
+                           entry[:skill_group].skills.order(:skill_level).first %>
+                      <% if skill %>
+                        <% trigger = capture do %>
+                          <button type="button" class="fs-skill-icon"
+                                  data-action="dialog#open"
+                                  aria-label="<%= entry[:skill_group].name %>">
+                            <%= game_icon_tag entry[:skill_group].icon_path, alt: entry[:skill_group].name %>
+                          </button>
+                        <% end %>
+                        <%= render "skills/skill_detail_modal", skill: skill, trigger: trigger %>
+                      <% else %>
+                        <span class="fs-skill-icon !cursor-default" aria-hidden="true">
+                          <%= game_icon_tag entry[:skill_group].icon_path, alt: entry[:skill_group].name %>
+                        </span>
+                      <% end %>
                       <span class="tnum text-xs flex items-center gap-px">
                         <span class="text-text-dim" data-skill-current="<%= entry[:current_level] %>"><%= entry[:current_level] %></span>
                         <span class="text-text-mute mx-px">→</span>

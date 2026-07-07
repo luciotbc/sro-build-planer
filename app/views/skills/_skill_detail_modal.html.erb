@@ -1,0 +1,127 @@
+<%#
+  skills/skill_detail_modal — read-only detail dialog for one Skill level
+  -----------------------------------------------------------------------
+  Centered modal (dialog controller, `.overlay-head` pattern, 440px max).
+  Detail rows render only when the attribute has a value; the row list is
+  data-driven so future attributes (MP cost, cooldown, stack…) slot in
+  without redesign.
+  locals:
+    skill:   Skill  required; the level variant to display
+    trigger: String optional; pre-captured HTML for the open trigger.
+             Falls back to a ghost button labelled `trigger_label`.
+    trigger_label: String optional; default t(".details")
+  Usage:
+    render "skills/skill_detail_modal", skill: skill,
+           trigger: capture { <your clickable icon/name> }
+%>
+<%
+  skill         = local_assigns.fetch(:skill)
+  trigger       = local_assigns[:trigger]
+  trigger_label = local_assigns.fetch(:trigger_label, t(".details"))
+
+  group      = skill.skill_group
+  next_skill = group.skills.find_by(skill_level: skill.skill_level + 1)
+  at_max     = group.max_skill_level && skill.skill_level >= group.max_skill_level
+
+  # [label, value] pairs; blank values drop the row (conditional rendering).
+  detail_rows = [
+    [
+      t(".required_mastery"),
+      (t(".lv", level: skill.mastery_level_req) if skill.mastery_level_req)
+    ],
+    [
+      t(".sp_cost_next"),
+      if next_skill&.sp_cost
+        number_with_delimiter(next_skill.sp_cost)
+      elsif at_max || skill.sp_cost
+        t(".na")
+      end
+    ]
+  ].select { |_, value| value.present? }
+
+  requirements = group.skill_group_requirements.includes(:required_group)
+%>
+<div class="contents" data-controller="dialog">
+  <% if trigger %>
+    <%= trigger %>
+  <% else %>
+    <button type="button" class="btn-ghost" data-action="dialog#open">
+      <%= trigger_label %>
+    </button>
+  <% end %>
+  <dialog
+    class="modal max-w-[440px]"
+    data-dialog-target="dialog"
+    data-action="click->dialog#backdropClose"
+  >
+    <header class="overlay-head">
+      <span><%= group.name %></span>
+      <button type="button" class="icon-btn" data-action="dialog#close" aria-label="<%= t(".close") %>">×</button>
+    </header>
+
+    <div class="overlay-body">
+      <div class="flex items-center gap-4">
+        <span class="fs-skill-icon !cursor-default shrink-0">
+          <%= game_icon_tag group.icon_path, alt: group.name %>
+        </span>
+        <span class="text-sm text-text-dim">
+          <%= t(".level") %>
+          <span class="tnum font-semibold text-brass"><%= skill.skill_level %></span>
+          <% if group.max_skill_level %>
+            <span class="text-text-mute">/ <%= group.max_skill_level %></span>
+          <% end %>
+        </span>
+      </div>
+
+    <% if detail_rows.any? %>
+      <div class="mt-4 divide-y divide-line border-y border-line">
+        <% detail_rows.each do |label, value| %>
+          <div class="flex items-center justify-between gap-4 py-2 text-sm">
+            <span class="text-text-dim"><%= label %></span>
+            <span class="tnum font-semibold text-text"><%= value %></span>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if requirements.any? %>
+      <div class="mt-4">
+        <h3 class="text-xs font-bold uppercase tracking-[2px] text-text-dim"><%= t(".required_skills") %></h3>
+        <table class="mt-2 w-full text-sm">
+          <thead>
+            <tr class="text-left text-xs uppercase tracking-wider text-text-mute">
+              <th class="py-1 font-semibold" colspan="2"><%= t(".required_skill") %></th>
+              <th class="py-1 text-right font-semibold"><%= t(".max_level") %></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-line">
+            <% requirements.each do |requirement| %>
+              <% required = requirement.required_group %>
+              <tr>
+                <td class="w-10 py-2">
+                  <span class="fs-skill-icon !h-8 !w-8 !cursor-default">
+                    <%= game_icon_tag required.icon_path, alt: required.name %>
+                  </span>
+                </td>
+                <td class="py-2 text-text"><%= required.name %></td>
+                <td class="tnum py-2 text-right font-semibold text-text"><%= required.max_skill_level %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+
+      <% if group.description.present? %>
+        <p class="mt-4 text-sm leading-relaxed text-text-dim"><%= group.description %></p>
+      <% end %>
+
+      <%= render "shared/button",
+            label: t(".close"),
+            attrs: {
+              class: "mt-4 w-full",
+              "data-action": "dialog#close"
+            } %>
+    </div>
+  </dialog>
+</div>

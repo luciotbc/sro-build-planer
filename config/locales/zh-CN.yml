@@ -182,6 +182,24 @@ zh-CN:
       skill_points: Skill Point
     toast:
       dismiss: 关闭
+  skills:
+    skill_detail_modal:
+      close: 关闭
+      details: 详情
+      level: Level
+      lv: Lv %{level}
+      max_level: 最高 Level
+      na: 无
+      required_mastery: 所需 Mastery
+      required_skill: Skill
+      required_skills: 所需 Skills
+      sp_cost_next: SP 消耗（下一 level）
+    skill_series_detail_modal:
+      close: 关闭
+      contained_skills: 此系列的 Skills
+      details: 详情
+      levels:
+        other: "%{count} 个 levels"
   users_mailer:
     email_confirmation:
       button: 验证我的邮箱

@@ -17,15 +17,15 @@ The user clicks/hovers a skill (or a series header) → the panel shows details 
 - Code: `app/models/skill.rb`, `skill_group_requirement.rb`, `skill_series.rb`, `_sheet.html.erb`.
 
 ## Implementation scope
-- **Frontend**: `shared/_skill_info_panel` and `shared/_series_info_panel` (overlay via `_sheet` or popover); skill/series data.
-- **Backend**: load skill by level (`skill_at_level`) + requirements.
-- **States**: skill with no requirements (basic); loading; empty.
+- **Frontend**: `app/views/skills/_skill_detail_modal.html.erb` and `_skill_series_detail_modal.html.erb` — centered modal (440px, `.overlay-head`, `dialog` controller) instead of `_sheet`, per the approved mockup (`skills_editor.html`).
+- **Backend**: load skill by level (`skill_at_level`, level-1 fallback) + requirements; done inline in trigger views (presentational partials, no controller logic).
+- **States**: skill with no requirements (basic, rows omitted); no skill data (icon stays non-interactive); SP cost "N/A" at max level.
 
 ## Acceptance criteria
-- [ ] Skill panel shows the correct sp/mp cost, mastery_level_req, prerequisites.
-- [ ] Series panel shows the series summary.
-- [ ] Opens/closes accessibly (Esc/backdrop); faithful to the DS.
-- [ ] `PARALLEL_WORKERS=1 bin/rails test` green; console clean.
+- [x] Skill panel shows the correct next-level sp_cost, mastery_level_req, prerequisites (mp_cost slot-ready via data-driven rows).
+- [x] Series panel shows the series summary.
+- [x] Opens/closes accessibly (Esc/backdrop via `dialog` controller); faithful to the DS; live demo on `/docs/design_system`.
+- [x] `PARALLEL_WORKERS=1 bin/rails test` green; console clean.
 
 ## Testing strategy (TDD)
 - Integration/system: panel shows the selected skill's costs/reqs; series lists its groups; basic group with no reqs.

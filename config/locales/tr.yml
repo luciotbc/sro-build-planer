@@ -193,6 +193,25 @@ tr:
       skill_points: Skill point
     toast:
       dismiss: Kapat
+  skills:
+    skill_detail_modal:
+      close: Kapat
+      details: Detaylar
+      level: Level
+      lv: Lv %{level}
+      max_level: Maks. level
+      na: Yok
+      required_mastery: Gerekli Mastery
+      required_skill: Skill
+      required_skills: Gerekli Skills
+      sp_cost_next: SP maliyeti (sonraki level)
+    skill_series_detail_modal:
+      close: Kapat
+      contained_skills: Bu serideki Skills
+      details: Detaylar
+      levels:
+        one: 1 level
+        other: "%{count} level"
   users_mailer:
     email_confirmation:
       button: E-postamı onayla
