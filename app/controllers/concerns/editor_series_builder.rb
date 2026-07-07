@@ -24,8 +24,15 @@ module EditorSeriesBuilder
               cap: sg.effective_cap(character.server_level_cap)
             }
           end
+        # Spec 04 R5: hide groups unreachable under the server cap, unless
+        # the character already holds an allocation in them.
+        skills.select! do |e|
+          e[:cap].positive? || e[:current_level].positive? ||
+            e[:target_level].positive?
+        end
         { series: series, skills: skills }
       end
+      .reject { |group| group[:skills].empty? }
   end
 
   def build_editor_series_groups(character, mastery, side)
@@ -51,7 +58,11 @@ module EditorSeriesBuilder
             cap = sg.effective_cap(character.server_level_cap)
             { skill_group: sg, level: level, cap: cap }
           end
+        # Spec 04 R5: hide groups unreachable under the server cap, unless
+        # allocated on the side being edited.
+        skills.select! { |e| e[:cap].positive? || e[:level].positive? }
         { series: series, skills: skills }
       end
+      .reject { |group| group[:skills].empty? }
   end
 end
