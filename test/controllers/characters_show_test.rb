@@ -100,4 +100,77 @@ class CharactersShowTest < ActionDispatch::IntegrationTest
     get character_path(@char)
     assert_match "Spear", response.body
   end
+
+  # ---- out-of-cap groups hidden (spec 04 R5) -------------------------------
+
+  describe "server-cap filtering" do
+    it "hides a skill group whose lowest level requires mastery above the cap" do
+      out =
+        create(
+          :skill_group,
+          mastery: @mastery,
+          skill_series: @series,
+          name: "Beyond Cap"
+        )
+      create(
+        :skill,
+        skill_group: out,
+        skill_level: 1,
+        mastery_level_req: @char.server_level_cap + 1
+      )
+      get character_path(@char)
+      assert_response :success
+      refute_match "Beyond Cap", response.body
+    end
+
+    it "hides a series whose groups are all out of cap" do
+      empty_series =
+        create(
+          :skill_series,
+          mastery: @mastery,
+          row_position: 2,
+          title: "Ghost Series"
+        )
+      out =
+        create(
+          :skill_group,
+          mastery: @mastery,
+          skill_series: empty_series,
+          name: "Beyond Cap"
+        )
+      create(
+        :skill,
+        skill_group: out,
+        skill_level: 1,
+        mastery_level_req: @char.server_level_cap + 1
+      )
+      get character_path(@char)
+      refute_match "Ghost Series", response.body
+    end
+
+    it "still shows an out-of-cap group the character has allocated" do
+      out =
+        create(
+          :skill_group,
+          mastery: @mastery,
+          skill_series: @series,
+          name: "Beyond Cap"
+        )
+      create(
+        :skill,
+        skill_group: out,
+        skill_level: 1,
+        mastery_level_req: @char.server_level_cap + 1
+      )
+      create(
+        :character_skill,
+        character: @char,
+        skill_group: out,
+        current_skill_level: 1,
+        target_skill_level: 1
+      )
+      get character_path(@char)
+      assert_match "Beyond Cap", response.body
+    end
+  end
 end
