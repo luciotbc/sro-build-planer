@@ -1,4 +1,4 @@
-# 018 — Single-step Undo for bulk actions
+# 019 — Single-step Undo for bulk actions
 
 ## Execution order
 Depends on: 012 (bulk actions backend — Max skills, Max mastery, Clear all)
