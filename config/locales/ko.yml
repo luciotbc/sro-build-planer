@@ -22,6 +22,7 @@ ko:
       no_series: 이 Mastery에는 Skill 시리즈가 없습니다.
       planning_badge: "● 플래닝"
       toggle_series: "%{title} 접기/펼치기"
+      undo: 실행 취소
     show:
       current: 현재
       delete: 캐릭터 삭제

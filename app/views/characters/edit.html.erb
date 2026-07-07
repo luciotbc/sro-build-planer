@@ -78,7 +78,12 @@
         skills_allocated = @series_groups.sum { |g| g[:skills].sum { |e| e[:level] } }
         skills_total     = @series_groups.sum { |g| g[:skills].sum { |e| e[:cap] } }
       %>
-      <turbo-frame id="skill-window" class="block space-y-4">
+      <%# skill-editor lives on the frame so its bulk-action snapshot survives
+          the Turbo Stream refresh; frame navigation (mastery switch) drops it
+          via turbo:frame-load (spec 06 R7 — scoped to the active mastery). %>
+      <turbo-frame id="skill-window" class="block space-y-4"
+                   data-controller="skill-editor"
+                   data-action="turbo:frame-load->skill-editor#clearSnapshot">
         <%= render "shared/mastery_header",
               character: @character,
               mastery: @active_mastery,
@@ -89,8 +94,8 @@
         <% if @series_groups.empty? %>
           <p class="text-sm text-text-dim"><%= t(".no_series") %></p>
         <% else %>
-        <%# Bulk actions (spec 06 R4/R5/R6). Undo (R7) is task 012 / not built;
-            the hold-to-max hint is omitted until that interaction exists. %>
+        <%# Bulk actions (spec 06 R4/R5/R6) + single-step Undo (R7, task 019).
+            The hold-to-max hint is omitted until that interaction exists. %>
         <%#
           Bulk actions: full-width 3-up grid on mobile; on desktop the buttons
           shrink to fit their label and left-align in a row, per the mockup.
@@ -100,22 +105,28 @@
             "w-full md:w-auto rounded-field border border-line bg-card px-3 md:px-5 py-4 " \
               "text-sm font-bold text-text hover:bg-card-hi transition-colors"
         %>
-        <div class="grid grid-cols-3 gap-2 md:flex md:flex-wrap">
-          <%= form_with url: max_mastery_character_path(@character), data: { turbo: true }, html: { class: "contents" } do |f| %>
+        <div class="grid grid-cols-2 gap-2 md:flex md:flex-wrap">
+          <%= form_with url: max_mastery_character_path(@character), data: { turbo: true, action: "submit->skill-editor#beforeBulk" }, html: { class: "contents" } do |f| %>
             <%= f.hidden_field :side, value: @side %>
             <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
             <%= f.button t(".max_mastery"), type: :submit, class: action_btn %>
           <% end %>
-          <%= form_with url: max_skills_character_path(@character), data: { turbo: true }, html: { class: "contents" } do |f| %>
+          <%= form_with url: max_skills_character_path(@character), data: { turbo: true, action: "submit->skill-editor#beforeBulk" }, html: { class: "contents" } do |f| %>
             <%= f.hidden_field :side, value: @side %>
             <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
             <%= f.button t(".max_skills"), type: :submit, class: action_btn %>
           <% end %>
-          <%= form_with url: clear_mastery_character_path(@character), data: { turbo: true }, html: { class: "contents" } do |f| %>
+          <%= form_with url: clear_mastery_character_path(@character), data: { turbo: true, action: "submit->skill-editor#beforeBulk" }, html: { class: "contents" } do |f| %>
             <%= f.hidden_field :side, value: @side %>
             <%= f.hidden_field :mastery_id, value: @active_mastery.id %>
             <%= f.button t(".clear_all"), type: :submit, class: "#{action_btn} !text-red" %>
           <% end %>
+          <button type="button" disabled
+                  class="<%= action_btn %> disabled:opacity-40 disabled:pointer-events-none"
+                  data-skill-editor-target="undo"
+                  data-action="skill-editor#restore">
+            <%= t(".undo") %>
+          </button>
         </div>
         <div class="flex flex-col gap-3">
           <% @series_groups.each do |group| %>
