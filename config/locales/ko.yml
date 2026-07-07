@@ -1,5 +1,9 @@
 ---
 ko:
+  activerecord:
+    attributes:
+      character:
+        name: 이름
   app:
     name: SRO Lab
   auth:
@@ -44,6 +48,8 @@ ko:
       confirmed: 이메일 인증 완료. SRO Labs에 오신 것을 환영합니다!
       invalid_token: 이 인증 링크는 유효하지 않거나 만료되었습니다.
   errors:
+    server_level_cap:
+      masteries_exceed: '서버 Level Cap을 낮출 수 없습니다: masteries가 새 cap을 초과합니다: %{mastery_names}'
     skill_level:
       above_max: "%{attr}은(는) %{max} 이하여야 합니다"
       below_zero: "%{attr}은(는) 0 이상이어야 합니다"
@@ -150,6 +156,7 @@ ko:
       title: 로그인
   shared:
     char_bar:
+      edit: 캐릭터 편집
       level_cap: Level Cap
     chars_drawer:
       active: 활성
@@ -174,6 +181,17 @@ ko:
       submit: Build 시작
       title: 새 캐릭터
       trigger: 새 캐릭터
+    edit_character:
+      cap_100: LEGACY
+      cap_110: STANDARD
+      cap_120: HIGH
+      cap_130: EXTREME
+      cap_90: CLASSIC
+      cap_label: 서버 Level Cap
+      name_label: 캐릭터 이름
+      name_placeholder: 캐릭터 이름 입력
+      submit: 저장
+      title: 캐릭터 편집
     log_out: 로그아웃
     mastery_header:
       decrease: Mastery Level 낮추기

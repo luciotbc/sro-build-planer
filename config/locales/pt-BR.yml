@@ -1,5 +1,9 @@
 ---
 pt-BR:
+  activerecord:
+    attributes:
+      character:
+        name: Nome
   app:
     name: SRO Lab
   auth:
@@ -45,6 +49,9 @@ pt-BR:
       confirmed: Email confirmado. Boas-vindas ao SRO Labs!
       invalid_token: Esse link de confirmação é inválido ou expirou.
   errors:
+    server_level_cap:
+      masteries_exceed: 'Não é possível baixar o Level Cap do servidor: masteries
+        excedem o novo cap: %{mastery_names}'
     skill_level:
       above_max: "%{attr} deve ser <= %{max}"
       below_zero: "%{attr} deve ser >= 0"
@@ -155,6 +162,7 @@ pt-BR:
       title: Entrar
   shared:
     char_bar:
+      edit: Editar personagem
       level_cap: Level Cap
     chars_drawer:
       active: ATIVO
@@ -179,6 +187,17 @@ pt-BR:
       submit: Começar Build
       title: Novo personagem
       trigger: Novo personagem
+    edit_character:
+      cap_100: LEGACY
+      cap_110: STANDARD
+      cap_120: HIGH
+      cap_130: EXTREME
+      cap_90: CLASSIC
+      cap_label: Level Cap do servidor
+      name_label: Nome do personagem
+      name_placeholder: Digite o nome do personagem
+      submit: Salvar
+      title: Editar personagem
     log_out: Sair
     mastery_header:
       decrease: Diminuir level da mastery

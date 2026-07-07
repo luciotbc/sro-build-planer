@@ -89,8 +89,11 @@ class CharactersController < ApplicationController
     if result.success?
       redirect_to @character, notice: t(".updated")
     else
-      @character.errors.add(:base, result.errors.join(", "))
-      render :edit, status: :unprocessable_entity
+      # :edit is the skill-editor screen, not a character form — failures from
+      # the edit-character modal go back to the planner (spec 05 R4: no clamp).
+      redirect_to @character,
+                  alert: result.errors.join(", "),
+                  status: :see_other
     end
   end
 

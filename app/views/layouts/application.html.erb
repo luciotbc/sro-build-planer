@@ -38,6 +38,9 @@
     <main class="mx-auto max-w-7xl px-4 py-8 md:px-8">
       <%= yield %>
     </main>
-    <div id="toast-container"></div>
+    <div id="toast-container">
+      <%= render "shared/toast", message: flash[:alert], variant: "warning" if flash[:alert] %>
+      <%= render "shared/toast", message: flash[:notice], variant: "success" if flash[:notice] %>
+    </div>
   </body>
 </html>

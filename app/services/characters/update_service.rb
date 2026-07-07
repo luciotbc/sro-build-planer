@@ -48,7 +48,7 @@ module Characters
       return [] if incompatible.empty?
 
       names = incompatible.map { |cm| cm.mastery.name }.join(", ")
-      ["Cannot lower server level cap: masteries exceed new cap: #{names}"]
+      [I18n.t("errors.server_level_cap.masteries_exceed", mastery_names: names)]
     end
 
     def persist!(race_changing)

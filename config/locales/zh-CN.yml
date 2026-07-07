@@ -1,5 +1,9 @@
 ---
 zh-CN:
+  activerecord:
+    attributes:
+      character:
+        name: 名称
   app:
     name: SRO Lab
   auth:
@@ -44,6 +48,8 @@ zh-CN:
       confirmed: 邮箱验证成功。欢迎来到 SRO Labs！
       invalid_token: 该验证链接无效或已过期。
   errors:
+    server_level_cap:
+      masteries_exceed: 无法降低服务器 Level 上限：masteries 超过新上限：%{mastery_names}
     skill_level:
       above_max: "%{attr} 必须 <= %{max}"
       below_zero: "%{attr} 必须 >= 0"
@@ -145,6 +151,7 @@ zh-CN:
       title: 登录
   shared:
     char_bar:
+      edit: 编辑角色
       level_cap: Level 上限
     chars_drawer:
       active: 当前
@@ -169,6 +176,17 @@ zh-CN:
       submit: 开始 Build
       title: 新建角色
       trigger: 新建角色
+    edit_character:
+      cap_100: LEGACY
+      cap_110: STANDARD
+      cap_120: HIGH
+      cap_130: EXTREME
+      cap_90: CLASSIC
+      cap_label: 服务器 Level 上限
+      name_label: 角色名称
+      name_placeholder: 输入角色名称
+      submit: 保存
+      title: 编辑角色
     log_out: 退出登录
     mastery_header:
       decrease: 降低 Mastery 等级
