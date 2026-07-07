@@ -23,10 +23,11 @@
   data-stepper-url-value="<%= character_character_skill_path(character, skill_group) %>"
   data-stepper-side-value="<%= side %>"
 >
-  <%# Icon opens the read-only skill detail modal (task 014). Shows the
-      current-level variant, falling back to level 1 when nothing is
-      allocated yet. When the group has no skill data the frame stays
-      non-interactive. %>
+  <%# Icon and skill name open the read-only skill detail modal (task 014).
+      Shows the current-level variant, falling back to level 1 when nothing
+      is allocated yet. When the group has no skill data both stay
+      non-interactive. The stepper output target keeps working inside the
+      dialog scope (different controller identifier). %>
   <% skill = skill_group.skill_at_level(level) ||
        skill_group.skills.order(:skill_level).first %>
   <% if skill %>
@@ -36,20 +37,28 @@
               aria-label="<%= skill_group.name %>">
         <%= game_icon_tag skill_group.icon_path, alt: skill_group.name %>
       </button>
+      <div class="fs-skill-meta">
+        <button type="button" class="fs-skill-name text-left"
+                data-action="dialog#open"><%= skill_group.name %></button>
+        <span class="fs-skill-level">
+          <span class="fs-level-num" data-stepper-target="output"><%= level %></span>
+          <span class="text-text-mute"> / <%= cap %></span>
+        </span>
+      </div>
     <% end %>
     <%= render "skills/skill_detail_modal", skill: skill, trigger: trigger %>
   <% else %>
     <span class="fs-skill-icon shrink-0 !cursor-default">
       <%= game_icon_tag skill_group.icon_path, alt: skill_group.name %>
     </span>
+    <div class="fs-skill-meta">
+      <span class="fs-skill-name"><%= skill_group.name %></span>
+      <span class="fs-skill-level">
+        <span class="fs-level-num" data-stepper-target="output"><%= level %></span>
+        <span class="text-text-mute"> / <%= cap %></span>
+      </span>
+    </div>
   <% end %>
-  <div class="fs-skill-meta">
-    <span class="fs-skill-name"><%= skill_group.name %></span>
-    <span class="fs-skill-level">
-      <span class="fs-level-num" data-stepper-target="output"><%= level %></span>
-      <span class="text-text-mute"> / <%= cap %></span>
-    </span>
-  </div>
   <div class="fs-skill-controls">
     <button type="button" class="fs-step-btn"
             data-action="stepper#decrement">−</button>

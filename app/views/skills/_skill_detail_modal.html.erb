@@ -115,6 +115,13 @@
       <% if group.description.present? %>
         <p class="mt-4 text-sm leading-relaxed text-text-dim"><%= group.description %></p>
       <% end %>
+
+      <%= render "shared/button",
+            label: t(".close"),
+            attrs: {
+              class: "mt-4 w-full",
+              "data-action": "dialog#close"
+            } %>
     </div>
   </dialog>
 </div>
