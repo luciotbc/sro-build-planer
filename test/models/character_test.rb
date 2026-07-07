@@ -198,4 +198,24 @@ class CharacterTest < ActiveSupport::TestCase
     assert_equal 0, character.reload.current_level
     assert_equal 0, character.reload.target_level
   end
+
+  # ---------- share token -----------------------------------------------------
+
+  it "generates a UUID share_token on create" do
+    character = create(:character, race:, user:)
+    assert_match(/\A\h{8}-\h{4}-\h{4}-\h{4}-\h{12}\z/, character.share_token)
+  end
+
+  it "keeps the share_token stable across updates" do
+    character = create(:character, race:, user:)
+    token = character.share_token
+    character.update!(name: "Renamed")
+    assert_equal token, character.reload.share_token
+  end
+
+  it "gives each character a distinct share_token" do
+    a = create(:character, race:, user:)
+    b = create(:character, race:, user:)
+    refute_equal a.share_token, b.share_token
+  end
 end
