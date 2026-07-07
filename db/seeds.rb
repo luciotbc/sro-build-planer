@@ -36,6 +36,13 @@ masteries.each do |_fixture_name, attrs|
     end
 end
 
+# Full skill-tree import (masteries, series, groups, skills, requirements,
+# level data) from the raw game XML exports. The importer is idempotent.
+unless defined?(Rake::Task) && Rake::Task.task_defined?("import:skills_xml")
+  Rails.application.load_tasks
+end
+Rake::Task["import:skills_xml"].invoke
+
 # Default user
 User.find_or_create_by!(email_address: "user@mail.com") do |user|
   user.password = "Password1!"

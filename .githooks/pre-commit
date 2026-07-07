@@ -16,6 +16,20 @@ if [ -n "$files" ]; then
   bin/rubocop $files
 fi
 
+# Optimize staged PNGs losslessly with oxipng (idempotent). Lossy pngquant is
+# a one-time manual step at asset-import time, never automated here.
+pngs=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.png$' || true)
+
+if [ -n "$pngs" ]; then
+  if command -v oxipng > /dev/null; then
+    echo "oxipng: optimizing staged PNG files..."
+    echo "$pngs" | tr '\n' '\0' | xargs -0 oxipng -o 4 --strip safe --quiet
+    echo "$pngs" | tr '\n' '\0' | xargs -0 git add
+  else
+    echo "oxipng not found; skipping PNG optimization (brew install oxipng)" >&2
+  fi
+fi
+
 # Regenerate ERD diagram when db/schema.rb is staged.
 if git diff --cached --name-only | grep -q "^db/schema\.rb$"; then
   echo "schema.rb changed: regenerating doc/diagrams/db-erd.svg..."

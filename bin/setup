@@ -15,6 +15,12 @@ FileUtils.chdir APP_ROOT do
   puts "== Installing dependencies =="
   system("bundle check") || system!("bundle install")
 
+  puts "\n== Checking external tools =="
+  unless system("command -v oxipng > /dev/null")
+    warn "oxipng not found — the pre-commit hook needs it to optimize PNGs."
+    warn "Install with: brew install oxipng"
+  end
+
   # puts "\n== Copying sample files =="
   # unless File.exist?("config/database.yml")
   #   FileUtils.cp "config/database.yml.sample", "config/database.yml"
