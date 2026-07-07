@@ -28,10 +28,12 @@ pt-BR:
       toggle_series: Alternar %{title}
       undo: Desfazer
     show:
-      current: Atual
       delete: Excluir personagem
       delete_confirm: Excluir este personagem e todos os dados da build? Essa ação
         não pode ser desfeita.
+      summary: Resumo
+    skills_panel:
+      current: Atual
       edit_current: Editar Atual
       edit_planned: Editar Planejado
       lv: LV
@@ -39,7 +41,6 @@ pt-BR:
       no_series: Nenhuma série de skills nesta mastery.
       planned: Planejado
       skills: Skills
-      summary: Resumo
     update:
       updated: Personagem atualizado.
   email_confirmations:
@@ -164,6 +165,7 @@ pt-BR:
     char_bar:
       edit: Editar personagem
       level_cap: Level Cap
+      share: Compartilhar link da build
     chars_drawer:
       active: ATIVO
       empty: Nenhum personagem ainda. Crie um para começar a planejar sua build.
@@ -212,6 +214,11 @@ pt-BR:
       skill_points: Skill Points
     toast:
       dismiss: Dispensar
+  shared_builds:
+    show:
+      copy: Copiar link
+      share_link: Link de compartilhamento
+      summary: Resumo
   skills:
     skill_detail_modal:
       close: Fechar

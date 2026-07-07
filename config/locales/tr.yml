@@ -28,10 +28,12 @@ tr:
       toggle_series: "%{title} aç/kapat"
       undo: Geri al
     show:
-      current: Mevcut
       delete: Karakteri sil
       delete_confirm: Bu karakter ve tüm build verileri silinsin mi? Bu işlem geri
         alınamaz.
+      summary: Özet
+    skills_panel:
+      current: Mevcut
       edit_current: Mevcudu düzenle
       edit_planned: Planlananı düzenle
       lv: LV
@@ -39,7 +41,6 @@ tr:
       no_series: Bu mastery'de skill serisi yok.
       planned: Planlanan
       skills: Skill'ler
-      summary: Özet
     update:
       updated: Karakter güncellendi.
   email_confirmations:
@@ -165,6 +166,7 @@ tr:
     char_bar:
       edit: Karakteri düzenle
       level_cap: Level Cap
+      share: Build linkini paylaş
     chars_drawer:
       active: AKTİF
       empty: Henüz karakter yok. Build'ini planlamaya başlamak için bir tane oluştur.
@@ -213,6 +215,11 @@ tr:
       skill_points: Skill point
     toast:
       dismiss: Kapat
+  shared_builds:
+    show:
+      copy: Linki kopyala
+      share_link: Paylaşım linki
+      summary: Özet
   skills:
     skill_detail_modal:
       close: Kapat

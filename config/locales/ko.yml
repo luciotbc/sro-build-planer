@@ -28,9 +28,11 @@ ko:
       toggle_series: "%{title} 접기/펼치기"
       undo: 실행 취소
     show:
-      current: 현재
       delete: 캐릭터 삭제
       delete_confirm: 이 캐릭터와 모든 Build 데이터를 삭제할까요? 되돌릴 수 없습니다.
+      summary: 요약
+    skills_panel:
+      current: 현재
       edit_current: 현재 편집
       edit_planned: 플랜 편집
       lv: LV
@@ -38,7 +40,6 @@ ko:
       no_series: 이 Mastery에는 Skill 시리즈가 없습니다.
       planned: 플랜
       skills: Skill
-      summary: 요약
     update:
       updated: 캐릭터가 수정되었습니다.
   email_confirmations:
@@ -158,6 +159,7 @@ ko:
     char_bar:
       edit: 캐릭터 편집
       level_cap: Level Cap
+      share: Build 링크 공유
     chars_drawer:
       active: 활성
       empty: 아직 캐릭터가 없습니다. 캐릭터를 만들어 Build 플랜을 시작하세요.
@@ -206,6 +208,11 @@ ko:
       skill_points: Skill Point
     toast:
       dismiss: 닫기
+  shared_builds:
+    show:
+      copy: 링크 복사
+      share_link: 공유 링크
+      summary: 요약
   skills:
     skill_detail_modal:
       close: 닫기

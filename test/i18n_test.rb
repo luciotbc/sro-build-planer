@@ -117,15 +117,19 @@ describe "i18n backend keys" do
 
   CHARACTER_VIEW_KEYS = %w[
     app.name
-    characters.show.skills
-    characters.show.current
-    characters.show.planned
-    characters.show.lv
-    characters.show.no_series
-    characters.show.no_mastery
-    characters.show.edit_current
-    characters.show.edit_planned
+    characters.skills_panel.skills
+    characters.skills_panel.current
+    characters.skills_panel.planned
+    characters.skills_panel.lv
+    characters.skills_panel.no_series
+    characters.skills_panel.no_mastery
+    characters.skills_panel.edit_current
+    characters.skills_panel.edit_planned
     characters.show.summary
+    shared.char_bar.share
+    shared_builds.show.share_link
+    shared_builds.show.copy
+    shared_builds.show.summary
     characters.show.delete
     characters.show.delete_confirm
     characters.edit.back
