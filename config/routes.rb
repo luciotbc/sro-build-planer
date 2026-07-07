@@ -8,6 +8,9 @@ Rails.application.routes.draw do
       post :clear_mastery, to: "bulk_skill_actions#clear_mastery"
     end
   end
+  # Public, read-only shared build page (docs/todo/021, spec 05).
+  get "shared/:share_token" => "shared_builds#show", :as => :shared_build
+
   resource :session
   resources :passwords, param: :token
   resource :registration, only: %i[new create]

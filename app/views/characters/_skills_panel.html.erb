@@ -1,0 +1,165 @@
+<%#
+  characters/skills_panel — read-only SKILLS box (mastery nav + skill grid)
+  -----------------------------------------------------------------------
+  Shared by the owner planner (characters#show) and the public shared-build
+  page (shared_builds#show). Data comes from BuildViewData#load_build_view_data.
+  locals:
+    character:             Character  required
+    grouped_masteries:     Hash       required; mastery_type => [Mastery]
+    mastery_types:         Array      required; sorted type keys
+    active_mastery:        Mastery    required (may be nil)
+    current_mastery_level: Integer    required
+    target_mastery_level:  Integer    required
+    series_groups:         Array      required; build_show_series_groups result
+    tab_url:               Proc       required; ->(mastery) { url } for sub-tabs
+    editable:              Boolean    optional (default false); renders the
+                                      Edit Current / Edit Planned buttons
+  Usage:
+    render "characters/skills_panel", character: @character, ...,
+           tab_url: ->(m) { character_path(@character, mastery_id: m.id) },
+           editable: true
+%>
+<%
+  character             = local_assigns.fetch(:character)
+  grouped_masteries     = local_assigns.fetch(:grouped_masteries)
+  mastery_types         = local_assigns.fetch(:mastery_types)
+  active_mastery        = local_assigns.fetch(:active_mastery)
+  current_mastery_level = local_assigns.fetch(:current_mastery_level)
+  target_mastery_level  = local_assigns.fetch(:target_mastery_level)
+  series_groups         = local_assigns.fetch(:series_groups)
+  tab_url               = local_assigns.fetch(:tab_url)
+  editable              = local_assigns.fetch(:editable, false)
+%>
+<section class="rounded-panel border border-line bg-card p-4 space-y-4">
+  <div class="flex items-center justify-between gap-3">
+    <h2 class="text-xs font-bold uppercase tracking-[2px] text-text-dim"><%= t(".skills") %></h2>
+    <span class="text-xs">
+      <span class="text-text"><%= t(".current") %></span>
+      <span class="text-text-mute mx-1">→</span>
+      <span class="font-semibold text-brass"><%= t(".planned") %></span>
+    </span>
+  </div>
+
+  <%# Mastery navigation: type pills + per-group sub-tabs (mirrors edit, spec 07) %>
+  <% if grouped_masteries.any? %>
+    <div class="space-y-3" data-controller="mastery-tabs">
+      <%# Row 1 — mastery type pills %>
+      <div class="ro-tabs max-w-none">
+        <% mastery_types.each do |type| %>
+          <button
+            type="button"
+            class="<%= class_names("ro-tab", "on" => type == active_mastery&.mastery_type) %>"
+            data-mastery-tabs-target="typeTab"
+            data-action="mastery-tabs#selectType"
+            data-mastery-type="<%= type %>"
+          ><%= type %></button>
+        <% end %>
+      </div>
+
+      <%# Row 2 — specific mastery sub-tabs %>
+      <% mastery_types.each do |type| %>
+        <div
+          class="ro-subtabs max-w-none <%= "hidden" unless type == active_mastery&.mastery_type %>"
+          data-mastery-tabs-target="panel"
+          data-mastery-type="<%= type %>"
+        >
+          <% (grouped_masteries[type] || []).each do |mastery| %>
+            <%= link_to mastery.name,
+                  tab_url.call(mastery),
+                  class: class_names("ro-subtab", "on" => active_mastery&.id == mastery.id),
+                  "data-turbo-frame":         "skill-window",
+                  "data-mastery-id":           mastery.id,
+                  "data-mastery-tabs-target": "masteryTab",
+                  "data-action":              "mastery-tabs#selectMastery" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <turbo-frame id="skill-window" class="block space-y-4">
+    <% if active_mastery %>
+      <%# ── Read-only mastery header ──────────────────────────────────── %>
+      <div class="rounded-control border border-line bg-card-hi p-4 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="mastery-icon shrink-0" aria-hidden="true">
+            <%= game_icon_tag active_mastery.icon_path, alt: "" %>
+          </span>
+          <span class="truncate text-base font-bold text-text">
+            <%= active_mastery.name %>
+          </span>
+        </div>
+        <div class="tnum text-sm shrink-0 flex items-center gap-1">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-text-dim mr-0.5"><%= t(".lv") %></span>
+          <span class="font-bold text-text"><%= current_mastery_level %></span>
+          <span class="text-text-mute mx-0.5">→</span>
+          <span class="font-bold text-brass"><%= target_mastery_level %></span>
+          <span class="text-text-mute">/<%= character.server_level_cap %></span>
+        </div>
+      </div>
+
+      <%# ── Skill series grid (read-only) ─────────────────────────────── %>
+      <% if series_groups.empty? %>
+        <p class="text-sm text-text-dim"><%= t(".no_series") %></p>
+      <% else %>
+        <div class="flex flex-col gap-4">
+          <% series_groups.each do |group| %>
+            <div class="flex items-start gap-3">
+              <span class="series-badge shrink-0 mt-1" aria-hidden="true">
+                <%= game_icon_tag(group[:series].icon_path, alt: group[:series].title) || "✦" %>
+              </span>
+              <div class="flex flex-wrap gap-x-3 gap-y-2">
+                <% group[:skills].each do |entry| %>
+                  <div class="flex flex-col items-center gap-1">
+                    <%# Icon opens the read-only skill detail modal (task 014),
+                        showing the current-level variant (level 1 fallback). %>
+                    <% skill = entry[:skill_group].skill_at_level(entry[:current_level]) ||
+                         entry[:skill_group].skills.order(:skill_level).first %>
+                    <% if skill %>
+                      <% trigger = capture do %>
+                        <button type="button" class="fs-skill-icon"
+                                data-action="dialog#open"
+                                aria-label="<%= entry[:skill_group].name %>">
+                          <%= game_icon_tag entry[:skill_group].icon_path, alt: entry[:skill_group].name %>
+                        </button>
+                      <% end %>
+                      <%= render "skills/skill_detail_modal", skill: skill, trigger: trigger %>
+                    <% else %>
+                      <span class="fs-skill-icon !cursor-default" aria-hidden="true">
+                        <%= game_icon_tag entry[:skill_group].icon_path, alt: entry[:skill_group].name %>
+                      </span>
+                    <% end %>
+                    <span class="tnum text-xs flex items-center gap-px">
+                      <span class="text-text-dim" data-skill-current="<%= entry[:current_level] %>"><%= entry[:current_level] %></span>
+                      <span class="text-text-mute mx-px">→</span>
+                      <span class="font-semibold text-brass" data-skill-planned="<%= entry[:target_level] %>"><%= entry[:target_level] %></span>
+                    </span>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <% if editable %>
+        <%# ── Edit buttons ─────────────────────────────────────────────── %>
+        <div class="flex items-center gap-2">
+          <%# Full-page navigation to the editor: break out of the skill-window
+              frame so the edit page replaces the whole document. %>
+          <%= link_to t(".edit_current"),
+                edit_character_path(character, side: :current, mastery_id: active_mastery&.id),
+                class: "flex-1 btn-ghost",
+                data: { turbo_frame: "_top" } %>
+          <span class="text-text-mute" aria-hidden="true">→</span>
+          <%= link_to t(".edit_planned"),
+                edit_character_path(character, side: :target, mastery_id: active_mastery&.id),
+                class: "flex-1 btn-primary",
+                data: { turbo_frame: "_top" } %>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-sm text-text-dim"><%= t(".no_mastery") %></p>
+    <% end %>
+  </turbo-frame>
+</section>
