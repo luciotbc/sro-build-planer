@@ -12,6 +12,7 @@ This is a Rails 8.1 application for planning character builds in **Silkroad Onli
 # Setup
 bundle install
 git config core.hooksPath .githooks   # enable pre-commit hooks
+brew install oxipng                   # lossless PNG optimizer used by the pre-commit hook
 bin/rails db:setup                    # creates DB, loads schema, runs seeds
 
 # Development (runs Rails server + Tailwind CSS watcher)
@@ -111,7 +112,7 @@ Tests use **Minitest** with **Minitest::Spec DSL** (`describe`/`it` blocks) and 
 
 RuboCop is configured to inherit `syntax_tree` formatting rules plus `rubocop-rails-omakase`. The formatter is `syntax_tree` (not standard RuboCop auto-correct). Run `bin/rubocop -A` to auto-fix.
 
-The pre-commit hook (`.githooks/pre-commit`) automatically runs `stree write` on staged `.rb`/`.rake` files and then `bin/rubocop` — commits will fail if rubocop finds violations. Make sure hooks are installed: `git config core.hooksPath .githooks`.
+The pre-commit hook (`.githooks/pre-commit`) automatically runs `stree write` on staged `.rb`/`.rake` files and then `bin/rubocop` — commits will fail if rubocop finds violations. It also losslessly optimizes staged `.png` files with `oxipng` (skipped with a warning if oxipng is not installed). Make sure hooks are installed: `git config core.hooksPath .githooks`.
 
 ## Development Workflow
 
