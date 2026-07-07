@@ -44,6 +44,8 @@ ko:
       confirmed: 이메일 인증 완료. SRO Labs에 오신 것을 환영합니다!
       invalid_token: 이 인증 링크는 유효하지 않거나 만료되었습니다.
   errors:
+    server_level_cap:
+      masteries_exceed: '서버 Level Cap을 낮출 수 없습니다: masteries가 새 cap을 초과합니다: %{mastery_names}'
     skill_level:
       above_max: "%{attr}은(는) %{max} 이하여야 합니다"
       below_zero: "%{attr}은(는) 0 이상이어야 합니다"

@@ -44,6 +44,8 @@ zh-CN:
       confirmed: 邮箱验证成功。欢迎来到 SRO Labs！
       invalid_token: 该验证链接无效或已过期。
   errors:
+    server_level_cap:
+      masteries_exceed: 无法降低服务器 Level 上限：masteries 超过新上限：%{mastery_names}
     skill_level:
       above_max: "%{attr} 必须 <= %{max}"
       below_zero: "%{attr} 必须 >= 0"

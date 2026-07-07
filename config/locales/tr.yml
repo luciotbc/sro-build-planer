@@ -45,6 +45,9 @@ tr:
       confirmed: E-posta onaylandı. SRO Labs'e hoş geldin!
       invalid_token: Bu onay bağlantısı geçersiz veya süresi dolmuş.
   errors:
+    server_level_cap:
+      masteries_exceed: 'Sunucu Level Cap''i düşürülemez: masteries yeni cap''i aşıyor:
+        %{mastery_names}'
     skill_level:
       above_max: "%{attr} <= %{max} olmalı"
       below_zero: "%{attr} >= 0 olmalı"

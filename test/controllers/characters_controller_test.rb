@@ -104,7 +104,11 @@ class CharactersControllerTest < ActionDispatch::IntegrationTest
     original_cap = @char.server_level_cap
     patch character_path(@char), params: { character: { server_level_cap: 90 } }
     assert_redirected_to character_path(@char)
-    assert flash[:alert].present?
+    assert_equal I18n.t(
+                   "errors.server_level_cap.masteries_exceed",
+                   mastery_names: mastery.name
+                 ),
+                 flash[:alert]
     assert_equal original_cap, @char.reload.server_level_cap
     follow_redirect! while response.redirect?
     assert_select "#toast-container .toast--warning"

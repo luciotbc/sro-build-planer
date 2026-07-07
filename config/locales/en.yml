@@ -45,6 +45,9 @@ en:
       confirmed: Email confirmed. Welcome to SRO Labs!
       invalid_token: That confirmation link is invalid or has expired.
   errors:
+    server_level_cap:
+      masteries_exceed: 'Cannot lower server level cap: masteries exceed new cap:
+        %{mastery_names}'
     skill_level:
       above_max: "%{attr} must be <= %{max}"
       below_zero: "%{attr} must be >= 0"
