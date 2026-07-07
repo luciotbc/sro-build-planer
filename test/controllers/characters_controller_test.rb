@@ -106,6 +106,8 @@ class CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to character_path(@char)
     assert flash[:alert].present?
     assert_equal original_cap, @char.reload.server_level_cap
+    follow_redirect! while response.redirect?
+    assert_select "#toast-container .toast--warning"
   end
 
   it "updates server_level_cap and redirects" do
