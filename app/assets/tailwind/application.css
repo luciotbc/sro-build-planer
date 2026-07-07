@@ -396,6 +396,14 @@
     color: var(--color-brass-hi);
     font-size: 24px;
     font-weight: 800;
+    overflow: hidden;
+  }
+  /* Slightly inset so square crest corners don't get clipped by the circle. */
+  .char-avatar img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    display: block;
   }
   .char-bar-name {
     font-size: 24px;
@@ -448,28 +456,40 @@
   .fs-skill-row:first-child {
     border-top: none;
   }
+  /* Bare game icon, no frame — matches the in-game look (border/rounding/
+     background intentionally removed; the 128px source assets are crisp). */
   .fs-skill-icon {
     width: 44px;
     height: 44px;
-    border-radius: var(--radius-control);
     flex-shrink: 0;
     overflow: hidden;
     cursor: pointer;
     border: 0;
-    /* Engraved game-icon frame: bespoke dark skin (intentionally non-token),
-       with a brass-dk inset edge from the token palette. */
-    background: linear-gradient(180deg, #0a0a0b, #161618);
-    box-shadow:
-      0 0 0 1px var(--color-brass-dk) inset,
-      0 0 0 2px #000 inset;
+    background: none;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
   }
   .fs-skill-icon img {
-    width: 36px;
-    height: 36px;
-    border-radius: 6px;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  /* Bare mastery icon, no frame — same in-game look as skill icons but
+     non-interactive (mastery headers), so no cursor/button semantics. */
+  .mastery-icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mastery-icon img {
+    width: 100%;
+    height: 100%;
     display: block;
   }
   .fs-skill-meta {
@@ -538,26 +558,22 @@
   }
 
   /* Series header badge — small brass-ringed glyph marking a skill series. */
+  /* Bare series icon, no frame — matches the in-game look. The brass glyph
+     color remains for the "✦" fallback when no icon asset exists. */
   .series-badge {
-    width: 34px;
-    height: 34px;
-    border-radius: var(--radius-pill);
+    width: 44px;
+    height: 44px;
     flex-shrink: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
     color: var(--color-brass-hi);
-    background: color-mix(in srgb, var(--color-brass) 12%, transparent);
-    box-shadow: 0 0 0 1px
-      color-mix(in srgb, var(--color-brass) 40%, transparent) inset;
     overflow: hidden;
   }
   .series-badge img {
     width: 100%;
     height: 100%;
-    border-radius: inherit;
-    object-fit: cover;
     display: block;
   }
 
@@ -698,6 +714,12 @@
   .race-glyph .race-glyph-char {
     font-size: 2rem;
     line-height: 1;
+  }
+
+  .race-glyph .race-glyph-char img {
+    width: 44px;
+    height: 44px;
+    display: block;
   }
 
   .race-glyph .race-glyph-label {

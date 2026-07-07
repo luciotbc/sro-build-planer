@@ -3,25 +3,23 @@
   -----------------------------------------------------------------------
   locals:
     name:    String          required; character name (rendered in brass)
-    race:    String          required; race label (e.g. "Chinese")
+    race:    String          required; race label (e.g. "Chinese"); also picks
+                             the crest icon (china.png / europe.png)
     level:   Integer/String  required; level cap value
-    initial: String          required; avatar glyph (e.g. "华")
     class:   String          optional; extra utility classes (e.g. responsive
                              width overrides). Appended to the .char-bar element.
   Usage:
-    render "shared/char_bar", name: "BuckTBC", race: "Chinese",
-           level: 110, initial: "华"
+    render "shared/char_bar", name: "BuckTBC", race: "Chinese", level: 110
 %>
 <%
-  name    = local_assigns.fetch(:name)
-  race    = local_assigns.fetch(:race)
-  level   = local_assigns.fetch(:level)
-  initial = local_assigns.fetch(:initial)
-  extra   = local_assigns[:class]
+  name  = local_assigns.fetch(:name)
+  race  = local_assigns.fetch(:race)
+  level = local_assigns.fetch(:level)
+  extra = local_assigns[:class]
 %>
 <div class="<%= class_names("char-bar", extra) %>">
   <div class="char-bar-id">
-    <div class="char-avatar"><%= initial %></div>
+    <div class="char-avatar"><%= race_icon_tag(race) %></div>
     <div>
       <div class="char-bar-name"><%= name %></div>
       <div class="char-bar-race"><%= race %></div>

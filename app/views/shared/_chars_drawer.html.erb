@@ -43,7 +43,7 @@
                 ),
                 "data-active-row": (true if is_active) do %>
             <div class="char-avatar text-xs shrink-0">
-              <%= character.race.name == "Chinese" ? "华" : "⚔" %>
+              <%= race_icon_tag(character.race.name) %>
             </div>
             <div class="flex-1 min-w-0">
               <div class="font-semibold truncate"><%= character.name %></div>

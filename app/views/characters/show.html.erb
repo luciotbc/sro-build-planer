@@ -8,7 +8,6 @@
         name:    @character.name,
         race:    @character.race.name,
         level:   @character.server_level_cap,
-        initial: @character.race.name == "Chinese" ? "华" : "⚔",
         class:   "md:max-w-none" %>
 
   <%# ── Box: skills ──────────────────────────────────────────────────────── %>
@@ -64,7 +63,7 @@
         <%# ── Read-only mastery header ──────────────────────────────────── %>
         <div class="rounded-control border border-line bg-card-hi p-4 flex items-center justify-between gap-3">
           <div class="flex items-center gap-3 min-w-0">
-            <span class="fs-skill-icon shrink-0 !cursor-default" aria-hidden="true">
+            <span class="mastery-icon shrink-0" aria-hidden="true">
               <%= game_icon_tag @active_mastery.icon_path, alt: "" %>
             </span>
             <span class="truncate text-base font-bold text-text">

@@ -50,13 +50,13 @@
         <div>
           <p class="text-[10px] font-bold uppercase tracking-widest text-text-mute mb-2"><%= t(".race_label") %></p>
           <div class="grid grid-cols-2 gap-3">
-            <% [["Chinese", "华", Race.find_by(name: "Chinese")&.id], ["European", "⚔", Race.find_by(name: "European")&.id]].each do |race_name, glyph, race_id| %>
+            <% [["Chinese", Race.find_by(name: "Chinese")&.id], ["European", Race.find_by(name: "European")&.id]].each do |race_name, race_id| %>
               <label class="cursor-pointer">
                 <input type="radio" name="character[race_id]"
                        value="<%= race_id %>"
                        class="sr-only" required>
                 <div class="race-glyph">
-                  <span class="race-glyph-char"><%= glyph %></span>
+                  <span class="race-glyph-char"><%= race_icon_tag(race_name) %></span>
                   <span class="race-glyph-label"><%= race_name %></span>
                   <span class="race-glyph-state-choose"><%= t(".choose") %></span>
                   <span class="race-glyph-state-selected"><%= t(".selected") %></span>

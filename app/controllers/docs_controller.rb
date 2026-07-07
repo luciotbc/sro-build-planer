@@ -34,7 +34,7 @@ class DocsController < ApplicationController
         </div>
       ERB
       char_bar: <<~ERB,
-        <%= render "shared/char_bar", name: "BuckTBC", race: "Chinese", level: 110, initial: "\u534e" %>
+        <%= render "shared/char_bar", name: "BuckTBC", race: "Chinese", level: 110 %>
       ERB
       skill_row: <<~ERB,
         <div class="skill-card">

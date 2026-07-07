@@ -24,7 +24,7 @@ FactoryBot.define do
       external_id { 273 }
       name { "Cold" }
       mastery_type { "Force" }
-      icon_path { "skillmastery/china/mastery_gigong.png" }
+      icon_path { "skillmastery/china/mastery_cold.png" }
     end
 
     trait :warrior do
