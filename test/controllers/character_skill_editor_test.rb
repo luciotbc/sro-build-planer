@@ -208,4 +208,55 @@ class CharacterSkillEditorTest < ActionDispatch::IntegrationTest
       end
     assert_equal [@mastery.id, second.id], ids
   end
+
+  # ---- out-of-cap groups hidden (spec 04 R5) -------------------------------
+
+  describe "server-cap filtering" do
+    before do
+      @out =
+        create(
+          :skill_group,
+          mastery: @mastery,
+          skill_series: @series,
+          name: "Beyond Cap"
+        )
+      create(
+        :skill,
+        skill_group: @out,
+        skill_level: 1,
+        mastery_level_req: @char.server_level_cap + 1
+      )
+    end
+
+    it "hides an out-of-cap skill group in the editor" do
+      get edit_character_path(@char, side: :current)
+      assert_response :success
+      assert_select "#skill-row-#{@out.id}", count: 0
+    end
+
+    it "hides a series whose groups are all out of cap" do
+      ghost =
+        create(
+          :skill_series,
+          mastery: @mastery,
+          title: "Ghost Series",
+          row_position: 2
+        )
+      @out.update!(skill_series: ghost)
+      get edit_character_path(@char, side: :current)
+      refute_match "Ghost Series", response.body
+    end
+
+    it "still shows an out-of-cap group with an allocation on the edited side" do
+      create(
+        :character_skill,
+        character: @char,
+        skill_group: @out,
+        current_skill_level: 1,
+        target_skill_level: 0
+      )
+      get edit_character_path(@char, side: :current)
+      assert_select "#skill-row-#{@out.id}"
+    end
+  end
 end
