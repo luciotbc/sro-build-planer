@@ -89,12 +89,18 @@
         data-dialog-target="dialog"
         data-controller="delete-confirmation"
         data-delete-confirmation-word-value="DELETE"
+        data-action="click->dialog#backdropClose"
       >
-        <div class="pt-2 text-center">
-          <span class="delete-modal-icon" aria-hidden="true">🗑</span>
-          <h3 class="mt-3 text-lg font-bold text-text"><%= t("settings.delete_account.modal_title") %></h3>
-          <p class="mt-2 text-sm text-text-dim"><%= t("settings.delete_account.modal_body") %></p>
-        </div>
+        <header class="overlay-head">
+          <span><%= t("settings.delete_account.modal_title") %></span>
+          <button type="button" class="icon-btn" data-action="dialog#close" aria-label="<%= t("shared.close") %>">×</button>
+        </header>
+
+        <div class="overlay-body">
+          <div class="flex items-center gap-4">
+            <span class="delete-modal-icon shrink-0" aria-hidden="true">🗑</span>
+            <p class="text-sm text-text-dim"><%= t("settings.delete_account.modal_body") %></p>
+          </div>
         <%= form_with url: settings_account_path, method: :delete, class: "mt-5" do %>
           <label
             for="delete_confirmation"
@@ -124,6 +130,7 @@
             ><%= t("settings.delete_account.confirm_button") %></button>
           </div>
         <% end %>
+        </div>
       </dialog>
     </section>
   </div>
