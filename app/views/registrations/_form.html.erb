@@ -24,7 +24,10 @@
     </div>
   <% end %>
 
-  <%= form_with url: registration_path do |form| %>
+  <%= form_with url: registration_path,
+                data: {
+                  controller: "password-rules"
+                } do |form| %>
     <div class="mb-4">
       <%= form.label :email_address,
                      t(".email_label"),
@@ -47,7 +50,11 @@
                               autocomplete: "new-password",
                               placeholder: t("auth.password_placeholder"),
                               maxlength: 72,
-                              class: field_classes %>
+                              class: field_classes,
+                              data: {
+                                password_rules_target: "password",
+                                action: "input->password-rules#check"
+                              } %>
       <p class="mt-1.5 text-xs text-text-mute">
         <%= t(".password_hint") %>
       </p>
@@ -62,8 +69,14 @@
                               autocomplete: "new-password",
                               placeholder: t("auth.password_placeholder"),
                               maxlength: 72,
-                              class: field_classes %>
+                              class: field_classes,
+                              data: {
+                                password_rules_target: "confirmation",
+                                action: "input->password-rules#check"
+                              } %>
     </div>
+
+    <%= render "shared/password_rules" %>
 
     <label class="mb-3 flex items-start gap-2 text-sm text-text-dim">
       <%= form.check_box :terms,
