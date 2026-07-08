@@ -54,7 +54,8 @@ class TopbarAuthTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     # Account settings entry navigates to /settings.
-    assert_select ".menu-panel a.menu-item[href=?]", settings_path,
+    assert_select ".menu-panel a.menu-item[href=?]",
+                  settings_path,
                   text: "Account settings"
     # Log out stays a DELETE form-button (CSRF-safe, non-GET).
     assert_select ".menu-panel form[action=?][method=post]", session_path do
