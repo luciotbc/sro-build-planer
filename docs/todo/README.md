@@ -43,6 +43,7 @@ A task is delivered as ordered small PRs `feature/NNN-slug/NN-slice` (refactor �
 | 028 | [my-data-summary](028-my-data-summary.md) | 022 | Haiku |
 | 029 | [export-my-data](029-export-my-data.md) | 028 | Opus |
 | 030 | [delete-account](030-delete-account.md) | 022 | Sonnet |
+| 031 | [transactional-email](031-transactional-email.md) | — | Sonnet |
 
 ## Dependency DAG / parallel lanes
 - Foundation (serial): 000 → 001 → 002 → 003.
@@ -54,5 +55,6 @@ A task is delivered as ordered small PRs `feature/NNN-slug/NN-slice` (refactor �
 - **020** (edit-character modal) independent after 005+007; can run any time.
 - **021** (share-character link) after 020; public read-only page + share token.
 - **Account settings** (mockup `account_settings.html`; topbar untouched): **022** (page shell + spec 09) → then **023 ∥ 024 ∥ 027 ∥ 028 ∥ 030** (one section per task); **025 ∥ 026** after 024 (password-fields/rules reuse); **029** after 028 (export button lives in the My data card).
+- **031** (transactional-email) — standalone infra/config; no dependency; enables reliable delivery for the mailers above (Mailpit in dev, encrypted-credentials SMTP elsewhere).
 
 Each lane = a separate branch/session. One PR per task, approve, then next.
