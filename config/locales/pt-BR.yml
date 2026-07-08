@@ -175,6 +175,13 @@ pt-BR:
       label: Novidades do produto
       saved: Preferência de e-mail salva.
       title: Receber novidades do SRO Labs por e-mail
+    my_data:
+      characters: Total de personagens criados
+      created: Conta criada
+      description: Um resumo dos dados associados à sua conta.
+      email: Endereço de e-mail
+      terms_accepted: Termos e política de privacidade aceitos
+      title: Meus dados
     password:
       confirmation_label: Confirmar senha
       current_label: Senha atual

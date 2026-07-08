@@ -166,6 +166,13 @@ ko:
       label: 제품 소식
       saved: 이메일 수신 설정이 저장되었습니다.
       title: SRO Labs 소식 이메일 받기
+    my_data:
+      characters: 생성한 캐릭터 수
+      created: 계정 생성일
+      description: 계정과 연결된 데이터 요약입니다.
+      email: 이메일 주소
+      terms_accepted: 이용약관 및 개인정보 처리방침 동의일
+      title: 내 데이터
     password:
       confirmation_label: 비밀번호 확인
       current_label: 현재 비밀번호

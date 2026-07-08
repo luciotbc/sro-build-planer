@@ -44,5 +44,31 @@
         </div>
       <% end %>
     <% end %>
+    <%= render layout: "shared/settings_card",
+          locals: {
+            title: t("settings.my_data.title"),
+            description: t("settings.my_data.description")
+          } do %>
+      <%# Terms are accepted at registration, so the accepted date equals
+          the account creation date (spec 09 R7 — no terms_accepted_at column). %>
+      <div id="settings-my-data">
+        <div class="data-row">
+          <span class="data-row-label"><%= t("settings.my_data.email") %></span>
+          <span class="data-row-value"><%= Current.user.email_address %></span>
+        </div>
+        <div class="data-row">
+          <span class="data-row-label"><%= t("settings.my_data.created") %></span>
+          <span class="data-row-value"><%= l(Current.user.created_at.to_date, format: :long) %></span>
+        </div>
+        <div class="data-row">
+          <span class="data-row-label"><%= t("settings.my_data.terms_accepted") %></span>
+          <span class="data-row-value"><%= l(Current.user.created_at.to_date, format: :long) %></span>
+        </div>
+        <div class="data-row">
+          <span class="data-row-label"><%= t("settings.my_data.characters") %></span>
+          <span class="data-row-value"><%= Current.user.characters.count %></span>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>

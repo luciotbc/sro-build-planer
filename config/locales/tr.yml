@@ -176,6 +176,13 @@ tr:
       label: Ürün güncellemeleri
       saved: E-posta tercihi kaydedildi.
       title: SRO Labs güncellemelerini bana e-postayla gönder
+    my_data:
+      characters: Oluşturulan toplam karakter
+      created: Hesap oluşturulma tarihi
+      description: Hesabınızla ilişkili verilerin özeti.
+      email: E-posta adresi
+      terms_accepted: Şartlar ve gizlilik politikası kabul tarihi
+      title: Verilerim
     password:
       confirmation_label: Şifreyi onayla
       current_label: Mevcut şifre

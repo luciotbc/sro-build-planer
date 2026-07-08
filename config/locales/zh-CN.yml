@@ -161,6 +161,13 @@ zh-CN:
       label: 产品动态
       saved: 邮件偏好已保存。
       title: 通过邮件接收 SRO Labs 动态
+    my_data:
+      characters: 创建的角色总数
+      created: 账户创建时间
+      description: 与您的账户相关的数据摘要。
+      email: 邮箱地址
+      terms_accepted: 条款与隐私政策接受时间
+      title: 我的数据
     password:
       confirmation_label: 确认密码
       current_label: 当前密码

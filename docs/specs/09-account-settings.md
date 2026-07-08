@@ -16,7 +16,7 @@
 - No topbar entry for now (explicit scope decision, task 022): the page is reachable by direct URL. Adding a topbar/menu link is future work and must not modify `shared/_topbar` until then.
 
 ### R3 — Section inventory
-The page hosts, in order: Update email *(R4 — task 023)*, Update password *(R5 — task 024)*, Email me updates about SRO Labs *(R6 — task 027)*, My data *(planned — 028, export 029)*, Delete account *(planned — 030)*. Each section's rules join this spec when its task ships.
+The page hosts, in order: Update email *(R4 — task 023)*, Update password *(R5 — task 024)*, Email me updates about SRO Labs *(R6 — task 027)*, My data *(R7 — task 028; export 029)*, Delete account *(planned — 030)*. Each section's rules join this spec when its task ships.
 
 ### R4 — Update email (task 023)
 - **Given** a logged-in user, **when** they submit a new valid email, **then** the email is updated, `email_confirmed_at` is reset to `nil`, and a confirmation email is sent to the **new** address (existing `email_confirmation` flow) — the user must re-verify. The session is kept.
@@ -35,6 +35,11 @@ The page hosts, in order: Update email *(R4 — task 023)*, Update password *(R5
 ### R6 — Product-updates email opt-in (task 027)
 - `users.email_opt_in` (boolean, default **false**) — set at registration, editable on `/settings` via the Product updates toggle, which saves on change (no separate save button).
 - The flag governs **product-update emails only**; transactional mail (confirmation, password reset, data export) is always sent.
+
+### R7 — My data summary (task 028)
+- The card shows read-only rows: email address; account created date; Terms & Privacy Policy accepted date; total characters created.
+- **Terms-accepted date equals `created_at`**: terms are accepted as part of registration (`Users::RegisterService` gate) and no `terms_accepted_at` column exists — a deliberate scope decision. If terms re-acceptance is ever introduced, add the column and update this rule.
+- Dates render via `l(date, format: :long)` (rails-i18n locale data).
 
 ## Cross-links
 - Ownership/auth foundations: [05-character-lifecycle](05-character-lifecycle.md).
