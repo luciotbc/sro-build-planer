@@ -165,6 +165,15 @@ es:
     new:
       title: Iniciar sesión
   settings:
+    email:
+      current_email_label: Correo actual
+      description: Tu correo de inicio de sesión y donde enviamos avisos importantes
+        de la cuenta.
+      save: Guardar correo
+      title: Actualizar correo electrónico
+      unchanged: Tu correo no ha cambiado.
+      updated_check_inbox: Correo actualizado. Revisa tu nueva bandeja de entrada
+        para verificarlo.
     show:
       heading: Configuración de la cuenta
       subtitle: Administra tus credenciales de inicio de sesión, notificaciones y

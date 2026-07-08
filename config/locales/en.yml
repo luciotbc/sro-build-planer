@@ -162,6 +162,13 @@ en:
     new:
       title: Sign in
   settings:
+    email:
+      current_email_label: Current email
+      description: Your login email and where we send important account notices.
+      save: Save email
+      title: Update email
+      unchanged: Your email is unchanged.
+      updated_check_inbox: Email updated. Check your new inbox to verify it.
     show:
       heading: Account settings
       subtitle: Manage your login credentials, notifications, and account data.

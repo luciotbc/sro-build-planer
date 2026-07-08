@@ -16,6 +16,9 @@ Rails.application.routes.draw do
   resource :registration, only: %i[new create]
   # Account settings page (docs/todo/022, spec 09).
   resource :settings, only: :show
+  namespace :settings do
+    resource :email, only: :update
+  end
   get "email_confirmation/:token" => "email_confirmations#show",
       :as => :email_confirmation
   post "email_confirmation/resend" => "email_confirmations#resend",

@@ -156,6 +156,13 @@ ko:
     new:
       title: 로그인
   settings:
+    email:
+      current_email_label: 현재 이메일
+      description: 로그인 이메일이며 중요한 계정 알림을 보내는 주소입니다.
+      save: 이메일 저장
+      title: 이메일 변경
+      unchanged: 이메일이 변경되지 않았습니다.
+      updated_check_inbox: 이메일이 변경되었습니다. 새 이메일에서 확인 메일을 확인하세요.
     show:
       heading: 계정 설정
       subtitle: 로그인 정보, 알림 및 계정 데이터를 관리하세요.

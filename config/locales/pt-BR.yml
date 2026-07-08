@@ -162,6 +162,15 @@ pt-BR:
     new:
       title: Entrar
   settings:
+    email:
+      current_email_label: E-mail atual
+      description: Seu e-mail de login e para onde enviamos avisos importantes da
+        conta.
+      save: Salvar e-mail
+      title: Atualizar e-mail
+      unchanged: Seu e-mail não foi alterado.
+      updated_check_inbox: E-mail atualizado. Verifique sua nova caixa de entrada
+        para confirmá-lo.
     show:
       heading: Configurações da conta
       subtitle: Gerencie suas credenciais de login, notificações e dados da conta.

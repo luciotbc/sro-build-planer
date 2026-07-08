@@ -151,6 +151,13 @@ zh-CN:
     new:
       title: 登录
   settings:
+    email:
+      current_email_label: 当前邮箱
+      description: 您的登录邮箱，也是我们发送重要账户通知的地址。
+      save: 保存邮箱
+      title: 更新邮箱
+      unchanged: 您的邮箱未更改。
+      updated_check_inbox: 邮箱已更新。请检查新邮箱以完成验证。
     show:
       heading: 账户设置
       subtitle: 管理您的登录凭据、通知和账户数据。

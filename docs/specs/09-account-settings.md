@@ -16,7 +16,14 @@
 - No topbar entry for now (explicit scope decision, task 022): the page is reachable by direct URL. Adding a topbar/menu link is future work and must not modify `shared/_topbar` until then.
 
 ### R3 — Section inventory
-The page hosts, in order: Update email *(planned — task 023)*, Update password *(planned — 024)*, Email me updates about SRO Labs *(planned — 027)*, My data *(planned — 028, export 029)*, Delete account *(planned — 030)*. Each section's rules join this spec when its task ships.
+The page hosts, in order: Update email *(R4 — task 023)*, Update password *(planned — 024)*, Email me updates about SRO Labs *(planned — 027)*, My data *(planned — 028, export 029)*, Delete account *(planned — 030)*. Each section's rules join this spec when its task ships.
+
+### R4 — Update email (task 023)
+- **Given** a logged-in user, **when** they submit a new valid email, **then** the email is updated, `email_confirmed_at` is reset to `nil`, and a confirmation email is sent to the **new** address (existing `email_confirmation` flow) — the user must re-verify. The session is kept.
+- **Given** the previous state's confirmation links, **when** the email changes, **then** they stop working (the token embeds `email_confirmed_at`).
+- **Given** an invalid or already-taken email, **when** submitted, **then** an inline validation message is shown, nothing changes, no mail is sent, and the taken-email error does not reveal the other account.
+- **Given** an unchanged email, **when** submitted, **then** it is a no-op with a neutral notice (no mail, confirmation kept).
+- Updates are rate-limited (same posture as registration).
 
 ## Cross-links
 - Ownership/auth foundations: [05-character-lifecycle](05-character-lifecycle.md).
