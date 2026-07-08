@@ -164,6 +164,12 @@ es:
       submit: Iniciar sesión
     new:
       title: Iniciar sesión
+  settings:
+    show:
+      heading: Configuración de la cuenta
+      subtitle: Administra tus credenciales de inicio de sesión, notificaciones y
+        datos de la cuenta.
+      title: Configuración de la cuenta
   shared:
     char_bar:
       edit: Editar personaje

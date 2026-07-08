@@ -162,6 +162,12 @@ tr:
       submit: Giriş yap
     new:
       title: Giriş yap
+  settings:
+    show:
+      heading: Hesap ayarları
+      subtitle: Oturum açma bilgilerinizi, bildirimlerinizi ve hesap verilerinizi
+        yönetin.
+      title: Hesap ayarları
   shared:
     char_bar:
       edit: Karakteri düzenle

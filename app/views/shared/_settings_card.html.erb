@@ -1,0 +1,11 @@
+<%# Settings section card (design system: .settings-card).
+    Locals: title (required), description (optional).
+    Body comes from the caller's block:
+      render layout: "shared/settings_card", locals: { title: ... } do %>
+<section class="settings-card">
+  <h2 class="settings-card-title"><%= title %></h2>
+  <% if local_assigns[:description].present? %>
+    <p class="settings-card-desc"><%= description %></p>
+  <% end %>
+  <div class="settings-card-body"><%= yield %></div>
+</section>

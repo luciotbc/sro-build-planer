@@ -807,4 +807,28 @@
   label:has(input[type="radio"]:checked) .cap-btn .cap-label {
     color: var(--color-bg);
   }
+
+  /* ── Settings section card (account settings page) ────────────────────── */
+  .settings-card {
+    background: var(--color-card);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-panel);
+    padding: 20px;
+  }
+
+  .settings-card-title {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .settings-card-desc {
+    margin-top: 2px;
+    font-size: 0.8125rem;
+    color: var(--color-text-dim);
+  }
+
+  .settings-card-body {
+    margin-top: 14px;
+  }
 }

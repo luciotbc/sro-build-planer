@@ -150,6 +150,11 @@ zh-CN:
       submit: 登录
     new:
       title: 登录
+  settings:
+    show:
+      heading: 账户设置
+      subtitle: 管理您的登录凭据、通知和账户数据。
+      title: 账户设置
   shared:
     char_bar:
       edit: 编辑角色

@@ -161,6 +161,11 @@ en:
       submit: Sign in
     new:
       title: Sign in
+  settings:
+    show:
+      heading: Account settings
+      subtitle: Manage your login credentials, notifications, and account data.
+      title: Account settings
   shared:
     char_bar:
       edit: Edit character
