@@ -171,6 +171,12 @@ pt-BR:
       unchanged: Seu e-mail não foi alterado.
       updated_check_inbox: E-mail atualizado. Verifique sua nova caixa de entrada
         para confirmá-lo.
+    email_opt_in:
+      hint: E-mails ocasionais sobre novos recursos e grandes lançamentos. Enviamos
+        bem raramente.
+      label: Novidades do produto
+      saved: Preferência de e-mail salva.
+      title: Receber novidades do SRO Labs por e-mail
     password:
       confirmation_label: Confirmar senha
       current_label: Senha atual

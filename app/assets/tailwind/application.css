@@ -876,4 +876,45 @@
     content: "✓";
     color: var(--color-green);
   }
+
+  /* ── Toggle switch (shared/_toggle) ────────────────────────────────────── */
+  .toggle {
+    display: inline-flex;
+    cursor: pointer;
+  }
+
+  .toggle .toggle-track {
+    display: inline-flex;
+    align-items: center;
+    width: 36px;
+    height: 20px;
+    padding: 2px;
+    border-radius: 999px;
+    background: var(--color-card-hi);
+    border: 1px solid var(--color-line);
+    transition: background 0.15s ease;
+  }
+
+  .toggle .toggle-knob {
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    background: var(--color-text);
+    transition: transform 0.15s ease;
+  }
+
+  .toggle:has(input:checked) .toggle-track {
+    background: var(--color-brass);
+    border-color: var(--color-brass-dk);
+  }
+
+  .toggle:has(input:checked) .toggle-knob {
+    transform: translateX(16px);
+    background: var(--color-bg);
+  }
+
+  .toggle:has(input:focus-visible) .toggle-track {
+    outline: 2px solid var(--color-brass);
+    outline-offset: 2px;
+  }
 }

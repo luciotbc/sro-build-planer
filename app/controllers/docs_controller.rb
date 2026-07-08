@@ -67,6 +67,14 @@ class DocsController < ApplicationController
                 confirmation_label: "Confirm password" %>
         <% end %>
       ERB
+      toggle: <<~ERB,
+        <%= form_with url: settings_email_opt_in_path, method: :patch,
+              data: { controller: "autosubmit" } do |form| %>
+          <%= render "shared/toggle", name: "email_opt_in", checked: true,
+                sr_label: "Product updates",
+                attrs: { data: { action: "change->autosubmit#submit" } } %>
+        <% end %>
+      ERB
       turbo_frame: <<~ERB,
         <%# Lazy-load a modal's body inside a Turbo Frame %>
         <%= turbo_frame_tag "modal", src: edit_character_path(@character), loading: :lazy %>
