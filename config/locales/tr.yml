@@ -99,8 +99,6 @@ tr:
         bir kullanıcı varsa).
     edit:
       heading: Parolanı güncelle
-      password_confirmation_placeholder: Yeni parolayı tekrar gir
-      password_placeholder: Yeni parolayı gir
       submit: Kaydet
     invalid_token: Parola sıfırlama bağlantısı geçersiz veya süresi dolmuş.
     new:

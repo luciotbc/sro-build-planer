@@ -98,8 +98,6 @@ en:
         address exists).
     edit:
       heading: Update your password
-      password_confirmation_placeholder: Repeat new password
-      password_placeholder: Enter new password
       submit: Save
     invalid_token: Password reset link is invalid or has expired.
     new:
