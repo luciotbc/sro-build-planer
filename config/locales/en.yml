@@ -175,6 +175,13 @@ en:
       label: Product updates
       saved: Email preference saved.
       title: Email me updates about SRO Labs
+    my_data:
+      characters: Total characters created
+      created: Account created
+      description: A summary of the data associated with your account.
+      email: Email address
+      terms_accepted: Terms & Privacy Policy accepted
+      title: My data
     password:
       confirmation_label: Confirm password
       current_label: Current password
