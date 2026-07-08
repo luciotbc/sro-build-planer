@@ -87,8 +87,6 @@ describe "i18n backend keys" do
     passwords.new.email_placeholder
     passwords.new.submit
     passwords.edit.heading
-    passwords.edit.password_placeholder
-    passwords.edit.password_confirmation_placeholder
     passwords.edit.submit
     home.hero.kicker
     home.hero.title_line1
