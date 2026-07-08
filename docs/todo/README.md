@@ -34,6 +34,15 @@ A task is delivered as ordered small PRs `feature/NNN-slug/NN-slice` (refactor �
 | 019 | [single-step-undo](019-single-step-undo.md) | 012 | Haiku |
 | 020 | [edit-character-modal](020-edit-character-modal.md) | 005,007 | Sonnet |
 | 021 | [share-character-link](021-share-character-link.md) | 020 | Sonnet |
+| 022 | [account-settings-page](022-account-settings-page.md) | — | Sonnet |
+| 023 | [update-email-section](023-update-email-section.md) | 022 | Sonnet |
+| 024 | [update-password-section](024-update-password-section.md) | 022 | Sonnet |
+| 025 | [password-recovery-reuse](025-password-recovery-reuse.md) | 024 | Haiku |
+| 026 | [registration-rules-reuse](026-registration-rules-reuse.md) | 024 | Haiku |
+| 027 | [email-opt-in-toggle](027-email-opt-in-toggle.md) | 022 | Haiku |
+| 028 | [my-data-summary](028-my-data-summary.md) | 022 | Haiku |
+| 029 | [export-my-data](029-export-my-data.md) | 028 | Opus |
+| 030 | [delete-account](030-delete-account.md) | 022 | Sonnet |
 
 ## Dependency DAG / parallel lanes
 - Foundation (serial): 000 → 001 → 002 → 003.
@@ -44,5 +53,6 @@ A task is delivered as ordered small PRs `feature/NNN-slug/NN-slice` (refactor �
 - **018** (landing page) ships independently after 004, can run in parallel with 005-006 or as final polish after 017.
 - **020** (edit-character modal) independent after 005+007; can run any time.
 - **021** (share-character link) after 020; public read-only page + share token.
+- **Account settings** (mockup `account_settings.html`; topbar untouched): **022** (page shell + spec 09) → then **023 ∥ 024 ∥ 027 ∥ 028 ∥ 030** (one section per task); **025 ∥ 026** after 024 (password-fields/rules reuse); **029** after 028 (export button lives in the My data card).
 
 Each lane = a separate branch/session. One PR per task, approve, then next.
