@@ -13,7 +13,9 @@ class RegistrationPasswordRulesTest < ActionDispatch::IntegrationTest
                   "password_confirmation",
                   "confirmation"
     assert_select "#registration_form .password-rules[hidden]"
-    assert_select "#registration_form .password-rules li[data-rule]", count: 4
+    # The page renders the standalone form AND the topbar signup modal,
+    # both from registrations/_form → two panels of four rules each.
+    assert_select "#registration_form .password-rules li[data-rule]", count: 8
   end
 
   test "signup modal on the home page renders the same rules panel" do
