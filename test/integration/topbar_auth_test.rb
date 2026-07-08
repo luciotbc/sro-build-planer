@@ -34,14 +34,44 @@ class TopbarAuthTest < ActionDispatch::IntegrationTest
     assert_select "dialog[data-auth-target='signup'] button[data-action='auth#close']"
   end
 
-  test "authenticated topbar shows the logout button" do
+  test "authenticated topbar shows the user-settings menu, not a bare logout button" do
     sign_in_as(@user)
 
     get root_url
     follow_redirect! while response.redirect?
 
     assert_response :success
-    assert_select "button", text: "Log out"
+    # Avatar trigger for the dropdown menu.
+    assert_select ".user-menu [data-menu-target='trigger'][aria-haspopup='menu']"
     assert_select "button", text: "Log in", count: 0
+  end
+
+  test "user menu links to account settings and logs out via DELETE" do
+    sign_in_as(@user)
+
+    get root_url
+    follow_redirect! while response.redirect?
+
+    assert_response :success
+    # Account settings entry navigates to /settings.
+    assert_select ".menu-panel a.menu-item[href=?]", settings_path,
+                  text: "Account settings"
+    # Log out stays a DELETE form-button (CSRF-safe, non-GET).
+    assert_select ".menu-panel form[action=?][method=post]", session_path do
+      assert_select "input[name='_method'][value='delete']", count: 1
+      assert_select "button", text: "Log out"
+    end
+  end
+
+  test "user menu does not include a language item" do
+    sign_in_as(@user)
+
+    get root_url
+    follow_redirect! while response.redirect?
+
+    assert_response :success
+    # Exactly two entries — Account settings + Log out — and no language item.
+    assert_select ".menu-panel .menu-item", count: 2
+    assert_select ".menu-panel a.menu-item", count: 1, text: "Account settings"
   end
 end

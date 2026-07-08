@@ -29,7 +29,7 @@
         <%= render "shared/chars_drawer",
               characters:           Current.user.characters.order(:name),
               active_character_id:  @character&.id %>
-        <%= button_to t("shared.log_out"), session_path, method: :delete, class: "btn-ghost" %>
+        <%= render "shared/user_menu", email: Current.user.email_address %>
       <% else %>
         <%= render "sessions/auth_modals" %>
       <% end %>

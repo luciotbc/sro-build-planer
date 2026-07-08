@@ -15,6 +15,11 @@ class DocsController < ApplicationController
         <%= render "shared/button", label: "\u00d7", variant: :icon, attrs: { "aria-label": "Close" } %>
         <%= render "shared/chars_pill", count: 3 %>
       ERB
+      user_menu: <<~ERB,
+        <%# Topbar user menu (authenticated) — avatar trigger + dropdown. %>
+        <%# Stimulus controller: menu (toggle, Esc, outside-click, aria-expanded). %>
+        <%= render "shared/user_menu", email: Current.user.email_address %>
+      ERB
       mastery_nav: <<~ERB,
         <%# Mastery navigation component (characters/show) %>
         <%# Row 1: mastery type pills; Row 2: mastery sub-tabs per group %>

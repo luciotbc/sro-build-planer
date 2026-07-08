@@ -13,7 +13,7 @@
 - **Given** an authenticated user, **when** they request `/settings`, **then** the page renders with their own account data only (`Current.user`).
 
 ### R2 — Navigation
-- The page is reachable via direct URL and, once **task 032** lands, from the **user-settings menu** in the authenticated topbar ("Account settings" item → `settings_path`). Until 032 lands, direct URL only. The user menu is rendered from the layout's `:topbar_actions` slot / `shared/_user_menu`, not from `shared/_topbar` (which stays a pure layout slot).
+- The page is reachable via direct URL and from the **user-settings menu** in the authenticated topbar (task 032): the avatar trigger opens a dropdown whose "Account settings" item links to `settings_path`. The menu also holds "Log out" (`DELETE /session`) and deliberately excludes any language/locale switcher. It is rendered from the layout's `:topbar_actions` slot via `shared/_user_menu` (driven by the `menu` Stimulus controller), not from `shared/_topbar` (which stays a pure layout slot).
 
 ### R3 — Section inventory
 The page hosts, in order: Update email *(R4 — task 023)*, Update password *(R5 — task 024)*, Email me updates about SRO Labs *(R6 — task 027)*, My data *(R7 — task 028; export R8 — task 029)*, Delete account *(R9 — task 030)*.

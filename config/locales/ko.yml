@@ -201,6 +201,7 @@ ko:
       subtitle: 로그인 정보, 알림 및 계정 데이터를 관리하세요.
       title: 계정 설정
   shared:
+    account_settings: 계정 설정
     char_bar:
       edit: 캐릭터 편집
       level_cap: Level Cap
@@ -261,6 +262,8 @@ ko:
       skill_points: Skill Point
     toast:
       dismiss: 닫기
+    user_menu:
+      label: 사용자 설정
   shared_builds:
     show:
       copy: 링크 복사
