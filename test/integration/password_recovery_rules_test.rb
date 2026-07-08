@@ -9,11 +9,13 @@ class PasswordRecoveryRulesTest < ActionDispatch::IntegrationTest
     get edit_password_url(token)
 
     assert_response :success
-    assert_select "[data-controller~=?]", "password-rules"
-    assert_select "input[name=?]", "password"
-    assert_select "input[name=?]", "password_confirmation"
-    assert_select ".password-rules[hidden]"
-    assert_select ".password-rules li[data-rule]", count: 4
+    # Scope to the reset form: the unauthenticated page also renders the
+    # topbar signup modal, which carries its own password-rules panel.
+    assert_select "#password_reset_form[data-controller~=?]", "password-rules"
+    assert_select "#password_reset_form input[name=?]", "password"
+    assert_select "#password_reset_form input[name=?]", "password_confirmation"
+    assert_select "#password_reset_form .password-rules[hidden]"
+    assert_select "#password_reset_form .password-rules li[data-rule]", count: 4
   end
 
   test "reset flow still updates the password" do
