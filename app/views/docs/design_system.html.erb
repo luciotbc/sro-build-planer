@@ -307,6 +307,16 @@
       <%= render "shared/toggle", name: "demo_toggle_on", checked: true, sr_label: "Demo toggle on" %>
     </div>
     <%= render "docs/snippet", code: @snippets[:toggle] %>
+
+    <%# ── Danger button (task 030) ────────────────────────────────────── %>
+    <div>
+      <h3 class="text-lg font-bold text-text">Danger button &amp; card</h3>
+      <p class="text-text-dim">Destructive actions use <code class="text-brass-hi">.btn-danger</code> (outline red, fills on hover, dims when disabled) inside a <code class="text-brass-hi">.settings-card--danger</code> red-bordered card.</p>
+    </div>
+    <div class="flex items-center gap-4 rounded-panel border border-line bg-card p-6">
+      <button type="button" class="btn-danger">Delete my account</button>
+      <button type="button" class="btn-danger" disabled>Delete account</button>
+    </div>
   </section>
 
   <%# ── Hotwire ─────────────────────────────────────────────────────────── %>

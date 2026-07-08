@@ -165,6 +165,19 @@ es:
     new:
       title: Iniciar sesión
   settings:
+    delete_account:
+      cancel: Cancelar
+      confirm_button: Eliminar cuenta
+      confirm_label_html: Escribe <strong>%{word}</strong> para confirmar
+      confirmation_mismatch: Escribe DELETE para confirmar la eliminación de la cuenta.
+      deleted: Tu cuenta y todos los datos asociados fueron eliminados. ¡Hasta pronto!
+      description: Borra permanentemente tu cuenta y todos los datos asociados. Esta
+        acción no se puede deshacer.
+      modal_body: Esto es permanente. Todos tus personajes, Builds y datos serán borrados
+        y no se podrán recuperar.
+      modal_title: "¿Eliminar tu cuenta?"
+      title: Eliminar cuenta
+      trigger: Eliminar mi cuenta
     email:
       current_email_label: Correo actual
       description: Tu correo de inicio de sesión y donde enviamos avisos importantes

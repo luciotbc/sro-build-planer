@@ -942,4 +942,48 @@
     font-weight: 600;
     color: var(--color-text);
   }
+
+  /* ── Danger zone (settings delete account) ─────────────────────────────── */
+  .settings-card--danger {
+    border-color: color-mix(in srgb, var(--color-red) 40%, transparent);
+  }
+
+  .btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: var(--radius-field);
+    border: 1px solid color-mix(in srgb, var(--color-red) 55%, transparent);
+    background: color-mix(in srgb, var(--color-red) 12%, transparent);
+    color: var(--color-red);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .btn-danger:hover:not(:disabled) {
+    background: var(--color-red);
+    color: var(--color-bg);
+  }
+
+  .btn-danger:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .delete-modal-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-control);
+    background: color-mix(in srgb, var(--color-red) 15%, transparent);
+    font-size: 20px;
+  }
 }

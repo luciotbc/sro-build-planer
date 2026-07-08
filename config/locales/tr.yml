@@ -163,6 +163,19 @@ tr:
     new:
       title: Giriş yap
   settings:
+    delete_account:
+      cancel: İptal
+      confirm_button: Hesabı sil
+      confirm_label_html: Onaylamak için <strong>%{word}</strong> yazın
+      confirmation_mismatch: Hesap silme işlemini onaylamak için DELETE yazın.
+      deleted: Hesabınız ve tüm ilişkili veriler silindi. Hoşça kalın!
+      description: Hesabınızı ve tüm ilişkili verileri kalıcı olarak siler. Bu işlem
+        geri alınamaz.
+      modal_body: Bu kalıcıdır. Tüm karakterleriniz, Build'leriniz ve verileriniz
+        silinecek ve kurtarılamayacak.
+      modal_title: Hesabınız silinsin mi?
+      title: Hesabı sil
+      trigger: Hesabımı sil
     email:
       current_email_label: Mevcut e-posta
       description: Oturum açma e-postanız ve önemli hesap bildirimlerini gönderdiğimiz

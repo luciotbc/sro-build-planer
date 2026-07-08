@@ -75,5 +75,56 @@
         </button>
       <% end %>
     <% end %>
+    <section class="settings-card settings-card--danger" data-controller="dialog">
+      <h2 class="settings-card-title text-red"><%= t("settings.delete_account.title") %></h2>
+      <p class="settings-card-desc"><%= t("settings.delete_account.description") %></p>
+      <div class="settings-card-body">
+        <button type="button" class="btn-danger w-full" data-action="dialog#open">
+          <%= t("settings.delete_account.trigger") %>
+        </button>
+      </div>
+      <dialog
+        id="delete-account-modal"
+        class="modal"
+        data-dialog-target="dialog"
+        data-controller="delete-confirmation"
+        data-delete-confirmation-word-value="DELETE"
+      >
+        <div class="pt-2 text-center">
+          <span class="delete-modal-icon" aria-hidden="true">🗑</span>
+          <h3 class="mt-3 text-lg font-bold text-text"><%= t("settings.delete_account.modal_title") %></h3>
+          <p class="mt-2 text-sm text-text-dim"><%= t("settings.delete_account.modal_body") %></p>
+        </div>
+        <%= form_with url: settings_account_path, method: :delete, class: "mt-5" do %>
+          <label
+            for="delete_confirmation"
+            class="mb-1.5 block text-left text-xs font-bold uppercase tracking-wide text-text-dim"
+          ><%= t("settings.delete_account.confirm_label_html", word: "DELETE") %></label>
+          <%= text_field_tag :confirmation,
+                             nil,
+                             id: "delete_confirmation",
+                             autocomplete: "off",
+                             placeholder: "delete",
+                             class:
+                               "w-full rounded-field border border-line bg-card-hi px-3 py-2 " \
+                                 "text-text placeholder:text-text-mute focus:border-brass focus:outline-none",
+                             data: {
+                               delete_confirmation_target: "input",
+                               action: "input->delete-confirmation#check"
+                             } %>
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <button type="button" class="btn-ghost" data-action="dialog#close">
+              <%= t("settings.delete_account.cancel") %>
+            </button>
+            <button
+              type="submit"
+              class="btn-danger"
+              disabled
+              data-delete-confirmation-target="submit"
+            ><%= t("settings.delete_account.confirm_button") %></button>
+          </div>
+        <% end %>
+      </dialog>
+    </section>
   </div>
 </div>

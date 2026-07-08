@@ -16,7 +16,7 @@
 - No topbar entry for now (explicit scope decision, task 022): the page is reachable by direct URL. Adding a topbar/menu link is future work and must not modify `shared/_topbar` until then.
 
 ### R3 — Section inventory
-The page hosts, in order: Update email *(R4 — task 023)*, Update password *(R5 — task 024)*, Email me updates about SRO Labs *(R6 — task 027)*, My data *(R7 — task 028; export R8 — task 029)*, Delete account *(planned — 030)*. Each section's rules join this spec when its task ships.
+The page hosts, in order: Update email *(R4 — task 023)*, Update password *(R5 — task 024)*, Email me updates about SRO Labs *(R6 — task 027)*, My data *(R7 — task 028; export R8 — task 029)*, Delete account *(R9 — task 030)*.
 
 ### R4 — Update email (task 023)
 - **Given** a logged-in user, **when** they submit a new valid email, **then** the email is updated, `email_confirmed_at` is reset to `nil`, and a confirmation email is sent to the **new** address (existing `email_confirmation` flow) — the user must re-verify. The session is kept.
@@ -48,6 +48,11 @@ The page hosts, in order: Update email *(R4 — task 023)*, Update password *(R5
 - One CSV per character named `<race prefix>_<name>_<current level>.csv` (`ch` Chinese, `eu` European; name sanitized to `[0-9A-Za-z_-]`; duplicates suffixed `_2`, `_3`…). Columns: `mastery_name, mastery_current_level, mastery_future_level, skill_group_name, current_skill_level, future_skill_level` — one row per `CharacterSkill`; "future" = the `target_*` fields.
 - CSV headers are data identifiers and stay in English in every locale.
 - Empty cases: no characters → zip contains only `user.csv`; character without skills → header-only CSV.
+
+### R9 — Delete account (task 030)
+- **Given** the confirmation modal, **when** the typed value equals the literal word `DELETE` (same in every locale — treated like fixed jargon), **then** the account is hard-deleted with its full cascade (sessions, characters, character masteries/skills), the session ends, and the user lands on the home page with a farewell notice. No grace period, no soft delete (scope decision).
+- **Given** any other confirmation value — including forged requests without the param — **then** nothing is deleted and an error is shown. The disabled-until-typed button is UX only; `Users::DeleteAccountService` is the gate.
+- Deleting the user invalidates every session row, so concurrent sessions die immediately.
 
 ## Cross-links
 - Ownership/auth foundations: [05-character-lifecycle](05-character-lifecycle.md).
