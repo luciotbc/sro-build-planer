@@ -160,6 +160,19 @@ en:
     new:
       title: Sign in
   settings:
+    delete_account:
+      cancel: Cancel
+      confirm_button: Delete account
+      confirm_label_html: Type <strong>%{word}</strong> to confirm
+      confirmation_mismatch: Type DELETE to confirm the account deletion.
+      deleted: Your account and all associated data were deleted. Farewell!
+      description: Permanently erase your account and all associated data. This action
+        cannot be undone.
+      modal_body: This is permanent. All your characters, builds, and data will be
+        erased and cannot be recovered.
+      modal_title: Delete your account?
+      title: Delete account
+      trigger: Delete my account
     email:
       current_email_label: Current email
       description: Your login email and where we send important account notices.

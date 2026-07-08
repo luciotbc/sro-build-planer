@@ -160,6 +160,19 @@ pt-BR:
     new:
       title: Entrar
   settings:
+    delete_account:
+      cancel: Cancelar
+      confirm_button: Excluir conta
+      confirm_label_html: Digite <strong>%{word}</strong> para confirmar
+      confirmation_mismatch: Digite DELETE para confirmar a exclusão da conta.
+      deleted: Sua conta e todos os dados associados foram excluídos. Até logo!
+      description: Apaga permanentemente sua conta e todos os dados associados. Esta
+        ação não pode ser desfeita.
+      modal_body: Isto é permanente. Todos os seus personagens, Builds e dados serão
+        apagados e não poderão ser recuperados.
+      modal_title: Excluir sua conta?
+      title: Excluir conta
+      trigger: Excluir minha conta
     email:
       current_email_label: E-mail atual
       description: Seu e-mail de login e para onde enviamos avisos importantes da

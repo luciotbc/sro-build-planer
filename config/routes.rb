@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     resource :password, only: :update
     resource :email_opt_in, only: :update
     resource :export, only: :create
+    resource :account, only: :destroy
   end
   get "email_confirmation/:token" => "email_confirmations#show",
       :as => :email_confirmation
