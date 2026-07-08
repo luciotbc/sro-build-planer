@@ -217,6 +217,7 @@ es:
         datos de la cuenta.
       title: Configuración de la cuenta
   shared:
+    account_settings: Configuración de la cuenta
     char_bar:
       edit: Editar personaje
       level_cap: Level Cap
@@ -277,6 +278,8 @@ es:
       skill_points: Skill points
     toast:
       dismiss: Cerrar
+    user_menu:
+      label: Ajustes de usuario
   shared_builds:
     show:
       copy: Copiar link

@@ -210,6 +210,7 @@ en:
       subtitle: Manage your login credentials, notifications, and account data.
       title: Account settings
   shared:
+    account_settings: Account settings
     char_bar:
       edit: Edit character
       level_cap: Level Cap
@@ -270,6 +271,8 @@ en:
       skill_points: Skill points
     toast:
       dismiss: Dismiss
+    user_menu:
+      label: User settings
   shared_builds:
     show:
       copy: Copy link

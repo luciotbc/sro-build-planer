@@ -1,0 +1,50 @@
+<%#
+  shared/user_menu — topbar user-icon trigger + dropdown with account actions
+  -----------------------------------------------------------------------
+  Replaces the standalone "Log out" button in the authenticated topbar.
+  The `menu` Stimulus controller toggles the panel and closes it on Esc,
+  outside click, or item selection.
+  locals:
+    email: String  the signed-in user's email address (dropdown header)
+  Usage:
+    render "shared/user_menu", email: Current.user.email_address
+%>
+<%
+  email = local_assigns.fetch(:email)
+%>
+<div class="user-menu" data-controller="menu">
+  <button
+    type="button"
+    class="user-menu-trigger"
+    data-menu-target="trigger"
+    data-action="menu#toggle"
+    aria-haspopup="menu"
+    aria-expanded="false"
+    aria-label="<%= t(".label") %>"
+  >
+    <span class="user-menu-avatar" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    </span>
+  </button>
+
+  <div class="menu-panel" role="menu" data-menu-target="panel" hidden>
+    <p class="menu-email" title="<%= email %>"><%= email %></p>
+    <%= link_to t("shared.account_settings"),
+          settings_path,
+          class: "menu-item",
+          role: "menuitem",
+          data: {
+            action: "menu#close"
+          } %>
+    <%= button_to t("shared.log_out"),
+          session_path,
+          method: :delete,
+          class: "menu-item menu-item--danger",
+          form: {
+            role: "menuitem"
+          } %>
+  </div>
+</div>

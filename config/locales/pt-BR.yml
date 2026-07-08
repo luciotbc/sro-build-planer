@@ -213,6 +213,7 @@ pt-BR:
       subtitle: Gerencie suas credenciais de login, notificações e dados da conta.
       title: Configurações da conta
   shared:
+    account_settings: Configurações da conta
     char_bar:
       edit: Editar personagem
       level_cap: Level Cap
@@ -273,6 +274,8 @@ pt-BR:
       skill_points: Skill Points
     toast:
       dismiss: Dispensar
+    user_menu:
+      label: Configurações do usuário
   shared_builds:
     show:
       copy: Copiar link

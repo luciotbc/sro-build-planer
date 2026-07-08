@@ -30,7 +30,7 @@
    ] %>
 
 <% toc = { color: "Color", type: "Type", radius: "Radius", logo: "Logo",
-           buttons: "Buttons", mastery_nav: "Mastery navigation", badges: "Badges", stats: "Stat rows",
+           buttons: "Buttons", user_menu: "User menu", mastery_nav: "Mastery navigation", badges: "Badges", stats: "Stat rows",
            identity: "Character bar", skillrow: "Skill row", overlays: "Overlays",
            settings: "Settings card", hotwire: "Hotwire" } %>
 
@@ -135,6 +135,24 @@
       <%= render "shared/chars_pill", count: 3 %>
     </div>
     <%= render "docs/snippet", code: @snippets[:button] %>
+  </section>
+
+  <%# ── User menu ───────────────────────────────────────────────────────── %>
+  <section id="user_menu" class="space-y-4 scroll-mt-24">
+    <div>
+      <h2 class="text-2xl font-bold text-text">User menu</h2>
+      <p class="text-text-dim">
+        Topbar user-icon trigger + dropdown (<code class="text-brass-hi">user-menu-trigger</code> /
+        <code class="text-brass-hi">menu-panel</code> / <code class="text-brass-hi">menu-item</code>),
+        driven by the <code class="text-brass-hi">menu</code> Stimulus controller
+        (toggle, Esc-close, outside-click-close, <code class="text-brass-hi">aria-expanded</code>).
+        Replaces the standalone Log out button on authenticated pages. Click the icon to open.
+      </p>
+    </div>
+    <div class="flex justify-end rounded-panel border border-line bg-card p-6">
+      <%= render "shared/user_menu", email: "player@example.com" %>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:user_menu] %>
   </section>
 
   <%# ── Tabs ────────────────────────────────────────────────────────────── %>

@@ -196,6 +196,7 @@ zh-CN:
       subtitle: 管理您的登录凭据、通知和账户数据。
       title: 账户设置
   shared:
+    account_settings: 账户设置
     char_bar:
       edit: 编辑角色
       level_cap: Level 上限
@@ -256,6 +257,8 @@ zh-CN:
       skill_points: Skill Point
     toast:
       dismiss: 关闭
+    user_menu:
+      label: 用户设置
   shared_builds:
     show:
       copy: 复制链接
