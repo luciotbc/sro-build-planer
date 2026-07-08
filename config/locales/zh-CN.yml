@@ -156,6 +156,11 @@ zh-CN:
       title: 更新邮箱
       unchanged: 您的邮箱未更改。
       updated_check_inbox: 邮箱已更新。请检查新邮箱以完成验证。
+    email_opt_in:
+      hint: 偶尔发送关于新功能和重要版本的邮件。我们很少发送。
+      label: 产品动态
+      saved: 邮件偏好已保存。
+      title: 通过邮件接收 SRO Labs 动态
     password:
       confirmation_label: 确认密码
       current_label: 当前密码

@@ -161,6 +161,11 @@ ko:
       title: 이메일 변경
       unchanged: 이메일이 변경되지 않았습니다.
       updated_check_inbox: 이메일이 변경되었습니다. 새 이메일에서 확인 메일을 확인하세요.
+    email_opt_in:
+      hint: 새 기능과 주요 릴리스에 대한 이메일을 가끔 보냅니다. 매우 드물게 발송됩니다.
+      label: 제품 소식
+      saved: 이메일 수신 설정이 저장되었습니다.
+      title: SRO Labs 소식 이메일 받기
     password:
       confirmation_label: 비밀번호 확인
       current_label: 현재 비밀번호

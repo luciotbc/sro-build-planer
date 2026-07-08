@@ -296,6 +296,17 @@
       </div>
     </div>
     <%= render "docs/snippet", code: @snippets[:password_fields] %>
+
+    <%# ── Toggle switch (task 027) ────────────────────────────────────── %>
+    <div>
+      <h3 class="text-lg font-bold text-text">Toggle switch</h3>
+      <p class="text-text-dim">Pill switch over a real checkbox (<code class="text-brass-hi">shared/_toggle</code>, <code class="text-brass-hi">.toggle</code>) — state styled with CSS <code class="text-brass-hi">:has(input:checked)</code>; pair with the <code class="text-brass-hi">autosubmit</code> controller for save-on-change forms.</p>
+    </div>
+    <div class="flex items-center gap-6 rounded-panel border border-line bg-card p-6">
+      <%= render "shared/toggle", name: "demo_toggle_off", checked: false, sr_label: "Demo toggle off" %>
+      <%= render "shared/toggle", name: "demo_toggle_on", checked: true, sr_label: "Demo toggle on" %>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:toggle] %>
   </section>
 
   <%# ── Hotwire ─────────────────────────────────────────────────────────── %>

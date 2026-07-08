@@ -167,6 +167,12 @@ en:
       title: Update email
       unchanged: Your email is unchanged.
       updated_check_inbox: Email updated. Check your new inbox to verify it.
+    email_opt_in:
+      hint: Occasional emails about new features and major releases. We send these
+        very rarely.
+      label: Product updates
+      saved: Email preference saved.
+      title: Email me updates about SRO Labs
     password:
       confirmation_label: Confirm password
       current_label: Current password

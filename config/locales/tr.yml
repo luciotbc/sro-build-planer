@@ -170,6 +170,12 @@ tr:
       unchanged: E-postanız değişmedi.
       updated_check_inbox: E-posta güncellendi. Doğrulamak için yeni gelen kutunuzu
         kontrol edin.
+    email_opt_in:
+      hint: Yeni özellikler ve önemli sürümler hakkında ara sıra e-posta. Bunları
+        çok nadiren göndeririz.
+      label: Ürün güncellemeleri
+      saved: E-posta tercihi kaydedildi.
+      title: SRO Labs güncellemelerini bana e-postayla gönder
     password:
       confirmation_label: Şifreyi onayla
       current_label: Mevcut şifre

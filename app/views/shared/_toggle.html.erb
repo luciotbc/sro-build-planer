@@ -1,0 +1,20 @@
+<%# Toggle switch (design system: .toggle) — a checkbox styled as a pill
+    switch via CSS :has(input:checked); the input stays real for forms,
+    accessibility and no-JS fallbacks.
+    locals:
+      name:        input name (required)
+      checked:     boolean (required)
+      sr_label:    screen-reader label for the input (required)
+      attrs:       optional extra attributes for the checkbox (e.g. data) %>
+<label class="toggle">
+  <%= hidden_field_tag name, "0", id: nil %>
+  <%= check_box_tag name,
+                    "1",
+                    checked,
+                    { class: "sr-only", "aria-label": sr_label }.merge(
+                      local_assigns.fetch(:attrs, {})
+                    ) %>
+  <span class="toggle-track" aria-hidden="true">
+    <span class="toggle-knob"></span>
+  </span>
+</label>

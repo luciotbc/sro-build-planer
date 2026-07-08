@@ -20,5 +20,29 @@
           } do %>
       <%= render "settings/password_form" %>
     <% end %>
+    <%= render layout: "shared/settings_card",
+          locals: { title: t("settings.email_opt_in.title") } do %>
+      <%= form_with url: settings_email_opt_in_path,
+                    method: :patch,
+                    data: {
+                      controller: "autosubmit"
+                    } do |form| %>
+        <div class="flex items-start justify-between gap-6">
+          <div>
+            <p class="text-sm font-semibold text-text"><%= t("settings.email_opt_in.label") %></p>
+            <p class="mt-0.5 max-w-sm text-[0.8125rem] text-text-dim"><%= t("settings.email_opt_in.hint") %></p>
+          </div>
+          <%= render "shared/toggle",
+                     name: "email_opt_in",
+                     checked: Current.user.email_opt_in,
+                     sr_label: t("settings.email_opt_in.label"),
+                     attrs: {
+                       data: {
+                         action: "change->autosubmit#submit"
+                       }
+                     } %>
+        </div>
+      <% end %>
+    <% end %>
   </div>
 </div>
