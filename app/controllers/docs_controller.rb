@@ -53,6 +53,12 @@ class DocsController < ApplicationController
         <%= render "shared/drawer", title: "Characters", trigger_label: "Open drawer" %>
         <%= render "shared/sheet", title: "Filters", trigger_label: "Open sheet" %>
       ERB
+      settings_card: <<~ERB,
+        <%= render layout: "shared/settings_card",
+              locals: { title: "Update email", description: "Your login email…" } do %>
+          <%# section body %>
+        <% end %>
+      ERB
       turbo_frame: <<~ERB,
         <%# Lazy-load a modal's body inside a Turbo Frame %>
         <%= turbo_frame_tag "modal", src: edit_character_path(@character), loading: :lazy %>

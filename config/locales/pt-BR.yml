@@ -161,6 +161,11 @@ pt-BR:
       submit: Entrar
     new:
       title: Entrar
+  settings:
+    show:
+      heading: Configurações da conta
+      subtitle: Gerencie suas credenciais de login, notificações e dados da conta.
+      title: Configurações da conta
   shared:
     char_bar:
       edit: Editar personagem
