@@ -11,6 +11,7 @@
 
   <%= form_with url: password_path(params[:token]),
                 method: :put,
+                id: "password_reset_form",
                 data: {
                   controller: "password-rules"
                 } do |form| %>
