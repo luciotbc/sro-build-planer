@@ -166,6 +166,8 @@ zh-CN:
       created: 账户创建时间
       description: 与您的账户相关的数据摘要。
       email: 邮箱地址
+      export: 导出我的数据
+      export_enqueued: 我们正在准备您的导出文件，稍后将通过邮件发送给您。
       terms_accepted: 条款与隐私政策接受时间
       title: 我的数据
     password:
@@ -267,6 +269,11 @@ zh-CN:
       levels:
         other: "%{count} 个 levels"
   users_mailer:
+    data_export:
+      body: 附件是您的 SRO Lab 账户数据导出文件。
+      contents: zip 中包含含有您个人数据的 user.csv，以及每个角色一个的 Build CSV（Mastery 与 Skill 的当前和未来等级）。
+      heading: 您的数据导出
+      subject: 您的 SRO Lab 数据导出
     email_confirmation:
       button: 验证我的邮箱
       expiry: 该链接 24 小时后失效。如果你没有注册过账号，忽略这封邮件即可。

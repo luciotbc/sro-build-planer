@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     resource :email, only: :update
     resource :password, only: :update
     resource :email_opt_in, only: :update
+    resource :export, only: :create
   end
   get "email_confirmation/:token" => "email_confirmations#show",
       :as => :email_confirmation

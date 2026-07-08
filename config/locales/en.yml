@@ -178,6 +178,8 @@ en:
       created: Account created
       description: A summary of the data associated with your account.
       email: Email address
+      export: Export my data
+      export_enqueued: We're preparing your export — you'll receive it by email shortly.
       terms_accepted: Terms & Privacy Policy accepted
       title: My data
     password:
@@ -280,6 +282,12 @@ en:
         one: 1 level
         other: "%{count} levels"
   users_mailer:
+    data_export:
+      body: Attached is the export of your SRO Lab account data.
+      contents: The zip contains user.csv with your personal data and one CSV per
+        character with its build (masteries and skills, current and future levels).
+      heading: Your data export
+      subject: Your SRO Lab data export
     email_confirmation:
       button: Confirm my email
       expiry: This link expires in 24 hours. If you didn't create an account, you

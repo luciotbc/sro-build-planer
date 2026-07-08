@@ -16,7 +16,7 @@
 - No topbar entry for now (explicit scope decision, task 022): the page is reachable by direct URL. Adding a topbar/menu link is future work and must not modify `shared/_topbar` until then.
 
 ### R3 — Section inventory
-The page hosts, in order: Update email *(R4 — task 023)*, Update password *(R5 — task 024)*, Email me updates about SRO Labs *(R6 — task 027)*, My data *(R7 — task 028; export 029)*, Delete account *(planned — 030)*. Each section's rules join this spec when its task ships.
+The page hosts, in order: Update email *(R4 — task 023)*, Update password *(R5 — task 024)*, Email me updates about SRO Labs *(R6 — task 027)*, My data *(R7 — task 028; export R8 — task 029)*, Delete account *(planned — 030)*. Each section's rules join this spec when its task ships.
 
 ### R4 — Update email (task 023)
 - **Given** a logged-in user, **when** they submit a new valid email, **then** the email is updated, `email_confirmed_at` is reset to `nil`, and a confirmation email is sent to the **new** address (existing `email_confirmation` flow) — the user must re-verify. The session is kept.
@@ -40,6 +40,14 @@ The page hosts, in order: Update email *(R4 — task 023)*, Update password *(R5
 - The card shows read-only rows: email address; account created date; Terms & Privacy Policy accepted date; total characters created.
 - **Terms-accepted date equals `created_at`**: terms are accepted as part of registration (`Users::RegisterService` gate) and no `terms_accepted_at` column exists — a deliberate scope decision. If terms re-acceptance is ever introduced, add the column and update this rule.
 - Dates render via `l(date, format: :long)` (rails-i18n locale data).
+
+### R8 — Export my data (task 029)
+- **Given** a logged-in user clicking "Export my data", **then** a background job (Solid Queue, `Users::ExportDataJob`) builds the archive and emails it; the request itself only enqueues and shows a notice. Requests are rate-limited (2 per 10 min).
+- Archive: single zip named `srolabs_<UTC %Y%m%d%H%M%S>.zip`, attached to one email to the account address (transactional — sent regardless of `email_opt_in`).
+- `user.csv`: `email_address, email_confirmed_at, email_opt_in, created_at` — **never** ids/uuids/password data.
+- One CSV per character named `<race prefix>_<name>_<current level>.csv` (`ch` Chinese, `eu` European; name sanitized to `[0-9A-Za-z_-]`; duplicates suffixed `_2`, `_3`…). Columns: `mastery_name, mastery_current_level, mastery_future_level, skill_group_name, current_skill_level, future_skill_level` — one row per `CharacterSkill`; "future" = the `target_*` fields.
+- CSV headers are data identifiers and stay in English in every locale.
+- Empty cases: no characters → zip contains only `user.csv`; character without skills → header-only CSV.
 
 ## Cross-links
 - Ownership/auth foundations: [05-character-lifecycle](05-character-lifecycle.md).

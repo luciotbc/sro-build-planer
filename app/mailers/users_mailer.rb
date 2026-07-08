@@ -7,4 +7,10 @@ class UsersMailer < ApplicationMailer
       )
     mail to: user.email_address
   end
+
+  def data_export(user, filename:, content:)
+    @user = user
+    attachments[filename] = { mime_type: "application/zip", content: content }
+    mail to: user.email_address
+  end
 end
