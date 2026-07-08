@@ -13,5 +13,12 @@
           } do %>
       <%= render "settings/email_form" %>
     <% end %>
+    <%= render layout: "shared/settings_card",
+          locals: {
+            title: t("settings.password.title"),
+            description: t("settings.password.description")
+          } do %>
+      <%= render "settings/password_form" %>
+    <% end %>
   </div>
 </div>

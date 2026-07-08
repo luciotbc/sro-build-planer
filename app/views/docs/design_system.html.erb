@@ -279,6 +279,23 @@
       </div>
     </div>
     <%= render "docs/snippet", code: @snippets[:settings_card] %>
+
+    <%# ── Password rules checklist (task 024) ─────────────────────────── %>
+    <div>
+      <h3 class="text-lg font-bold text-text">Password rules checklist</h3>
+      <p class="text-text-dim">Live-checked <code class="text-brass-hi">.password-rules</code> panel from <code class="text-brass-hi">shared/_password_fields</code> — hidden until the user edits a password field, driven by the <code class="text-brass-hi">password-rules</code> Stimulus controller. Type to see it.</p>
+    </div>
+    <div class="rounded-panel border border-line bg-bg p-6">
+      <div class="max-w-lg" data-controller="password-rules">
+        <%= form_with url: "#", method: :get do |form| %>
+          <%= render "shared/password_fields",
+                form: form,
+                password_label: "New password",
+                confirmation_label: "Confirm password" %>
+        <% end %>
+      </div>
+    </div>
+    <%= render "docs/snippet", code: @snippets[:password_fields] %>
   </section>
 
   <%# ── Hotwire ─────────────────────────────────────────────────────────── %>

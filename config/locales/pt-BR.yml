@@ -171,6 +171,16 @@ pt-BR:
       unchanged: Seu e-mail não foi alterado.
       updated_check_inbox: E-mail atualizado. Verifique sua nova caixa de entrada
         para confirmá-lo.
+    password:
+      confirmation_label: Confirmar senha
+      current_label: Senha atual
+      current_placeholder: Digite a senha atual
+      description: Use uma senha forte com pelo menos 8 caracteres.
+      new_label: Nova senha
+      save: Atualizar senha
+      title: Atualizar senha
+      updated: Senha atualizada. Os outros dispositivos foram desconectados.
+      wrong_current: A senha atual está incorreta.
     show:
       heading: Configurações da conta
       subtitle: Gerencie suas credenciais de login, notificações e dados da conta.
@@ -222,6 +232,14 @@ pt-BR:
       mastery_suffix: "· mastery"
       range_label: Level da mastery %{name}
       skills: Skills
+    password_fields:
+      confirm_placeholder: Repita a nova senha
+      new_placeholder: Mín. 8 caracteres
+      rule_length: 8+ caracteres
+      rule_match: Confirmação idêntica
+      rule_number: Um número (0-9)
+      rule_uppercase: Uma letra maiúscula (A-Z)
+      rules_heading: 'A senha deve ter:'
     stats_summary:
       mastery_total: Total de mastery
       required_level: Level necessário

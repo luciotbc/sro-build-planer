@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resource :settings, only: :show
   namespace :settings do
     resource :email, only: :update
+    resource :password, only: :update
   end
   get "email_confirmation/:token" => "email_confirmations#show",
       :as => :email_confirmation

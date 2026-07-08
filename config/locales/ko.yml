@@ -163,6 +163,16 @@ ko:
       title: 이메일 변경
       unchanged: 이메일이 변경되지 않았습니다.
       updated_check_inbox: 이메일이 변경되었습니다. 새 이메일에서 확인 메일을 확인하세요.
+    password:
+      confirmation_label: 비밀번호 확인
+      current_label: 현재 비밀번호
+      current_placeholder: 현재 비밀번호를 입력하세요
+      description: 8자 이상의 강력한 비밀번호를 사용하세요.
+      new_label: 새 비밀번호
+      save: 비밀번호 변경
+      title: 비밀번호 변경
+      updated: 비밀번호가 변경되었습니다. 다른 기기에서는 로그아웃되었습니다.
+      wrong_current: 현재 비밀번호가 올바르지 않습니다.
     show:
       heading: 계정 설정
       subtitle: 로그인 정보, 알림 및 계정 데이터를 관리하세요.
@@ -214,6 +224,14 @@ ko:
       mastery_suffix: "· Mastery"
       range_label: "%{name} Mastery Level"
       skills: Skill
+    password_fields:
+      confirm_placeholder: 새 비밀번호를 다시 입력하세요
+      new_placeholder: 최소 8자
+      rule_length: 8자 이상
+      rule_match: 확인 입력 일치
+      rule_number: 숫자 1개 (0-9)
+      rule_uppercase: 대문자 1개 (A-Z)
+      rules_heading: '비밀번호 요건:'
     stats_summary:
       mastery_total: Mastery 합계
       required_level: 필요 Level

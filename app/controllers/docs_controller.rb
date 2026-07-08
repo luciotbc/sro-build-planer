@@ -59,6 +59,14 @@ class DocsController < ApplicationController
           <%# section body %>
         <% end %>
       ERB
+      password_fields: <<~ERB,
+        <%= form_with url: settings_password_path, method: :patch,
+              data: { controller: "password-rules" } do |form| %>
+          <%= render "shared/password_fields", form: form,
+                password_label: "New password",
+                confirmation_label: "Confirm password" %>
+        <% end %>
+      ERB
       turbo_frame: <<~ERB,
         <%# Lazy-load a modal's body inside a Turbo Frame %>
         <%= turbo_frame_tag "modal", src: edit_character_path(@character), loading: :lazy %>
