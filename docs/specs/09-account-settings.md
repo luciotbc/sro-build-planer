@@ -16,13 +16,20 @@
 - No topbar entry for now (explicit scope decision, task 022): the page is reachable by direct URL. Adding a topbar/menu link is future work and must not modify `shared/_topbar` until then.
 
 ### R3 — Section inventory
-The page hosts, in order: Update email *(R4 — task 023)*, Update password *(planned — 024)*, Email me updates about SRO Labs *(planned — 027)*, My data *(planned — 028, export 029)*, Delete account *(planned — 030)*. Each section's rules join this spec when its task ships.
+The page hosts, in order: Update email *(R4 — task 023)*, Update password *(R5 — task 024)*, Email me updates about SRO Labs *(planned — 027)*, My data *(planned — 028, export 029)*, Delete account *(planned — 030)*. Each section's rules join this spec when its task ships.
 
 ### R4 — Update email (task 023)
 - **Given** a logged-in user, **when** they submit a new valid email, **then** the email is updated, `email_confirmed_at` is reset to `nil`, and a confirmation email is sent to the **new** address (existing `email_confirmation` flow) — the user must re-verify. The session is kept.
 - **Given** the previous state's confirmation links, **when** the email changes, **then** they stop working (the token embeds `email_confirmed_at`).
 - **Given** an invalid or already-taken email, **when** submitted, **then** an inline validation message is shown, nothing changes, no mail is sent, and the taken-email error does not reveal the other account.
 - **Given** an unchanged email, **when** submitted, **then** it is a no-op with a neutral notice (no mail, confirmation kept).
+- Updates are rate-limited (same posture as registration).
+
+### R5 — Update password (task 024)
+- **Given** a logged-in user, **when** they submit current + new + confirmation, **then** the current password must authenticate and the new password must satisfy the `User` model validations (min 8 chars, one uppercase, one number, confirmation match) — the model is the single source of truth; the live checklist merely mirrors it.
+- **Given** a successful change, **then** every OTHER session of the user is destroyed; the session performing the change stays valid.
+- **Given** a wrong current password or failed validation, **then** an inline error is shown and nothing changes.
+- The "Password must have" checklist (shared `_password_fields` + `password-rules` Stimulus controller) stays hidden until the user edits the new/confirmation field; it is client-side UX only — the server re-validates with JS disabled.
 - Updates are rate-limited (same posture as registration).
 
 ## Cross-links

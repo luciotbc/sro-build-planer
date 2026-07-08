@@ -158,6 +158,16 @@ zh-CN:
       title: 更新邮箱
       unchanged: 您的邮箱未更改。
       updated_check_inbox: 邮箱已更新。请检查新邮箱以完成验证。
+    password:
+      confirmation_label: 确认密码
+      current_label: 当前密码
+      current_placeholder: 输入当前密码
+      description: 请使用至少 8 个字符的强密码。
+      new_label: 新密码
+      save: 更新密码
+      title: 更新密码
+      updated: 密码已更新。其他设备已退出登录。
+      wrong_current: 当前密码不正确。
     show:
       heading: 账户设置
       subtitle: 管理您的登录凭据、通知和账户数据。
@@ -209,6 +219,14 @@ zh-CN:
       mastery_suffix: "· Mastery"
       range_label: "%{name} Mastery 等级"
       skills: Skill
+    password_fields:
+      confirm_placeholder: 再次输入新密码
+      new_placeholder: 至少 8 个字符
+      rule_length: 8 个以上字符
+      rule_match: 确认输入一致
+      rule_number: 一个数字 (0-9)
+      rule_uppercase: 一个大写字母 (A-Z)
+      rules_heading: 密码必须包含：
     stats_summary:
       mastery_total: Mastery 总计
       required_level: 所需 Level

@@ -172,6 +172,16 @@ tr:
       unchanged: E-postanız değişmedi.
       updated_check_inbox: E-posta güncellendi. Doğrulamak için yeni gelen kutunuzu
         kontrol edin.
+    password:
+      confirmation_label: Şifreyi onayla
+      current_label: Mevcut şifre
+      current_placeholder: Mevcut şifreyi girin
+      description: En az 8 karakterli güçlü bir şifre kullanın.
+      new_label: Yeni şifre
+      save: Şifreyi güncelle
+      title: Şifreyi güncelle
+      updated: Şifre güncellendi. Diğer cihazlardaki oturumlar kapatıldı.
+      wrong_current: Mevcut şifre yanlış.
     show:
       heading: Hesap ayarları
       subtitle: Oturum açma bilgilerinizi, bildirimlerinizi ve hesap verilerinizi
@@ -224,6 +234,14 @@ tr:
       mastery_suffix: "· mastery"
       range_label: "%{name} mastery level'ı"
       skills: Skill'ler
+    password_fields:
+      confirm_placeholder: Yeni şifreyi tekrarlayın
+      new_placeholder: En az 8 karakter
+      rule_length: 8+ karakter
+      rule_match: Eşleşen onay
+      rule_number: Bir rakam (0-9)
+      rule_uppercase: Bir büyük harf (A-Z)
+      rules_heading: 'Şifre şunları içermelidir:'
     stats_summary:
       mastery_total: Toplam mastery
       required_level: Gereken level

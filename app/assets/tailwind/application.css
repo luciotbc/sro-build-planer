@@ -831,4 +831,49 @@
   .settings-card-body {
     margin-top: 14px;
   }
+
+  /* ── Password rules checklist (shared/_password_fields) ───────────────── */
+  .password-rules {
+    background: var(--color-card-hi);
+    border-radius: var(--radius-field);
+    padding: 12px 14px;
+  }
+
+  .password-rules-heading {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-dim);
+  }
+
+  .password-rules-list {
+    margin-top: 8px;
+    display: grid;
+    gap: 6px;
+  }
+
+  .password-rules-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8125rem;
+    color: var(--color-text-dim);
+  }
+
+  .password-rules-list li::before {
+    content: "✕";
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-red);
+  }
+
+  .password-rules-list li[data-met="true"] {
+    color: var(--color-text);
+  }
+
+  .password-rules-list li[data-met="true"]::before {
+    content: "✓";
+    color: var(--color-green);
+  }
 }

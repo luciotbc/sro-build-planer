@@ -169,6 +169,16 @@ en:
       title: Update email
       unchanged: Your email is unchanged.
       updated_check_inbox: Email updated. Check your new inbox to verify it.
+    password:
+      confirmation_label: Confirm password
+      current_label: Current password
+      current_placeholder: Enter current password
+      description: Use a strong password with at least 8 characters.
+      new_label: New password
+      save: Update password
+      title: Update password
+      updated: Password updated. Other devices were signed out.
+      wrong_current: Current password is incorrect.
     show:
       heading: Account settings
       subtitle: Manage your login credentials, notifications, and account data.
@@ -220,6 +230,14 @@ en:
       mastery_suffix: "· mastery"
       range_label: "%{name} mastery level"
       skills: Skills
+    password_fields:
+      confirm_placeholder: Repeat new password
+      new_placeholder: Min. 8 characters
+      rule_length: 8+ characters
+      rule_match: Matching confirmation
+      rule_number: One number (0-9)
+      rule_uppercase: One uppercase letter (A-Z)
+      rules_heading: 'Password must have:'
     stats_summary:
       mastery_total: Mastery total
       required_level: Required level
