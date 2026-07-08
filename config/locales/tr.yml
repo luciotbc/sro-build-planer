@@ -183,6 +183,9 @@ tr:
       created: Hesap oluşturulma tarihi
       description: Hesabınızla ilişkili verilerin özeti.
       email: E-posta adresi
+      export: Verilerimi dışa aktar
+      export_enqueued: Dışa aktarmanız hazırlanıyor — kısa süre içinde e-postayla
+        alacaksınız.
       terms_accepted: Şartlar ve gizlilik politikası kabul tarihi
       title: Verilerim
     password:
@@ -286,6 +289,13 @@ tr:
         one: 1 level
         other: "%{count} level"
   users_mailer:
+    data_export:
+      body: SRO Lab hesap verilerinizin dışa aktarımı ektedir.
+      contents: Zip, kişisel verilerinizi içeren user.csv dosyasını ve her karakter
+        için Build bilgilerini (Mastery ve Skill, mevcut ve gelecek seviyeler) içeren
+        birer CSV dosyasını içerir.
+      heading: Veri dışa aktarımınız
+      subject: SRO Lab veri dışa aktarımınız
     email_confirmation:
       button: E-postamı onayla
       expiry: Bu bağlantının süresi 24 saat içinde dolar. Hesap oluşturmadıysan bu

@@ -13,6 +13,7 @@ ignore_unused:
   # Action Mailer resolves subjects implicitly via default_i18n_subject.
   - "passwords_mailer.reset.subject"
   - "users_mailer.email_confirmation.subject"
+  - "users_mailer.data_export.subject"
   # Referenced via a multiline I18n.t call the static scanner cannot see
   # (app/services/character_masteries/update_service.rb).
   - "warnings.character_level_updated"

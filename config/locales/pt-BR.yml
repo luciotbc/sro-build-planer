@@ -182,6 +182,9 @@ pt-BR:
       created: Conta criada
       description: Um resumo dos dados associados à sua conta.
       email: Endereço de e-mail
+      export: Exportar meus dados
+      export_enqueued: Estamos preparando sua exportação — você a receberá por e-mail
+        em instantes.
       terms_accepted: Termos e política de privacidade aceitos
       title: Meus dados
     password:
@@ -284,6 +287,12 @@ pt-BR:
         one: 1 level
         other: "%{count} levels"
   users_mailer:
+    data_export:
+      body: Em anexo está a exportação dos dados da sua conta do SRO Lab.
+      contents: O zip contém user.csv com seus dados pessoais e um CSV por personagem
+        com sua Build (Masteries e Skills, níveis atuais e futuros).
+      heading: Sua exportação de dados
+      subject: Sua exportação de dados do SRO Lab
     email_confirmation:
       button: Confirmar meu email
       expiry: Este link expira em 24 horas. Se você não criou uma conta, pode ignorar

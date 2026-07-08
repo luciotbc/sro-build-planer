@@ -43,6 +43,7 @@ describe "i18n backend keys" do
     characters.destroy.deleted
     passwords_mailer.reset.subject
     users_mailer.email_confirmation.subject
+    users_mailer.data_export.subject
     errors.skill_level.below_zero
     errors.skill_level.above_max
   ].freeze

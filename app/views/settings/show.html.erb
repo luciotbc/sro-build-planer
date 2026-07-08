@@ -69,6 +69,11 @@
           <span class="data-row-value"><%= Current.user.characters.count %></span>
         </div>
       </div>
+      <%= form_with url: settings_export_path, method: :post, class: "mt-4" do %>
+        <button type="submit" class="btn-ghost">
+          ⬇ <%= t("settings.my_data.export") %>
+        </button>
+      <% end %>
     <% end %>
   </div>
 </div>
