@@ -442,6 +442,7 @@ DEPENDENCIES
   rails-i18n
   rubocop-rails-omakase
   ruby-graphviz
+  rubyzip (~> 3.4)
   selenium-webdriver
   solid_cable
   solid_cache
