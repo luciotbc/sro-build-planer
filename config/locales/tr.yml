@@ -163,6 +163,15 @@ tr:
     new:
       title: Giriş yap
   settings:
+    email:
+      current_email_label: Mevcut e-posta
+      description: Oturum açma e-postanız ve önemli hesap bildirimlerini gönderdiğimiz
+        adres.
+      save: E-postayı kaydet
+      title: E-postayı güncelle
+      unchanged: E-postanız değişmedi.
+      updated_check_inbox: E-posta güncellendi. Doğrulamak için yeni gelen kutunuzu
+        kontrol edin.
     show:
       heading: Hesap ayarları
       subtitle: Oturum açma bilgilerinizi, bildirimlerinizi ve hesap verilerinizi
