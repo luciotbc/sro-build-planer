@@ -101,8 +101,6 @@ es:
         existe un usuario con ese email).
     edit:
       heading: Actualiza tu contraseña
-      password_confirmation_placeholder: Repite la nueva contraseña
-      password_placeholder: Introduce la nueva contraseña
       submit: Guardar
     invalid_token: El enlace para restablecer la contraseña no es válido o ha expirado.
     new:

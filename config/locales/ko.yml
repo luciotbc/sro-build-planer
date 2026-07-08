@@ -94,8 +94,6 @@ ko:
       instructions_sent: 비밀번호 재설정 안내를 보냈습니다(해당 이메일의 계정이 있는 경우).
     edit:
       heading: 비밀번호 변경
-      password_confirmation_placeholder: 새 비밀번호 다시 입력
-      password_placeholder: 새 비밀번호 입력
       submit: 저장
     invalid_token: 비밀번호 재설정 링크가 유효하지 않거나 만료되었습니다.
     new:
