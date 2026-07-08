@@ -33,11 +33,22 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  # Surface delivery failures in development instead of silently dropping mail
+  # (e.g. Mailpit not running) so email bugs are visible early.
+  config.action_mailer.raise_delivery_errors = true
 
   # Make template changes take effect immediately.
   config.action_mailer.perform_caching = false
+
+  # Capture all outgoing mail with Mailpit (fake SMTP + web inbox at :8025).
+  # Run it via `docker compose up -d mailpit` or a local `mailpit` binary.
+  # SMTP_ADDRESS/SMTP_PORT let you point elsewhere (e.g. when the app runs
+  # inside Docker and reaches Mailpit by service name).
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: ENV.fetch("SMTP_ADDRESS", "localhost"),
+    port: ENV.fetch("SMTP_PORT", 1025)
+  }
 
   # Set localhost to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }

@@ -1,0 +1,13 @@
+# Development-only services. Not used in production (deploy is via Kamal).
+# Mailpit — fake SMTP server that captures every outgoing email in a web inbox.
+#   SMTP: localhost:1025  (Action Mailer delivers here in development)
+#   Web UI: http://localhost:8025  (read captured mail)
+# Run: docker compose up -d mailpit
+services:
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: sro_mailpit
+    restart: unless-stopped
+    ports:
+      - "1025:1025" # SMTP
+      - "8025:8025" # web UI
