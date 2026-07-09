@@ -22,6 +22,8 @@ Rails.application.routes.draw do
     resource :email_opt_in, only: :update
     resource :export, only: :create
     resource :account, only: :destroy
+    # Application-language selection from the topbar user menu (docs/todo/033).
+    resource :locale, only: :update
   end
   get "email_confirmation/:token" => "email_confirmations#show",
       :as => :email_confirmation

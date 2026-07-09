@@ -32,6 +32,43 @@
 
   <div class="menu-panel" role="menu" data-menu-target="panel" hidden>
     <p class="menu-email" title="<%= email %>"><%= email %></p>
+
+    <div class="menu-submenu" data-controller="menu">
+      <button
+        type="button"
+        class="menu-item menu-submenu-trigger"
+        role="menuitem"
+        data-menu-target="trigger"
+        data-action="menu#toggle"
+        aria-haspopup="menu"
+        aria-expanded="false"
+      >
+        <span class="menu-submenu-caret" aria-hidden="true">◀</span>
+        <span class="menu-submenu-label"><%= t(".language") %></span>
+        <span class="menu-flag" aria-hidden="true"><%= LocaleOption.flag(I18n.locale) %></span>
+      </button>
+
+      <div class="submenu-panel" role="menu" data-menu-target="panel" hidden>
+        <% LocaleOption.all.each do |option| %>
+          <% current = option.code == I18n.locale.to_s %>
+          <%= button_to settings_locale_path,
+                method: :patch,
+                params: {
+                  locale: option.code
+                },
+                class: "menu-item menu-locale#{" is-active" if current}",
+                form: {
+                  role: "menuitem"
+                } do %>
+            <span class="menu-flag" aria-hidden="true"><%= option.flag %></span>
+            <span class="menu-locale-name"><%= option.native_name %></span>
+            <span class="menu-locale-code"><%= option.code %></span>
+            <span class="menu-locale-check" aria-hidden="true"><%= "✓" if current %></span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
     <%= link_to t("shared.account_settings"),
           settings_path,
           class: "menu-item",

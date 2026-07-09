@@ -177,6 +177,9 @@ ko:
       label: 제품 소식
       saved: 이메일 수신 설정이 저장되었습니다.
       title: SRO Labs 소식 이메일 받기
+    locales:
+      update:
+        updated: 언어가 변경되었습니다.
     my_data:
       characters: 생성한 캐릭터 수
       created: 계정 생성일
@@ -264,6 +267,7 @@ ko:
       dismiss: 닫기
     user_menu:
       label: 사용자 설정
+      language: 언어
   shared_builds:
     show:
       copy: 링크 복사

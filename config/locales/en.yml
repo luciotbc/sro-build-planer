@@ -186,6 +186,9 @@ en:
       label: Product updates
       saved: Email preference saved.
       title: Email me updates about SRO Labs
+    locales:
+      update:
+        updated: Language updated.
     my_data:
       characters: Total characters created
       created: Account created
@@ -273,6 +276,7 @@ en:
       dismiss: Dismiss
     user_menu:
       label: User settings
+      language: Language
   shared_builds:
     show:
       copy: Copy link
