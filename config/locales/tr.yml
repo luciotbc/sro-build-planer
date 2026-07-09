@@ -265,9 +265,11 @@ tr:
       submit: Kaydet
       title: Karakteri düzenle
     footer:
-      available_in: 'Mevcut diller:'
+      available_in: Mevcut diller
       developed_by_html: "%{author} tarafından geliştirildi"
+      disclaimer: Hayran yapımı araç. Joymax veya vSRO ile bağlantılı değildir.
       legal: Yasal
+      product_name: SRO Lab · Skill Planner
     log_out: Çıkış yap
     mastery_header:
       decrease: Mastery level'ını düşür

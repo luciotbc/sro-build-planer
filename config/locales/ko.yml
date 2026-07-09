@@ -251,7 +251,7 @@ ko:
       submit: 저장
       title: 캐릭터 편집
     footer:
-      available_in: '사용 가능한 언어:'
+      available_in: 사용 가능한 언어
       developed_by_html: '개발: %{author}'
       disclaimer: 팬 제작 도구입니다. Joymax 또는 vSRO와 관련이 없습니다.
       legal: 법적 고지

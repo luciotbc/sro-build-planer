@@ -260,7 +260,7 @@ en:
       submit: Save
       title: Edit character
     footer:
-      available_in: 'Available in:'
+      available_in: Available in
       developed_by_html: Developed by %{author}
       disclaimer: Fan-made tool. Not affiliated with Joymax or vSRO.
       legal: Legal

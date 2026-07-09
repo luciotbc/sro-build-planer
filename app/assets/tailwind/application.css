@@ -338,17 +338,18 @@
   }
   .site-footer-inner {
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 1fr) minmax(0, 1.15fr);
-    gap: 2rem;
-    align-items: start;
-  }
-  .site-footer-section {
-    margin: 0;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand disclaimer credit"
+      "langs langs       legal";
+    gap: 1.5rem 2rem;
+    align-items: center;
   }
   .site-footer-brand {
-    display: grid;
-    gap: 1rem;
-    justify-items: start;
+    grid-area: brand;
+  }
+  .site-footer-locales {
+    grid-area: langs;
   }
   .site-footer-logo {
     display: inline-flex;
@@ -370,18 +371,17 @@
     opacity: 0.68;
   }
   .site-footer-disclaimer {
+    grid-area: disclaimer;
     justify-self: center;
     max-width: 34rem;
+    margin: 0;
     text-align: center;
   }
-  .site-footer-meta {
-    display: grid;
-    gap: 1rem;
-    justify-items: end;
-    text-align: right;
-  }
   .site-footer-credit {
+    grid-area: credit;
+    justify-self: end;
     margin: 0;
+    white-space: nowrap;
   }
   .site-footer-link {
     color: var(--color-brass);
@@ -428,6 +428,8 @@
     cursor: default;
   }
   .site-footer-nav {
+    grid-area: legal;
+    justify-self: end;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -444,12 +446,15 @@
   @media (max-width: 900px) {
     .site-footer-inner {
       grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-    .site-footer-brand,
-    .site-footer-meta {
+      grid-template-areas: "brand" "langs" "disclaimer" "credit" "legal";
+      gap: 1.25rem;
       justify-items: center;
       text-align: center;
+    }
+    .site-footer-brand,
+    .site-footer-credit,
+    .site-footer-disclaimer {
+      justify-self: center;
     }
     .site-footer-locales,
     .site-footer-nav {

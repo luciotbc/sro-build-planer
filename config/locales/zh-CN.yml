@@ -246,7 +246,7 @@ zh-CN:
       submit: 保存
       title: 编辑角色
     footer:
-      available_in: 可用语言：
+      available_in: 可用语言
       developed_by_html: 由 %{author} 开发
       disclaimer: 粉丝制作工具。与 Joymax 或 vSRO 无关联。
       legal: 法律

@@ -267,7 +267,7 @@ es:
       submit: Guardar
       title: Editar personaje
     footer:
-      available_in: 'Disponible en:'
+      available_in: Disponible en
       developed_by_html: Desarrollado por %{author}
       disclaimer: Herramienta hecha por fans. No afiliada a Joymax ni a vSRO.
       legal: Legal

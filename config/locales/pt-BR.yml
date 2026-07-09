@@ -263,9 +263,11 @@ pt-BR:
       submit: Salvar
       title: Editar personagem
     footer:
-      available_in: 'Disponível em:'
+      available_in: Disponível em
       developed_by_html: Desenvolvido por %{author}
+      disclaimer: Ferramenta feita por fãs. Sem afiliação com a Joymax ou vSRO.
       legal: Jurídico
+      product_name: SRO Lab · Skill Planner
     log_out: Sair
     mastery_header:
       decrease: Diminuir level da mastery
