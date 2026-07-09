@@ -125,6 +125,23 @@ class CharactersShowTest < ActionDispatch::IntegrationTest
       get character_path(@char)
       assert_select "input[name='character[public]'][checked]"
     end
+
+    it "shows the private-state hint while the build is private" do
+      get character_path(@char)
+      assert_includes response.body,
+                      I18n.t("characters.show.sharing.hint_private")
+      refute_includes response.body,
+                      I18n.t("characters.show.sharing.hint_public")
+    end
+
+    it "shows the public-state hint once the build is public" do
+      @char.update!(public: true)
+      get character_path(@char)
+      assert_includes response.body,
+                      I18n.t("characters.show.sharing.hint_public")
+      refute_includes response.body,
+                      I18n.t("characters.show.sharing.hint_private")
+    end
   end
 
   # ---- out-of-cap groups hidden (spec 04 R5) -------------------------------

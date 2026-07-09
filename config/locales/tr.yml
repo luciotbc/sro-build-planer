@@ -33,7 +33,9 @@ tr:
         alınamaz.
       sharing:
         copy: Paylaşım bağlantısını kopyala
-        hint: Bağlantıya sahip herkes bu Build'i görebilir. Gizli yapmak için kapat.
+        hint_private: Bu Build gizli. Herkese açık bir bağlantı paylaşmak için aç.
+        hint_public: Bağlantıya sahip herkes bu Build'i görebilir. Gizli yapmak için
+          kapat.
         label: Herkese açık Build
         link_label: Herkese açık Build bağlantısı
         title: Paylaşım

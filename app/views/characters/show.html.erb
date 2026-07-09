@@ -47,7 +47,8 @@
                   method: :patch,
                   data: { controller: "autosubmit" } do %>
       <div class="flex items-center justify-between gap-6">
-        <p class="max-w-sm text-[0.8125rem] text-text-dim"><%= t("characters.show.sharing.hint") %></p>
+        <% hint_key = @character.public? ? "hint_public" : "hint_private" %>
+        <p class="max-w-sm text-[0.8125rem] text-text-dim"><%= t("characters.show.sharing.#{hint_key}") %></p>
         <%= render "shared/toggle",
               name: "character[public]",
               checked: @character.public?,

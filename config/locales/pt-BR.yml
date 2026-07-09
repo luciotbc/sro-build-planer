@@ -33,8 +33,9 @@ pt-BR:
         não pode ser desfeita.
       sharing:
         copy: Copiar link de compartilhamento
-        hint: Qualquer pessoa com o link pode ver esta Build. Desative para torná-la
-          privada.
+        hint_private: Esta Build está privada. Ative para compartilhar um link público.
+        hint_public: Qualquer pessoa com o link pode ver esta Build. Desative para
+          torná-la privada.
         label: Build pública
         link_label: Link da Build pública
         title: Compartilhamento
