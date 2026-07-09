@@ -39,7 +39,12 @@ RUN apt-get update -qq && \
 COPY vendor/* ./vendor/
 COPY Gemfile Gemfile.lock ./
 
-RUN bundle install && \
+# BUNDLE_JOBS=1 forces a serial install: llhttp-ffi (via mailersend-ruby ->
+# http) builds a native extension with ffi-compiler, which must resolve the
+# already-installed ffi gem. Under a parallel install that build races ahead of
+# ffi's spec registration and fails with "Could not find 'ffi'". Serial install
+# guarantees ffi is fully installed first.
+RUN BUNDLE_JOBS=1 bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     # -j 1 disable parallel compilation to avoid a QEMU bug: https://github.com/rails/bootsnap/issues/495
     bundle exec bootsnap precompile -j 1 --gemfile
