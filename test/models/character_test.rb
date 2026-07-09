@@ -201,9 +201,10 @@ class CharacterTest < ActiveSupport::TestCase
 
   # ---------- share token -----------------------------------------------------
 
-  it "generates a UUID share_token on create" do
+  it "generates a short base58 share_token on create" do
     character = create(:character, race:, user:)
-    assert_match(/\A\h{8}-\h{4}-\h{4}-\h{4}-\h{12}\z/, character.share_token)
+    # has_secure_token(length: 10) → 10 base58 chars for a compact share URL.
+    assert_match(/\A[1-9A-HJ-NP-Za-km-z]{10}\z/, character.share_token)
   end
 
   it "keeps the share_token stable across updates" do
