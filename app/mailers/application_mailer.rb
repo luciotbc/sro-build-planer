@@ -1,5 +1,7 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "from@example.com"
+  default from:
+            Rails.application.credentials.dig(:smtp, :from) ||
+              "from@example.com"
   layout "mailer"
 
   # Render the subject + body in the recipient's saved locale (docs/todo/033).

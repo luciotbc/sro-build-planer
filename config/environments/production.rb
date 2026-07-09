@@ -58,23 +58,28 @@ Rails.application.configure do
   # Raise delivery errors so a misconfigured SMTP server fails loudly in logs.
   config.action_mailer.raise_delivery_errors = true
 
+  # SMTP config. Secrets and per-environment values come ONLY from encrypted
+  # credentials (`bin/rails credentials:edit --environment <env>`), never from
+  # .env or plaintext. The decrypt key is injected as RAILS_MASTER_KEY (Kamal
+  # env/secret). Non-secret settings (port, authentication, TLS) live here as
+  # secure defaults — credentials override only what is truly secret or
+  # environment-specific.
+  smtp = Rails.application.credentials.smtp || {}
+
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = {
-    host: Rails.application.credentials.dig(:smtp, :host) || "example.com"
+    host: smtp[:host] || "example.com"
   }
 
-  # Outgoing SMTP. Secrets come ONLY from per-environment encrypted credentials
-  # (`bin/rails credentials:edit --environment <env>`), never from .env or
-  # plaintext. The decrypt key is injected as RAILS_MASTER_KEY (Kamal env/secret).
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: Rails.application.credentials.dig(:smtp, :address),
-    port: Rails.application.credentials.dig(:smtp, :port),
-    user_name: Rails.application.credentials.dig(:smtp, :user_name),
-    password: Rails.application.credentials.dig(:smtp, :password),
-    domain: Rails.application.credentials.dig(:smtp, :domain),
-    authentication: :plain,
-    enable_starttls_auto: true
+    address: smtp[:address],
+    port: smtp[:port] || 587,
+    user_name: smtp[:user_name],
+    password: smtp[:password],
+    domain: smtp[:domain],
+    authentication: smtp[:authentication] || :plain,
+    starttls: smtp.fetch(:starttls, true)
   }
 
   # Do not dump schema after migrations.
