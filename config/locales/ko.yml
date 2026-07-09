@@ -253,7 +253,9 @@ ko:
     footer:
       available_in: '사용 가능한 언어:'
       developed_by_html: '개발: %{author}'
+      disclaimer: 팬 제작 도구입니다. Joymax 또는 vSRO와 관련이 없습니다.
       legal: 법적 고지
+      product_name: SRO Lab · Skill Planner
     log_out: 로그아웃
     mastery_header:
       decrease: Mastery Level 낮추기

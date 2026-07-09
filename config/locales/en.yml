@@ -262,7 +262,9 @@ en:
     footer:
       available_in: 'Available in:'
       developed_by_html: Developed by %{author}
+      disclaimer: Fan-made tool. Not affiliated with Joymax or vSRO.
       legal: Legal
+      product_name: SRO Lab · Skill Planner
     log_out: Log out
     mastery_header:
       decrease: Decrease mastery level

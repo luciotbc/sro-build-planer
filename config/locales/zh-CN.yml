@@ -248,7 +248,9 @@ zh-CN:
     footer:
       available_in: 可用语言：
       developed_by_html: 由 %{author} 开发
+      disclaimer: 粉丝制作工具。与 Joymax 或 vSRO 无关联。
       legal: 法律
+      product_name: SRO Lab · Skill Planner
     log_out: 退出登录
     mastery_header:
       decrease: 降低 Mastery 等级
