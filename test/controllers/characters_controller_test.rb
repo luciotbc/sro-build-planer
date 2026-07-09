@@ -82,11 +82,18 @@ class CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  it "shows a share button with the public build URL on show" do
+  it "shows a share button with the public build URL once the build is public" do
+    @char.update!(public: true)
     sign_in_as @user
     get character_path(@char)
     assert_select "[data-controller=clipboard][data-clipboard-text-value=?]",
                   shared_build_url(@char.share_token)
+  end
+
+  it "hides the char-bar share button while the build is private" do
+    sign_in_as @user
+    get character_path(@char)
+    assert_select ".char-bar [data-controller=clipboard]", count: 0
   end
 
   # ---- update ---------------------------------------------------------------
@@ -158,5 +165,55 @@ class CharactersControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @user
     delete character_path(@other_char)
     assert_response :not_found
+  end
+
+  # ---- visibility (spec 05 R11a/R13) ----------------------------------------
+
+  it "makes a character public and redirects to the planner" do
+    sign_in_as @user
+    patch visibility_character_path(@char),
+          params: {
+            character: {
+              public: "1"
+            }
+          }
+    assert_redirected_to character_path(@char)
+    assert @char.reload.public?
+  end
+
+  it "makes a character private again" do
+    @char.update!(public: true)
+    sign_in_as @user
+    patch visibility_character_path(@char),
+          params: {
+            character: {
+              public: "0"
+            }
+          }
+    assert_redirected_to character_path(@char)
+    refute @char.reload.public?
+  end
+
+  it "returns 404 when changing another user's character visibility" do
+    sign_in_as @user
+    patch visibility_character_path(@other_char),
+          params: {
+            character: {
+              public: "1"
+            }
+          }
+    assert_response :not_found
+    refute @other_char.reload.public?
+  end
+
+  it "redirects unauthenticated visibility changes to login" do
+    patch visibility_character_path(@char),
+          params: {
+            character: {
+              public: "1"
+            }
+          }
+    assert_redirected_to new_session_path
+    refute @char.reload.public?
   end
 end

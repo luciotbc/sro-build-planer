@@ -4,7 +4,14 @@ class SharedBuildsControllerTest < ActionDispatch::IntegrationTest
   before do
     @user = create(:user)
     @race = create(:race, name: "Chinese")
-    @char = create(:character, user: @user, race: @race, name: "Blade Lord")
+    @char =
+      create(
+        :character,
+        user: @user,
+        race: @race,
+        name: "Blade Lord",
+        public: true
+      )
     @mastery = create(:mastery, race: @race, name: "Blade")
     create(
       :character_mastery,
@@ -37,6 +44,29 @@ class SharedBuildsControllerTest < ActionDispatch::IntegrationTest
   it "returns 404 for an unknown share token" do
     get shared_build_path("00000000-0000-0000-0000-000000000000")
     assert_response :not_found
+  end
+
+  # ---- visibility gate (spec 05 R11a/R12) ------------------------------------
+
+  it "returns 404 for a private character even with a valid token" do
+    private_char =
+      create(
+        :character,
+        user: @user,
+        race: @race,
+        name: "Secret",
+        public: false
+      )
+    get shared_build_path(private_char.share_token)
+    assert_response :not_found
+  end
+
+  it "renders the build once the owner makes it public" do
+    private_char = create(:character, user: @user, race: @race, name: "Secret")
+    private_char.update!(public: true)
+    get shared_build_path(private_char.share_token)
+    assert_response :success
+    assert_includes response.body, "Secret"
   end
 
   # ---- read-only guarantee ---------------------------------------------------
@@ -76,7 +106,8 @@ class SharedBuildsControllerTest < ActionDispatch::IntegrationTest
   end
 
   it "renders empty-safe OG description for a character without masteries" do
-    empty_char = create(:character, user: @user, race: @race, name: "Fresh")
+    empty_char =
+      create(:character, user: @user, race: @race, name: "Fresh", public: true)
     get shared_build_path(empty_char.share_token)
     assert_response :success
     assert_select "meta[property='og:title'][content='Fresh']"
