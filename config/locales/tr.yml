@@ -31,6 +31,12 @@ tr:
       delete: Karakteri sil
       delete_confirm: Bu karakter ve tüm build verileri silinsin mi? Bu işlem geri
         alınamaz.
+      sharing:
+        copy: Paylaşım bağlantısını kopyala
+        hint: Bağlantıya sahip herkes bu Build'i görebilir. Gizli yapmak için kapat.
+        label: Herkese açık Build
+        link_label: Herkese açık Build bağlantısı
+        title: Paylaşım
       summary: Özet
     skills_panel:
       current: Mevcut
@@ -43,6 +49,8 @@ tr:
       skills: Skill'ler
     update:
       updated: Karakter güncellendi.
+    visibility:
+      updated: Paylaşım ayarları güncellendi.
   email_confirmations:
     resend:
       sent: Hesabının hâlâ onaya ihtiyacı varsa yeni bir bağlantı gönderdik.

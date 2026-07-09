@@ -31,6 +31,12 @@ en:
       delete: Delete character
       delete_confirm: Delete this character and all its build data? This cannot be
         undone.
+      sharing:
+        copy: Copy share link
+        hint: Anyone with the link can view this Build. Turn off to make it private.
+        label: Public Build
+        link_label: Public Build link
+        title: Sharing
       summary: Summary
     skills_panel:
       current: Current
@@ -43,6 +49,8 @@ en:
       skills: Skills
     update:
       updated: Character updated.
+    visibility:
+      updated: Sharing settings updated.
   email_confirmations:
     resend:
       sent: If your account still needs confirmation, we've sent a new link.

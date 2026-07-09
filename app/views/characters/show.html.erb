@@ -10,7 +10,7 @@
           race:      @character.race.name,
           level:     @character.server_level_cap,
           editable:  true,
-          share_url: shared_build_url(@character.share_token),
+          share_url: (shared_build_url(@character.share_token) if @character.public?),
           class:     "md:max-w-none" %>
     <%= render "shared/edit_character", character: @character %>
   </div>
@@ -32,6 +32,50 @@
         series_groups:         @series_groups,
         tab_url:               ->(m) { character_path(@character, mastery_id: m.id) },
         editable:              true %>
+
+  <%# ── Box: sharing / public build (spec 05 R11a/R13) ──────────────────── %>
+  <%# NOTE: keys are absolute — inside a settings_card layout block a relative
+      t(".x") resolves against the partial, not this template. %>
+  <%= render layout: "shared/settings_card",
+        locals: {
+          title: t("characters.show.sharing.title")
+        } do %>
+    <%# Public/private toggle — autosubmit, mirrors settings/email_opt_in.
+        The visible "Public Build" label is dropped as redundant with the
+        heading + hint; sr_label keeps the control named for screen readers. %>
+    <%= form_with url: visibility_character_path(@character),
+                  method: :patch,
+                  data: { controller: "autosubmit" } do %>
+      <div class="flex items-center justify-between gap-6">
+        <p class="max-w-sm text-[0.8125rem] text-text-dim"><%= t("characters.show.sharing.hint") %></p>
+        <%= render "shared/toggle",
+              name: "character[public]",
+              checked: @character.public?,
+              sr_label: t("characters.show.sharing.label"),
+              attrs: { data: { action: "change->autosubmit#submit" } } %>
+      </div>
+    <% end %>
+
+    <%# Share link + copy — only revealed while the build is public. %>
+    <% if @character.public? %>
+      <div class="mt-4 flex items-center gap-2"
+           data-controller="clipboard"
+           data-clipboard-text-value="<%= shared_build_url(@character.share_token) %>">
+        <input type="text" readonly
+               value="<%= shared_build_url(@character.share_token) %>"
+               class="min-w-0 flex-1 rounded-field border border-line bg-card px-3 py-2 text-sm text-text-dim"
+               aria-label="<%= t("characters.show.sharing.link_label") %>"
+               data-action="focus->clipboard#copy" />
+        <button type="button" class="icon-btn shrink-0"
+                data-action="clipboard#copy"
+                aria-label="<%= t("characters.show.sharing.copy") %>"
+                title="<%= t("characters.show.sharing.copy") %>">
+          <span data-clipboard-target="icon" aria-hidden="true">⧉</span>
+          <span data-clipboard-target="check" class="hidden text-brass" aria-hidden="true">✓</span>
+        </button>
+      </div>
+    <% end %>
+  <% end %>
 
   <%# ── Footer ────────────────────────────────────────────────────────────── %>
   <div class="flex items-center">

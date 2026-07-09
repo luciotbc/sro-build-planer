@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     resources :character_skills, only: [:update], param: :skill_group_id
     resources :character_masteries, only: [:update], param: :mastery_id
     member do
+      patch :visibility
       post :max_mastery, to: "bulk_skill_actions#max_mastery"
       post :max_skills, to: "bulk_skill_actions#max_skills"
       post :clear_mastery, to: "bulk_skill_actions#clear_mastery"

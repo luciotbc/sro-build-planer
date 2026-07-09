@@ -101,6 +101,32 @@ class CharactersShowTest < ActionDispatch::IntegrationTest
     assert_match "Spear", response.body
   end
 
+  # ---- sharing (spec 05 R11a/R13) -------------------------------------------
+
+  describe "sharing card" do
+    it "renders the visibility toggle" do
+      get character_path(@char)
+      assert_select "input[type=checkbox][name='character[public]']"
+    end
+
+    it "hides the share link while the build is private" do
+      get character_path(@char)
+      refute_includes response.body, shared_build_url(@char.share_token)
+    end
+
+    it "shows the share link once the build is public" do
+      @char.update!(public: true)
+      get character_path(@char)
+      assert_includes response.body, shared_build_url(@char.share_token)
+    end
+
+    it "checks the toggle for a public build" do
+      @char.update!(public: true)
+      get character_path(@char)
+      assert_select "input[name='character[public]'][checked]"
+    end
+  end
+
   # ---- out-of-cap groups hidden (spec 04 R5) -------------------------------
 
   describe "server-cap filtering" do
