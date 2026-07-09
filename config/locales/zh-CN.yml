@@ -30,6 +30,13 @@ zh-CN:
     show:
       delete: 删除角色
       delete_confirm: 确定删除该角色及其全部 Build 数据吗？此操作无法撤销。
+      sharing:
+        copy: 复制分享链接
+        description: 控制谁可以打开此 Build 的只读页面。
+        hint: 拥有链接的任何人都能查看此 Build。关闭即可设为私有。
+        label: 公开 Build
+        link_label: 公开 Build 链接
+        title: 分享
       summary: 汇总
     skills_panel:
       current: 当前
@@ -42,6 +49,8 @@ zh-CN:
       skills: Skill
     update:
       updated: 角色已更新。
+    visibility:
+      updated: 分享设置已更新。
   email_confirmations:
     resend:
       sent: 如果你的账号仍需验证，我们已发送新的链接。

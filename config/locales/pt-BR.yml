@@ -31,6 +31,14 @@ pt-BR:
       delete: Excluir personagem
       delete_confirm: Excluir este personagem e todos os dados da build? Essa ação
         não pode ser desfeita.
+      sharing:
+        copy: Copiar link de compartilhamento
+        description: Controle quem pode abrir a página somente leitura desta Build.
+        hint: Qualquer pessoa com o link pode ver esta Build. Desative para torná-la
+          privada.
+        label: Build pública
+        link_label: Link da Build pública
+        title: Compartilhamento
       summary: Resumo
     skills_panel:
       current: Atual
@@ -43,6 +51,8 @@ pt-BR:
       skills: Skills
     update:
       updated: Personagem atualizado.
+    visibility:
+      updated: Configurações de compartilhamento atualizadas.
   email_confirmations:
     resend:
       sent: Se a sua conta ainda precisar de confirmação, enviamos um novo link.

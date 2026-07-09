@@ -4,8 +4,11 @@ class SharedBuildsController < ApplicationController
   allow_unauthenticated_access
 
   def show
-    @character = Character.find_by(share_token: params[:share_token]) or
-      return head :not_found
+    @character = Character.find_by(share_token: params[:share_token])
+    # A private build is indistinguishable from a missing one (spec 05 R12):
+    # both return 404 so visibility never leaks through the response.
+    return head :not_found unless @character&.public?
+
     load_build_view_data(@character)
   end
 end

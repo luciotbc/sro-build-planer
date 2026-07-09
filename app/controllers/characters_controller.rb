@@ -2,7 +2,7 @@ class CharactersController < ApplicationController
   include EditorSeriesBuilder
   include BuildViewData
 
-  before_action :set_character, only: %i[show edit update destroy]
+  before_action :set_character, only: %i[show edit update destroy visibility]
 
   def index
     redirect_to root_path
@@ -79,6 +79,13 @@ class CharactersController < ApplicationController
     redirect_to characters_path, notice: t(".deleted"), status: :see_other
   end
 
+  # Toggles the public/private visibility of the shared-build page (spec 05
+  # R11a/R13). A one-attribute state flip — thin controller, no service needed.
+  def visibility
+    @character.update(public: visibility_params[:public])
+    redirect_to @character, notice: t(".updated")
+  end
+
   private
 
   def set_character
@@ -88,5 +95,9 @@ class CharactersController < ApplicationController
 
   def character_params
     params.require(:character).permit(:name, :race_id, :server_level_cap)
+  end
+
+  def visibility_params
+    params.require(:character).permit(:public)
   end
 end

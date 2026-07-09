@@ -30,6 +30,13 @@ ko:
     show:
       delete: 캐릭터 삭제
       delete_confirm: 이 캐릭터와 모든 Build 데이터를 삭제할까요? 되돌릴 수 없습니다.
+      sharing:
+        copy: 공유 링크 복사
+        description: 이 Build의 읽기 전용 페이지를 누가 열 수 있는지 설정합니다.
+        hint: 링크가 있는 누구나 이 Build를 볼 수 있습니다. 비공개로 하려면 끄세요.
+        label: 공개 Build
+        link_label: 공개 Build 링크
+        title: 공유
       summary: 요약
     skills_panel:
       current: 현재
@@ -42,6 +49,8 @@ ko:
       skills: Skill
     update:
       updated: 캐릭터가 수정되었습니다.
+    visibility:
+      updated: 공유 설정이 변경되었습니다.
   email_confirmations:
     resend:
       sent: 아직 인증이 필요한 계정이라면 새 링크를 보내 드렸습니다.
