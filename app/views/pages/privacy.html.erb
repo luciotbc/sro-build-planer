@@ -1,6 +1,6 @@
 <% content_for :title, t(".title") %>
 <article class="legal">
   <h1 class="legal-title"><%= t(".title") %></h1>
-  <%# Only English copy exists; every locale falls back to it. %>
-  <%= render "pages/privacy/content" %>
+  <%# pt-BR is translated; the other locales fall back to English. %>
+  <%= render(I18n.locale == :"pt-BR" ? "pages/privacy/pt_br" : "pages/privacy/en") %>
 </article>
