@@ -50,6 +50,8 @@ pt-BR:
       confirmed: Email confirmado. Boas-vindas ao SRO Labs!
       invalid_token: Esse link de confirmação é inválido ou expirou.
   errors:
+    locale:
+      unsupported: Idioma não suportado.
     server_level_cap:
       masteries_exceed: 'Não é possível baixar o Level Cap do servidor: masteries
         excedem o novo cap: %{mastery_names}'
@@ -94,6 +96,11 @@ pt-BR:
       subtitle: Veja uma build real em andamento — SP, masteries e séries, tudo à
         vista.
       title: Sua build, calculada com precisão
+  pages:
+    privacy:
+      title: Política de Privacidade
+    terms:
+      title: Termos de Serviço
   passwords:
     create:
       instructions_sent: Instruções para redefinir a senha enviadas (se existir um
@@ -255,6 +262,10 @@ pt-BR:
       name_placeholder: Digite o nome do personagem
       submit: Salvar
       title: Editar personagem
+    footer:
+      available_in: 'Disponível em:'
+      developed_by_html: Desenvolvido por %{author}
+      legal: Jurídico
     log_out: Sair
     mastery_header:
       decrease: Diminuir level da mastery

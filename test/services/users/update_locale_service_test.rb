@@ -28,4 +28,18 @@ class Users::UpdateLocaleServiceTest < ActiveSupport::TestCase
     assert result.errors.any?
     assert_equal "es", user.reload.locale
   end
+
+  it "validates a guest's locale without persisting anything" do
+    result = Users::UpdateLocaleService.call(user: nil, locale: "pt-BR")
+
+    assert result.success?
+    assert_equal "pt-BR", result.data
+  end
+
+  it "fails on an unsupported locale for a guest" do
+    result = Users::UpdateLocaleService.call(user: nil, locale: "xx")
+
+    assert_not result.success?
+    assert result.errors.any?
+  end
 end

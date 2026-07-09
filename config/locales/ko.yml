@@ -49,6 +49,8 @@ ko:
       confirmed: 이메일 인증 완료. SRO Labs에 오신 것을 환영합니다!
       invalid_token: 이 인증 링크는 유효하지 않거나 만료되었습니다.
   errors:
+    locale:
+      unsupported: 지원되지 않는 언어입니다.
     server_level_cap:
       masteries_exceed: '서버 Level Cap을 낮출 수 없습니다: masteries가 새 cap을 초과합니다: %{mastery_names}'
     skill_level:
@@ -89,6 +91,11 @@ ko:
         미리 보기
       subtitle: 진행 중인 실제 Build를 확인하세요 — Skill Point, Mastery, 시리즈를 한눈에.
       title: 정확하게 계산된 나만의 Build
+  pages:
+    privacy:
+      title: 개인정보 처리방침
+    terms:
+      title: 서비스 약관
   passwords:
     create:
       instructions_sent: 비밀번호 재설정 안내를 보냈습니다(해당 이메일의 계정이 있는 경우).
@@ -243,6 +250,10 @@ ko:
       name_placeholder: 캐릭터 이름 입력
       submit: 저장
       title: 캐릭터 편집
+    footer:
+      available_in: '사용 가능한 언어:'
+      developed_by_html: '개발: %{author}'
+      legal: 법적 고지
     log_out: 로그아웃
     mastery_header:
       decrease: Mastery Level 낮추기

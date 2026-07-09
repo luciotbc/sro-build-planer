@@ -50,6 +50,8 @@ tr:
       confirmed: E-posta onaylandı. SRO Labs'e hoş geldin!
       invalid_token: Bu onay bağlantısı geçersiz veya süresi dolmuş.
   errors:
+    locale:
+      unsupported: Desteklenmeyen dil.
     server_level_cap:
       masteries_exceed: 'Sunucu Level Cap''i düşürülemez: masteries yeni cap''i aşıyor:
         %{mastery_names}'
@@ -93,6 +95,11 @@ tr:
       subtitle: Devam eden gerçek bir build'i gör — skill point'ler, mastery'ler ve
         seriler tek bakışta.
       title: Build'in, tam hesaplanmış
+  pages:
+    privacy:
+      title: Gizlilik Politikası
+    terms:
+      title: Hizmet Şartları
   passwords:
     create:
       instructions_sent: Parola sıfırlama talimatları gönderildi (bu e-postaya sahip
@@ -257,6 +264,10 @@ tr:
       name_placeholder: Karakter adını gir
       submit: Kaydet
       title: Karakteri düzenle
+    footer:
+      available_in: 'Mevcut diller:'
+      developed_by_html: "%{author} tarafından geliştirildi"
+      legal: Yasal
     log_out: Çıkış yap
     mastery_header:
       decrease: Mastery level'ını düşür

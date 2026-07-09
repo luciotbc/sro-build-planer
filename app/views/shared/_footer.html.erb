@@ -1,0 +1,52 @@
+<%#
+  shared/footer — site-wide footer shown on every page
+  -----------------------------------------------------------------------
+  Three lines: legal links, an author credit, and a language switcher. Each
+  locale is a PATCH button to /settings/locale (works signed-out; persists to
+  the user record once signed in — spec 08 R12). The active locale renders as a
+  non-interactive brass marker; the rest are switch buttons.
+  Native language names come from LocaleOption (display data, never
+  translated — spec 08).
+%>
+<footer class="site-footer">
+  <nav class="site-footer-line site-footer-nav" aria-label="<%= t("shared.footer.legal") %>">
+    <%= link_to t("pages.privacy.title"), privacy_path, class: "site-footer-navlink" %>
+    <span class="site-footer-sep" aria-hidden="true">·</span>
+    <%= link_to t("pages.terms.title"), terms_path, class: "site-footer-navlink" %>
+  </nav>
+  <p class="site-footer-line">
+    <%= t(
+          "shared.footer.developed_by_html",
+          author:
+            link_to(
+              "@luciotbc",
+              "https://lucio.app/",
+              class: "site-footer-link",
+              target: "_blank",
+              rel: "noopener"
+            )
+        ) %>
+  </p>
+  <%# A div, not a <p>: button_to renders a <form>, which the HTML parser would
+      hoist out of a <p>, breaking the :last-child comma logic. %>
+  <div class="site-footer-line site-footer-locales">
+    <span class="site-footer-available"><%= t("shared.footer.available_in") %></span>
+    <% LocaleOption.all.each do |option| %>
+      <% if option.code == I18n.locale.to_s %>
+        <span
+          class="site-footer-locale-item site-footer-locale is-active"
+          aria-current="true"
+        ><%= option.native_name %></span>
+      <% else %>
+        <%= button_to option.native_name,
+              settings_locale_path,
+              method: :patch,
+              params: {
+                locale: option.code
+              },
+              class: "site-footer-locale",
+              form_class: "site-footer-locale-item" %>
+      <% end %>
+    <% end %>
+  </div>
+</footer>

@@ -16,6 +16,13 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  it "links the terms and privacy consent to the legal pages" do
+    get new_registration_path
+
+    assert_select "a[href=?]", terms_path
+    assert_select "a[href=?]", privacy_path
+  end
+
   it "creates a user and redirects home with the email stashed" do
     assert_difference "User.count", 1 do
       post registration_path, params: valid_params

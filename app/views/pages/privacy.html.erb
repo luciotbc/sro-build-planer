@@ -1,0 +1,6 @@
+<% content_for :title, t(".title") %>
+<article class="legal">
+  <h1 class="legal-title"><%= t(".title") %></h1>
+  <%# Only English copy exists; every locale falls back to it. %>
+  <%= render "pages/privacy/content" %>
+</article>

@@ -50,6 +50,8 @@ en:
       confirmed: Email confirmed. Welcome to SRO Labs!
       invalid_token: That confirmation link is invalid or has expired.
   errors:
+    locale:
+      unsupported: Unsupported language.
     server_level_cap:
       masteries_exceed: 'Cannot lower server level cap: masteries exceed new cap:
         %{mastery_names}'
@@ -92,6 +94,11 @@ en:
       subtitle: See a real build in progress — skill points, masteries, and series
         laid out at a glance.
       title: Your build, calculated precisely
+  pages:
+    privacy:
+      title: Privacy Policy
+    terms:
+      title: Terms of Service
   passwords:
     create:
       instructions_sent: Password reset instructions sent (if user with that email
@@ -252,6 +259,10 @@ en:
       name_placeholder: Enter character name
       submit: Save
       title: Edit character
+    footer:
+      available_in: 'Available in:'
+      developed_by_html: Developed by %{author}
+      legal: Legal
     log_out: Log out
     mastery_header:
       decrease: Decrease mastery level

@@ -11,6 +11,10 @@ Rails.application.routes.draw do
   # Public, read-only shared build page (docs/todo/021, spec 05).
   get "shared/:share_token" => "shared_builds#show", :as => :shared_build
 
+  # Public static legal pages (linked from the footer + sign-up form).
+  get "privacy" => "pages#privacy", :as => :privacy
+  get "terms" => "pages#terms", :as => :terms
+
   resource :session
   resources :passwords, param: :token
   resource :registration, only: %i[new create]
