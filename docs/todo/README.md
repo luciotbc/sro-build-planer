@@ -45,6 +45,7 @@ A task is delivered as ordered small PRs `feature/NNN-slug/NN-slice` (refactor �
 | 030 | [delete-account](030-delete-account.md) | 022 | Sonnet |
 | 031 | [transactional-email](031-transactional-email.md) | — | Sonnet |
 | 032 | [user-settings-menu-topbar](032-user-settings-menu-topbar.md) | 006,022 | Sonnet |
+| 033 | [language-selection](033-language-selection.md) | 032 | Sonnet |
 
 ## Dependency DAG / parallel lanes
 - Foundation (serial): 000 → 001 → 002 → 003.
@@ -58,5 +59,6 @@ A task is delivered as ordered small PRs `feature/NNN-slug/NN-slice` (refactor �
 - **Account settings** (mockup `account_settings.html`; topbar untouched): **022** (page shell + spec 09) → then **023 ∥ 024 ∥ 027 ∥ 028 ∥ 030** (one section per task); **025 ∥ 026** after 024 (password-fields/rules reuse); **029** after 028 (export button lives in the My data card).
 - **031** (transactional-email) — standalone infra/config; no dependency; enables reliable delivery for the mailers above (Mailpit in dev, encrypted-credentials SMTP elsewhere).
 - **032** (user-settings menu in the topbar; mockup `character_show.html`) after **006 + 022** — replaces the standalone "Log out" button with a dropdown (Account settings + Log out); reconciles spec 09 R2.
+- **033** (language selection; mockup `character_show.html` → user menu → Language) after **032** — persists `users.locale`, adds the saved-locale precedence step to spec 08 R12, localizes transactional emails, and defaults the locale captured at sign-up.
 
 Each lane = a separate branch/session. One PR per task, approve, then next.

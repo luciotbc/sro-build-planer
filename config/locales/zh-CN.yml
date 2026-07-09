@@ -172,6 +172,9 @@ zh-CN:
       label: 产品动态
       saved: 邮件偏好已保存。
       title: 通过邮件接收 SRO Labs 动态
+    locales:
+      update:
+        updated: 语言已更新。
     my_data:
       characters: 创建的角色总数
       created: 账户创建时间
@@ -259,6 +262,7 @@ zh-CN:
       dismiss: 关闭
     user_menu:
       label: 用户设置
+      language: 语言
   shared_builds:
     show:
       copy: 复制链接

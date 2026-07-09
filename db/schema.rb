@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_07_085528) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_09_023456) do
   create_table "character_masteries", force: :cascade do |t|
     t.integer "character_id", null: false
     t.datetime "created_at", null: false
@@ -161,6 +161,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_085528) do
     t.string "email_address", null: false
     t.datetime "email_confirmed_at"
     t.boolean "email_opt_in", default: false, null: false
+    t.string "locale"
     t.string "password_digest", null: false
     t.datetime "updated_at", null: false
     t.index ["email_address"],

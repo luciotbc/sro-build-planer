@@ -20,7 +20,8 @@ module Users
           email_address: @params[:email_address],
           password: @params[:password],
           password_confirmation: @params[:password_confirmation],
-          email_opt_in: @params.fetch(:email_opt_in, false)
+          email_opt_in: @params.fetch(:email_opt_in, false),
+          locale: I18n.locale.to_s
         )
 
       if user.save

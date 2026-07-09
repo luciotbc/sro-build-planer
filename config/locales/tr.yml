@@ -189,6 +189,9 @@ tr:
       label: Ürün güncellemeleri
       saved: E-posta tercihi kaydedildi.
       title: SRO Labs güncellemelerini bana e-postayla gönder
+    locales:
+      update:
+        updated: Dil güncellendi.
     my_data:
       characters: Oluşturulan toplam karakter
       created: Hesap oluşturulma tarihi
@@ -278,6 +281,7 @@ tr:
       dismiss: Kapat
     user_menu:
       label: Kullanıcı ayarları
+      language: Dil
   shared_builds:
     show:
       copy: Linki kopyala

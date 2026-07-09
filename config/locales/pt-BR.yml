@@ -188,6 +188,9 @@ pt-BR:
       label: Novidades do produto
       saved: Preferência de e-mail salva.
       title: Receber novidades do SRO Labs por e-mail
+    locales:
+      update:
+        updated: Idioma atualizado.
     my_data:
       characters: Total de personagens criados
       created: Conta criada
@@ -276,6 +279,7 @@ pt-BR:
       dismiss: Dispensar
     user_menu:
       label: Configurações do usuário
+      language: Idioma
   shared_builds:
     show:
       copy: Copiar link
