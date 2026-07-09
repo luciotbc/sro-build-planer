@@ -52,6 +52,8 @@ es:
       confirmed: Email confirmado. ¡Bienvenido a SRO Labs!
       invalid_token: Ese enlace de confirmación no es válido o ha expirado.
   errors:
+    locale:
+      unsupported: Idioma no admitido.
     server_level_cap:
       masteries_exceed: 'No se puede bajar el Level Cap del servidor: las masteries
         superan el nuevo cap: %{mastery_names}'
@@ -95,6 +97,11 @@ es:
       subtitle: Mira una build real en progreso — skill points, masteries y series
         de un vistazo.
       title: Tu build, calculada con precisión
+  pages:
+    privacy:
+      title: Política de Privacidad
+    terms:
+      title: Términos del Servicio
   passwords:
     create:
       instructions_sent: Instrucciones para restablecer la contraseña enviadas (si
@@ -259,6 +266,12 @@ es:
       name_placeholder: Introduce el nombre del personaje
       submit: Guardar
       title: Editar personaje
+    footer:
+      available_in: Disponible en
+      developed_by_html: Desarrollado por %{author}
+      disclaimer: Herramienta hecha por fans. No afiliada a Joymax ni a vSRO.
+      legal: Legal
+      product_name: SRO Lab · Skill Planner
     log_out: Cerrar sesión
     mastery_header:
       decrease: Bajar nivel de mastery

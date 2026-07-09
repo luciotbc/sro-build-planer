@@ -89,14 +89,18 @@
           terms:
             link_to(
               t(".terms_of_use"),
-              "#",
-              class: "text-brass underline hover:text-brass-hi"
+              terms_path,
+              class: "text-brass underline hover:text-brass-hi",
+              target: "_blank",
+              rel: "noopener"
             ),
           privacy:
             link_to(
               t(".privacy_policy"),
-              "#",
-              class: "text-brass underline hover:text-brass-hi"
+              privacy_path,
+              class: "text-brass underline hover:text-brass-hi",
+              target: "_blank",
+              rel: "noopener"
             )
         ) %>
       </span>

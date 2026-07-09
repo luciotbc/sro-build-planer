@@ -40,9 +40,25 @@ class SettingsLanguageTest < ActionDispatch::IntegrationTest
     assert_equal "es", @user.reload.locale
   end
 
-  test "requires authentication" do
-    patch settings_locale_url, params: { locale: "pt-BR" }
+  test "a guest can switch the UI language and it applies on the next request" do
+    patch settings_locale_url,
+          params: {
+            locale: "pt-BR"
+          },
+          headers: {
+            "Referer" => root_url
+          }
 
-    assert_redirected_to new_session_url
+    assert_redirected_to root_url
+
+    get root_url
+    assert_includes response.body, I18n.t("home.cta_band.cta", locale: :"pt-BR")
+  end
+
+  test "a guest's unsupported locale is rejected" do
+    patch settings_locale_url, params: { locale: "xx" }
+
+    get root_url
+    assert_includes response.body, I18n.t("home.cta_band.cta", locale: :en)
   end
 end

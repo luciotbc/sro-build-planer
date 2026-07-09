@@ -1,5 +1,6 @@
 # Picks the request locale (per docs/specs/08-i18n-conventions.md R12):
-# a signed-in user's saved locale wins; else the browser's Accept-Language
+# a signed-in user's saved locale wins; else a guest's session-stored choice
+# (set from the footer language switcher); else the browser's Accept-Language
 # header — exact tag match first (pt-BR → pt-BR), then language-only match
 # (pt → pt-BR, en-US → en, zh-Hans → zh-CN); else I18n.default_locale.
 module LocaleDetection
@@ -17,13 +18,23 @@ module LocaleDetection
   # preference also applies on allow_unauthenticated_access pages (e.g. the
   # post-login landing redirect). `resume_session` comes from Authentication.
   def request_locale
-    user_locale || browser_locale
+    user_locale || session_locale || browser_locale
   end
 
   def user_locale
     resume_session
     tag = Current.user&.locale.presence
-    tag if tag && I18n.available_locales.map(&:to_s).include?(tag)
+    tag if tag && supported_tag?(tag)
+  end
+
+  # A guest's footer selection, persisted in the session (spec 08 R12).
+  def session_locale
+    tag = session[:locale].presence
+    tag if tag && supported_tag?(tag)
+  end
+
+  def supported_tag?(tag)
+    I18n.available_locales.map(&:to_s).include?(tag)
   end
 
   def browser_locale

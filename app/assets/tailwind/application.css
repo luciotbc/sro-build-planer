@@ -322,6 +322,200 @@
     color: var(--color-brass);
   }
 
+  /* ── Site footer ──────────────────────────────────────────────────────── */
+  /* Mockup-aligned three-column footer. Locale switches are inline PATCH
+     buttons reset to look like text links (shared/_footer). */
+  .site-footer {
+    @apply mx-auto max-w-7xl px-4 md:px-8;
+    margin-top: 4rem;
+    padding-top: 2.25rem;
+    padding-bottom: 2.5rem;
+    border-top: 1px solid var(--color-line);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--color-text-dim);
+  }
+  .site-footer-inner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand disclaimer credit"
+      "langs langs       legal";
+    gap: 1.5rem 2rem;
+    align-items: center;
+  }
+  .site-footer-brand {
+    grid-area: brand;
+  }
+  .site-footer-locales {
+    grid-area: langs;
+  }
+  .site-footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-text-dim);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0;
+    transition: color 0.15s ease;
+  }
+  .site-footer-logo:hover {
+    color: var(--color-text);
+  }
+  .site-footer-logo-mark {
+    width: 18px;
+    height: 24px;
+    object-fit: contain;
+    opacity: 0.68;
+  }
+  .site-footer-disclaimer {
+    grid-area: disclaimer;
+    justify-self: center;
+    max-width: 34rem;
+    margin: 0;
+    text-align: center;
+  }
+  .site-footer-credit {
+    grid-area: credit;
+    justify-self: end;
+    margin: 0;
+    white-space: nowrap;
+  }
+  .site-footer-link {
+    color: var(--color-brass);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.15s ease;
+  }
+  .site-footer-link:hover {
+    color: var(--color-brass-hi);
+  }
+  .site-footer-available {
+    color: var(--color-text-mute);
+    margin-right: 0.8rem;
+  }
+  .site-footer-locales {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1rem;
+    align-items: center;
+  }
+  .site-footer-locale-item {
+    display: inline;
+  }
+  .site-footer-locales .site-footer-locale-item:not(:last-child)::after {
+    content: none;
+  }
+  .site-footer-locale {
+    display: inline;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: var(--color-text-dim);
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+  button.site-footer-locale:hover {
+    color: var(--color-brass-hi);
+  }
+  .site-footer-locale.is-active {
+    color: var(--color-brass);
+    font-weight: 600;
+    cursor: default;
+  }
+  .site-footer-nav {
+    grid-area: legal;
+    justify-self: end;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .site-footer-navlink {
+    color: var(--color-text-dim);
+    transition: color 0.15s ease;
+  }
+  .site-footer-navlink:hover {
+    color: var(--color-brass-hi);
+  }
+  @media (max-width: 900px) {
+    .site-footer-inner {
+      grid-template-columns: 1fr;
+      grid-template-areas: "brand" "langs" "disclaimer" "credit" "legal";
+      gap: 1.25rem;
+      justify-items: center;
+      text-align: center;
+    }
+    .site-footer-brand,
+    .site-footer-credit,
+    .site-footer-disclaimer {
+      justify-self: center;
+    }
+    .site-footer-locales,
+    .site-footer-nav {
+      justify-content: center;
+    }
+  }
+
+  /* ── Legal pages (privacy / terms) ────────────────────────────────────── */
+  /* Long-form static copy; readable measure, DS typographic scale. */
+  .legal {
+    @apply mx-auto max-w-3xl;
+    color: var(--color-text-dim);
+    line-height: 1.7;
+  }
+  .legal-title {
+    @apply text-2xl font-bold;
+    color: var(--color-text);
+    margin-bottom: 1.5rem;
+  }
+  .legal h2 {
+    @apply text-lg font-semibold;
+    color: var(--color-text);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  .legal h3 {
+    @apply text-base font-semibold;
+    color: var(--color-text);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .legal p {
+    margin-bottom: 1rem;
+  }
+  .legal ul,
+  .legal ol {
+    margin: 0 0 1rem 1.5rem;
+    padding-left: 0.5rem;
+  }
+  .legal ul {
+    list-style: disc;
+  }
+  .legal ol {
+    list-style: decimal;
+  }
+  .legal li {
+    margin-bottom: 0.4rem;
+  }
+  .legal a {
+    color: var(--color-brass);
+    text-decoration: underline;
+  }
+  .legal a:hover {
+    color: var(--color-brass-hi);
+  }
+  .legal-effective {
+    color: var(--color-text-mute);
+    font-size: 13px;
+    margin-top: 2rem;
+  }
+
   /* ── Tabs / sub-tabs ──────────────────────────────────────────────────── */
   .ro-tabs {
     display: flex;

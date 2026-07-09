@@ -91,4 +91,18 @@ class LocaleDetectionTest < ActionDispatch::IntegrationTest
     get_root "tr,en;q=0.9"
     assert_includes response.body, menu_label_in(:tr)
   end
+
+  # A guest's chosen locale is kept in the session and beats Accept-Language.
+  it "prefers a guest's session locale over Accept-Language" do
+    patch settings_locale_url, params: { locale: "es" }
+    get_root "tr,en;q=0.9"
+    assert_includes response.body, cta_in(:es)
+  end
+
+  it "prefers a signed-in user's saved locale over the session locale" do
+    patch settings_locale_url, params: { locale: "es" }
+    sign_in_as create(:user, locale: "ko")
+    get_root "tr,en;q=0.9"
+    assert_includes response.body, menu_label_in(:ko)
+  end
 end

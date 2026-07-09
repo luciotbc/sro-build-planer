@@ -49,6 +49,8 @@ zh-CN:
       confirmed: 邮箱验证成功。欢迎来到 SRO Labs！
       invalid_token: 该验证链接无效或已过期。
   errors:
+    locale:
+      unsupported: 不支持的语言。
     server_level_cap:
       masteries_exceed: 无法降低服务器 Level 上限：masteries 超过新上限：%{mastery_names}
     skill_level:
@@ -85,6 +87,11 @@ zh-CN:
         系列
       subtitle: 看一个真实的 Build 进度——Skill Point、Mastery 和系列一目了然。
       title: 你的 Build，精确计算
+  pages:
+    privacy:
+      title: 隐私政策
+    terms:
+      title: 服务条款
   passwords:
     create:
       instructions_sent: 重置密码的说明已发送（如果该邮箱对应的用户存在）。
@@ -238,6 +245,12 @@ zh-CN:
       name_placeholder: 输入角色名称
       submit: 保存
       title: 编辑角色
+    footer:
+      available_in: 可用语言
+      developed_by_html: 由 %{author} 开发
+      disclaimer: 粉丝制作工具。与 Joymax 或 vSRO 无关联。
+      legal: 法律
+      product_name: SRO Lab · Skill Planner
     log_out: 退出登录
     mastery_header:
       decrease: 降低 Mastery 等级
