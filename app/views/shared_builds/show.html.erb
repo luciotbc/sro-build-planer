@@ -10,35 +10,6 @@
 <%# Public, read-only shared build page (task 021, spec 05). No edit
     affordances: navigation stays on the shared route, no forms. %>
 <div class="mx-auto w-full max-w-[520px] md:max-w-3xl space-y-4 md:space-y-5">
-  <%# ── Box: share link ──────────────────────────────────────────────────── %>
-  <section class="rounded-panel border border-line bg-card p-4 space-y-2">
-    <h2 class="text-xs font-bold uppercase tracking-[2px] text-text-dim"><%= t(".share_link") %></h2>
-    <div
-      class="flex items-center gap-2"
-      data-controller="clipboard"
-      data-clipboard-text-value="<%= shared_build_url(@character.share_token) %>"
-    >
-      <input
-        type="text"
-        readonly
-        value="<%= shared_build_url(@character.share_token) %>"
-        class="w-full min-w-0 rounded-control border border-line bg-card-hi px-3 py-2 text-sm text-text-dim"
-        data-action="focus->clipboard#copy"
-        aria-label="<%= t(".share_link") %>"
-      >
-      <button
-        type="button"
-        class="icon-btn shrink-0"
-        data-action="clipboard#copy"
-        aria-label="<%= t(".copy") %>"
-        title="<%= t(".copy") %>"
-      >
-        <span data-clipboard-target="icon" aria-hidden="true">⧉</span>
-        <span data-clipboard-target="check" class="hidden text-brass" aria-hidden="true">✓</span>
-      </button>
-    </div>
-  </section>
-
   <%# ── Box: character identity (no share icon — link box above) ─────────── %>
   <%= render "shared/char_bar",
         name:  @character.name,
@@ -62,4 +33,34 @@
         target_mastery_level:  @target_mastery_level,
         series_groups:         @series_groups,
         tab_url:               ->(m) { shared_build_path(@character.share_token, mastery_id: m.id) } %>
+
+  <%# ── Box: share link ──────────────────────────────────────────────────── %>
+  <section class="rounded-panel border border-line bg-card p-4 space-y-2">
+    <h2 class="text-xs font-bold uppercase tracking-[2px] text-text-dim"><%= t(".share_link") %></h2>
+    <div
+      class="flex items-center gap-2"
+      data-controller="clipboard"
+      data-clipboard-text-value="<%= shared_build_url(@character.share_token) %>"
+    >
+      <input
+        type="text"
+        readonly
+        autocomplete="off"
+        value="<%= shared_build_url(@character.share_token) %>"
+        class="w-full min-w-0 rounded-control border border-line bg-card-hi px-3 py-2 text-sm text-text-dim"
+        data-action="focus->clipboard#copy"
+        aria-label="<%= t(".share_link") %>"
+      >
+      <button
+        type="button"
+        class="icon-btn shrink-0"
+        data-action="clipboard#copy"
+        aria-label="<%= t(".copy") %>"
+        title="<%= t(".copy") %>"
+      >
+        <span data-clipboard-target="icon" aria-hidden="true">⧉</span>
+        <span data-clipboard-target="check" class="hidden text-brass" aria-hidden="true">✓</span>
+      </button>
+    </div>
+  </section>
 </div>
