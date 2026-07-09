@@ -17,6 +17,11 @@ class User < ApplicationRecord
             format: {
               with: URI::MailTo::EMAIL_REGEXP
             }
+  validates :locale,
+            inclusion: {
+              in: I18n.available_locales.map(&:to_s)
+            },
+            allow_nil: true
   validates :password,
             length: {
               minimum: 8
