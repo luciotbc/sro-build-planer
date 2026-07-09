@@ -1,7 +1,7 @@
-# Picks the request locale from the browser's Accept-Language header
-# (per docs/specs/08-i18n-conventions.md R12): exact tag match first
-# (pt-BR → pt-BR), then language-only match (pt → pt-BR, en-US → en,
-# zh-Hans → zh-CN), else I18n.default_locale.
+# Picks the request locale (per docs/specs/08-i18n-conventions.md R12):
+# a signed-in user's saved locale wins; else the browser's Accept-Language
+# header — exact tag match first (pt-BR → pt-BR), then language-only match
+# (pt → pt-BR, en-US → en, zh-Hans → zh-CN); else I18n.default_locale.
 module LocaleDetection
   extend ActiveSupport::Concern
 
@@ -10,7 +10,20 @@ module LocaleDetection
   private
 
   def switch_locale(&action)
-    I18n.with_locale(browser_locale, &action)
+    I18n.with_locale(request_locale, &action)
+  end
+
+  # Saved user locale takes precedence; the session is resumed here so the
+  # preference also applies on allow_unauthenticated_access pages (e.g. the
+  # post-login landing redirect). `resume_session` comes from Authentication.
+  def request_locale
+    user_locale || browser_locale
+  end
+
+  def user_locale
+    resume_session
+    tag = Current.user&.locale.presence
+    tag if tag && I18n.available_locales.map(&:to_s).include?(tag)
   end
 
   def browser_locale
