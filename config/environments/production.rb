@@ -55,32 +55,22 @@ Rails.application.configure do
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
-  # Raise delivery errors so a misconfigured SMTP server fails loudly in logs.
+  # Raise delivery errors so a misconfigured mailer fails loudly in logs.
   config.action_mailer.raise_delivery_errors = true
 
-  # SMTP config. Secrets and per-environment values come ONLY from encrypted
-  # credentials (`bin/rails credentials:edit --environment <env>`), never from
-  # .env or plaintext. The decrypt key is injected as RAILS_MASTER_KEY (Kamal
-  # env/secret). Non-secret settings (port, authentication, TLS) live here as
-  # secure defaults — credentials override only what is truly secret or
-  # environment-specific.
-  smtp = Rails.application.credentials.smtp || {}
+  # Email is delivered over MailerSend's HTTP API (Railway blocks outbound
+  # SMTP). The :mailersend delivery method is registered in
+  # config/initializers/mailersend.rb and reads mailersend.api_token from
+  # encrypted credentials. Non-secret, environment-specific values (from, host)
+  # also live in credentials (`bin/rails credentials:edit --environment <env>`).
+  mailersend = Rails.application.credentials.mailersend || {}
 
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = {
-    host: smtp[:host] || "example.com"
+    host: mailersend[:host] || "example.com"
   }
 
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address: smtp[:address],
-    port: smtp[:port] || 587,
-    user_name: smtp[:user_name],
-    password: smtp[:password],
-    domain: smtp[:domain],
-    authentication: smtp[:authentication] || :plain,
-    starttls: smtp.fetch(:starttls, true)
-  }
+  config.action_mailer.delivery_method = :mailersend
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false

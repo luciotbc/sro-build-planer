@@ -1,6 +1,6 @@
 class ApplicationMailer < ActionMailer::Base
   default from:
-            Rails.application.credentials.dig(:smtp, :from) ||
+            Rails.application.credentials.dig(:mailersend, :from) ||
               "from@example.com"
   layout "mailer"
 

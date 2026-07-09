@@ -49,6 +49,11 @@ gem "image_processing", "~> 2.0"
 # supported locales (used by Character#name presence errors, etc.)
 gem "rails-i18n"
 
+# MailerSend HTTP API client. Railway blocks outbound SMTP, so production
+# email is delivered over HTTPS via a custom Action Mailer delivery method
+# (config/initializers/mailersend.rb).
+gem "mailersend-ruby"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
