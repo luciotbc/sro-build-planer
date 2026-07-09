@@ -456,6 +456,7 @@ DEPENDENCIES
   csv
   debug
   factory_bot_rails
+  ffi
   i18n-tasks
   image_processing (~> 2.0)
   importmap-rails
