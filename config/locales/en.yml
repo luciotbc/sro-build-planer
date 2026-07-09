@@ -33,7 +33,6 @@ en:
         undone.
       sharing:
         copy: Copy share link
-        description: Control who can open the read-only page for this Build.
         hint: Anyone with the link can view this Build. Turn off to make it private.
         label: Public Build
         link_label: Public Build link

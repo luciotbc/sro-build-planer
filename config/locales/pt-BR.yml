@@ -33,7 +33,6 @@ pt-BR:
         não pode ser desfeita.
       sharing:
         copy: Copiar link de compartilhamento
-        description: Controle quem pode abrir a página somente leitura desta Build.
         hint: Qualquer pessoa com o link pode ver esta Build. Desative para torná-la
           privada.
         label: Build pública

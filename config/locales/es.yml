@@ -33,8 +33,6 @@ es:
         no se puede deshacer."
       sharing:
         copy: Copiar enlace para compartir
-        description: Controla quién puede abrir la página de solo lectura de esta
-          Build.
         hint: Cualquiera con el enlace puede ver esta Build. Desactívalo para hacerla
           privada.
         label: Build pública
