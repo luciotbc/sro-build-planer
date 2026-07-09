@@ -21,6 +21,18 @@
     <%= render "shared/stats_summary", summary: @summary, class: "max-w-none" %>
   </section>
 
+  <%# ── Box: skills (shared with the public build page, task 021) ────────── %>
+  <%= render "characters/skills_panel",
+        character:             @character,
+        grouped_masteries:     @grouped_masteries,
+        mastery_types:         @mastery_types,
+        active_mastery:        @active_mastery,
+        current_mastery_level: @current_mastery_level,
+        target_mastery_level:  @target_mastery_level,
+        series_groups:         @series_groups,
+        tab_url:               ->(m) { character_path(@character, mastery_id: m.id) },
+        editable:              true %>
+
   <%# ── Box: sharing / public build (spec 05 R11a/R13) ──────────────────── %>
   <%# NOTE: keys are absolute — inside a settings_card layout block a relative
       t(".x") resolves against the partial, not this template. %>
@@ -66,18 +78,6 @@
       </div>
     <% end %>
   <% end %>
-
-  <%# ── Box: skills (shared with the public build page, task 021) ────────── %>
-  <%= render "characters/skills_panel",
-        character:             @character,
-        grouped_masteries:     @grouped_masteries,
-        mastery_types:         @mastery_types,
-        active_mastery:        @active_mastery,
-        current_mastery_level: @current_mastery_level,
-        target_mastery_level:  @target_mastery_level,
-        series_groups:         @series_groups,
-        tab_url:               ->(m) { character_path(@character, mastery_id: m.id) },
-        editable:              true %>
 
   <%# ── Footer ────────────────────────────────────────────────────────────── %>
   <div class="flex items-center">
