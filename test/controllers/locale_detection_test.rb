@@ -73,4 +73,22 @@ class LocaleDetectionTest < ActionDispatch::IntegrationTest
     get_root "pt-BR"
     assert_equal :en, I18n.locale
   end
+
+  # Signed-in users see the app home (not the landing CTA band), so assert on
+  # a string the authenticated layout always renders: the user-menu label.
+  def menu_label_in(locale)
+    I18n.t("shared.user_menu.label", locale:)
+  end
+
+  it "prefers a signed-in user's saved locale over Accept-Language" do
+    sign_in_as create(:user, locale: "ko")
+    get_root "pt-BR,en;q=0.9"
+    assert_includes response.body, menu_label_in(:ko)
+  end
+
+  it "falls back to Accept-Language when the user has no saved locale" do
+    sign_in_as create(:user, locale: nil)
+    get_root "tr,en;q=0.9"
+    assert_includes response.body, menu_label_in(:tr)
+  end
 end

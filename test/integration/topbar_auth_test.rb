@@ -64,15 +64,17 @@ class TopbarAuthTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "user menu does not include a language item" do
+  test "user menu includes a language submenu" do
     sign_in_as(@user)
 
     get root_url
     follow_redirect! while response.redirect?
 
     assert_response :success
-    # Exactly two entries — Account settings + Log out — and no language item.
-    assert_select ".menu-panel .menu-item", count: 2
+    # Language submenu trigger + the flyout lists every supported locale (033).
+    assert_select ".menu-panel .menu-submenu-trigger", text: /Language/
+    assert_select ".submenu-panel .menu-locale", count: LocaleOption.all.size
+    # Account settings stays a link; Log out stays a DELETE form-button.
     assert_select ".menu-panel a.menu-item", count: 1, text: "Account settings"
   end
 end

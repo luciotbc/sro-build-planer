@@ -9,6 +9,18 @@ class UsersMailerTest < ActiveSupport::TestCase
     assert_equal "Confirm your email", mail.subject
   end
 
+  it "renders the confirmation email in the recipient's saved locale" do
+    user = create(:user, locale: "pt-BR")
+    mail = UsersMailer.email_confirmation(user)
+
+    assert_equal I18n.t(
+                   "users_mailer.email_confirmation.subject",
+                   locale: :"pt-BR"
+                 ),
+                 mail.subject
+    assert_not_equal "Confirm your email", mail.subject
+  end
+
   it "includes a working confirmation link" do
     user = create(:user)
     mail = UsersMailer.email_confirmation(user)

@@ -66,6 +66,20 @@ class UserTest < ActiveSupport::TestCase
            ).valid?
   end
 
+  test "locale is nil by default" do
+    assert_nil build(:user).locale
+  end
+
+  test "valid with a supported locale" do
+    assert build(:user, locale: "pt-BR").valid?
+  end
+
+  test "invalid with an unsupported locale" do
+    user = build(:user, locale: "xx")
+    assert_not user.valid?
+    assert_includes user.errors[:locale], "is not included in the list"
+  end
+
   test "email_confirmed? reflects email_confirmed_at" do
     assert_not build(:user).email_confirmed?
     assert build(:user, :confirmed).email_confirmed?

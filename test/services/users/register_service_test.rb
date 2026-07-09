@@ -49,6 +49,16 @@ class Users::RegisterServiceTest < ActiveSupport::TestCase
     )
   end
 
+  it "captures the locale being rendered at sign-up" do
+    result = nil
+    I18n.with_locale(:"pt-BR") do
+      result = Users::RegisterService.call(valid_params)
+    end
+
+    assert result.success?
+    assert_equal "pt-BR", result.data.locale
+  end
+
   it "fails with a malformed email" do
     result =
       Users::RegisterService.call(valid_params.merge(email_address: "nope"))
