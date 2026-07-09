@@ -54,6 +54,13 @@ gem "rails-i18n"
 # (config/initializers/mailersend.rb).
 gem "mailersend-ruby"
 
+# Direct dependency so bundler installs ffi before llhttp-ffi (pulled in by
+# mailersend-ruby -> http). Under Railway's parallel `bundle install`,
+# llhttp-ffi's native extension is otherwise built before ffi is available and
+# the deploy fails with "Could not find 'ffi'". Making ffi a top-level
+# dependency forces the correct install ordering.
+gem "ffi"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
