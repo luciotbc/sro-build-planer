@@ -54,6 +54,62 @@ class MailersendDeliveryTest < ActiveSupport::TestCase
     assert_equal({ "email" => "support@example.com" }, email.reply_to)
   end
 
+  it "base64-encodes file attachments onto the MailerSend email" do
+    mail =
+      Mail.new do
+        from "app@example.com"
+        to "user@example.com"
+        subject "Report"
+        body "see attached"
+        add_file(filename: "report.txt", content: "hello world")
+      end
+
+    email = MailersendDelivery.new.build_email(mail, client)
+
+    assert_equal 1, email.attachments.size
+    attachment = email.attachments.first
+    assert_equal "report.txt", attachment["filename"]
+    assert_equal "attachment", attachment["disposition"]
+    assert_equal "hello world", Base64.decode64(attachment["content"])
+    # The body still maps correctly alongside the attachment.
+    assert_equal "see attached", email.text
+  end
+
+  it "marks inline attachments and carries their content id for cid: refs" do
+    mail =
+      Mail.new do
+        from "app@example.com"
+        to "user@example.com"
+        subject "Inline"
+        html_part do
+          content_type "text/html; charset=UTF-8"
+          body '<img src="cid:logo.png">'
+        end
+      end
+    mail.attachments.inline["logo.png"] = "PNGDATA"
+
+    email = MailersendDelivery.new.build_email(mail, client)
+
+    attachment = email.attachments.first
+    assert_equal "inline", attachment["disposition"]
+    assert_equal mail.attachments.first.cid, attachment["id"]
+    assert_equal "PNGDATA", Base64.decode64(attachment["content"])
+  end
+
+  it "sends no attachments key when the message has none" do
+    mail =
+      Mail.new do
+        from "app@example.com"
+        to "user@example.com"
+        subject "Plain"
+        body "hi"
+      end
+
+    email = MailersendDelivery.new.build_email(mail, client)
+
+    assert_empty email.attachments
+  end
+
   it "raises when the api_token credential is missing" do
     # test env carries no :mailersend credentials, so the token is nil.
     assert_nil Rails.application.credentials.dig(:mailersend, :api_token)

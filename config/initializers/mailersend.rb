@@ -46,6 +46,7 @@ class MailersendDelivery
     text = part_body(mail, "text/plain")
     email.add_html(html) if html.present?
     email.add_text(text.presence || strip_tags(html))
+    add_attachments(email, mail)
     email
   end
 
@@ -53,6 +54,25 @@ class MailersendDelivery
 
   def first_address(field)
     Array(field).first
+  end
+
+  # Action Mailer carries attachments as separate MIME parts; MailerSend expects
+  # them base64-encoded inside the JSON payload.
+  def add_attachments(email, mail)
+    mail.attachments.each do |attachment|
+      inline = attachment.inline?
+      email.add_attachment(
+        content: Base64.strict_encode64(attachment.body.decoded),
+        filename: attachment.filename,
+        disposition: inline ? "inline" : "attachment"
+      )
+
+      # Inline parts need an `id` so `cid:` references in the HTML body resolve.
+      # The gem's add_attachment does not expose it, so set it on the payload.
+      if inline && attachment.cid.present?
+        email.attachments.last["id"] = attachment.cid
+      end
+    end
   end
 
   def part_body(mail, mime_type)
