@@ -27,5 +27,11 @@ module App
     config.i18n.available_locales = %i[en pt-BR es tr ko zh-CN]
     config.i18n.default_locale = :en
     config.i18n.fallbacks = [:en]
+
+    # ActiveStorage is unused (no has_one_attached/has_many_attached anywhere).
+    # Rails 8.1's default variant_processor (:vips) eagerly requires
+    # image_processing/vips on every boot as of Rails 8.1.3.1 (CVE-2026-66066
+    # fix), which crashes without the ruby-vips gem. Disable it outright.
+    config.active_storage.variant_processor = :disabled
   end
 end
