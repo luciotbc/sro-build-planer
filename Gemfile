@@ -98,4 +98,4 @@ group :test do
   gem "factory_bot_rails"
 end
 
-gem "rubyzip", "~> 3.4"
+gem "rubyzip", "~> 3.6"
